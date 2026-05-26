@@ -1,4 +1,4 @@
-import { Flex, Space } from "antd";
+import { Flex } from "antd";
 import DashboardCard from "../components/DashboardCard";
 import { UserOutlined } from "@ant-design/icons";
 
@@ -24,8 +24,8 @@ const dashboardCardItem = [
 const Dashboard = () => {
     return (
         <Flex vertical>
-            <Space>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-7 px-10 py-8">
+            <section className="mx-auto">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 lg:gap-6 md:gap-4 px-10 py-8">
                     {dashboardCardItem.map((item, key) => (
                         <DashboardCard
                             key={key}
@@ -35,10 +35,10 @@ const Dashboard = () => {
                         />
                     ))}
                 </div>
-            </Space>
-            <Space className="mt-20">
+            </section>
+            <section className="mt-20">
                 <h2>Revenue</h2>
-            </Space>
+            </section>
         </Flex>
     );
 };
