@@ -1,0 +1,8 @@
+tailwind 
+clsx@2.1.1
+redux toolkit/ rtk query 
+antd 
+react-router-dom
+tanstack
+antdesign icons
+lucide-react@1.7.0

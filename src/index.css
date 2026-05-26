@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+    --color-dark-blue: var(--color-blue-800);
+}
+
+@utility sidemenu-item {
+    @apply font-bold text-dark-blue;
+}
