@@ -19,7 +19,7 @@ const LoginForm = () => {
                     onFinish={onFinish}
                 >
                     <Title level={3} className="!mb-10 !font-bold">
-                        Login
+                        Welcome Back!
                     </Title>
                     <Form.Item
                         name="email"
@@ -44,6 +44,9 @@ const LoginForm = () => {
                             {
                                 required: true,
                                 message: "Please input your Password!",
+                            },
+                            {
+                                min: 8,
                             },
                         ]}
                     >
@@ -70,18 +73,9 @@ const LoginForm = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button
-                            block
-                            type="primary"
-                            className="!mb-4"
-                            htmlType="submit"
-                        >
+                        <Button block type="primary" htmlType="submit">
                             Log in
                         </Button>
-                        or{" "}
-                        <Link to="/signup" className="hover:!underline">
-                            Register now !
-                        </Link>
                     </Form.Item>
                 </Form>
             </div>

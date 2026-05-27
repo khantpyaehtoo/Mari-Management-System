@@ -1,6 +1,11 @@
-import { Flex } from "antd";
+import { Flex, Typography } from "antd";
 import DashboardCard from "../components/DashboardCard";
-import { UserOutlined } from "@ant-design/icons";
+import {
+    ApartmentOutlined,
+    IdcardOutlined,
+    UnorderedListOutlined,
+    UserOutlined,
+} from "@ant-design/icons";
 
 const dashboardCardItem = [
     {
@@ -9,21 +14,28 @@ const dashboardCardItem = [
         value: "400",
     },
     {
+        icon: <ApartmentOutlined />,
         title: "Total Services",
         value: "35",
     },
     {
+        icon: <IdcardOutlined />,
         title: "Total Staff",
         value: "20",
     },
     {
+        icon: <UnorderedListOutlined />,
         title: "Total Booking",
         value: "2,000",
     },
 ];
 const Dashboard = () => {
+    const { Title } = Typography;
     return (
         <Flex vertical>
+            <Title className="p-3 border-b-1" level={3}>
+                Dashboard
+            </Title>
             <section className="mx-auto">
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 lg:gap-6 md:gap-4 px-10 py-8">
                     {dashboardCardItem.map((item, key) => (

@@ -1,5 +1,15 @@
+import { Typography } from "antd";
+
 const User = () => {
-    return <div>User</div>;
+    const { Title } = Typography;
+
+    return (
+        <div>
+            <Title className="p-3 border-b-1" level={3}>
+                User
+            </Title>
+        </div>
+    );
 };
 
 export default User;

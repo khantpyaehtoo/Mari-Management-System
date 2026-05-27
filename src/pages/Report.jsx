@@ -1,5 +1,14 @@
+import { Typography } from "antd";
+
 const Report = () => {
-    return <div>Report</div>;
+    const { Title } = Typography;
+    return (
+        <div>
+            <Title className="p-3 border-b-1" level={3}>
+                Report
+            </Title>
+        </div>
+    );
 };
 
 export default Report;
