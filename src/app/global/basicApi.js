@@ -6,6 +6,6 @@ export const baseApi = createApi({
         baseUrl: "",
         credentials: "include", // => for cookie
     }),
-    tagTypes: [],
+    tagTypes: ["auth", "settings", "services"],
     endpoints: () => ({}),
 });
