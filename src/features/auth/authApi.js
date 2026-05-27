@@ -1,0 +1,34 @@
+import { baseApi } from "../../app/global/basicApi";
+const authEndPoint = "/auth";
+// const settingEndPoint = "/settings";
+
+export const authApi = baseApi.injectEndpoints({
+    endpoints: (builder) => ({
+        getAdminData: builder.query({
+            query: (token) => ({
+                url: `${authEndPoint}`,
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            }),
+            providesTags: ["auth"],
+        }),
+
+        loginAccount: builder.mutation({
+            query: (getAdminData) => ({
+                url: `${authEndPoint}/login`,
+                method: "POST",
+                body: getAdminData,
+            }),
+            invalidatesTags: ["auth"],
+        }),
+
+        resetPassword: builder.mutation({
+            query: (username) => ({
+                url: `${authEndPoint}/reset`,
+                method: "PUT",
+                body: { username },
+            }),
+            invalidatesTags: ["auth"],
+        }),
+    }),
+});
