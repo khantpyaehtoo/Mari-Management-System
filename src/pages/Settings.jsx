@@ -1,8 +1,16 @@
 import { Image, Typography } from "antd";
+import { useState } from "react";
 
 const { Title } = Typography;
 
 const Settings = () => {
+    const [isEdit, setIsEdit] = useState(false);
+
+    const onEditHandler = () => {
+        console.log("clicked");
+        setIsEdit(true);
+    };
+
     return (
         <>
             <Title className="p-3 border-b-1" level={3}>
@@ -35,14 +43,30 @@ const Settings = () => {
                                 <span>(+95) 9 956 145 223</span>
                             </div>
                         </div>
-                        <div className="flex justify-center items-center my-10">
-                            <button
-                                type="button"
-                                className="bg-amber-200 p-3 rounded-md "
-                            >
-                                Edit
-                            </button>
-                        </div>
+
+                        <button
+                            type="button"
+                            className="bg-amber-200 p-3 rounded-md hover:cursor-pointer"
+                            onClick={() => onEditHandler()}
+                        >
+                            Edit
+                        </button>
+
+                        {isEdit && (
+                            <form action="" className="bg-gray-50/50 shadow-md">
+                                <h1>Edit Form</h1>
+                                <div>
+                                    <label htmlFor="">username</label>
+                                    <input type="text" className="bg-white" />
+                                    <label htmlFor="">email</label>
+                                    <input type="text" className="bg-white" />
+                                </div>
+                                <button>Submit</button>
+                                <button onClick={() => setIsEdit(false)}>
+                                    Cancel
+                                </button>
+                            </form>
+                        )}
                     </section>
                 </div>
             </section>

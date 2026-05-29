@@ -1,4 +1,4 @@
-import { Flex, Typography } from "antd";
+import { Flex, Typography, Col, Row } from "antd";
 import DashboardCard from "../components/DashboardCard";
 import {
     ApartmentOutlined,
@@ -36,8 +36,9 @@ const Dashboard = () => {
             <Title className="p-3 border-b-1" level={3}>
                 Dashboard
             </Title>
-            <section className="mx-auto">
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 lg:gap-6 md:gap-4 px-10 py-8">
+
+            <section className="space-y-6 w-full px-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {dashboardCardItem.map((item, key) => (
                         <DashboardCard
                             key={key}
@@ -48,6 +49,7 @@ const Dashboard = () => {
                     ))}
                 </div>
             </section>
+
             <section className="mt-20">
                 <h2>Revenue</h2>
             </section>

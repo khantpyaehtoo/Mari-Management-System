@@ -1,6 +1,6 @@
-const Navbar = () => {
-    const currentYear = new Date();
+import DateTimeFormatter from "../app/core/functions/DateTimeFormatter";
 
+const Navbar = () => {
     return (
         <div className="flex justify-between items-center">
             <h3 className="text-white font-2xl">
@@ -9,11 +9,7 @@ const Navbar = () => {
 
             <div className="text-white">
                 <span>Current Date: </span>
-                {currentYear.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                })}
+                <DateTimeFormatter />
             </div>
         </div>
     );
