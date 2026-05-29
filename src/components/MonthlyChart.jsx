@@ -32,7 +32,9 @@ const options = {
     },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const labels = Array.from({ length: 12 }, (_, i) =>
+    new Date(0, i).toLocaleString("default", { month: "short" }),
+);
 
 const data = {
     labels,
@@ -52,8 +54,12 @@ const data = {
 
 export function MonthlyChart() {
     return (
-        <Card style={{ width: "full", height: 450 }}>
-            <Bar options={options} data={data} />
+        <Card style={{ width: "full", height: 450 }} className="shadow-sm">
+            <Bar
+                options={options}
+                data={data}
+                style={{ height: "full", width: "full" }}
+            />
         </Card>
     );
 }

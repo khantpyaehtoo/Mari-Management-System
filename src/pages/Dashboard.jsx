@@ -52,8 +52,8 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            <section className="mt-10 px-10">
-                <div className="grid lg:grid-cols-2 gap-3">
+            <section className="mt-10 mb-10 px-10">
+                <div className="grid lg:grid-cols-2 gap-3 md:grid-cols-1">
                     <MonthlyChart />
                     <div>
                         <CalendarCard />

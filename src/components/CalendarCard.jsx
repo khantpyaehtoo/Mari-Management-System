@@ -66,5 +66,5 @@ export const CalendarCard = () => {
         }
         return info.originNode;
     };
-    return <Calendar cellRender={cellRender} />;
+    return <Calendar cellRender={cellRender} className="shadow-sm" />;
 };
