@@ -1,4 +1,4 @@
-import { Flex, Typography, Col, Row } from "antd";
+import { Flex, Typography } from "antd";
 import DashboardCard from "../components/DashboardCard";
 import {
     ApartmentOutlined,
@@ -6,6 +6,8 @@ import {
     UnorderedListOutlined,
     UserOutlined,
 } from "@ant-design/icons";
+import { CalendarCard } from "../components/CalendarCard";
+import { MonthlyChart } from "../components/MonthlyChart";
 
 const dashboardCardItem = [
     {
@@ -50,8 +52,13 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            <section className="mt-20">
-                <h2>Revenue</h2>
+            <section className="mt-10 px-10">
+                <div className="grid lg:grid-cols-2 gap-3">
+                    <MonthlyChart />
+                    <div>
+                        <CalendarCard />
+                    </div>
+                </div>
             </section>
         </Flex>
     );
