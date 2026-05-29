@@ -34,7 +34,7 @@ const MainLayout = () => {
             </Sider>
 
             <Layout>
-                <Header>
+                <Header className="!bg-dark-blue">
                     <Navbar />
                 </Header>
                 <Content>
