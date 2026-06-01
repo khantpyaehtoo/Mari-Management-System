@@ -15,16 +15,10 @@ const Services = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
-                                    Product
-                                </th>
-                                <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
-                                    Price
-                                </th>
-                                <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
-                                    ID
-                                </th>
-                                <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
+                                <th className="thead-styling">Service</th>
+                                <th className="thead-styling">Price</th>
+                                <th className="thead-styling">ID</th>
+                                <th className="thead-styling text-right">
                                     Actions
                                 </th>
                             </tr>

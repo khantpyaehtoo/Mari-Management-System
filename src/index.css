@@ -27,3 +27,8 @@
 @utility sidebar-mobile {
     @apply fixed inset-y-0 left-0 z-50 w-64 bg-blue-500 transform transition-transform duration-300;
 }
+
+/* table header styling */
+@utility thead-styling {
+    @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest
+}
