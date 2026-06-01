@@ -11,10 +11,15 @@ import {
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { cn } from "../lib/utils";
+import { toggleSidebar } from "../layout/LayoutSlice";
 
 const SideBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
+    const isSidebarOpen = useSelector((state) => state.layout.isSidebarOpen);
 
     const menuItem = [
         {
@@ -66,19 +71,45 @@ const SideBar = () => {
         },
     ];
 
+    const closeSidebar = () => dispatch(toggleSidebar(false));
+
     return (
-        <aside>
-            <h2 className="flex justify-center text-center items-center text-3xl h-20 mb-5">
-                Logo
-            </h2>
-            <Menu
-                mode="inline"
-                items={menuItem}
-                selectedKeys={[location.pathname]}
-                onClick={(item) => navigate(item.key)}
-                className="flex flex-col gap-1"
+        <>
+            {/* Backdrop for mobile */}
+            <div
+                className={cn(
+                    "fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300",
+                    isSidebarOpen
+                        ? "opacity-100"
+                        : "opacity-0 pointer-events-none",
+                )}
+                onClick={closeSidebar}
             />
-        </aside>
+
+            {/* Sidebar content */}
+            <aside
+                className={cn(
+                    "fixed inset-y-0 left-0 z-50 w-64 bg-blue-500 transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:z-0 lg:w-full h-full",
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+                )}
+            >
+                <div className="flex flex-col h-full ">
+                    <h2 className="flex justify-center text-center items-center text-3xl h-20 mb-5 font-bold text-dark-blue">
+                        Logo
+                    </h2>
+                    <Menu
+                        mode="inline"
+                        items={menuItem}
+                        selectedKeys={[location.pathname]}
+                        onClick={(item) => {
+                            navigate(item.key);
+                            if (window.innerWidth < 1024) closeSidebar();
+                        }}
+                        className="flex-1 border-none"
+                    />
+                </div>
+            </aside>
+        </>
     );
 };
 
