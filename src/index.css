@@ -30,5 +30,5 @@
 
 /* table header styling */
 @utility thead-styling {
-    @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest
+    @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest;
 }
