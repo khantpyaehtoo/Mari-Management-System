@@ -9,6 +9,7 @@ const { Sider, Header, Content } = Layout;
 const MainLayout = () => {
     return (
         <Layout>
+            {/* for desktop */}
             <Sider
                 theme="light"
                 trigger={null}
@@ -21,6 +22,7 @@ const MainLayout = () => {
             </Sider>
 
             <Layout>
+                {/* for mobile */}
                 <div className="lg:h-full lg:w-full lg:hidden">
                     <SideBar />
                 </div>
