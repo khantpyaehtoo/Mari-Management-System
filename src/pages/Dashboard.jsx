@@ -55,7 +55,7 @@ const Dashboard = () => {
             <section className="mt-10 mb-10 px-10">
                 <div className="grid lg:grid-cols-2 gap-3 md:grid-cols-1">
                     <MonthlyChart />
-                    <div>
+                    <div className="h-[200px]">
                         <CalendarCard />
                     </div>
                 </div>
