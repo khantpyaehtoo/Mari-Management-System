@@ -15,13 +15,13 @@ const MainLayout = () => {
                 breakpoint="lg"
                 collapsedWidth="0"
                 width={220}
-                className="hidden lg:block min-h-screen"
+                className="hidden lg:min-h-screen lg:block "
             >
                 <SideBar />
             </Sider>
 
             <Layout>
-                <div className="h-full w-full lg:hidden">
+                <div className="lg:h-full lg:w-full lg:hidden">
                     <SideBar />
                 </div>
 

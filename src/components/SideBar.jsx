@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../lib/utils";
 import { toggleSidebar } from "../layout/LayoutSlice";
+import { X } from "lucide-react";
 
 const SideBar = () => {
     const navigate = useNavigate();
@@ -93,7 +94,13 @@ const SideBar = () => {
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full",
                 )}
             >
-                <div className="flex flex-col h-full ">
+                <div className="flex flex-col h-full">
+                    <button
+                        onClick={closeSidebar}
+                        className="cursor-pointer lg:hidden flex justify-end p-4"
+                    >
+                        <X />
+                    </button>
                     <h2 className="flex justify-center text-center items-center text-3xl h-20 mb-5 font-bold text-dark-blue">
                         Logo
                     </h2>
