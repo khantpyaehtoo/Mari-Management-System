@@ -21,13 +21,23 @@ ChartJS.register(
 
 const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             position: "bottom",
         },
         title: {
             display: true,
-            text: "Chart.js Bar Chart",
+            text: "Chart",
+        },
+    },
+    scales: {
+        y: {
+            min: 10,
+            max: 100,
+            ticks: {
+                stepSize: 10,
+            },
         },
     },
 };
@@ -36,30 +46,27 @@ const labels = Array.from({ length: 12 }, (_, i) =>
     new Date(0, i).toLocaleString("default", { month: "short" }),
 );
 
+const currentMonthIndex = new Date().getMonth();
+
+const filteredLabels = labels.slice(0, currentMonthIndex + 1);
+
 const data = {
-    labels,
+    labels: filteredLabels,
     datasets: [
         {
-            label: "Dataset 1",
-            data: labels.map(() => Math.random()),
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
-        },
-        {
-            label: "Dataset 2",
-            data: labels.map(() => Math.random()),
-            backgroundColor: "rgba(53, 162, 235, 0.5)",
+            label: "Total Order",
+            data: filteredLabels.map(() => Math.random() * 90),
+            backgroundColor: "#040404",
         },
     ],
 };
 
 export function MonthlyChart() {
     return (
-        <Card style={{ width: "full", height: 450 }} className="shadow-sm">
-            <Bar
-                options={options}
-                data={data}
-                style={{ height: "full", width: "full" }}
-            />
+        <Card className="w-full shadow-sm p-4">
+            <div className="relative w-full !h-[400px]">
+                <Bar options={options} data={data} />
+            </div>
         </Card>
     );
 }
