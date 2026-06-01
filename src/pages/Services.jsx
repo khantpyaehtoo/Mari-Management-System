@@ -6,11 +6,14 @@ const Services = () => {
 
     return (
         <div>
-            <Title className="title-style" level={3}>
-                Services
-            </Title>
+            <div className="title-style flex justify-between items-center">
+                <Title level={3}>Services</Title>
+                <button className="bg-black text-white p-3 rounded-md cursor-pointer shadow-sm">
+                    Add Service
+                </button>
+            </div>
 
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
