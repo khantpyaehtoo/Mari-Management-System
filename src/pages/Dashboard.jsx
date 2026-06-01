@@ -35,12 +35,12 @@ const Dashboard = () => {
     const { Title } = Typography;
     return (
         <Flex vertical>
-            <Title className="p-3 border-b-1" level={3}>
+            <Title className="title-style" level={3}>
                 Dashboard
             </Title>
 
             <section className="space-y-6 w-full px-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid-items-4">
                     {dashboardCardItem.map((item, key) => (
                         <DashboardCard
                             key={key}
@@ -53,7 +53,7 @@ const Dashboard = () => {
             </section>
 
             <section className="mt-10 mb-10 px-10">
-                <div className="grid lg:grid-cols-2 gap-3 md:grid-cols-1">
+                <div className="grid-items">
                     <MonthlyChart />
                     <div className="h-[200px]">
                         <CalendarCard />

@@ -13,7 +13,7 @@ const Settings = () => {
 
     return (
         <>
-            <Title className="p-3 border-b-1" level={3}>
+            <Title className="title-style" level={3}>
                 Settings
             </Title>
 

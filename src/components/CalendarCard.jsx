@@ -12,7 +12,6 @@ const useStyles = createStyles(({ token }) => ({
             borderColor: "red",
         },
         "& .ant-picker-calendar-date-value": {
-            // backgroundColor: "black",
             width: 40,
             height: 40,
             fontSize: 10,
