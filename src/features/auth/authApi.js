@@ -1,6 +1,6 @@
 import { baseApi } from "../../app/global/basicApi";
 const authEndPoint = "/auth";
-// const settingEndPoint = "/settings";
+const settingEndPoint = "/settings";
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -29,6 +29,25 @@ export const authApi = baseApi.injectEndpoints({
                 body: { username },
             }),
             invalidatesTags: ["auth"],
+        }),
+
+        changePassword: builder.mutation({
+            query: ({ updatePasswords, token }) => ({
+                url: `${authEndPoint}/change-password`,
+                method: "PUT",
+                header: { Authorization: `Bearer ${token}` },
+                body: updatePasswords,
+            }),
+            invalidatesTags: ["auth"],
+        }),
+
+        getAllSettings: builder.mutaion({
+            query: (token) => ({
+                url: `${settingEndPoint}`,
+                method: "GET",
+                header: { Authorization: `Bearer ${token}` },
+            }),
+            providesTags: ["settings"],
         }),
     }),
 });

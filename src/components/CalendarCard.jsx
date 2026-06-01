@@ -1,4 +1,4 @@
-import { Badge, Calendar, Card } from "antd";
+import { Badge, Calendar } from "antd";
 
 const getListData = (value) => {
     let listData = []; // Specify the type of listData
