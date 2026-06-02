@@ -13,21 +13,10 @@ const { Title } = Typography;
 const LoginForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [iserror, setIsError] = useState(null);
-    // const [isFormEmpty, setIsFormEmpty] = useState(true);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const [form] = Form.useForm();
 
     const [loginAccount] = useLoginAccountMutation();
-
-    // const emailValue = Form.useWatch("email", form);
-    // const pwsValue = Form.useWatch("password", form);
-
-    // useEffect(() => {
-    //     if (emailValue?.length > 0 && pwsValue?.length > 0) {
-    //         setIsFormEmpty(false);
-    //     }
-    // }, [emailValue, pwsValue]);
 
     // console.log("What Message", setMessage); => check redux noti connection
 
@@ -35,7 +24,9 @@ const LoginForm = () => {
         console.log("Received values of form: ", values);
         try {
             setIsSubmitting(true);
-            const { data, error: ApiError } = await loginAccount(values);
+            setIsError(null);
+
+            const data = await loginAccount(values).unwrap();
 
             if (data?.accessToken) {
                 Cookies.set("lmsToken", data?.accessToken);
@@ -43,7 +34,7 @@ const LoginForm = () => {
                 dispatch(
                     setLoggedIn({
                         token: data?.accessToken,
-                        email: values.email,
+                        email: values?.email,
                     }),
                 );
                 navigate("/");
@@ -53,16 +44,21 @@ const LoginForm = () => {
                         msgContent: "Login Successful!",
                     }),
                 );
-            } else {
-                setIsSubmitting(false);
-                setIsError(ApiError?.data?.message || ApiError?.error);
-                dispatch(
-                    setMessage({
-                        msgType: "error",
-                        msgContent: iserror?.data?.message || iserror?.error,
-                    }),
-                );
             }
+        } catch (ApiError) {
+            console.error("Login failed:", ApiError);
+            setIsSubmitting(false);
+
+            const errorMessage =
+                ApiError?.data?.message || ApiError?.error || "Login failed";
+
+            setIsError(errorMessage);
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
         } finally {
             setIsSubmitting(false);
         }

@@ -14,9 +14,9 @@ const initialState = {
 export const notiSlice = createSlice({
     name: "noti",
     initialState,
-    reducer: {
+    reducers: {
         setMessage: (state, { payload }) => {
-            state.message = payload;
+            state.message = payload.message;
         },
         setAlert: (state, { payload }) => {
             state.alert = payload;
