@@ -1,5 +1,6 @@
 import { Typography } from "antd";
 import { Edit, Trash2 } from "lucide-react";
+import AddServicesForm from "../components/modals/addServicesForm";
 
 const Services = () => {
     const { Title } = Typography;
@@ -8,9 +9,8 @@ const Services = () => {
         <div>
             <div className="title-style flex justify-between items-center">
                 <Title level={3}>Services</Title>
-                <button className="bg-black text-white p-3 rounded-md cursor-pointer shadow-sm">
-                    Add Service
-                </button>
+
+                <AddServicesForm />
             </div>
 
             <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3">

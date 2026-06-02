@@ -45,12 +45,12 @@ const LoginForm = () => {
                     }),
                 );
             }
-        } catch (ApiError) {
-            console.error("Login failed:", ApiError);
+        } catch (err) {
+            console.error("Login failed:", err);
             setIsSubmitting(false);
 
             const errorMessage =
-                ApiError?.data?.message || ApiError?.error || "Login failed";
+                err?.data?.message || err?.error || "Login failed";
 
             setIsError(errorMessage);
             dispatch(

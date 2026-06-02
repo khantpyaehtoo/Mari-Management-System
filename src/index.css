@@ -32,3 +32,8 @@
 @utility thead-styling {
     @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest;
 }
+
+/* modal form input design */
+@utility input-styling {
+    @apply w-full px-4 py-3 bg-gray-100 border-transparent focus:bg-white focus:border-black border-2 rounded-xl transition-all outline-none font-bold text-gray-700;
+}

@@ -26,7 +26,6 @@ const useStyles = createStyles(({ token }) => ({
                 color: "white !important",
                 borderRadius: "6px !important",
             },
-
         "& .ant-picker-cell-today .ant-picker-cell-inner::before": {
             borderColor: "black !important",
         },
