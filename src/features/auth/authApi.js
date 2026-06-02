@@ -1,4 +1,4 @@
-import { baseApi } from "../../app/coreapp/global/basicApi";
+import { baseApi } from "../../app/core/global/basicApi";
 const authEndPoint = "/auth";
 const settingEndPoint = "/settings";
 
@@ -41,7 +41,7 @@ export const authApi = baseApi.injectEndpoints({
             invalidatesTags: ["auth"],
         }),
 
-        getAllSettings: builder.mutaion({
+        getAllSettings: builder.mutation({
             query: (token) => ({
                 url: `${settingEndPoint}`,
                 method: "GET",
@@ -51,3 +51,11 @@ export const authApi = baseApi.injectEndpoints({
         }),
     }),
 });
+
+export const {
+    useLoginAccountMutation,
+    useChangePasswordMutation,
+    useGetAdminDataQuery,
+    useGetAllSettingsMutation,
+    useResetPasswordMutation,
+} = authApi;

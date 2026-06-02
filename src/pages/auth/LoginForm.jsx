@@ -1,12 +1,71 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Flex, Form, Input, Typography } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginAccountMutation } from "../../features/auth/authApi";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { setLoggedIn } from "../../features/auth/authSlice";
+import { setMessage } from "../../app/core/notiSlice";
+import { useState } from "react";
 
 const { Title } = Typography;
 
 const LoginForm = () => {
-    const onFinish = (values) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [iserror, setIsError] = useState(null);
+    // const [isFormEmpty, setIsFormEmpty] = useState(true);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    // const [form] = Form.useForm();
+
+    const [loginAccount] = useLoginAccountMutation();
+
+    // const emailValue = Form.useWatch("email", form);
+    // const pwsValue = Form.useWatch("password", form);
+
+    // useEffect(() => {
+    //     if (emailValue?.length > 0 && pwsValue?.length > 0) {
+    //         setIsFormEmpty(false);
+    //     }
+    // }, [emailValue, pwsValue]);
+
+    // console.log("What Message", setMessage); => check redux noti connection
+
+    const onFinish = async (values) => {
         console.log("Received values of form: ", values);
+        try {
+            setIsSubmitting(true);
+            const { data, error: ApiError } = await loginAccount(values);
+
+            if (data?.accessToken) {
+                Cookies.set("lmsToken", data?.accessToken);
+                Cookies.set("email", values?.email);
+                dispatch(
+                    setLoggedIn({
+                        token: data?.accessToken,
+                        email: values.email,
+                    }),
+                );
+                navigate("/");
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Login Successful!",
+                    }),
+                );
+            } else {
+                setIsSubmitting(false);
+                setIsError(ApiError?.data?.message || ApiError?.error);
+                dispatch(
+                    setMessage({
+                        msgType: "error",
+                        msgContent: iserror?.data?.message || iserror?.error,
+                    }),
+                );
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -73,7 +132,13 @@ const LoginForm = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button block type="primary" htmlType="submit">
+                        <Button
+                            block
+                            type="primary"
+                            htmlType="submit"
+                            loading={isSubmitting}
+                            // disabled={isFormEmpty}
+                        >
                             Log in
                         </Button>
                     </Form.Item>
