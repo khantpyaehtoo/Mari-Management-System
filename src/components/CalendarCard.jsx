@@ -9,7 +9,11 @@ const useStyles = createStyles(({ token }) => ({
         height: 350,
         borderRadius: 10,
         "& .ant-radio-button-wrapper": {
+            borderColor: "black",
+        },
+        "& .ant-radio-button-wrapper.ant-radio-button-wrapper-checked": {
             borderColor: "red",
+            color: "red",
         },
         "& .ant-picker-calendar-date-value": {
             width: 40,
@@ -22,6 +26,15 @@ const useStyles = createStyles(({ token }) => ({
                 color: "white !important",
                 borderRadius: "6px !important",
             },
+
+        "& .ant-picker-cell-today .ant-picker-cell-inner::before": {
+            borderColor: "black !important",
+        },
+        "& .ant-picker-cell-selected .ant-picker-cell-inner": {
+            backgroundColor: "black !important",
+            color: "white !important",
+            borderRadius: "6px !important",
+        },
     },
 }));
 
