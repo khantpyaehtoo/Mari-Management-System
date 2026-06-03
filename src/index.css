@@ -28,6 +28,16 @@
     @apply fixed inset-y-0 left-0 z-50 w-64 bg-blue-500 transform transition-transform duration-300;
 }
 
+/* label styling */
+@utility label-styling {
+    @apply text-xs font-bold text-gray-400 uppercase tracking-widest;
+}
+
+/* table wrapper styling */
+@utility table-wrapper {
+    @apply bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3;
+}
+
 /* table header styling */
 @utility thead-styling {
     @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest;

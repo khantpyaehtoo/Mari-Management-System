@@ -10,10 +10,10 @@ const Services = () => {
             <div className="title-style flex justify-between items-center">
                 <Title level={3}>Services</Title>
 
-                <AddServicesForm />
+                <AddServicesForm title={"Services"} />
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3">
+            <div className="table-wrapper">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>

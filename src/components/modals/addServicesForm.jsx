@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Modal, Typography } from "antd";
 
-const addServicesForm = () => {
+const addServicesForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { Title } = Typography;
     const showModal = () => {
@@ -23,10 +23,14 @@ const addServicesForm = () => {
                 onClick={showModal}
                 className="!bg-black !text-white !p-3 !shadow-sm"
             >
-                Add Service
+                Add {title}
             </Button>
             <Modal
-                title={<Title level={3}>Add Service</Title>}
+                title={
+                    <Title className="uppercase" level={3}>
+                        Add {title}
+                    </Title>
+                }
                 closable={{ "aria-label": "Custom Close Button" }}
                 open={isModalOpen}
                 onOk={handleOk}
@@ -34,9 +38,7 @@ const addServicesForm = () => {
             >
                 <form action="" method="">
                     <div className="flex flex-col space-y-1 my-7">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                            Service Name
-                        </label>
+                        <label className="label-styling">{title} Name</label>
                         <input
                             placeholder="Service Name"
                             className="input-styling"
@@ -44,9 +46,7 @@ const addServicesForm = () => {
                     </div>
 
                     <div className="flex flex-col space-y-1 my-7">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                            Service Price
-                        </label>
+                        <label className="label-styling">Service Price</label>
                         <input
                             placeholder="Service Price"
                             className="input-styling"
@@ -54,7 +54,7 @@ const addServicesForm = () => {
                     </div>
 
                     <div>
-                        <label>Image</label>
+                        <label className="label-styling">Image</label>
                         <input
                             placeholder="Image"
                             className="input-styling mb-10"
