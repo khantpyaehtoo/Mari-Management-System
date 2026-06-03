@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import Cookie from "js-cookie";
 
 const token = Cookie.get("lmsToken") ? Cookie.get("lmsToken") : null;
-const username = Cookie.get("username") ? Cookie.get("username") : null;
+const email = Cookie.get("email") ? Cookie.get("email") : null;
 
 const initialState = {
     isLoggedIn: !!token,
-    username,
+    email,
     token,
 };
 
@@ -20,7 +20,7 @@ export const authSlice = createSlice({
         },
 
         removeCookie: () => {
-            Cookie.remove("username");
+            Cookie.remove("email");
             Cookie.remove("lmsToken");
         },
     },

@@ -10,14 +10,31 @@ import Dashboard from "./pages/Dashboard";
 import LoginForm from "./pages/auth/LoginForm";
 import PageNotFound from "./pages/PageNotFound";
 import ForgetPasswordForm from "./pages/auth/ForgetPasswordForm";
+// import IsAuth from "./components/Guards/isAuth";
+// import IsNotAuth from "./components/Guards/isAuth";
 
 export default function App() {
     return (
         <Routes>
-            <Route index path="/login" element={<LoginForm />} />
+            <Route
+                index
+                path="/login"
+                element={
+                    // <IsNotAuth>
+                    <LoginForm />
+                    // </IsNotAuth>
+                }
+            />
             <Route index path="/reset" element={<ForgetPasswordForm />} />
 
-            <Route path="/" element={<MainLayout />}>
+            <Route
+                path="/"
+                element={
+                    // <IsAuth>
+                    <MainLayout />
+                    // </IsAuth>
+                }
+            >
                 <Route index path="/" element={<Dashboard />} />
                 <Route path="/management">
                     <Route path="user" element={<User />} />
