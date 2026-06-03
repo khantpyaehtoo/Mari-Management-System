@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import { Flex, Space, Table, Tag } from "antd";
-import AddServicesForm from "../components/modals/addServicesForm";
+import AddServicesForm from "../components/modals/addForm";
 const { Column, ColumnGroup } = Table;
 const data = [
     {

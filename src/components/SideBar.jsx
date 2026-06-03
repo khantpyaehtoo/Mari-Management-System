@@ -15,12 +15,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../lib/utils";
 import { toggleSidebar } from "../layout/LayoutSlice";
 import { X } from "lucide-react";
+import { removeCookie, setLoggedIn } from "../features/auth/authSlice";
 
 const SideBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-    const isSidebarOpen = useSelector((state) => state.layout.isSidebarOpen);
+    const isSidebarOpen = useSelector((state) => state.layout.isOpen);
+
+    const signOutHandler = () => {
+        dispatch(removeCookie());
+        dispatch(
+            setLoggedIn({
+                email: null,
+                token: null,
+            }),
+        );
+        navigate("/login");
+    };
 
     const menuItem = [
         {
@@ -66,7 +78,7 @@ const SideBar = () => {
             label: <span className="sidemenu-item">Settings</span>,
         },
         {
-            key: "/login",
+            key: "logout",
             icon: <LogoutOutlined />,
             label: <span className="sidemenu-item text-red-500">Logout</span>,
         },
@@ -109,7 +121,12 @@ const SideBar = () => {
                         items={menuItem}
                         selectedKeys={[location.pathname]}
                         onClick={(item) => {
-                            navigate(item.key);
+                            if (item.key !== "logout") {
+                                navigate(item.key);
+                            } else {
+                                signOutHandler();
+                            }
+
                             if (window.innerWidth < 1024) closeSidebar();
                         }}
                         className="flex-1 border-none"

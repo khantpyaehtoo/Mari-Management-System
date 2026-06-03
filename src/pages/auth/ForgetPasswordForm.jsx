@@ -1,25 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Input, Typography, message } from "antd";
 import {
     ArrowLeftOutlined,
     MailOutlined,
     LockOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useResetPasswordMutation } from "../../features/auth/authApi";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../app/core/notiSlice";
 
 const { Title, Text } = Typography;
 
 const ForgetPasswordForm = () => {
     const [form] = Form.useForm();
-    const [currentStep, setCurrentStep] = useState("email"); // 'email' or 'reset'
+    const [currentStep, setCurrentStep] = useState("email");
+
     const [loading, setLoading] = useState(false);
+    const [isFormEmpty, setIsFormEmpty] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(true);
+    const [isError, setIsError] = useState(null);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const emailValue = Form.useWatch("email", form);
+    const otpValue = Form.useWatch("otp", form);
+
+    useEffect(() => {
+        if (emailValue?.length > 0) {
+            setIsFormEmpty(false);
+        }
+    }, [emailValue]);
+
+    useEffect(() => {
+        if (otpValue?.length > 0 && otpValue?.length === 6) {
+            setIsSubmitting(false);
+        }
+    }, [otpValue]);
 
     const handleRequestOTP = async () => {
         try {
             const values = await form.validateFields(["email"]);
             setLoading(true);
 
-            // Mocking API call
             console.log("Requesting OTP for:", values.email);
             setTimeout(() => {
                 setLoading(false);
@@ -31,9 +55,39 @@ const ForgetPasswordForm = () => {
         }
     };
 
-    const onFinish = (values) => {
+    const [resetPassword] = useResetPasswordMutation();
+    const onFinish = async (values) => {
         console.log("Resetting password with:", values);
-        message.success("Password has been reset successfully!");
+
+        try {
+            setLoading(true);
+            const email = values.email;
+            const { data } = await resetPassword(email);
+            if (data?.success) {
+                form.resetFields();
+                navigate("/login");
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "successful!",
+                    }),
+                );
+            }
+        } catch (err) {
+            setLoading(false);
+            console.error("reset password failed", err);
+            const errorMsg = err?.data?.message || err?.error;
+
+            setIsError(errorMsg);
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: isError,
+                }),
+            );
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -102,6 +156,7 @@ const ForgetPasswordForm = () => {
                                     block
                                     loading={loading}
                                     onClick={handleRequestOTP}
+                                    disabled={isFormEmpty}
                                     className="h-12 font-semibold rounded-lg"
                                 >
                                     Send Reset Code
@@ -131,6 +186,7 @@ const ForgetPasswordForm = () => {
                             <Form.Item
                                 name="password"
                                 label="New Password"
+                                hasFeedback
                                 rules={[
                                     {
                                         required: true,
@@ -148,6 +204,7 @@ const ForgetPasswordForm = () => {
                                     prefix={
                                         <LockOutlined className="text-gray-400 mr-1" />
                                     }
+                                    disabled={isSubmitting}
                                     placeholder="Min. 8 characters"
                                     size="large"
                                     className="rounded-lg"

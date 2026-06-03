@@ -12,7 +12,7 @@ const { Title } = Typography;
 
 const LoginForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [iserror, setIsError] = useState(null);
+    const [isError, setIsError] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -56,7 +56,7 @@ const LoginForm = () => {
             dispatch(
                 setMessage({
                     msgType: "error",
-                    msgContent: errorMessage,
+                    msgContent: isError,
                 }),
             );
         } finally {

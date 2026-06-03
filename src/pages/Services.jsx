@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import { Edit, Trash2 } from "lucide-react";
-import AddServicesForm from "../components/modals/addServicesForm";
+import AddServicesForm from "../components/modals/addForm";
 
 const Services = () => {
     const { Title } = Typography;

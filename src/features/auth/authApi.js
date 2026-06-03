@@ -23,10 +23,10 @@ export const authApi = baseApi.injectEndpoints({
         }),
 
         resetPassword: builder.mutation({
-            query: (username) => ({
+            query: (email) => ({
                 url: `${authEndPoint}/reset`,
                 method: "PUT",
-                body: { username },
+                body: { email },
             }),
             invalidatesTags: ["auth"],
         }),
