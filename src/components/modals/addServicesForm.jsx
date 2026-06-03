@@ -40,7 +40,7 @@ const addServicesForm = ({ title }) => {
                     <div className="flex flex-col space-y-1 my-7">
                         <label className="label-styling">{title} Name</label>
                         <input
-                            placeholder="Service Name"
+                            placeholder={`${title} Name`}
                             className="input-styling"
                         />
                     </div>
@@ -48,7 +48,7 @@ const addServicesForm = ({ title }) => {
                     <div className="flex flex-col space-y-1 my-7">
                         <label className="label-styling">Service Price</label>
                         <input
-                            placeholder="Service Price"
+                            placeholder={`${title} Price`}
                             className="input-styling"
                         />
                     </div>
