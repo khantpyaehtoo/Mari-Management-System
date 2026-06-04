@@ -87,9 +87,38 @@ const User = () => {
         pageSize: 5,
         total: data.length,
     });
-    // const filterSearch =
-    //     String(record.name).toLowerCase().includes(value.toLowerCase());
-    // };
+
+    const columns = [
+        {
+            title: "Name",
+            dataIndex: "username",
+            key: "username",
+            filteredValue: [searchText],
+            onFilter: (value, record) => {
+                return (
+                    String(record.age)
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    String(record.address)
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    String(record.username)
+                        .toLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            },
+        },
+        {
+            title: "Age",
+            dataIndex: "age",
+            key: "age",
+        },
+        {
+            title: "address",
+            dataIndex: "address",
+            key: "address",
+        },
+    ];
 
     const handlePageChange = (page, pageSize) => {
         setPaginationConfig({
@@ -124,37 +153,7 @@ const User = () => {
 
             <div className="table-wrapper">
                 <Table
-                    columns={[
-                        {
-                            title: "Name",
-                            dataIndex: "username",
-                            key: "username",
-                            filteredValue: [searchText],
-                            onFilter: (value, record) => {
-                                return (
-                                    String(record.age)
-                                        .toLowerCase()
-                                        .includes(value.toLowerCase()) ||
-                                    String(record.address)
-                                        .toLowerCase()
-                                        .includes(value.toLowerCase()) ||
-                                    String(record.username)
-                                        .toLowerCase()
-                                        .includes(value.toLowerCase())
-                                );
-                            },
-                        },
-                        {
-                            title: "Age",
-                            dataIndex: "age",
-                            key: "age",
-                        },
-                        {
-                            title: "address",
-                            dataIndex: "address",
-                            key: "address",
-                        },
-                    ]}
+                    columns={columns}
                     dataSource={data}
                     pagination={paginationConfig || 1}
                     // onClick={() => handlePageChange(1, data.length)}
