@@ -1,11 +1,21 @@
 import { Input, Typography } from "antd";
-import { Flex, Space, Table, Tag } from "antd";
+import { Flex, Space, Table, Tag, Image } from "antd";
 import AddForm from "../components/modals/AddForm";
+import flowerProfile from "../../public/flowerProfile.jpg";
 import { useState } from "react";
+
 const { Column, ColumnGroup } = Table;
 const data = [
     {
         key: "1",
+        pofile: (
+            <Image
+                src={flowerProfile}
+                width={40}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
         firstName: "John",
         lastName: "Brown",
         age: 32,
@@ -14,6 +24,14 @@ const data = [
     },
     {
         key: "2",
+        pofile: (
+            <Image
+                src={flowerProfile}
+                width={40}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
         firstName: "Jim",
         lastName: "Green",
         age: 42,
@@ -22,6 +40,14 @@ const data = [
     },
     {
         key: "3",
+        pofile: (
+            <Image
+                src={flowerProfile}
+                width={40}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
         firstName: "Joe",
         lastName: "Black",
         age: 32,
@@ -30,6 +56,14 @@ const data = [
     },
     {
         key: "4",
+        pofile: (
+            <Image
+                src={flowerProfile}
+                width={40}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
         firstName: "John",
         lastName: "Brown",
         age: 32,
@@ -38,6 +72,14 @@ const data = [
     },
     {
         key: "5",
+        pofile: (
+            <Image
+                src={flowerProfile}
+                width={40}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
         firstName: "Jim",
         lastName: "Green",
         age: 42,
@@ -46,6 +88,14 @@ const data = [
     },
     {
         key: "6",
+        pofile: (
+            <Image
+                src={flowerProfile}
+                width={40}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
         firstName: "Joe",
         lastName: "Black",
         age: 32,
@@ -74,6 +124,7 @@ const Staff = () => {
             </div>
             <div className="table-wrapper">
                 <Table dataSource={data}>
+                    <Column title="Profile" dataIndex="pofile" key="profile" />
                     <ColumnGroup
                         title="Name"
                         filteredValue={[searchText]}
