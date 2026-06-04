@@ -1,7 +1,7 @@
-import { Typography } from "antd";
+import { Image, Typography } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import AddForm from "../components/modals/AddForm";
-// import SearchBar from "../components/SearchBar/SearchBar";
+import flowerProfile from "../../public/flowerProfile.jpg";
 
 const Services = () => {
     const { Title } = Typography;
@@ -36,11 +36,10 @@ const Services = () => {
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 border border-gray-200 flex-shrink-0 shadow-sm">
-                                            {/* <img
-                                                    src={product.image}
-                                                    alt={product.name}
-                                                    className="w-full h-full object-cover"
-                                                /> */}
+                                            <Image
+                                                src={flowerProfile}
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                         <span className="font-bold text-gray-800 text-lg">
                                             {/* {product.name} */}
@@ -50,6 +49,7 @@ const Services = () => {
                                 <td className="px-6 py-4">
                                     <span className="text-gray-700 font-black">
                                         {/* {product.price.toLocaleString()}{" "} */}
+                                        120,000{" "}
                                         <small className="text-gray-400">
                                             MMK
                                         </small>
@@ -58,7 +58,7 @@ const Services = () => {
                                 <td className="px-6 py-4">
                                     <span className="text-[10px] font-mono font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-md uppercase">
                                         {/* #{product.id.toString().slice(0, 8)} */}
-                                        ...
+                                        DB-20
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 text-right">

@@ -17,8 +17,8 @@ const Settings = () => {
                 Settings
             </Title>
 
-            <section className="shadow-sm min-h-[95%]">
-                <div className="h-full bg-amber-700 w-[95%] mx-auto">
+            <section className="table-wrapper">
+                <div className="bg-amber-700 w-[95%] mx-auto">
                     <section className="bg-gray-50/50 w-[500px]">
                         <Title level={4} className="border-b-1 p-3">
                             Account SetUp

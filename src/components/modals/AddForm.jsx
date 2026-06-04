@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal, Typography, Upload } from "antd";
-import {
-    LockOutlined,
-    PlusCircleOutlined,
-    PlusOutlined,
-} from "@ant-design/icons";
+import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [formValue, setFormValue] = useState("");
     const { Title } = Typography;
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -124,7 +122,7 @@ const AddForm = ({ title }) => {
                                 <label className="label-styling">
                                     {title} Price
                                 </label>
-                                <Form.Item name="name">
+                                <Form.Item name="price">
                                     <Input
                                         required
                                         placeholder={`${title} Price`}
