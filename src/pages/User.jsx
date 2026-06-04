@@ -1,5 +1,6 @@
 import { Input, Table, Typography } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import AddServicesForm from "../components/modals/addForm";
 
 const data = [
     {
@@ -83,7 +84,7 @@ const User = () => {
     const [searchText, setSearchText] = useState("");
     const [paginationConfig, setPaginationConfig] = useState({
         current: 1,
-        pageSize: 3,
+        pageSize: 5,
         total: data.length,
     });
     // const filterSearch =
@@ -91,7 +92,11 @@ const User = () => {
     // };
 
     const handlePageChange = (page, pageSize) => {
-        setPaginationConfig({ ...paginationConfig, current: page, pageSize });
+        setPaginationConfig({
+            ...paginationConfig,
+            current: page,
+            pageSize,
+        });
     };
 
     // const CustomPagination = () => {
@@ -106,53 +111,56 @@ const User = () => {
 
     return (
         <div>
-            <Title className="title-style" level={3}>
-                User
-            </Title>
+            <div className="title-style flex justify-between items-center">
+                <Title level={3}>User</Title>
+                <Search
+                    placeholder="Search user ...."
+                    onSearch={(value) => setSearchText(value)}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="!w-128"
+                />
+                <AddServicesForm title={"User"} />
+            </div>
 
-            <Search
-                placeholder="Search user ...."
-                onSearch={(value) => setSearchText(value)}
-                onChange={(e) => setSearchText(e.target.value)}
-            />
-
-            <Table
-                columns={[
-                    {
-                        title: "Name",
-                        dataIndex: "username",
-                        key: "username",
-                        filteredValue: [searchText],
-                        onFilter: (value, record) => {
-                            return (
-                                String(record.age)
-                                    .toLowerCase()
-                                    .includes(value.toLowerCase()) ||
-                                String(record.address)
-                                    .toLowerCase()
-                                    .includes(value.toLowerCase()) ||
-                                String(record.username)
-                                    .toLowerCase()
-                                    .includes(value.toLowerCase())
-                            );
+            <div className="table-wrapper">
+                <Table
+                    columns={[
+                        {
+                            title: "Name",
+                            dataIndex: "username",
+                            key: "username",
+                            filteredValue: [searchText],
+                            onFilter: (value, record) => {
+                                return (
+                                    String(record.age)
+                                        .toLowerCase()
+                                        .includes(value.toLowerCase()) ||
+                                    String(record.address)
+                                        .toLowerCase()
+                                        .includes(value.toLowerCase()) ||
+                                    String(record.username)
+                                        .toLowerCase()
+                                        .includes(value.toLowerCase())
+                                );
+                            },
                         },
-                    },
-                    {
-                        title: "Age",
-                        dataIndex: "age",
-                        key: "age",
-                    },
-                    {
-                        title: "address",
-                        dataIndex: "address",
-                        key: "address",
-                    },
-                ]}
-                dataSource={data}
-                pagination={paginationConfig}
-                // onClick={() => handlePageChange(1, data.length)}
-                onChange={handlePageChange}
-            />
+                        {
+                            title: "Age",
+                            dataIndex: "age",
+                            key: "age",
+                        },
+                        {
+                            title: "address",
+                            dataIndex: "address",
+                            key: "address",
+                        },
+                    ]}
+                    dataSource={data}
+                    pagination={paginationConfig || 1}
+                    // onClick={() => handlePageChange(1, data.length)}
+                    onChange={handlePageChange}
+                />
+            </div>
         </div>
     );
 };
