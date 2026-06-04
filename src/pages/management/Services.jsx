@@ -1,18 +1,12 @@
-import { Image, Typography } from "antd";
+import { Image } from "antd";
 import { Edit, Trash2 } from "lucide-react";
-import AddForm from "../../components/modals/AddForm";
 import flowerProfile from "../../../public/flowerProfile.jpg";
+import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 
 const Services = () => {
-    const { Title } = Typography;
-
     return (
         <div>
-            <div className="title-style flex justify-between items-center">
-                <Title level={3}>Services</Title>
-                {/* <SearchBar /> */}
-                <AddForm title={"Services"} />
-            </div>
+            <SubHeaderSection title={"Services"} />
 
             <div className="table-wrapper">
                 <div className="overflow-x-auto">

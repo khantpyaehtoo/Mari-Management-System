@@ -1,14 +1,12 @@
-import { Input, Typography } from "antd";
 import { Flex, Space, Table, Tag, Image } from "antd";
-import AddForm from "../../components/modals/AddForm";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import { useState } from "react";
+import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 
-const { Column, ColumnGroup } = Table;
 const data = [
     {
         key: "1",
-        pofile: (
+        profile: (
             <Image
                 src={flowerProfile}
                 width={40}
@@ -24,7 +22,7 @@ const data = [
     },
     {
         key: "2",
-        pofile: (
+        profile: (
             <Image
                 src={flowerProfile}
                 width={40}
@@ -40,7 +38,7 @@ const data = [
     },
     {
         key: "3",
-        pofile: (
+        profile: (
             <Image
                 src={flowerProfile}
                 width={40}
@@ -56,7 +54,7 @@ const data = [
     },
     {
         key: "4",
-        pofile: (
+        profile: (
             <Image
                 src={flowerProfile}
                 width={40}
@@ -72,7 +70,7 @@ const data = [
     },
     {
         key: "5",
-        pofile: (
+        profile: (
             <Image
                 src={flowerProfile}
                 width={40}
@@ -88,7 +86,7 @@ const data = [
     },
     {
         key: "6",
-        pofile: (
+        profile: (
             <Image
                 src={flowerProfile}
                 width={40}
@@ -105,89 +103,91 @@ const data = [
 ];
 
 const Staff = () => {
-    const { Title } = Typography;
-    const { Search } = Input;
-
     const [searchText, setSearchText] = useState("");
+    const columns = [
+        {
+            title: "Profile",
+            dataIndex: "profile",
+            key: "profile",
+        },
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+            filteredValue: [searchText],
+            onFilter: (value, record) => {
+                return (
+                    String(record.age)
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    String(record.address)
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    String(record.firstName)
+                        .toLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            },
+            children: [
+                {
+                    title: "First Name",
+                    dataIndex: "firstName",
+                    key: "firstName",
+                },
+                {
+                    title: "Last Name",
+                    dataIndex: "lastName",
+                    key: "lastName",
+                },
+            ],
+        },
+        {
+            title: "Age",
+            dataIndex: "age",
+            key: "age",
+        },
+        {
+            title: "address",
+            dataIndex: "address",
+            key: "address",
+        },
+        {
+            title: "Tags",
+            dataIndex: "tags",
+            key: "tags",
+            render: (tags) => (
+                <Flex gap="small" align="center" wrap>
+                    {tags.map((tag) => {
+                        let color = tag.length > 5 ? "geekblue" : "green";
+                        if (tag === "Blah") {
+                            color = "volcano";
+                        }
+                        return (
+                            <Tag color={color} key={tag}>
+                                {tag.toUpperCase()}
+                            </Tag>
+                        );
+                    })}
+                </Flex>
+            ),
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <Space size="medium">
+                    <a>Invite {record.lastName}</a>
+                    <a>Delete</a>
+                </Space>
+            ),
+        },
+    ];
 
     return (
         <div>
-            <div className="title-style flex justify-between items-center">
-                <Title level={3}>Staff</Title>
-                <Search
-                    placeholder="Search staff ...."
-                    onSearch={(value) => setSearchText(value)}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    className="!w-128"
-                />
-                <AddForm title={"Staff"} />
-            </div>
+            <SubHeaderSection setSearchText={setSearchText} title={"Staff"} />
             <div className="table-wrapper">
-                <Table dataSource={data}>
-                    <Column title="Profile" dataIndex="pofile" key="profile" />
-                    <ColumnGroup
-                        title="Name"
-                        filteredValue={[searchText]}
-                        dataIndex="name"
-                        onFilter={(value, record) => {
-                            return (
-                                String(record.age)
-                                    .toLowerCase()
-                                    .includes(value.toLowerCase()) ||
-                                String(record.address)
-                                    .toLowerCase()
-                                    .includes(value.toLowerCase()) ||
-                                String(record.firstName)
-                                    .toLowerCase()
-                                    .includes(value.toLowerCase())
-                            );
-                        }}
-                    >
-                        <Column
-                            title="First Name"
-                            dataIndex="firstName"
-                            key="firstName"
-                        />
-                        <Column
-                            title="Last Name"
-                            dataIndex="lastName"
-                            key="lastName"
-                        />
-                    </ColumnGroup>
-                    <Column title="Age" dataIndex="age" key="age" />
-                    <Column title="Address" dataIndex="address" key="address" />
-                    <Column
-                        title="Tags"
-                        dataIndex="tags"
-                        key="tags"
-                        render={(tags) => (
-                            <Flex gap="small" align="center" wrap>
-                                {tags.map((tag) => {
-                                    let color =
-                                        tag.length > 5 ? "geekblue" : "green";
-                                    if (tag === "Blah") {
-                                        color = "volcano";
-                                    }
-                                    return (
-                                        <Tag color={color} key={tag}>
-                                            {tag.toUpperCase()}
-                                        </Tag>
-                                    );
-                                })}
-                            </Flex>
-                        )}
-                    />
-                    <Column
-                        title="Action"
-                        key="action"
-                        render={(_, record) => (
-                            <Space size="medium">
-                                <a>Invite {record.lastName}</a>
-                                <a>Delete</a>
-                            </Space>
-                        )}
-                    />
-                </Table>
+                <Table dataSource={data} columns={columns} />
             </div>
         </div>
     );

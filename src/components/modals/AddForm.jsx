@@ -52,116 +52,123 @@ const AddForm = ({ title }) => {
                 okText="Create"
             >
                 <Form action="" method="">
-                    <div>
-                        <label className="label-styling">{title} Name</label>
-                        <Form.Item name="name">
-                            <Input
-                                required
-                                placeholder={`${title} Name`}
-                                className="!input-styling"
-                            />
-                        </Form.Item>
-                    </div>
-                    {(title != "Services" && (
-                        <>
-                            <div>
-                                <label className="label-styling">
-                                    {title} Email
-                                </label>
-                                <Form.Item
-                                    name="email"
-                                    hasFeedback
-                                    rules={[
-                                        {
-                                            type: "email",
-                                            message:
-                                                "The input is not valid email",
-                                        },
-                                        {
-                                            required: true,
-                                            message: "Please input email",
-                                        },
-                                    ]}
-                                >
-                                    <Input
-                                        placeholder={`${title} Email`}
-                                        className="!input-styling"
-                                    />
-                                </Form.Item>
-                            </div>
+                    <Form.Item
+                        layout="vertical"
+                        name="name"
+                        label={
+                            <label className="label-styling">
+                                {title} name
+                            </label>
+                        }
+                    >
+                        <Input
+                            required
+                            placeholder={`${title} Name`}
+                            className="!input-styling"
+                        />
+                    </Form.Item>
 
-                            <div>
-                                <label className="label-styling">
-                                    password
-                                </label>
-                                <Form.Item
-                                    name="password"
-                                    hasFeedback
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Please input password",
-                                        },
-                                        {
-                                            min: 8,
-                                        },
-                                    ]}
-                                >
-                                    <Input.Password
-                                        allowClear
-                                        // prefix={<LockOutlined />}
-                                        placeholder={`${title} Password`}
-                                        className="!input-styling"
-                                    />
-                                </Form.Item>
-                            </div>
-                        </>
-                    )) || (
+                    {title !== "Services" && title !== "Booking" && (
                         <>
-                            <div>
-                                <label className="label-styling">
-                                    {title} Price
-                                </label>
-                                <Form.Item name="price">
-                                    <Input
-                                        required
-                                        placeholder={`${title} Price`}
-                                        className="!input-styling"
-                                    />
-                                </Form.Item>
-                            </div>
+                            <Form.Item
+                                name="email"
+                                layout="vertical"
+                                label={
+                                    <label className="label-styling">
+                                        {title} Email
+                                    </label>
+                                }
+                                hasFeedback
+                                rules={[
+                                    {
+                                        type: "email",
+                                        message: "The input is not valid email",
+                                    },
+                                    {
+                                        required: true,
+                                        message: "Please input email",
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    placeholder={`${title} Email`}
+                                    className="!input-styling"
+                                />
+                            </Form.Item>
+
+                            <Form.Item
+                                layout="vertical"
+                                name="password"
+                                label={
+                                    <label className="label-styling">
+                                        password
+                                    </label>
+                                }
+                                hasFeedback
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input password",
+                                    },
+                                    {
+                                        min: 8,
+                                        message:
+                                            "Password must be at least 8 characters",
+                                    },
+                                ]}
+                            >
+                                <Input.Password
+                                    allowClear
+                                    // prefix={<LockOutlined />}
+                                    placeholder={`${title} Password`}
+                                    className="!input-styling"
+                                />
+                            </Form.Item>
                         </>
                     )}
 
-                    {title != "User" && (
-                        <div>
-                            <label className="label-styling">Image</label>
-                            <Form.Item
-                                label="Upload"
-                                valuePropName="fileList"
-                                getValueFromEvent={normFile}
-                            >
-                                <Upload
-                                    action="/services"
-                                    listType="picture-card"
+                    {title === "Services" && (
+                        <Form.Item
+                            label={
+                                <label className="label-styling">
+                                    {title} Price
+                                </label>
+                            }
+                            layout="vertical"
+                            name="price"
+                        >
+                            <Input
+                                required
+                                placeholder={`${title} Price`}
+                                className="!input-styling"
+                            />
+                        </Form.Item>
+                    )}
+
+                    {title !== "User" && title !== "Booking" && (
+                        <Form.Item
+                            label={
+                                <label className="label-styling">Image</label>
+                            }
+                            layout="vertical"
+                            valuePropName="fileList"
+                            getValueFromEvent={normFile}
+                        >
+                            <Upload action="/services" listType="picture-card">
+                                <button
+                                    style={{
+                                        color: "inherit",
+                                        cursor: "inherit",
+                                        border: 0,
+                                        background: "none",
+                                    }}
+                                    type="button"
                                 >
-                                    <button
-                                        style={{
-                                            color: "inherit",
-                                            cursor: "inherit",
-                                            border: 0,
-                                            background: "none",
-                                        }}
-                                        type="button"
-                                    >
-                                        <PlusOutlined />
-                                        <div style={{ marginTop: 8 }}>
-                                            Upload
-                                        </div>
-                                    </button>
-                                </Upload>
-                            </Form.Item>
-                        </div>
+                                    <PlusOutlined />
+                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                </button>
+                            </Upload>
+                        </Form.Item>
                     )}
                 </Form>
             </Modal>

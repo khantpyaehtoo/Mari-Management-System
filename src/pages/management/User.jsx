@@ -1,6 +1,6 @@
-import { Input, Table, Typography } from "antd";
+import { Table } from "antd";
 import { useState } from "react";
-import AddForm from "../../components/modals/AddForm";
+import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 
 const data = [
     {
@@ -78,9 +78,6 @@ const data = [
 ];
 
 const User = () => {
-    const { Title } = Typography;
-    const { Search } = Input;
-
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -123,16 +120,7 @@ const User = () => {
 
     return (
         <div>
-            <div className="title-style flex justify-between items-center">
-                <Title level={3}>User</Title>
-                <Search
-                    placeholder="Search user ...."
-                    onSearch={(value) => setSearchText(value)}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    className="!w-128"
-                />
-                <AddForm title={"User"} />
-            </div>
+            <SubHeaderSection setSearchText={setSearchText} title={"User"} />
 
             <div className="table-wrapper">
                 <Table
