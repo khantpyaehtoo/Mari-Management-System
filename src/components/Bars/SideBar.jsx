@@ -12,10 +12,10 @@ import {
 import { Menu } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { cn } from "../lib/utils";
-import { toggleSidebar } from "../layout/LayoutSlice";
+import { cn } from "../../lib/utils";
+import { toggleSidebar } from "../../layout/LayoutSlice";
 import { X } from "lucide-react";
-import { removeCookie, setLoggedIn } from "../features/auth/authSlice";
+import { removeCookie, setLoggedIn } from "../../features/auth/authSlice";
 
 const SideBar = () => {
     const navigate = useNavigate();

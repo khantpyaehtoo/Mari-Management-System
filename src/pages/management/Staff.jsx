@@ -1,7 +1,7 @@
 import { Input, Typography } from "antd";
 import { Flex, Space, Table, Tag, Image } from "antd";
-import AddForm from "../components/modals/AddForm";
-import flowerProfile from "../../public/flowerProfile.jpg";
+import AddForm from "../../components/modals/AddForm";
+import flowerProfile from "../../../public/flowerProfile.jpg";
 import { useState } from "react";
 
 const { Column, ColumnGroup } = Table;

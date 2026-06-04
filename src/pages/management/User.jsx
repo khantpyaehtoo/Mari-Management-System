@@ -1,6 +1,6 @@
 import { Input, Table, Typography } from "antd";
 import { useState } from "react";
-import AddForm from "../components/modals/AddForm";
+import AddForm from "../../components/modals/AddForm";
 
 const data = [
     {

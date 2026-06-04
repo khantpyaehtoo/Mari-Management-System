@@ -1,7 +1,7 @@
 import { Image, Typography } from "antd";
 import { Edit, Trash2 } from "lucide-react";
-import AddForm from "../components/modals/AddForm";
-import flowerProfile from "../../public/flowerProfile.jpg";
+import AddForm from "../../components/modals/AddForm";
+import flowerProfile from "../../../public/flowerProfile.jpg";
 
 const Services = () => {
     const { Title } = Typography;

@@ -1,7 +1,7 @@
 import { MenuOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { toggleSidebar } from "../layout/LayoutSlice";
-import DateTimeFormatter from "../app/core/functions/DateTimeFormatter";
+import { toggleSidebar } from "../../layout/LayoutSlice";
+import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 
 const Navbar = () => {
     const dispatch = useDispatch();

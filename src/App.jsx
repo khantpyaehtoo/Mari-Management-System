@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
-import User from "./pages/User";
-import Staff from "./pages/Staff";
+import User from "./pages/management/User";
+import Staff from "./pages/management/Staff";
 import Report from "./pages/Report";
 import Settings from "./pages/Settings";
-import Booking from "./pages/Booking";
-import Services from "./pages/Services";
+import Booking from "./pages/management/Booking";
+import Services from "./pages/management/Services";
 import Dashboard from "./pages/Dashboard";
 import LoginForm from "./pages/auth/LoginForm";
 import PageNotFound from "./pages/PageNotFound";

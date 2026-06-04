@@ -1,7 +1,7 @@
 import { Layout } from "antd";
-import SideBar from "../components/SideBar";
+import SideBar from "../components/Bars/SideBar";
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Bars/NavBar";
 import AppFooter from "../components/Footer";
 
 const { Sider, Header, Content } = Layout;
