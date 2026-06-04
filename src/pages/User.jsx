@@ -1,6 +1,6 @@
 import { Input, Table, Typography } from "antd";
 import { useState } from "react";
-import AddServicesForm from "../components/modals/addForm";
+import AddForm from "../components/modals/AddForm";
 
 const data = [
     {
@@ -82,11 +82,7 @@ const User = () => {
     const { Search } = Input;
 
     const [searchText, setSearchText] = useState("");
-    const [paginationConfig, setPaginationConfig] = useState({
-        current: 1,
-        pageSize: 5,
-        total: data.length,
-    });
+    const [currentPage, setCurrentPage] = useState(1);
 
     const columns = [
         {
@@ -120,23 +116,10 @@ const User = () => {
         },
     ];
 
-    const handlePageChange = (page, pageSize) => {
-        setPaginationConfig({
-            ...paginationConfig,
-            current: page,
-            pageSize,
-        });
+    // console.log(currentPage);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     };
-
-    // const CustomPagination = () => {
-    //     <Pagination
-    //         current={paginationConfig.current}
-    //         pageSize={paginationConfig.pageSize}
-    //         pageSizeOptions={[2, 3, 4]}
-    //         total={paginationConfig.total}
-    //         onChange={handlePageChange}
-    //     />;
-    // };
 
     return (
         <div>
@@ -148,16 +131,20 @@ const User = () => {
                     onChange={(e) => setSearchText(e.target.value)}
                     className="!w-128"
                 />
-                <AddServicesForm title={"User"} />
+                <AddForm title={"User"} />
             </div>
 
             <div className="table-wrapper">
                 <Table
                     columns={columns}
                     dataSource={data}
-                    pagination={paginationConfig || 1}
-                    // onClick={() => handlePageChange(1, data.length)}
-                    onChange={handlePageChange}
+                    pagination={{
+                        current: currentPage,
+                        onChange: handlePageChange,
+                        size: "large",
+                        pageSize: 5,
+                        placement: ["topEnd"],
+                    }}
                 />
             </div>
         </div>

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button, Modal, Typography } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
-const addServicesForm = ({ title }) => {
+const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { Title } = Typography;
     const showModal = () => {
@@ -19,9 +20,11 @@ const addServicesForm = ({ title }) => {
     return (
         <>
             <Button
-                type="primary"
+                color="default"
+                variant="solid"
                 onClick={showModal}
-                className="!bg-black !text-white !p-3 !shadow-sm"
+                icon={<PlusCircleOutlined />}
+                // className="!bg-black !text-white !p-3 !shadow-sm"
             >
                 Add {title}
             </Button>
@@ -66,4 +69,4 @@ const addServicesForm = ({ title }) => {
     );
 };
 
-export default addServicesForm;
+export default AddForm;

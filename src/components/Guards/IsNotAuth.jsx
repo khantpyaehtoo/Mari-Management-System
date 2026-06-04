@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const isNotAuth = ({ children }) => {
+const IsNotAuth = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
     const nav = useNavigate();
 
@@ -12,4 +12,4 @@ const isNotAuth = ({ children }) => {
     }
 };
 
-export default isNotAuth;
+export default IsNotAuth;

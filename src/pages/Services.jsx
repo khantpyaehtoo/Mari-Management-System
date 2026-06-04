@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import { Edit, Trash2 } from "lucide-react";
-import AddServicesForm from "../components/modals/addForm";
+import AddForm from "../components/modals/AddForm";
 // import SearchBar from "../components/SearchBar/SearchBar";
 
 const Services = () => {
@@ -11,7 +11,7 @@ const Services = () => {
             <div className="title-style flex justify-between items-center">
                 <Title level={3}>Services</Title>
                 {/* <SearchBar /> */}
-                <AddServicesForm title={"Services"} />
+                <AddForm title={"Services"} />
             </div>
 
             <div className="table-wrapper">

@@ -1,6 +1,6 @@
 import { Input, Typography } from "antd";
 import { Flex, Space, Table, Tag } from "antd";
-import AddServicesForm from "../components/modals/addForm";
+import AddForm from "../components/modals/AddForm";
 import { useState } from "react";
 const { Column, ColumnGroup } = Table;
 const data = [
@@ -64,21 +64,19 @@ const Staff = () => {
         <div>
             <div className="title-style flex justify-between items-center">
                 <Title level={3}>Staff</Title>
-
-                <AddServicesForm title={"Staff"} />
-            </div>
-            <div className="table-wrapper">
                 <Search
                     placeholder="Search staff ...."
                     onSearch={(value) => setSearchText(value)}
                     onChange={(e) => setSearchText(e.target.value)}
                     className="!w-128"
                 />
-
+                <AddForm title={"Staff"} />
+            </div>
+            <div className="table-wrapper">
                 <Table dataSource={data}>
                     <ColumnGroup
                         title="Name"
-                        filteredValue={searchText}
+                        filteredValue={[searchText]}
                         dataIndex="name"
                         onFilter={(value, record) => {
                             return (
