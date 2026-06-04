@@ -60,14 +60,6 @@ const Staff = () => {
 
     const [searchText, setSearchText] = useState("");
 
-    const filterSearch = (value, record) => {
-        return (
-            String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-            String(record.age).toLowerCase().includes(value.toLowerCase()) ||
-            String(record.address).toLowerCase().includes(value.toLowerCase())
-        );
-    };
-
     return (
         <div>
             <div className="title-style flex justify-between items-center">
@@ -77,19 +69,30 @@ const Staff = () => {
             </div>
             <div className="table-wrapper">
                 <Search
-                    placeholder="Search ..."
+                    placeholder="Search staff ...."
                     onSearch={(value) => setSearchText(value)}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="!w-128"
                 />
 
-                <Table
-                    dataSource={data}
-                    onFilter={(value, record) => filterSearch(value, record)}
-                    onChange={(e) => setSearchText(e.target.value)}
-                >
+                <Table dataSource={data}>
                     <ColumnGroup
                         title="Name"
                         filteredValue={searchText}
                         dataIndex="name"
+                        onFilter={(value, record) => {
+                            return (
+                                String(record.age)
+                                    .toLowerCase()
+                                    .includes(value.toLowerCase()) ||
+                                String(record.address)
+                                    .toLowerCase()
+                                    .includes(value.toLowerCase()) ||
+                                String(record.firstName)
+                                    .toLowerCase()
+                                    .includes(value.toLowerCase())
+                            );
+                        }}
                     >
                         <Column
                             title="First Name"
