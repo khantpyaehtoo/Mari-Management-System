@@ -1,6 +1,7 @@
-import { Typography } from "antd";
+import { Input, Typography } from "antd";
 import { Flex, Space, Table, Tag } from "antd";
 import AddServicesForm from "../components/modals/addForm";
+import { useState } from "react";
 const { Column, ColumnGroup } = Table;
 const data = [
     {
@@ -55,6 +56,17 @@ const data = [
 
 const Staff = () => {
     const { Title } = Typography;
+    const { Search } = Input;
+
+    const [searchText, setSearchText] = useState("");
+
+    const filterSearch = (value, record) => {
+        return (
+            String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+            String(record.age).toLowerCase().includes(value.toLowerCase()) ||
+            String(record.address).toLowerCase().includes(value.toLowerCase())
+        );
+    };
 
     return (
         <div>
@@ -64,8 +76,21 @@ const Staff = () => {
                 <AddServicesForm title={"Staff"} />
             </div>
             <div className="table-wrapper">
-                <Table dataSource={data}>
-                    <ColumnGroup title="Name">
+                <Search
+                    placeholder="Search ..."
+                    onSearch={(value) => setSearchText(value)}
+                />
+
+                <Table
+                    dataSource={data}
+                    onFilter={(value, record) => filterSearch(value, record)}
+                    onChange={(e) => setSearchText(e.target.value)}
+                >
+                    <ColumnGroup
+                        title="Name"
+                        filteredValue={searchText}
+                        dataIndex="name"
+                    >
                         <Column
                             title="First Name"
                             dataIndex="firstName"
