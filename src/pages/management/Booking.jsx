@@ -15,7 +15,7 @@ const data = [
         employee: "Hla Hla",
     },
     {
-        key: 1,
+        key: 2,
         id: "# 01",
         serviceName: "nail designing",
         price: "20,000",
@@ -26,7 +26,7 @@ const data = [
         employee: "Hla Hla",
     },
     {
-        key: 1,
+        key: 3,
         id: "# 01",
         serviceName: "nail removing",
         price: "20,000",

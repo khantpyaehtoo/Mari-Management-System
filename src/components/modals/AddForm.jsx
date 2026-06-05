@@ -12,42 +12,22 @@ import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [formValue, setFormValue] = useState("");
     const [form] = Form.useForm();
     const { Title } = Typography;
-
-    // const employeeName = Form.useForm("employeeName", form);
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
-    const onFinish = (fieldValue) => {
-        try {
-            const rawDate = fieldValue["date-picker"];
-            const formattedDate = rawDate
-                ? rawDate.format("YYYY-MM-DD HH:mm:ss")
-                : new Date().toISOString().replace("T", " ").substring(0, 19);
-            const values = {
-                ...fieldValue,
-                "date-picker": formattedDate,
-            };
-            console.log("Received values of form ", values);
-        } catch (err) {
-            console.err("error", err);
-        } finally {
-            form.resetFields();
-        }
+    const handleOk = () => {
+        form.validateFields().then((values) => {
+            console.log("Form Values", values);
+        });
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
-    };
-
-    const handleInput = (e) => {
-        const rawData = e.target.value;
-        console.log(rawData);
-        return rawData;
+        form.resetFields();
     };
 
     const normFile = (e) => {
@@ -70,7 +50,6 @@ const AddForm = ({ title }) => {
                 variant="solid"
                 onClick={showModal}
                 icon={<PlusCircleOutlined />}
-                // className="!bg-black !text-white !p-3 !shadow-sm"
             >
                 Create {title}
             </Button>
@@ -83,12 +62,11 @@ const AddForm = ({ title }) => {
                 }
                 closable={{ "aria-label": "Custom Close Button" }}
                 open={isModalOpen}
-                onOk={onFinish}
+                onOk={handleOk}
                 onCancel={handleCancel}
                 okText="Create"
             >
                 {" "}
-                {/* //onFinish={onFinish} */}
                 <Form form={form}>
                     {title !== "Booking" && (
                         <Form.Item
@@ -233,7 +211,6 @@ const AddForm = ({ title }) => {
                                 />
                             </Form.Item>
                             <Form.Item
-                                getValueFromEvent={handleInput}
                                 label={
                                     <label className="label-styling">
                                         Employee Name
