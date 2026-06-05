@@ -6,6 +6,6 @@ export const baseApi = createApi({
         baseUrl: "http://192.168.0.182:8080/api",
         // credentials: "include",
     }),
-    tagTypes: ["auth", "settings", "services"],
+    tagTypes: ["auth", "settings", "services", "users", "booking", "staff"],
     endpoints: () => ({}),
 });

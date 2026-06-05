@@ -42,3 +42,10 @@ export const servicesApi = baseApi.injectEndpoints({
         }),
     }),
 });
+
+export const {
+    useGetServicesDataQuery,
+    useCreateServiceMutation,
+    useDeleteServiceMutation,
+    useUpdateServiceMutation,
+} = servicesApi;
