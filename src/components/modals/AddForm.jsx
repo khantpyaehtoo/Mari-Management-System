@@ -1,23 +1,53 @@
 import { useState } from "react";
-import { Button, Form, Input, Modal, Typography, Upload } from "antd";
+import {
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    Modal,
+    Typography,
+    Upload,
+} from "antd";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     // const [formValue, setFormValue] = useState("");
+    const [form] = Form.useForm();
     const { Title } = Typography;
+
+    // const employeeName = Form.useForm("employeeName", form);
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
-    const handleCreate = async (values) => {
-        setIsModalOpen(false);
-        console.log("clicked", values);
+    const onFinish = (fieldValue) => {
+        try {
+            const rawDate = fieldValue["date-picker"];
+            const formattedDate = rawDate
+                ? rawDate.format("YYYY-MM-DD HH:mm:ss")
+                : new Date().toISOString().replace("T", " ").substring(0, 19);
+            const values = {
+                ...fieldValue,
+                "date-picker": formattedDate,
+            };
+            console.log("Received values of form ", values);
+        } catch (err) {
+            console.err("error", err);
+        } finally {
+            form.resetFields();
+        }
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
+    };
+
+    const handleInput = (e) => {
+        const rawData = e.target.value;
+        console.log(rawData);
+        return rawData;
     };
 
     const normFile = (e) => {
@@ -25,6 +55,12 @@ const AddForm = ({ title }) => {
             return e;
         }
         return e?.fileList;
+    };
+
+    const config = {
+        rules: [
+            { type: "object", required: true, message: "Please select time!" },
+        ],
     };
 
     return (
@@ -47,26 +83,30 @@ const AddForm = ({ title }) => {
                 }
                 closable={{ "aria-label": "Custom Close Button" }}
                 open={isModalOpen}
-                onOk={handleCreate}
+                onOk={onFinish}
                 onCancel={handleCancel}
                 okText="Create"
             >
-                <Form action="" method="">
-                    <Form.Item
-                        layout="vertical"
-                        name="name"
-                        label={
-                            <label className="label-styling">
-                                {title} name
-                            </label>
-                        }
-                    >
-                        <Input
-                            required
-                            placeholder={`${title} Name`}
-                            className="!input-styling"
-                        />
-                    </Form.Item>
+                {" "}
+                {/* //onFinish={onFinish} */}
+                <Form form={form}>
+                    {title !== "Booking" && (
+                        <Form.Item
+                            layout="vertical"
+                            name="name"
+                            label={
+                                <label className="label-styling">
+                                    {title} name
+                                </label>
+                            }
+                        >
+                            <Input
+                                required
+                                placeholder={`${title} Name`}
+                                className="!input-styling"
+                            />
+                        </Form.Item>
+                    )}
 
                     {title !== "Services" && title !== "Booking" && (
                         <>
@@ -143,6 +183,87 @@ const AddForm = ({ title }) => {
                                 className="!input-styling"
                             />
                         </Form.Item>
+                    )}
+
+                    {title === "Booking" && (
+                        <>
+                            <Form.Item
+                                label={
+                                    <label className="label-styling">
+                                        Service Name
+                                    </label>
+                                }
+                                layout="vertical"
+                                name="name"
+                            >
+                                <Input
+                                    required
+                                    placeholder="Service name"
+                                    className="!input-styling"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label={
+                                    <label className="label-styling">
+                                        Service Price
+                                    </label>
+                                }
+                                layout="vertical"
+                                name="price"
+                            >
+                                <Input
+                                    required
+                                    placeholder="Service Price"
+                                    className="!input-styling"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label={
+                                    <label className="label-styling">
+                                        Customer Name
+                                    </label>
+                                }
+                                layout="vertical"
+                                name="customerName"
+                            >
+                                <Input
+                                    required
+                                    placeholder="Customer Name"
+                                    className="!input-styling"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                getValueFromEvent={handleInput}
+                                label={
+                                    <label className="label-styling">
+                                        Employee Name
+                                    </label>
+                                }
+                                layout="vertical"
+                                name="employeeName"
+                            >
+                                <Input
+                                    required
+                                    placeholder="Employee Name"
+                                    className="!input-styling"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label={
+                                    <label className="label-styling">
+                                        Booked Time
+                                    </label>
+                                }
+                                {...config}
+                                layout="vertical"
+                                name="date-picker"
+                            >
+                                <DatePicker
+                                    showTime
+                                    format="YYYY-MM-DD HH:mm:ss"
+                                />
+                            </Form.Item>
+                        </>
                     )}
 
                     {title !== "User" && title !== "Booking" && (

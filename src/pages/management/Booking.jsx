@@ -8,7 +8,7 @@ const data = [
         id: "# 01",
         serviceName: "nail cleaning",
         price: "20,000",
-        customerName: "Aung Aung",
+        customerName: "Mya Mya",
         bookedAt: "4 Jun 2026 12:30",
         status: "Finished",
         startedAt: "4 Jun 2026 12:40",
@@ -67,6 +67,12 @@ const Booking = () => {
             title: "Cutomer-name",
             dataIndex: "customerName",
             key: "customerName",
+            filteredValue: [searchText],
+            onFilter: (value, record) => {
+                return String(record.customerName)
+                    .toLowerCase()
+                    .includes(value.toLowerCase());
+            },
         },
         {
             title: "Booking Status",
