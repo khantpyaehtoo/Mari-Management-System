@@ -1,97 +1,96 @@
-import { Image } from "antd";
+import { Image, Space, Table } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 
+const data = [
+    {
+        key: "1",
+        service: (
+            <Image
+                src={flowerProfile}
+                width={50}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
+        name: "Nails Cleaning",
+        price: "120,000",
+        serviceId: "DB-200",
+    },
+    {
+        key: "2",
+        service: (
+            <Image
+                src={flowerProfile}
+                width={50}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
+        name: "Nails Cleaning",
+        price: "120,000",
+        serviceId: "DB-200",
+    },
+    {
+        key: "3",
+        service: (
+            <Image
+                src={flowerProfile}
+                width={50}
+                alt="profile"
+                className="!rounded-md !shadow-sm"
+            />
+        ),
+        name: "Nails Cleaning",
+        price: "120,000",
+        serviceId: "DB-200",
+    },
+];
+
 const Services = () => {
+    const columns = [
+        {
+            title: "Service",
+            dataIndex: "service",
+            key: "service",
+        },
+        {
+            title: "Service Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Price",
+            dataIndex: "price",
+            key: "price",
+        },
+        {
+            title: "serviceId",
+            dataIndex: "serviceId",
+            key: "serviceId",
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: () => (
+                <Space>
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors border border-transparent hover:border-gray-200">
+                        <Edit size={18} />
+                    </button>
+                    <button className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100">
+                        <Trash2 size={18} />
+                    </button>
+                </Space>
+            ),
+        },
+    ];
     return (
         <div>
             <SubHeaderSection title={"Services"} />
 
             <div className="table-wrapper">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="bg-gray-50 border-b border-gray-200">
-                                <th className="thead-styling">Service</th>
-                                <th className="thead-styling">Price</th>
-                                <th className="thead-styling">ID</th>
-                                <th className="thead-styling text-right">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {/* {products.map((product) => ( */}
-                            <tr
-                                // key={product.id}
-                                className="hover:bg-gray-50 transition-colors"
-                            >
-                                <td className="px-6 py-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 border border-gray-200 flex-shrink-0 shadow-sm">
-                                            <Image
-                                                src={flowerProfile}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <span className="font-bold text-gray-800 text-lg">
-                                            {/* {product.name} */}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className="text-gray-700 font-black">
-                                        {/* {product.price.toLocaleString()}{" "} */}
-                                        120,000{" "}
-                                        <small className="text-gray-400">
-                                            MMK
-                                        </small>
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className="text-[10px] font-mono font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-md uppercase">
-                                        {/* #{product.id.toString().slice(0, 8)} */}
-                                        DB-20
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <div className="flex justify-end gap-2">
-                                        <button
-                                            // onClick={() =>
-                                            //     handleEditClick(product)
-                                            // }
-                                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors border border-transparent hover:border-gray-200"
-                                        >
-                                            <Edit size={18} />
-                                        </button>
-                                        <button
-                                            // onClick={() =>
-                                            //     handleDeleteClick(
-                                            //         product.id,
-                                            //         product.name,
-                                            //     )
-                                            // }
-                                            className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            {/* ))} */}
-
-                            <tr>
-                                <td
-                                    colSpan="4"
-                                    className="px-6 py-20 text-center text-gray-400 italic font-medium"
-                                >
-                                    No products found in the database.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <Table columns={columns} dataSource={data} />
             </div>
         </div>
     );

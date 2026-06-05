@@ -5,14 +5,36 @@ import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection
 const data = [
     {
         key: 1,
-        service: [
-            {
-                name: "nail cleaning",
-                price: "20,000",
-            },
-        ],
-        customer: "Aung Aung",
-        time: "12 May 2004 12:30",
+        id: "# 01",
+        serviceName: "nail cleaning",
+        price: "20,000",
+        customerName: "Aung Aung",
+        bookedAt: "4 Jun 2026 12:30",
+        status: "Finished",
+        startedAt: "4 Jun 2026 12:40",
+        employee: "Hla Hla",
+    },
+    {
+        key: 1,
+        id: "# 01",
+        serviceName: "nail designing",
+        price: "20,000",
+        customerName: "Aung Aung",
+        bookedAt: "4 Jun 2026 12:30",
+        status: "Finished",
+        startedAt: "4 Jun 2026 12:40",
+        employee: "Hla Hla",
+    },
+    {
+        key: 1,
+        id: "# 01",
+        serviceName: "nail removing",
+        price: "20,000",
+        customerName: "Aung Aung",
+        bookedAt: "4 Jun 2026 12:30",
+        status: "Finished",
+        startedAt: "4 Jun 2026 12:40",
+        employee: "Hla Hla",
     },
 ];
 
@@ -26,34 +48,51 @@ const Booking = () => {
             key: "id",
         },
         {
-            title: "Service-name",
-            dataIndex: "id",
-            key: "id",
-        },
-        {
-            title: "Service-price",
-            dataIndex: "id",
-            key: "id",
-        },
-        {
-            title: "Employee",
-            dataIndex: "id",
-            key: "id",
+            title: "Service",
+            key: "service",
+            children: [
+                {
+                    title: "service name",
+                    dataIndex: "serviceName",
+                    key: "serviceName",
+                },
+                {
+                    title: "price",
+                    dataIndex: "price",
+                    key: "price",
+                },
+            ],
         },
         {
             title: "Cutomer-name",
-            dataIndex: "id",
-            key: "id",
+            dataIndex: "customerName",
+            key: "customerName",
         },
         {
-            title: "Booking-Time",
-            dataIndex: "id",
-            key: "id",
+            title: "Booking Status",
+            key: "booking",
+            children: [
+                {
+                    title: "Booked At",
+                    dataIndex: "bookedAt",
+                    key: "bookedAt",
+                },
+                {
+                    title: "Current Status",
+                    dataIndex: "status",
+                    key: "status",
+                },
+                {
+                    title: "Started At",
+                    dataIndex: "startedAt",
+                    key: "startedAt",
+                },
+            ],
         },
         {
             title: "Employee",
-            dataIndex: "id",
-            key: "id",
+            dataIndex: "employee",
+            key: "employee",
         },
     ];
 
