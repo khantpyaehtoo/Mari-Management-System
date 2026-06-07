@@ -10,15 +10,18 @@ import Dashboard from "./pages/Dashboard";
 import LoginForm from "./pages/auth/LoginForm";
 import PageNotFound from "./pages/PageNotFound";
 import ForgetPasswordForm from "./pages/auth/ForgetPasswordForm";
+import NotificationHandler from "./components/NotificationHandler";
 // import IsAuth from "./components/Guards/isAuth";
 // import IsNotAuth from "./components/Guards/isAuth";
 
 export default function App() {
     return (
-        <Routes>
-            <Route
-                index
-                path="/login"
+        <>
+            <NotificationHandler />
+            <Routes>
+                <Route
+                    index
+                    path="/login"
                 element={
                     // <IsNotAuth>
                     <LoginForm />
@@ -47,5 +50,6 @@ export default function App() {
             </Route>
             <Route index path="*" element={<PageNotFound />} />
         </Routes>
+        </>
     );
 }
