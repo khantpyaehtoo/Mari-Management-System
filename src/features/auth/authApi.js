@@ -35,17 +35,27 @@ export const authApi = baseApi.injectEndpoints({
             query: ({ updatePasswords, token }) => ({
                 url: `${authEndPoint}/change-password`,
                 method: "PUT",
-                header: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
                 body: updatePasswords,
             }),
             invalidatesTags: ["auth"],
         }),
 
-        getAllSettings: builder.mutation({
+        updateAdminData: builder.mutation({
+            query: ({ adminData, token }) => ({
+                url: `${authEndPoint}/update`,
+                method: "PUT",
+                headers: { Authorization: `Bearer ${token}` },
+                body: adminData,
+            }),
+            invalidatesTags: ["auth"],
+        }),
+
+        getAllSettings: builder.query({
             query: (token) => ({
                 url: `${settingEndPoint}`,
                 method: "GET",
-                header: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
             }),
             providesTags: ["settings"],
         }),
@@ -56,6 +66,7 @@ export const {
     useLoginAccountMutation,
     useChangePasswordMutation,
     useGetAdminDataQuery,
-    useGetAllSettingsMutation,
+    useGetAllSettingsQuery,
     useResetPasswordMutation,
+    useUpdateAdminDataMutation,
 } = authApi;

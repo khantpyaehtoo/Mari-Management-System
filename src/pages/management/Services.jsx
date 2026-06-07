@@ -1,4 +1,4 @@
-import { Image, Space, Table } from "antd";
+import { Image, Space, Table, Button } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
@@ -75,12 +75,15 @@ const Services = () => {
             key: "action",
             render: () => (
                 <Space>
-                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors border border-transparent hover:border-gray-200">
+                    <Button className="!editBtn">
                         <Edit size={18} />
-                    </button>
-                    <button className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100">
+                    </Button>
+                    <Button
+                        className="!deleteBtn"
+                        onClick={(e) => console.log("clicked", e)}
+                    >
                         <Trash2 size={18} />
-                    </button>
+                    </Button>
                 </Space>
             ),
         },

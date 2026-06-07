@@ -47,3 +47,11 @@
 @utility input-styling {
     @apply w-full px-4 py-3 bg-gray-100 border-transparent focus:bg-white focus:border-black border-2 rounded-xl transition-all outline-none font-bold text-gray-700;
 }
+
+@utility editBtn {
+    @apply p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors border border-transparent hover:border-gray-200;
+}
+
+@utility deleteBtn {
+    @apply p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100;
+}

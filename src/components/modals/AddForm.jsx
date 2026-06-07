@@ -9,20 +9,47 @@ import {
     Upload,
 } from "antd";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../app/core/notiSlice";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const { Title } = Typography;
+    const dispatch = useDispatch();
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
-    const handleOk = () => {
-        form.validateFields().then((values) => {
+    const handleOk = async () => {
+        try {
+            const values = await form.validateFields();
             console.log("Form Values", values);
-        });
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Successful",
+                }),
+            );
+
+            form.resetFields();
+            setIsModalOpen(false);
+        } catch (err) {
+            if (err.errorFields) {
+                console.log("Validation Failed:", err.errorFields);
+                return;
+            }
+
+            console.error("Form Submission failed", err);
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: "Error occurred",
+                }),
+            );
+        }
     };
 
     const handleCancel = () => {
@@ -31,9 +58,7 @@ const AddForm = ({ title }) => {
     };
 
     const normFile = (e) => {
-        if (Array.isArray(e)) {
-            return e;
-        }
+        if (Array.isArray(e)) return e;
         return e?.fileList;
     };
 
@@ -66,31 +91,32 @@ const AddForm = ({ title }) => {
                 onCancel={handleCancel}
                 okText="Create"
             >
-                {" "}
-                <Form form={form}>
+                <Form form={form} layout="vertical">
                     {title !== "Booking" && (
                         <Form.Item
-                            layout="vertical"
                             name="name"
                             label={
                                 <label className="label-styling">
                                     {title} name
                                 </label>
                             }
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `Please input ${title} name!`,
+                                },
+                            ]}
                         >
                             <Input
-                                required
                                 placeholder={`${title} Name`}
                                 className="!input-styling"
                             />
                         </Form.Item>
                     )}
-
                     {title !== "Services" && title !== "Booking" && (
                         <>
                             <Form.Item
                                 name="email"
-                                layout="vertical"
                                 label={
                                     <label className="label-styling">
                                         {title} Email
@@ -115,7 +141,6 @@ const AddForm = ({ title }) => {
                             </Form.Item>
 
                             <Form.Item
-                                layout="vertical"
                                 name="password"
                                 label={
                                     <label className="label-styling">
@@ -137,32 +162,33 @@ const AddForm = ({ title }) => {
                             >
                                 <Input.Password
                                     allowClear
-                                    // prefix={<LockOutlined />}
                                     placeholder={`${title} Password`}
                                     className="!input-styling"
                                 />
                             </Form.Item>
                         </>
                     )}
-
-                    {title === "Services" && (
+                    {title === "Services" && title === "Edit" && (
                         <Form.Item
                             label={
                                 <label className="label-styling">
                                     {title} Price
                                 </label>
                             }
-                            layout="vertical"
                             name="price"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input price!",
+                                },
+                            ]}
                         >
                             <Input
-                                required
                                 placeholder={`${title} Price`}
                                 className="!input-styling"
                             />
                         </Form.Item>
                     )}
-
                     {title === "Booking" && (
                         <>
                             <Form.Item
@@ -171,60 +197,80 @@ const AddForm = ({ title }) => {
                                         Service Name
                                     </label>
                                 }
-                                layout="vertical"
                                 name="name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input service name!",
+                                    },
+                                ]}
                             >
                                 <Input
-                                    required
                                     placeholder="Service name"
                                     className="!input-styling"
                                 />
                             </Form.Item>
+
                             <Form.Item
                                 label={
                                     <label className="label-styling">
                                         Service Price
                                     </label>
                                 }
-                                layout="vertical"
                                 name="price"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input price!",
+                                    },
+                                ]}
                             >
                                 <Input
-                                    required
                                     placeholder="Service Price"
                                     className="!input-styling"
                                 />
                             </Form.Item>
+
                             <Form.Item
                                 label={
                                     <label className="label-styling">
                                         Customer Name
                                     </label>
                                 }
-                                layout="vertical"
                                 name="customerName"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input customer name!",
+                                    },
+                                ]}
                             >
                                 <Input
-                                    required
                                     placeholder="Customer Name"
                                     className="!input-styling"
                                 />
                             </Form.Item>
+
                             <Form.Item
                                 label={
                                     <label className="label-styling">
                                         Employee Name
                                     </label>
                                 }
-                                layout="vertical"
                                 name="employeeName"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input employee name!",
+                                    },
+                                ]}
                             >
                                 <Input
-                                    required
                                     placeholder="Employee Name"
                                     className="!input-styling"
                                 />
                             </Form.Item>
+
                             <Form.Item
                                 label={
                                     <label className="label-styling">
@@ -232,7 +278,6 @@ const AddForm = ({ title }) => {
                                     </label>
                                 }
                                 {...config}
-                                layout="vertical"
                                 name="date-picker"
                             >
                                 <DatePicker
@@ -242,13 +287,11 @@ const AddForm = ({ title }) => {
                             </Form.Item>
                         </>
                     )}
-
                     {title !== "User" && title !== "Booking" && (
                         <Form.Item
                             label={
                                 <label className="label-styling">Image</label>
                             }
-                            layout="vertical"
                             valuePropName="fileList"
                             getValueFromEvent={normFile}
                         >
