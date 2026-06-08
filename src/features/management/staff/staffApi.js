@@ -1,5 +1,5 @@
 import { baseApi } from "../../../app/core/global/basicApi";
-const staffEndPoint = "/staff";
+const staffEndPoint = "/staffs";
 
 const staffApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,7 +9,7 @@ const staffApi = baseApi.injectEndpoints({
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` },
             }),
-            providesTags: ["staff"],
+            providesTags: ["staffs"],
         }),
 
         createStaff: builder.mutation({
@@ -19,16 +19,16 @@ const staffApi = baseApi.injectEndpoints({
                 body: getStaffData,
                 header: { Authorization: `Bearer ${token}` },
             }),
-            invalidatesTags: ["staff"],
+            invalidatesTags: ["staffs"],
         }),
 
         updateStaff: builder.mutation({
             query: ({ getStaffData }) => ({
                 url: `${staffEndPoint}`,
-                method: "PUT",
+                method: "PATCH",
                 body: getStaffData,
             }),
-            invalidatesTags: ["staff"],
+            invalidatesTags: ["staffs"],
         }),
 
         deleteStaff: builder.mutation({
@@ -38,7 +38,7 @@ const staffApi = baseApi.injectEndpoints({
                 header: { Authorization: `Bearer ${token}` },
                 body: getStaffData,
             }),
-            invalidatesTags: ["staff"],
+            invalidatesTags: ["staffs"],
         }),
     }),
 });

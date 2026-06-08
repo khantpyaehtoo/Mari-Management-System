@@ -23,7 +23,7 @@ const NotificationHandler = () => {
 
             dispatch(clearMessage());
         }
-    }, [msgContent, msgType, dispatch]);
+    }, [msgContent, msgType, dispatch, message]);
 
     return null;
 };

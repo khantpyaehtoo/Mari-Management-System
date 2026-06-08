@@ -11,8 +11,8 @@ import LoginForm from "./pages/auth/LoginForm";
 import PageNotFound from "./pages/PageNotFound";
 import ForgetPasswordForm from "./pages/auth/ForgetPasswordForm";
 import NotificationHandler from "./components/NotificationHandler";
-// import IsAuth from "./components/Guards/isAuth";
-// import IsNotAuth from "./components/Guards/isAuth";
+// import IsAuth from "./components/Guards/IsAuth.jsx";
+// import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
 export default function App() {
     return (
@@ -25,7 +25,7 @@ export default function App() {
                     element={
                         // <IsNotAuth>
                         <LoginForm />
-                        // </IsNotAuth>
+                        // {/* </IsNotAuth> */}
                     }
                 />
                 <Route index path="/reset" element={<ForgetPasswordForm />} />

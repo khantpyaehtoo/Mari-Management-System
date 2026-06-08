@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Form, Input, Typography, message } from "antd";
 import {
     ArrowLeftOutlined,
@@ -17,8 +17,6 @@ const ForgetPasswordForm = () => {
     const [currentStep, setCurrentStep] = useState("email");
 
     const [loading, setLoading] = useState(false);
-    const [isFormEmpty, setIsFormEmpty] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(true);
     const [isError, setIsError] = useState(null);
 
     const navigate = useNavigate();
@@ -27,17 +25,8 @@ const ForgetPasswordForm = () => {
     const emailValue = Form.useWatch("email", form);
     const otpValue = Form.useWatch("otp", form);
 
-    useEffect(() => {
-        if (emailValue?.length > 0) {
-            setIsFormEmpty(false);
-        }
-    }, [emailValue]);
-
-    useEffect(() => {
-        if (otpValue?.length > 0 && otpValue?.length === 6) {
-            setIsSubmitting(false);
-        }
-    }, [otpValue]);
+    const isFormEmpty = !emailValue || emailValue.length === 0;
+    const isSubmitting = !otpValue || otpValue.length !== 6;
 
     const handleRequestOTP = async () => {
         try {

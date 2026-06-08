@@ -20,8 +20,8 @@ import {
     UploadOutlined,
     SaveOutlined,
 } from "@ant-design/icons";
-// import { useEffect } from "react";
-// import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
     useGetAdminDataQuery,
     useChangePasswordMutation,
@@ -31,8 +31,8 @@ import {
 const { Title, Text } = Typography;
 
 const Settings = () => {
-    // const { token } = useSelector((state) => state.auth);
-    // const { data: adminData, isLoading } = useGetAdminDataQuery(token);
+    const { token } = useSelector((state) => state.auth);
+    const { data: adminData } = useGetAdminDataQuery(token);
     const [changePassword, { isLoading: isChangingPassword }] =
         useChangePasswordMutation();
     const [updateAdminData, { isLoading: isUpdatingAdmin }] =
@@ -42,15 +42,15 @@ const Settings = () => {
     const [form] = Form.useForm();
     const [passwordForm] = Form.useForm();
 
-    // useEffect(() => {
-    //     if (adminData) {
-    //         form.setFieldsValue({
-    //             username: adminData.username || "Admin",
-    //             email: adminData.email || "admin@gmail.com",
-    //             phone: adminData.phone || "(+95) 9 956 145 223",
-    //         });
-    //     }
-    // }, [adminData, form]);
+    useEffect(() => {
+        if (adminData) {
+            form.setFieldsValue({
+                username: adminData.username || "Admin",
+                email: adminData.email || "admin@gmail.com",
+                phone: adminData.phone || "(+95) 9 956 145 223",
+            });
+        }
+    }, [adminData, form]);
 
     const onFinishAccount = async (values) => {
         // console.log(values);

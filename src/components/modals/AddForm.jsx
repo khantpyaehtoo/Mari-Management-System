@@ -11,12 +11,14 @@ import {
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../app/core/notiSlice";
+import { useCreateUserMutation } from "../../features/management/user/userApi";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const { Title } = Typography;
     const dispatch = useDispatch();
+    const [createUser] = useCreateUserMutation();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -26,13 +28,27 @@ const AddForm = ({ title }) => {
         try {
             const values = await form.validateFields();
             console.log("Form Values", values);
+            const { data, error } = await createUser({
+                getUserData: values,
+                // token,
+            });
 
-            dispatch(
-                setMessage({
-                    msgType: "success",
-                    msgContent: "Successful",
-                }),
-            );
+            if (data) {
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Successful",
+                    }),
+                );
+                console.log(data);
+            } else {
+                dispatch(
+                    setMessage({
+                        msgType: "error",
+                        msgContent: error.message,
+                    }),
+                );
+            }
 
             form.resetFields();
             setIsModalOpen(false);
@@ -168,7 +184,7 @@ const AddForm = ({ title }) => {
                             </Form.Item>
                         </>
                     )}
-                    {title === "Services" && title === "Edit" && (
+                    {title === "Services" && (
                         <Form.Item
                             label={
                                 <label className="label-styling">

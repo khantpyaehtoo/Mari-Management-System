@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const IsNotAuth = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
-    const nav = useNavigate();
 
     if (token) {
-        return nav("/");
+        // return nav("/");
+        return <Navigate to={"/"} />;
     } else {
         return children;
     }

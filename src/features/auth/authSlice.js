@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export const authSlice = createSlice({
-    name: "auth",
+    name: "authSlice",
     initialState,
     reducers: {
         setLoggedIn: (state, { payload }) => {

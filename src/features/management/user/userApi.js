@@ -1,44 +1,44 @@
 import { baseApi } from "../../../app/core/global/basicApi";
-const userEndpoint = "/users";
-
+const userEndpoint = "/staffs";
+// admin/staffs
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getUserData: builder.query({
             query: (token) => ({
-                url: `${userEndpoint}`,
+                url: `admin${userEndpoint}`,
                 method: "GET",
                 heades: { Authorization: `Bearer ${token}` },
             }),
-            providesTags: ["users"],
+            providesTags: ["staffs"],
         }),
 
         createUser: builder.mutation({
-            query: ({ getUserData, token }) => ({
-                url: `${userEndpoint}`,
+            query: ({ getUserData }) => ({
+                url: `admin${userEndpoint}`,
                 method: "POST",
                 body: getUserData,
-                header: { Authorization: `Bearer ${token}` },
+                // header: { Authorization: `Bearer ${token}` },
             }),
-            invalidatesTags: ["users"],
+            invalidatesTags: ["staffs"],
         }),
 
         updateUser: builder.mutation({
             query: ({ getUserData }) => ({
-                url: `${userEndpoint}`,
+                url: `admin${userEndpoint}`,
                 method: "PUT",
                 body: getUserData,
             }),
-            invalidatesTags: ["users"],
+            invalidatesTags: ["staffs"],
         }),
 
         deleteUser: builder.mutation({
             query: ({ getUserData, token }) => ({
-                url: `${userEndpoint}`,
+                url: `admin${userEndpoint}`,
                 method: "DELETE",
                 header: { Authorization: `Bearer ${token}` },
                 body: getUserData,
             }),
-            invalidatesTags: ["users"],
+            invalidatesTags: ["staffs"],
         }),
     }),
 });
