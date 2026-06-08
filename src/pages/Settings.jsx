@@ -8,10 +8,10 @@ import {
     Avatar,
     Upload,
     Switch,
-    message,
     Row,
     Col,
     Space,
+    App,
 } from "antd";
 import {
     UserOutlined,
@@ -20,8 +20,8 @@ import {
     UploadOutlined,
     SaveOutlined,
 } from "@ant-design/icons";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+// import { useEffect } from "react";
+// import { useSelector } from "react-redux";
 import {
     useGetAdminDataQuery,
     useChangePasswordMutation,
@@ -38,6 +38,7 @@ const Settings = () => {
     const [updateAdminData, { isLoading: isUpdatingAdmin }] =
         useUpdateAdminDataMutation();
 
+    const { message } = App.useApp();
     const [form] = Form.useForm();
     const [passwordForm] = Form.useForm();
 

@@ -22,34 +22,34 @@ export default function App() {
                 <Route
                     index
                     path="/login"
-                element={
-                    // <IsNotAuth>
-                    <LoginForm />
-                    // </IsNotAuth>
-                }
-            />
-            <Route index path="/reset" element={<ForgetPasswordForm />} />
+                    element={
+                        // <IsNotAuth>
+                        <LoginForm />
+                        // </IsNotAuth>
+                    }
+                />
+                <Route index path="/reset" element={<ForgetPasswordForm />} />
 
-            <Route
-                path="/"
-                element={
-                    // <IsAuth>
-                    <MainLayout />
-                    // </IsAuth>
-                }
-            >
-                <Route index path="/" element={<Dashboard />} />
-                <Route path="/management">
-                    <Route path="user" element={<User />} />
-                    <Route path="service" element={<Services />} />
-                    <Route path="booking" element={<Booking />} />
-                    <Route path="staff" element={<Staff />} />
+                <Route
+                    path="/"
+                    element={
+                        // <IsAuth>
+                        <MainLayout />
+                        // </IsAuth>
+                    }
+                >
+                    <Route index path="/" element={<Dashboard />} />
+                    <Route path="/management">
+                        <Route path="user" element={<User />} />
+                        <Route path="service" element={<Services />} />
+                        <Route path="booking" element={<Booking />} />
+                        <Route path="staff" element={<Staff />} />
+                    </Route>
+                    <Route index path="/report" element={<Report />} />
+                    <Route index path="/settings" element={<Settings />} />
                 </Route>
-                <Route index path="/report" element={<Report />} />
-                <Route index path="/settings" element={<Settings />} />
-            </Route>
-            <Route index path="*" element={<PageNotFound />} />
-        </Routes>
+                <Route index path="*" element={<PageNotFound />} />
+            </Routes>
         </>
     );
 }

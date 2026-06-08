@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { message } from "antd";
+import { App } from "antd";
 import { clearMessage } from "../app/core/notiSlice";
 
 const NotificationHandler = () => {
     const dispatch = useDispatch();
-    const { msgType, msgContent } = useSelector((state) => state.noti.message);
+    const { message } = App.useApp();
+    const messageData = useSelector((state) => state?.noti?.message);
+    const { msgType, msgContent } = messageData || {};
 
     useEffect(() => {
         if (msgContent) {
