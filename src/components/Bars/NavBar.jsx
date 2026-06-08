@@ -2,7 +2,7 @@ import { BellOutlined, MenuOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/LayoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
-import { Badge, Drawer, List, Space, Typography } from "antd";
+import { Badge, Drawer, List, Space, Typography, Tabs } from "antd";
 import { useState } from "react";
 const data = [
     "Racing car sprays burning fuel into crowd.",
@@ -14,6 +14,66 @@ const data = [
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const dispatch = useDispatch();
+
+    const items = [
+        {
+            key: "1",
+            label: <span className="flex items-center gap-2">Bookings</span>,
+            children: (
+                <List
+                    size="small"
+                    dataSource={data}
+                    renderItem={(item) => {
+                        return (
+                            <List.Item>
+                                <Typography.Title level={5}>
+                                    {item}
+                                </Typography.Title>
+                            </List.Item>
+                        );
+                    }}
+                />
+            ),
+        },
+        {
+            key: "2",
+            label: <span className="flex items-center gap-2">Comments</span>,
+            children: (
+                <List
+                    size="small"
+                    dataSource={data}
+                    renderItem={(item) => {
+                        return (
+                            <List.Item>
+                                <Typography.Title level={5}>
+                                    {item}
+                                </Typography.Title>
+                            </List.Item>
+                        );
+                    }}
+                />
+            ),
+        },
+        {
+            key: "3",
+            label: <span className="flex items-center gap-2">Promotions</span>,
+            children: (
+                <List
+                    size="small"
+                    dataSource={data}
+                    renderItem={(item) => {
+                        return (
+                            <List.Item>
+                                <Typography.Title level={5}>
+                                    {item}
+                                </Typography.Title>
+                            </List.Item>
+                        );
+                    }}
+                />
+            ),
+        },
+    ];
 
     return (
         <div className="flex justify-between items-center h-full">
@@ -29,7 +89,7 @@ const Navbar = () => {
                 </h3>
             </div>
 
-            <div className="text-white hidden md:block">
+            <div className="text-white">
                 <Space>
                     <span>Current Date: </span>
                     <DateTimeFormatter />
@@ -46,19 +106,7 @@ const Navbar = () => {
                     onClose={() => setIsNotiOpen(false)}
                     mask="true"
                 >
-                    <List
-                        size="small"
-                        dataSource={data}
-                        renderItem={(item) => {
-                            return (
-                                <List.Item>
-                                    <Typography.Title level={5}>
-                                        {item}
-                                    </Typography.Title>
-                                </List.Item>
-                            );
-                        }}
-                    />
+                    <Tabs defaultActiveKey="1" items={items} />
                 </Drawer>
             </div>
         </div>
