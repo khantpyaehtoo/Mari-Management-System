@@ -101,13 +101,12 @@ const User = () => {
     //     getUserData();
     // }, [token]);
 
-    // isLoading, isError
-    const { data: userList } = useGetUserDataQuery();
+    const { data: userList, isLoading, isError } = useGetUserDataQuery();
 
-    // if (isLoading) return <p>Loading ...</p>;
-    // if (isError) return <p>Error ...</p>;
+    if (isLoading) return <p>Loading ...</p>;
+    if (isError) return <p>Error ...</p>;
 
-    console.log(userList);
+    // console.log(userList);
 
     const columns = [
         {
@@ -117,10 +116,10 @@ const User = () => {
             filteredValue: [searchText],
             onFilter: (value, record) => {
                 return (
-                    String(record.age)
+                    String(record.phone)
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
-                    String(record.address)
+                    String(record.fullName)
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
                     String(record.username)
@@ -140,9 +139,9 @@ const User = () => {
             key: "email",
         },
         {
-            title: "Password",
-            dataIndex: "password",
-            key: "password",
+            title: "Phone",
+            dataIndex: "phone",
+            key: "phone",
         },
         {
             title: "Specialization",
@@ -150,9 +149,9 @@ const User = () => {
             key: "specialization",
         },
         {
-            title: "Phone Number",
-            dataIndex: "phoneNumber",
-            key: "phoneNumber",
+            title: "createdAt",
+            dataIndex: "createdAt",
+            key: "createdAt",
         },
     ];
 
@@ -169,6 +168,7 @@ const User = () => {
                 <Table
                     columns={columns}
                     dataSource={userList}
+                    rowKey={Math.random}
                     pagination={{
                         current: currentPage,
                         onChange: handlePageChange,
