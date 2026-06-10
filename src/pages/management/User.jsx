@@ -1,7 +1,11 @@
 import { Table } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import { useGetUserDataQuery } from "../../features/management/user/userApi";
+import {
+    useCreateUserMutation,
+    useGetUserDataQuery,
+} from "../../features/management/user/userApi";
+import UserAddForm from "../../features/management/user/UserAddForm";
 // import CookieJS from "js-cookie";
 // const data = [
 //     {
@@ -83,30 +87,10 @@ const User = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     // const token = CookieJS.get("lmsToken");
-
-    // const getUserData = async () => {
-    //     const res = await fetch(`http://192.168.0.182:8080/api/admin/staffs`, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`,
-    //             "Content-Type": "application/json",
-    //             "Access-Control-Allow-Origin": "*",
-    //             "Cross-Origin-Resource-Policy": "cross-origin",
-    //         },
-    //     });
-
-    //     console.log(res);
-    // };
-
-    // useEffect(() => {
-    //     getUserData();
-    // }, [token]);
-
+    // console.log(userList);
     const { data: userList, isLoading, isError } = useGetUserDataQuery();
-
     if (isLoading) return <p>Loading ...</p>;
     if (isError) return <p>Error ...</p>;
-
-    // console.log(userList);
 
     const columns = [
         {
@@ -155,6 +139,14 @@ const User = () => {
         },
     ];
 
+    // const handleCreateUser = async () => {
+    //     try {
+    //         const [craeteUser] = await useCreateUserMutation();
+    //     } catch {
+    //     } finally {
+    //     }
+    // };
+
     // console.log(currentPage);
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -163,6 +155,8 @@ const User = () => {
     return (
         <div>
             <SubHeaderSection setSearchText={setSearchText} title={"User"} />
+
+            {/* <UserAddForm /> */}
 
             <div className="table-wrapper">
                 <Table

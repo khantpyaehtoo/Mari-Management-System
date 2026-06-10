@@ -12,6 +12,7 @@ import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../app/core/notiSlice";
 import { useCreateUserMutation } from "../../features/management/user/userApi";
+import UserAddForm from "../../features/management/user/UserAddForm";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,10 +29,7 @@ const AddForm = ({ title }) => {
         try {
             const values = await form.validateFields();
             console.log("Form Values", values);
-            const { data, error } = await createUser({
-                getUserData: values,
-                // token,
-            });
+            const { data, error } = await createUser(values);
 
             if (data) {
                 dispatch(
@@ -107,7 +105,8 @@ const AddForm = ({ title }) => {
                 onCancel={handleCancel}
                 okText="Create"
             >
-                <Form form={form} layout="vertical">
+                {title === "User" && <UserAddForm />}
+                {/* <Form form={form} layout="vertical">
                     {title !== "Booking" && (
                         <Form.Item
                             name="name"
@@ -327,7 +326,7 @@ const AddForm = ({ title }) => {
                             </Upload>
                         </Form.Item>
                     )}
-                </Form>
+                </Form> */}
             </Modal>
         </>
     );

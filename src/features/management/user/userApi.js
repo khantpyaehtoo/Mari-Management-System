@@ -13,7 +13,7 @@ export const userApi = baseApi.injectEndpoints({
 
         createUser: builder.mutation({
             query: ({ getUserData }) => ({
-                url: `admin${userEndpoint}/:id`,
+                url: `admin${userEndpoint}`,
                 method: "POST",
                 body: getUserData,
             }),
