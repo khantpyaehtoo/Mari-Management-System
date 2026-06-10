@@ -4,20 +4,18 @@ const userEndpoint = "/staffs";
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getUserData: builder.query({
-            query: (token) => ({
+            query: () => ({
                 url: `admin${userEndpoint}`,
                 method: "GET",
-                heades: { Authorization: `Bearer ${token}` },
             }),
             providesTags: ["staffs"],
         }),
 
         createUser: builder.mutation({
             query: ({ getUserData }) => ({
-                url: `admin${userEndpoint}`,
+                url: `admin${userEndpoint}/:id`,
                 method: "POST",
                 body: getUserData,
-                // header: { Authorization: `Bearer ${token}` },
             }),
             invalidatesTags: ["staffs"],
         }),
@@ -35,7 +33,7 @@ export const userApi = baseApi.injectEndpoints({
             query: ({ getUserData, token }) => ({
                 url: `admin${userEndpoint}`,
                 method: "DELETE",
-                header: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
                 body: getUserData,
             }),
             invalidatesTags: ["staffs"],

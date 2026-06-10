@@ -1,23 +1,21 @@
 import { baseApi } from "../../../app/core/global/basicApi";
-const serviceEndpoint = "/services";
+const serviceEndpoint = "services";
 
 export const servicesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getServicesData: builder.query({
-            query: (token) => ({
+            query: () => ({
                 url: `${serviceEndpoint}`,
                 method: "GET",
-                headers: { Authorization: `Bearer ${token}` },
             }),
             providesTags: ["services"],
         }),
 
         createService: builder.mutation({
-            query: ({ getServicesData, token }) => ({
+            query: ({ getServicesData }) => ({
                 url: `${serviceEndpoint}`,
                 method: "POST",
                 body: getServicesData,
-                header: { Authorization: `Bearer ${token}` },
             }),
             invalidatesTags: ["services"],
         }),
@@ -32,10 +30,9 @@ export const servicesApi = baseApi.injectEndpoints({
         }),
 
         deleteService: builder.mutation({
-            query: ({ getServicesData, token }) => ({
+            query: ({ getServicesData }) => ({
                 url: `${serviceEndpoint}`,
                 method: "DELETE",
-                header: { Authorization: `Bearer ${token}` },
                 body: getServicesData,
             }),
             invalidatesTags: ["services"],

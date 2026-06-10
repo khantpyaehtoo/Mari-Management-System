@@ -1,42 +1,38 @@
 import { baseApi } from "../../../app/core/global/basicApi";
-const bookingEndPoint = "/booking";
+const bookingEndPoint = "booking";
 
 export const bookingApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllBooking: builder.query({
-            query: (token) => ({
+            query: () => ({
                 url: `${bookingEndPoint}`,
                 method: "GET",
-                header: { Authorization: `Bearer ${token}` },
             }),
             providesTags: ["booking"],
         }),
 
         createBooking: builder.mutation({
-            query: ({ getAllBooking, token }) => ({
+            query: ({ getAllBooking }) => ({
                 url: `${bookingEndPoint}`,
                 method: "POST",
-                header: { Authorization: `Bearer ${token}` },
                 body: getAllBooking,
             }),
             invalidatesTags: ["booking"],
         }),
 
         updateBooking: builder.mutation({
-            query: ({ getAllBooking, token }) => ({
+            query: ({ getAllBooking }) => ({
                 url: `${bookingEndPoint}`,
                 method: "PUT",
-                header: { Authorization: `Bearer ${token}` },
                 body: getAllBooking,
             }),
             invalidatesTags: ["booking"],
         }),
 
         deleteBooking: builder.mutation({
-            query: ({ getAllBooking, token }) => ({
+            query: ({ getAllBooking }) => ({
                 url: `${bookingEndPoint}`,
                 method: "DELETE",
-                header: { Authorization: `Bearer ${token}` },
                 body: getAllBooking,
             }),
             invalidatesTags: ["booking"],

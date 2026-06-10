@@ -2,7 +2,7 @@ import { Table } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useGetUserDataQuery } from "../../features/management/user/userApi";
-
+// import CookieJS from "js-cookie";
 // const data = [
 //     {
 //         key: 1,
@@ -81,14 +81,37 @@ import { useGetUserDataQuery } from "../../features/management/user/userApi";
 const User = () => {
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const { data } = useGetUserDataQuery();
-    const userList = data;
 
-    console.log(userList?.username);
+    // const token = CookieJS.get("lmsToken");
+
+    // const getUserData = async () => {
+    //     const res = await fetch(`http://192.168.0.182:8080/api/admin/staffs`, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //             "Content-Type": "application/json",
+    //             "Access-Control-Allow-Origin": "*",
+    //             "Cross-Origin-Resource-Policy": "cross-origin",
+    //         },
+    //     });
+
+    //     console.log(res);
+    // };
+
+    // useEffect(() => {
+    //     getUserData();
+    // }, [token]);
+
+    // isLoading, isError
+    const { data: userList } = useGetUserDataQuery();
+
+    // if (isLoading) return <p>Loading ...</p>;
+    // if (isError) return <p>Error ...</p>;
+
+    console.log(userList);
 
     const columns = [
         {
-            title: "username",
+            title: "Username",
             dataIndex: "username",
             key: "username",
             filteredValue: [searchText],
@@ -107,12 +130,27 @@ const User = () => {
             },
         },
         {
-            title: "email",
+            title: "Full Name",
+            dataIndex: "fullName",
+            key: "fullName",
+        },
+        {
+            title: "Email",
             dataIndex: "email",
             key: "email",
         },
         {
-            title: "phoneNumber",
+            title: "Password",
+            dataIndex: "password",
+            key: "password",
+        },
+        {
+            title: "Specialization",
+            dataIndex: "specialization",
+            key: "specialization",
+        },
+        {
+            title: "Phone Number",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
         },

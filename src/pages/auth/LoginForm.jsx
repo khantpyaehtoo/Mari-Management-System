@@ -27,13 +27,15 @@ const LoginForm = () => {
             // setIsError(null);
 
             const data = await loginAccount(values).unwrap();
+            console.log(data?.tokenPair.accessToken);
 
-            if (data?.accessToken) {
-                Cookies.set("lmsToken", data?.accessToken);
+            if (data?.tokenPair.accessToken) {
+                Cookies.set("lmsToken", data?.tokenPair.accessToken);
                 Cookies.set("email", values?.email);
+
                 dispatch(
                     setLoggedIn({
-                        token: data?.accessToken,
+                        token: data?.tokenPair.accessToken,
                         email: values?.email,
                     }),
                 );
