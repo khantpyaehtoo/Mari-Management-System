@@ -14,7 +14,6 @@ const MainLayout = () => {
                 theme="light"
                 trigger={null}
                 breakpoint="lg"
-                collapsedWidth="0"
                 width={220}
                 className="hidden lg:min-h-screen lg:block "
             >

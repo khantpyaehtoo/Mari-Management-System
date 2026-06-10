@@ -11,8 +11,8 @@ import LoginForm from "./pages/auth/LoginForm";
 import PageNotFound from "./pages/PageNotFound";
 import ForgetPasswordForm from "./pages/auth/ForgetPasswordForm";
 import NotificationHandler from "./components/NotificationHandler";
-// import IsAuth from "./components/Guards/IsAuth.jsx";
-// import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
+import IsAuth from "./components/Guards/IsAuth.jsx";
+import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
 export default function App() {
     return (
@@ -20,22 +20,21 @@ export default function App() {
             <NotificationHandler />
             <Routes>
                 <Route
-                    index
                     path="/login"
                     element={
-                        // <IsNotAuth>
-                        <LoginForm />
-                        // {/* </IsNotAuth> */}
+                        <IsNotAuth>
+                            <LoginForm />
+                        </IsNotAuth>
                     }
                 />
-                <Route index path="/reset" element={<ForgetPasswordForm />} />
+                <Route path="/reset" element={<ForgetPasswordForm />} />
 
                 <Route
                     path="/"
                     element={
-                        // <IsAuth>
-                        <MainLayout />
-                        // </IsAuth>
+                        <IsAuth>
+                            <MainLayout />
+                        </IsAuth>
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />
@@ -45,10 +44,10 @@ export default function App() {
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />
                     </Route>
-                    <Route index path="/report" element={<Report />} />
-                    <Route index path="/settings" element={<Settings />} />
+                    <Route path="/report" element={<Report />} />
+                    <Route path="/settings" element={<Settings />} />
                 </Route>
-                <Route index path="*" element={<PageNotFound />} />
+                <Route path="*" element={<PageNotFound />} />
             </Routes>
         </>
     );

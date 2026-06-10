@@ -18,7 +18,6 @@ export const authApi = baseApi.injectEndpoints({
                 url: `${authEndPoint}/login`,
                 method: "POST",
                 body: getAdminData,
-                responseHandler: (response) => response.text(),
             }),
             invalidatesTags: ["auth"],
         }),

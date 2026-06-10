@@ -2,6 +2,7 @@ import { Image, Space, Table, Button } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+// import { useState } from "react";
 
 const data = [
     {
@@ -49,6 +50,13 @@ const data = [
 ];
 
 const Services = () => {
+    // const [isFormOpen, setIsFormOpen] = useState(false);
+    // const [isEdit, setIsEdit] = useState(null);
+
+    // const handleEditBtn = (id) => {
+    //     setIsEdit(null);
+    //     setIsFormOpen(true);
+    // };
     const columns = [
         {
             title: "Service",
@@ -75,12 +83,15 @@ const Services = () => {
             key: "action",
             render: () => (
                 <Space>
-                    <Button className="!editBtn">
+                    <Button
+                        className="!editBtn"
+                        // onClick={(e) => handleEditBtn(e.target.value)}
+                    >
                         <Edit size={18} />
                     </Button>
                     <Button
                         className="!deleteBtn"
-                        onClick={(e) => console.log("clicked", e)}
+                        // onClick={(e) => console.log("clicked", e)}
                     >
                         <Trash2 size={18} />
                     </Button>
@@ -91,7 +102,6 @@ const Services = () => {
     return (
         <div>
             <SubHeaderSection title={"Services"} />
-
             <div className="table-wrapper">
                 <Table columns={columns} dataSource={data} />
             </div>

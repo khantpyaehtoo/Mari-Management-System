@@ -12,19 +12,19 @@ const { Title } = Typography;
 
 const LoginForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isError, setIsError] = useState(null);
+    // const [isError, setIsError] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [loginAccount] = useLoginAccountMutation();
 
-    // console.log("What Message", setMessage); => check redux noti connection
+    // console.log(" Message", setMessage); => check redux connection
 
     const onFinish = async (values) => {
         console.log("Received values of form: ", values);
         try {
             setIsSubmitting(true);
-            setIsError(null);
+            // setIsError(null);
 
             const data = await loginAccount(values).unwrap();
 
@@ -52,11 +52,11 @@ const LoginForm = () => {
             const errorMessage =
                 err?.data?.message || err?.error || "Login failed";
 
-            setIsError(errorMessage);
+            // setIsError(errorMessage);
             dispatch(
                 setMessage({
                     msgType: "error",
-                    msgContent: isError,
+                    msgContent: errorMessage,
                 }),
             );
         } finally {

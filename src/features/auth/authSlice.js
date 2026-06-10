@@ -17,6 +17,7 @@ export const authSlice = createSlice({
         setLoggedIn: (state, { payload }) => {
             state.email = payload.email;
             state.token = payload.token;
+            state.isLoggedIn = true;
         },
 
         removeCookie: () => {
