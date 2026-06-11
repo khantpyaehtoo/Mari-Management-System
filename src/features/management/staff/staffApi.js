@@ -1,4 +1,4 @@
-import { baseApi } from "../../../app/core/global/basicApi";
+import { baseApi } from "../../../app/core/basicApi";
 const staffEndPoint = "staffs";
 
 const staffApi = baseApi.injectEndpoints({

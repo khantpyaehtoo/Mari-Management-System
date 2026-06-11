@@ -1,13 +1,13 @@
 import { Flex, Typography } from "antd";
-import DashboardCard from "../components/main/DashboardCard";
+import DashboardCard from "../components/dashboard/DashboardCard";
+import { MonthlyChart } from "../components/dashboard/MonthlyChart";
+import { CalendarCard } from "../components/dashboard/CalendarCard";
 import {
     ApartmentOutlined,
     IdcardOutlined,
     UnorderedListOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { MonthlyChart } from "../components/main/MonthlyChart";
-import { CalendarCard } from "../components/main/CalendarCard";
 
 const dashboardCardItem = [
     {

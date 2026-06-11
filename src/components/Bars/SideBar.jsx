@@ -13,7 +13,7 @@ import { Menu } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../lib/utils";
-import { toggleSidebar } from "../../layout/LayoutSlice";
+import { toggleSidebar } from "../../layout/layoutSlice";
 import { X } from "lucide-react";
 import { removeCookie, setLoggedIn } from "../../features/auth/authSlice";
 

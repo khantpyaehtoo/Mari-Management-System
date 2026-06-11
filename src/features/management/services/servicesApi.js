@@ -1,4 +1,4 @@
-import { baseApi } from "../../../app/core/global/basicApi";
+import { baseApi } from "../../../app/core/basicApi";
 const serviceEndpoint = "services";
 
 export const servicesApi = baseApi.injectEndpoints({

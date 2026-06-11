@@ -3,7 +3,6 @@ import { Edit, Trash2 } from "lucide-react";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
-// import { useState } from "react";
 
 const data = [
     {
@@ -116,6 +115,7 @@ const Services = () => {
             ),
         },
     ];
+
     return (
         <div>
             <SubHeaderSection
@@ -124,7 +124,7 @@ const Services = () => {
             />
             <div className="table-wrapper">
                 <Table columns={columns} dataSource={data} />
-                {console.log(data)}
+                {/* {console.log(data)} */}
             </div>
         </div>
     );

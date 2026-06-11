@@ -1,4 +1,4 @@
-import { baseApi } from "../../../app/core/global/basicApi";
+import { baseApi } from "../../../app/core/basicApi";
 const bookingEndPoint = "booking";
 
 export const bookingApi = baseApi.injectEndpoints({

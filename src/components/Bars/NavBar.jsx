@@ -1,6 +1,6 @@
 import { BellOutlined, MenuOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { toggleSidebar } from "../../layout/LayoutSlice";
+import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import { Badge, Drawer, List, Space, Typography, Tabs } from "antd";
 import { useState } from "react";
