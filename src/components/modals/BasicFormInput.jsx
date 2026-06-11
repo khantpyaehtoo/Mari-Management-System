@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input, Space } from "antd";
 
 const BasicFormInput = () => {
     const { Item } = Form;
@@ -30,31 +30,47 @@ const BasicFormInput = () => {
             >
                 <Input placeholder={"email"} className="!input-styling" />
             </Item>
-            <Item
-                name="phoneNumber"
-                label={<label className="label-styling">Phone Number</label>}
-                rules={[
-                    {
-                        required: true,
-                        message: `Please input the Phone Number`,
-                    },
-                ]}
-            >
-                <Input
-                    prefix="+95"
-                    placeholder={"Phone Number"}
-                    className="!input-styling"
-                />
-            </Item>
-            <Item
-                name="password"
-                label={<label className="label-styling">Password</label>}
-                rules={[
-                    { required: true, message: `Please input the password` },
-                ]}
-            >
-                <Input placeholder={"password"} className="!input-styling" />
-            </Item>
+
+            <Space size="large" align="start">
+                <Item
+                    name="phoneNumber"
+                    label={
+                        <label className="label-styling">Phone Number</label>
+                    }
+                    rules={[
+                        {
+                            required: true,
+                            message: `Please input the Phone Number`,
+                        },
+                    ]}
+                >
+                    <Input
+                        prefix="+95"
+                        placeholder={"Phone Number"}
+                        className="!input-styling"
+                    />
+                </Item>
+                <Item
+                    hasFeedback
+                    name="password"
+                    label={<label className="label-styling">Password</label>}
+                    rules={[
+                        {
+                            required: true,
+                            message: `Please input the password`,
+                        },
+                        {
+                            min: 8,
+                            message: "Password must be at least 8 characters",
+                        },
+                    ]}
+                >
+                    <Input.Password
+                        placeholder={"password"}
+                        className="!input-styling"
+                    />
+                </Item>
+            </Space>
         </>
     );
 };

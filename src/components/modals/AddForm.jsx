@@ -76,11 +76,6 @@ const AddForm = ({ title }) => {
         form.resetFields();
     };
 
-    // const normFile = (e) => {
-    //     if (Array.isArray(e)) return e;
-    //     return e?.fileList;
-    // };
-
     // const config = {
     //     rules: [
     //         { type: "object", required: true, message: "Please select time!" },
@@ -209,30 +204,7 @@ const AddForm = ({ title }) => {
                             />
                         </Form.Item>
                     )}
-                    {title !== "User" && title !== "Booking" && (
-                        <Form.Item
-                            label={
-                                <label className="label-styling">Image</label>
-                            }
-                            valuePropName="fileList"
-                            getValueFromEvent={normFile}
-                        >
-                            <Upload action="/services" listType="picture-card">
-                                <button
-                                    style={{
-                                        color: "inherit",
-                                        cursor: "inherit",
-                                        border: 0,
-                                        background: "none",
-                                    }}
-                                    type="button"
-                                >
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload</div>
-                                </button>
-                            </Upload>
-                        </Form.Item>
-                    )}
+
                 </Form> */}
             </Modal>
         </>

@@ -1,5 +1,6 @@
-import { Form, Select } from "antd";
+import { Form, Select, Space, Upload } from "antd";
 import BasicFormInput from "../../../components/modals/BasicFormInput";
+import { PlusOutlined } from "@ant-design/icons";
 // import { useCreateUserMutation } from "./userApi";
 
 const UserForm = ({ form }) => {
@@ -11,6 +12,11 @@ const UserForm = ({ form }) => {
         console.log("form values", values);
     };
 
+    const normFile = (e) => {
+        if (Array.isArray(e)) return e;
+        return e?.fileList;
+    };
+
     return (
         <Form
             form={form}
@@ -19,24 +25,46 @@ const UserForm = ({ form }) => {
             autoComplete="off"
         >
             <BasicFormInput />
-            <Item
-                name="gender"
-                label={<label className="label-styling">Gender</label>}
-                initialValue={"female"}
-            >
-                <Select
-                    style={{ width: 120 }}
-                    // onChange={handleChange}
-                    options={[
-                        { value: "female", label: "Female" },
-                        { value: "male", label: "Male" },
-                        {
-                            label: "Gender",
-                            disabled: true,
-                        },
-                    ]}
-                />
-            </Item>
+            <Space size="large" align="start">
+                <Item
+                    name="gender"
+                    label={<label className="label-styling">Gender</label>}
+                    initialValue={"female"}
+                >
+                    <Select
+                        style={{ width: 120 }}
+                        // onChange={handleChange}
+                        options={[
+                            { value: "female", label: "Female" },
+                            { value: "male", label: "Male" },
+                            {
+                                label: "Gender",
+                                disabled: true,
+                            },
+                        ]}
+                    />
+                </Item>
+                <Item
+                    label={<label className="label-styling">Image</label>}
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                >
+                    <Upload listType="picture-card">
+                        <button
+                            style={{
+                                color: "inherit",
+                                cursor: "inherit",
+                                border: 0,
+                                background: "none",
+                            }}
+                            type="button"
+                        >
+                            <PlusOutlined />
+                            <div style={{ marginTop: 8 }}>Upload</div>
+                        </button>
+                    </Upload>
+                </Item>
+            </Space>
         </Form>
     );
 };
