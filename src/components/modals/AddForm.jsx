@@ -1,35 +1,39 @@
 import { useState } from "react";
-import {
-    Button,
-    DatePicker,
-    Form,
-    Input,
-    Modal,
-    Typography,
-    Upload,
-} from "antd";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Form, Modal, Typography } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../app/core/notiSlice";
-import { useCreateUserMutation } from "../../features/management/user/userApi";
-import UserAddForm from "../../features/management/user/UserAddForm";
+import { FORM_CONFIG } from "../../lib/config/formConfig";
 
 const AddForm = ({ title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+
+    // Get configuration
+    const config = FORM_CONFIG[title];
+
+    // Call create mutation
+    const useEntityMutation = config?.useCreateMutation;
+    const [triggerMutation] = useEntityMutation();
+    const ActiveComponent = config?.Component;
+
     const { Title } = Typography;
     const dispatch = useDispatch();
-    const [createUser] = useCreateUserMutation();
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
+    if (!config) {
+        console.error("Form type is not defined");
+        return null;
+    }
+
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
             console.log("Form Values", values);
-            const { data, error } = await createUser(values);
+            const { data, error } = await triggerMutation(values);
 
             if (data) {
                 dispatch(
@@ -39,17 +43,18 @@ const AddForm = ({ title }) => {
                     }),
                 );
                 console.log(data);
+                form.resetFields();
+                setIsModalOpen(false);
             } else {
+                const errorMessage =
+                    error?.data?.message || "something went wrong..";
                 dispatch(
                     setMessage({
                         msgType: "error",
-                        msgContent: error.message,
+                        msgContent: errorMessage,
                     }),
                 );
             }
-
-            form.resetFields();
-            setIsModalOpen(false);
         } catch (err) {
             if (err.errorFields) {
                 console.log("Validation Failed:", err.errorFields);
@@ -71,16 +76,16 @@ const AddForm = ({ title }) => {
         form.resetFields();
     };
 
-    const normFile = (e) => {
-        if (Array.isArray(e)) return e;
-        return e?.fileList;
-    };
+    // const normFile = (e) => {
+    //     if (Array.isArray(e)) return e;
+    //     return e?.fileList;
+    // };
 
-    const config = {
-        rules: [
-            { type: "object", required: true, message: "Please select time!" },
-        ],
-    };
+    // const config = {
+    //     rules: [
+    //         { type: "object", required: true, message: "Please select time!" },
+    //     ],
+    // };
 
     return (
         <>
@@ -105,7 +110,8 @@ const AddForm = ({ title }) => {
                 onCancel={handleCancel}
                 okText="Create"
             >
-                {title === "User" && <UserAddForm />}
+                <ActiveComponent form={form} />
+                {/* {title === "User" && <UserAddForm />} */}
                 {/* <Form form={form} layout="vertical">
                     {title !== "Booking" && (
                         <Form.Item

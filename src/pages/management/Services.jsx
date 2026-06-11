@@ -2,6 +2,7 @@ import { Image, Space, Table, Button } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+import { useState } from "react";
 // import { useState } from "react";
 
 const data = [
@@ -50,6 +51,8 @@ const data = [
 ];
 
 const Services = () => {
+    const [searchText, setSearchText] = useState("");
+
     // const [isFormOpen, setIsFormOpen] = useState(false);
     // const [isEdit, setIsEdit] = useState(null);
 
@@ -62,6 +65,20 @@ const Services = () => {
             title: "Service",
             dataIndex: "service",
             key: "service",
+            filteredValue: [searchText],
+            onFilter: (value, record) => {
+                return (
+                    String(record.service)
+                        .toLowerCase()
+                        .includes(value.toLowerCase) ||
+                    String(record.name)
+                        .toLowerCase()
+                        .includes(value.toLowerCase) ||
+                    String(record.serviceId)
+                        .toLowerCase()
+                        .includes(value.toLowerCase)
+                );
+            },
         },
         {
             title: "Service Name",
@@ -101,9 +118,13 @@ const Services = () => {
     ];
     return (
         <div>
-            <SubHeaderSection title={"Services"} />
+            <SubHeaderSection
+                setSearchText={setSearchText}
+                title={"Services"}
+            />
             <div className="table-wrapper">
                 <Table columns={columns} dataSource={data} />
+                {console.log(data)}
             </div>
         </div>
     );

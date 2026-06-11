@@ -12,10 +12,10 @@ export const userApi = baseApi.injectEndpoints({
         }),
 
         createUser: builder.mutation({
-            query: ({ getUserData }) => ({
+            query: (body) => ({
                 url: `admin${userEndpoint}`,
                 method: "POST",
-                body: getUserData,
+                body,
             }),
             invalidatesTags: ["staffs"],
         }),

@@ -1,11 +1,7 @@
 import { Table } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import {
-    useCreateUserMutation,
-    useGetUserDataQuery,
-} from "../../features/management/user/userApi";
-import UserAddForm from "../../features/management/user/UserAddForm";
+// import { useGetUserDataQuery } from "../../features/management/user/userApi";
 // import CookieJS from "js-cookie";
 // const data = [
 //     {
@@ -88,9 +84,9 @@ const User = () => {
 
     // const token = CookieJS.get("lmsToken");
     // console.log(userList);
-    const { data: userList, isLoading, isError } = useGetUserDataQuery();
-    if (isLoading) return <p>Loading ...</p>;
-    if (isError) return <p>Error ...</p>;
+    // const { data: userList, isLoading, isError } = useGetUserDataQuery();
+    // if (isLoading) return <p>Loading ...</p>;
+    // if (isError) return <p>Error ...</p>;
 
     const columns = [
         {
@@ -161,7 +157,7 @@ const User = () => {
             <div className="table-wrapper">
                 <Table
                     columns={columns}
-                    dataSource={userList}
+                    // dataSource={userList}
                     rowKey={Math.random}
                     pagination={{
                         current: currentPage,

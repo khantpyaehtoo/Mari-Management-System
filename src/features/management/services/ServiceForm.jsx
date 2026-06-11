@@ -1,13 +1,7 @@
 import { Form, Input, Select } from "antd";
 
-const UserAddForm = () => {
-    const [form] = Form.useForm();
+const ServiceForm = ({ form }) => {
     const { Item } = Form;
-
-    // const handleChange = (value) => {
-    //     console.log(`selected ${value}`);
-    // };
-
     const submitHandler = () => {
         const values = form.validateFields();
         console.log("form values", values);
@@ -43,11 +37,7 @@ const UserAddForm = () => {
                 label={<label className="label-styling">Email</label>}
                 rules={[{ required: true, message: `Please input the Email` }]}
             >
-                <Input
-                    suffix="@gmail.com"
-                    placeholder={"email"}
-                    className="!input-styling"
-                />
+                <Input placeholder={"email"} className="!input-styling" />
             </Item>
             <Item
                 name="phoneNumber"
@@ -100,4 +90,4 @@ const UserAddForm = () => {
     );
 };
 
-export default UserAddForm;
+export default ServiceForm;

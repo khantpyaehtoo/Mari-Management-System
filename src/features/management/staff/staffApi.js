@@ -12,10 +12,10 @@ const staffApi = baseApi.injectEndpoints({
         }),
 
         createStaff: builder.mutation({
-            query: ({ getStaffData }) => ({
+            query: (body) => ({
                 url: `${staffEndPoint}`,
                 method: "POST",
-                body: getStaffData,
+                body,
             }),
             invalidatesTags: ["staffs"],
         }),
