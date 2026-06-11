@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input } from "antd";
 
 const ServiceForm = ({ form }) => {
     const { Item } = Form;

@@ -45,9 +45,7 @@ const options = {
 const labels = Array.from({ length: 12 }, (_, i) =>
     new Date(0, i).toLocaleString("default", { month: "short" }),
 );
-
 const currentMonthIndex = new Date().getMonth();
-
 const filteredLabels = labels.slice(0, currentMonthIndex + 1);
 
 const data = {
