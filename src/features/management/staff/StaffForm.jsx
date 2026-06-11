@@ -27,7 +27,7 @@ const StaffForm = ({ form }) => {
                 <Select
                     defaultValue="gender"
                     style={{ width: 120 }}
-                    // onChange={handleChange}
+                    // onChange={(e) => e.target.value}
                     options={[
                         { value: "female", label: "Female" },
                         { value: "male", label: "Male" },

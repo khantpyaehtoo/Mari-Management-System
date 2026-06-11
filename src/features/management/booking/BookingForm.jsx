@@ -1,81 +1,82 @@
-import { Form, Input, Select } from "antd";
+import { DatePicker, Form, Input } from "antd";
 
 const BookingForm = ({ form }) => {
     const { Item } = Form;
+    const submitHandler = () => {
+        const values = form.validateFields();
+        console.log("form values", values);
+    };
+
     return (
         <Form
             form={form}
             layout="vertical"
-            // onFinish={submitHandler}
+            onFinish={submitHandler}
             autoComplete="off"
         >
             <Item
-                name="username"
-                label={<label className="label-styling">Username</label>}
-                rules={[
-                    { required: true, message: `Please input the username` },
-                ]}
-            >
-                <Input placeholder={"username"} className="!input-styling" />
-            </Item>
-            <Item
-                name="fullname"
-                label={<label className="label-styling">Full Name</label>}
-                rules={[
-                    { required: true, message: `Please input the fullname` },
-                ]}
-            >
-                <Input placeholder={"fullname"} className="!input-styling" />
-            </Item>
-            <Item
-                name="email"
-                label={<label className="label-styling">Email</label>}
-                rules={[{ required: true, message: `Please input the Email` }]}
-            >
-                <Input placeholder={"email"} className="!input-styling" />
-            </Item>
-            <Item
-                name="phoneNumber"
-                label={<label className="label-styling">Phone Number</label>}
+                label={<label className="label-styling">Service Name</label>}
+                name="name"
                 rules={[
                     {
                         required: true,
-                        message: `Please input the Phone Number`,
+                        message: "Please input service name!",
                     },
                 ]}
             >
-                <Input
-                    prefix="+95"
-                    placeholder={"Phone Number"}
-                    className="!input-styling"
-                />
+                <Input placeholder="Service name" className="!input-styling" />
             </Item>
             <Item
-                name="password"
-                label={<label className="label-styling">Password</label>}
+                label={<label className="label-styling">Service Price</label>}
+                name="price"
                 rules={[
-                    { required: true, message: `Please input the password` },
+                    {
+                        required: true,
+                        message: "Please input price!",
+                    },
                 ]}
             >
-                <Input placeholder={"password"} className="!input-styling" />
+                <Input placeholder="Service Price" className="!input-styling" />
             </Item>
+
             <Item
-                name="gender"
-                label={<label className="label-styling">Gender</label>}
-                initialValue={"female"}
+                label={<label className="label-styling">Customer Name</label>}
+                name="customerName"
+                rules={[
+                    {
+                        required: true,
+                        message: "Please input customer name!",
+                    },
+                ]}
             >
-                <Select
-                    style={{ width: 120 }}
-                    // onChange={handleChange}
-                    options={[
-                        { value: "female", label: "Female" },
-                        { value: "male", label: "Male" },
-                        {
-                            label: "Gender",
-                            disabled: true,
-                        },
-                    ]}
-                />
+                <Input placeholder="Customer Name" className="!input-styling" />
+            </Item>
+
+            <Item
+                label={<label className="label-styling">Employee Name</label>}
+                name="employeeName"
+                rules={[
+                    {
+                        required: true,
+                        message: "Please input employee name!",
+                    },
+                ]}
+            >
+                <Input placeholder="Employee Name" className="!input-styling" />
+            </Item>
+
+            <Item
+                label={<label className="label-styling">Booked Time</label>}
+                rules={[
+                    {
+                        type: "object",
+                        required: true,
+                        message: "Please Select time",
+                    },
+                ]}
+                name="date-picker"
+            >
+                <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
             </Item>
         </Form>
     );
