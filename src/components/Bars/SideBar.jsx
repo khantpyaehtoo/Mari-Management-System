@@ -86,6 +86,15 @@ const SideBar = () => {
 
     const closeSidebar = () => dispatch(toggleSidebar(false));
 
+    // for sidebar menu dropdown
+    const getOpenKeys = () => {
+        const pathParts = location.pathname.split("/");
+        if (pathParts.length > 2) {
+            return [`/${pathParts[1]}`];
+        }
+        return [];
+    };
+
     return (
         <>
             {/* Backdrop for mobile */}
@@ -120,6 +129,7 @@ const SideBar = () => {
                         mode="inline"
                         items={menuItem}
                         selectedKeys={[location.pathname]}
+                        defaultOpenKeys={getOpenKeys()}
                         onClick={(item) => {
                             if (item.key !== "logout") {
                                 navigate(item.key);

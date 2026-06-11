@@ -111,7 +111,6 @@ const AddForm = ({ title }) => {
                 okText="Create"
             >
                 <ActiveComponent form={form} />
-                {/* {title === "User" && <UserAddForm />} */}
                 {/* <Form form={form} layout="vertical">
                     {title !== "Booking" && (
                         <Form.Item
