@@ -2,14 +2,36 @@ import { BellOutlined, MenuOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
-import { Badge, Drawer, List, Space, Typography, Tabs } from "antd";
+import { Badge, Drawer, Space, Typography, Tabs, Flex } from "antd";
 import { useState } from "react";
-const data = [
+const bookingData = [
+    "For Booking Data",
     "Racing car sprays burning fuel into crowd.",
     "Japanese princess to wed commoner.",
     "Australian walks 100km after outback crash.",
     "Man charged over missing wedding girl.",
     "Los Angeles battles huge wildfires.",
+    "The End of Booking Data",
+];
+
+const commentData = [
+    "For Comment Data",
+    "Racing car sprays burning fuel into crowd.",
+    "Japanese princess to wed commoner.",
+    "Australian walks 100km after outback crash.",
+    "Man charged over missing wedding girl.",
+    "Los Angeles battles huge wildfires.",
+    "The End of Comment Data",
+];
+
+const promotionsData = [
+    "For Promotions Data",
+    "Racing car sprays burning fuel into crowd.",
+    "Japanese princess to wed commoner.",
+    "Australian walks 100km after outback crash.",
+    "Man charged over missing wedding girl.",
+    "Los Angeles battles huge wildfires.",
+    "The End of Promotions Data",
 ];
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
@@ -20,57 +42,39 @@ const Navbar = () => {
             key: "1",
             label: <span className="flex items-center gap-2">Bookings</span>,
             children: (
-                <List
-                    size="small"
-                    dataSource={data}
-                    renderItem={(item) => {
-                        return (
-                            <List.Item>
-                                <Typography.Title level={5}>
-                                    {item}
-                                </Typography.Title>
-                            </List.Item>
-                        );
-                    }}
-                />
+                <Flex vertical gap="1px">
+                    {bookingData.map((item, index) => (
+                        <Typography.Title level={5} key={index}>
+                            {item}
+                        </Typography.Title>
+                    ))}
+                </Flex>
             ),
         },
         {
             key: "2",
             label: <span className="flex items-center gap-2">Comments</span>,
             children: (
-                <List
-                    size="small"
-                    dataSource={data}
-                    renderItem={(item) => {
-                        return (
-                            <List.Item>
-                                <Typography.Title level={5}>
-                                    {item}
-                                </Typography.Title>
-                            </List.Item>
-                        );
-                    }}
-                />
+                <Flex vertical gap="1px">
+                    {commentData.map((item, index) => (
+                        <Typography.Title level={5} key={index}>
+                            {item}
+                        </Typography.Title>
+                    ))}
+                </Flex>
             ),
         },
         {
             key: "3",
             label: <span className="flex items-center gap-2">Promotions</span>,
             children: (
-                <List
-                    size="small"
-                    dataSource={data}
-                    renderItem={(item) => {
-                        return (
-                            <List.Item>
-                                <Typography.Title level={5}>
-                                    {item}
-                                </Typography.Title>
-                            </List.Item>
-                        );
-                    }}
-                />
+                <Flex vertical gap="1px">
+                    {promotionsData.map((item, index) => (
+                        <Typography.Title level={5} key={index}>
+                            {item}
+                        </Typography.Title>
+                    ))}
+                </Flex>
             ),
         },
     ];

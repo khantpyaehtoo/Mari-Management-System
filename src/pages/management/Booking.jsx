@@ -122,7 +122,10 @@ const Booking = () => {
                         return (
                             <Dropdown menu={menuProps} trigger={["click"]}>
                                 <Button>
-                                    {text} <DownOutlined />
+                                    <span className="bg-amber-400 px-2 rounded-md">
+                                        {text}
+                                    </span>{" "}
+                                    <DownOutlined />
                                 </Button>
                             </Dropdown>
                         );
