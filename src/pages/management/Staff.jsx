@@ -106,14 +106,19 @@ const Staff = () => {
     const [searchText, setSearchText] = useState("");
     const columns = [
         {
+            title: "Id",
+            dataIndex: "rowId",
+            key: "rowId",
+        },
+        {
             title: "Profile",
             dataIndex: "profile",
             key: "profile",
         },
         {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
+            title: "Full Name",
+            dataIndex: "fullName",
+            key: "fullName",
             filteredValue: [searchText],
             onFilter: (value, record) => {
                 return (
@@ -128,28 +133,46 @@ const Staff = () => {
                         .includes(value.toLowerCase())
                 );
             },
-            children: [
-                {
-                    title: "First Name",
-                    dataIndex: "firstName",
-                    key: "firstName",
-                },
-                {
-                    title: "Last Name",
-                    dataIndex: "lastName",
-                    key: "lastName",
-                },
-            ],
         },
         {
-            title: "Age",
-            dataIndex: "age",
-            key: "age",
+            title: "Staff Id",
+            dataIndex: "staffId",
+            key: "staffId",
         },
         {
-            title: "address",
-            dataIndex: "address",
-            key: "address",
+            title: "DOB",
+            dataIndex: "dob",
+            key: "dob",
+        },
+        {
+            title: "Phone Number",
+            dataIndex: "phNo",
+            key: "phNo",
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+        },
+        {
+            title: "Password",
+            dataIndex: "password",
+            key: "password",
+        },
+        {
+            title: "Rating",
+            dataIndex: "rating",
+            key: "rating",
+        },
+        {
+            title: "Customer Count",
+            dataIndex: "count",
+            key: "count",
+        },
+        {
+            title: "Available",
+            dataIndex: "available",
+            key: "available",
         },
         {
             title: "Tags",

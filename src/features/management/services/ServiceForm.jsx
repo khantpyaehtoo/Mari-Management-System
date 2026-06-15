@@ -39,6 +39,42 @@ const ServiceForm = ({ form }) => {
             >
                 <Input placeholder="Service Price" className="!input-styling" />
             </Item>
+
+            <Item
+                label={
+                    <label className="label-styling">Service Category</label>
+                }
+                name="category"
+                rules={[
+                    {
+                        required: true,
+                        message: "Please input Category!",
+                    },
+                ]}
+            >
+                <Input
+                    placeholder="Service Category"
+                    className="!input-styling"
+                />
+            </Item>
+
+            <Item
+                label={
+                    <label className="label-styling">Service duration</label>
+                }
+                name="duration"
+                rules={[
+                    {
+                        required: true,
+                        message: "Please input duration!",
+                    },
+                ]}
+            >
+                <Input
+                    placeholder="Service Duration"
+                    className="!input-styling"
+                />
+            </Item>
         </Form>
     );
 };

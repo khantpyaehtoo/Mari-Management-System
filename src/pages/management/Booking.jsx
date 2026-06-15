@@ -1,8 +1,9 @@
-import { Table } from "antd";
+import { Table, Button, Dropdown, message } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+import { DownOutlined } from "@ant-design/icons";
 
-const data = [
+const initialData = [
     {
         key: 1,
         id: "# 01",
@@ -10,7 +11,7 @@ const data = [
         price: "20,000",
         customerName: "Mya Mya",
         bookedAt: "4 Jun 2026 12:30",
-        status: "Finished",
+        status: "Pending",
         startedAt: "4 Jun 2026 12:40",
         employee: "Hla Hla",
     },
@@ -21,7 +22,7 @@ const data = [
         price: "20,000",
         customerName: "Aung Aung",
         bookedAt: "4 Jun 2026 12:30",
-        status: "Finished",
+        status: "Completed",
         startedAt: "4 Jun 2026 12:40",
         employee: "Hla Hla",
     },
@@ -32,14 +33,39 @@ const data = [
         price: "20,000",
         customerName: "Aung Aung",
         bookedAt: "4 Jun 2026 12:30",
-        status: "Finished",
+        status: "Canceled",
         startedAt: "4 Jun 2026 12:40",
         employee: "Hla Hla",
     },
 ];
 
+const items = [
+    { label: "Pending", key: "Pending" },
+    { label: "Completed", key: "Completed" },
+    { label: "Canceled", key: "Canceled" },
+    { label: "Progress", key: "Progress" },
+];
+
 const Booking = () => {
+    const [dataSource, setDataSource] = useState(initialData);
     const [searchText, setSearchText] = useState("");
+    const [messageApi, contextHolder] = message.useMessage();
+
+    // Handles the selection from the dropdown
+    const handleMenuClick = (record, e) => {
+        const nextStatus = e.key;
+
+        // Update only the specific row data
+        const updatedData = dataSource.map((item) => {
+            if (item.key === record.key) {
+                return { ...item, status: nextStatus };
+            }
+            return item;
+        });
+
+        setDataSource(updatedData);
+        messageApi.success(`Updated status to ${nextStatus}`);
+    };
 
     const columns = [
         {
@@ -64,10 +90,10 @@ const Booking = () => {
             ],
         },
         {
-            title: "Cutomer-name",
+            title: "Customer-name",
             dataIndex: "customerName",
             key: "customerName",
-            filteredValue: [searchText],
+            filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
                 return String(record.customerName)
                     .toLowerCase()
@@ -87,6 +113,20 @@ const Booking = () => {
                     title: "Current Status",
                     dataIndex: "status",
                     key: "status",
+                    render: (text, record) => {
+                        const menuProps = {
+                            items,
+                            onClick: (e) => handleMenuClick(record, e),
+                        };
+
+                        return (
+                            <Dropdown menu={menuProps} trigger={["click"]}>
+                                <Button>
+                                    {text} <DownOutlined />
+                                </Button>
+                            </Dropdown>
+                        );
+                    },
                 },
                 {
                     title: "Started At",
@@ -104,10 +144,10 @@ const Booking = () => {
 
     return (
         <div>
+            {contextHolder} {/* for message alert noti */}
             <SubHeaderSection setSearchText={setSearchText} title={"Booking"} />
-
             <div className="table-wrapper">
-                <Table columns={columns} dataSource={data} />
+                <Table columns={columns} dataSource={dataSource} />
             </div>
         </div>
     );

@@ -61,9 +61,14 @@ const Services = () => {
     // };
     const columns = [
         {
-            title: "Service",
-            dataIndex: "service",
-            key: "service",
+            title: "Id",
+            dataIndex: "key",
+            key: "key",
+        },
+        {
+            title: "ServiceId",
+            dataIndex: "ServiceId",
+            key: "ServiceId",
             filteredValue: [searchText],
             onFilter: (value, record) => {
                 return (
@@ -80,19 +85,24 @@ const Services = () => {
             },
         },
         {
-            title: "Service Name",
-            dataIndex: "name",
-            key: "name",
+            title: "Service-Name",
+            dataIndex: "serviceName",
+            key: "serviceName",
         },
         {
-            title: "Price",
-            dataIndex: "price",
-            key: "price",
+            title: "Service-Category",
+            dataIndex: "serviceCategory",
+            key: "serviceCategory",
         },
         {
-            title: "serviceId",
-            dataIndex: "serviceId",
-            key: "serviceId",
+            title: "Service-Price",
+            dataIndex: "servicePrice",
+            key: "servicePrice",
+        },
+        {
+            title: "Service-Duration",
+            dataIndex: "serviceDuration",
+            key: "serviceDuration",
         },
         {
             title: "Action",

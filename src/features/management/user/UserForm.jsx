@@ -1,6 +1,7 @@
 import { Form, Select, Space, Upload } from "antd";
 import BasicFormInput from "../../../components/modals/BasicFormInput";
 import { PlusOutlined } from "@ant-design/icons";
+import defaultProfile from "../../../../public/flowerProfile.jpg";
 // import { useCreateUserMutation } from "./userApi";
 
 const UserForm = ({ form }) => {
@@ -14,6 +15,7 @@ const UserForm = ({ form }) => {
 
     const normFile = (e) => {
         if (Array.isArray(e)) return e;
+        if (!e || e.length < 0) return defaultProfile;
         return e?.fileList;
     };
 

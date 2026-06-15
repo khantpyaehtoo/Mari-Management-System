@@ -76,12 +76,6 @@ const AddForm = ({ title }) => {
         form.resetFields();
     };
 
-    // const config = {
-    //     rules: [
-    //         { type: "object", required: true, message: "Please select time!" },
-    //     ],
-    // };
-
     return (
         <>
             <Button
