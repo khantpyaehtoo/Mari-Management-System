@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import User from "./pages/management/User";
 import Staff from "./pages/management/Staff";
-import Report from "./pages/Report";
+import CalendarSection from "./pages/Calendar.jsx";
 import Settings from "./pages/Settings";
 import Booking from "./pages/management/Booking";
 import Services from "./pages/management/Services";
@@ -44,7 +44,7 @@ export default function App() {
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />
                     </Route>
-                    <Route path="/report" element={<Report />} />
+                    <Route path="/calendar" element={<CalendarSection />} />
                     <Route path="/settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />

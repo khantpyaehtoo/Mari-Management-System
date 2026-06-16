@@ -116,8 +116,8 @@ const Services = () => {
         },
         {
             title: "Service-Category",
-            dataIndex: "serviceCategory",
-            key: "serviceCategory",
+            dataIndex: "categoryId",
+            key: "categoryId",
         },
         {
             title: "Service-Price",

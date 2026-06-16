@@ -1,14 +1,15 @@
-import { Typography } from "antd";
+import { Typography, Calendar } from "antd";
 
-const Report = () => {
+const CalendarSection = () => {
     const { Title } = Typography;
     return (
         <div>
             <Title className="title-style" level={3}>
-                Report
+                Calendar
             </Title>
+            <Calendar />
         </div>
     );
 };
 
-export default Report;
+export default CalendarSection;

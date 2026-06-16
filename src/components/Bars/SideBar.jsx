@@ -1,7 +1,7 @@
 import {
     ApartmentOutlined,
     BranchesOutlined,
-    FileDoneOutlined,
+    CalendarOutlined,
     IdcardOutlined,
     LogoutOutlined,
     SettingOutlined,
@@ -41,6 +41,11 @@ const SideBar = () => {
             label: <span className="sidemenu-item">Dashboard</span>,
         },
         {
+            key: "/calendar",
+            icon: <CalendarOutlined />,
+            label: <span className="sidemenu-item">Calendar</span>,
+        },
+        {
             key: "/management",
             icon: <BranchesOutlined />,
             label: <span className="sidemenu-item">Management</span>,
@@ -66,11 +71,6 @@ const SideBar = () => {
                     key: "/management/staff",
                 },
             ],
-        },
-        {
-            key: "/report",
-            icon: <FileDoneOutlined />,
-            label: <span className="sidemenu-item">Report</span>,
         },
         {
             key: "/settings",

@@ -4,6 +4,9 @@ import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import { Badge, Drawer, Space, Typography, Tabs, Flex } from "antd";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import profileImg from "../../../public/user.png";
+
 const bookingData = [
     "For Booking Data",
     "Racing car sprays burning fuel into crowd.",
@@ -94,7 +97,7 @@ const Navbar = () => {
             </div>
 
             <div className="text-white">
-                <Space>
+                <Space align="center">
                     <span>Current Date: </span>
                     <DateTimeFormatter />
                     <Badge>
@@ -103,6 +106,9 @@ const Navbar = () => {
                             onClick={() => setIsNotiOpen(true)}
                         />
                     </Badge>
+                    <Link to={"/settings"}>
+                        <img src={profileImg} className="w-7 ms-5" />
+                    </Link>
                 </Space>
                 <Drawer
                     title="notifications"
