@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const layoutSlice = createSlice({
-    name: "layout",
+    name: "layoutSlice",
     initialState: {
         isOpen: false,
     },

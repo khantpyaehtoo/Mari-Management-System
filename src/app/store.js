@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import layoutReducer from "../layout/layoutSlice";
+import layoutSlice from "../layout/layoutSlice";
 import { baseApi } from "./core/basicApi";
-import authReducer from "../features/auth/authSlice";
-import notiReducer from "./core/notiSlice";
+import authSlice from "../features/auth/authSlice";
+import notiSlice from "./core/notiSlice";
 
 export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]: baseApi.reducer,
-        layout: layoutReducer,
-        auth: authReducer,
-        noti: notiReducer,
+        layout: layoutSlice,
+        auth: authSlice,
+        noti: notiSlice,
     },
 
     middleware: (getDefaultMiddleware) =>

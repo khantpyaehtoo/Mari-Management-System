@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const notiSlice = createSlice({
-    name: "noti",
+    name: "notiSlice",
     initialState,
     reducers: {
         setMessage: (state, { payload }) => {

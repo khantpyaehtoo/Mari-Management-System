@@ -55,7 +55,8 @@ const data = [
 ];
 
 const Services = () => {
-    const { token } = useSelector((state) => state.authSlice);
+    const { token } = useSelector((state) => state?.auth);
+    console.log(token);
     const [searchText, setSearchText] = useState("");
     const { data: servicesData, isError } = useGetServicesDataQuery();
     const [deleteService] = useDeleteServiceMutation();
