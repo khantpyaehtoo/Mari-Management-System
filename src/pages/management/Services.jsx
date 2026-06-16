@@ -1,6 +1,7 @@
 import { Space, Table, Button } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+import AddForm from "../../components/modals/AddForm";
 import { useState } from "react";
 import {
     useDeleteServiceMutation,
@@ -57,54 +58,30 @@ const Services = () => {
     const { token } = useSelector((state) => state?.auth);
     // console.log(token);
     const [searchText, setSearchText] = useState("");
-    const { data: servicesData, isError } = useGetServicesDataQuery();
+    const { data: servicesData } = useGetServicesDataQuery();
     const [deleteService] = useDeleteServiceMutation();
 
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [isEdit, setIsEdit] = useState(null);
+    const [isEdit, setIsEdit] = useState(false);
+    const [selectedService, setSelectedService] = useState(null);
 
-    const handleEditBtn = (serviceId) => {
-        setIsEdit(null);
-        setIsFormOpen(false);
-        if (serviceId) {
-            try {
-                setIsEdit("Edit");
-                setIsFormOpen(true);
-            } catch (error) {
-                console.log("something went wrong!", isError?.message || error);
-            } finally {
-                setIsFormOpen(!isFormOpen);
-            }
-        }
+    const handleEditBtn = (service) => {
+        setSelectedService(service);
+        setIsEdit(true);
+        setIsFormOpen(true);
     };
 
     const deleteBtn = async (serviceId, name) => {
-        setIsEdit(null);
-        setIsFormOpen(false);
-        if (window.confirm(`Are you sure to delete this ${name}`)) {
+        if (window.confirm(`Are you sure to delete this ${name}?`)) {
             try {
-                const deleteFunc = await deleteService({
+                await deleteService({
                     id: serviceId,
                     token,
-                });
-                return deleteFunc;
+                }).unwrap();
             } catch (error) {
-                console.log("something went wrong!", isError?.message || error);
-            } finally {
-                setIsFormOpen(!isFormOpen);
+                console.error("Delete failed:", error);
+                alert("Something went wrong while deleting!");
             }
-        }
-        try {
-            if (serviceId) {
-                setIsEdit("Edit");
-                setIsFormOpen(true);
-            } else {
-                console.log(isError);
-            }
-        } catch (error) {
-            console.log("something went wrong!", error);
-        } finally {
-            setIsFormOpen(!isFormOpen);
         }
     };
 
@@ -122,13 +99,13 @@ const Services = () => {
                 return (
                     String(record.name)
                         .toLowerCase()
-                        .includes(value.toLowerCase) ||
+                        .includes(value.toLowerCase()) ||
                     String(record.serviceCategory)
                         .toLowerCase()
-                        .includes(value.toLowerCase) ||
+                        .includes(value.toLowerCase()) ||
                     String(record.price)
                         .toLowerCase()
-                        .includes(value.toLowerCase)
+                        .includes(value.toLowerCase())
                 );
             },
         },
@@ -159,7 +136,7 @@ const Services = () => {
                 <Space>
                     <Button
                         className="!editBtn"
-                        onClick={() => handleEditBtn(row.id)}
+                        onClick={() => handleEditBtn(row)}
                     >
                         <Edit size={18} />
                     </Button>
@@ -176,10 +153,20 @@ const Services = () => {
 
     return (
         <div>
-            <SubHeaderSection
-                setSearchText={setSearchText}
-                title={!isEdit ? "Services" : isEdit}
+            <SubHeaderSection setSearchText={setSearchText} title="Services" />
+
+            <AddForm
+                title="Services"
+                isEditMode={isEdit}
+                initialValues={selectedService}
+                open={isFormOpen}
+                onCancel={() => {
+                    setIsFormOpen(false);
+                    setSelectedService(null);
+                    setIsEdit(false);
+                }}
             />
+
             <div className="table-wrapper">
                 <Table
                     columns={columns}

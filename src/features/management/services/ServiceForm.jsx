@@ -1,19 +1,14 @@
-import { Form, Input } from "antd";
+import { Form, Input, InputNumber, Select } from "antd";
+import { useGetServicesDataQuery } from "./servicesApi";
 
 const ServiceForm = ({ form }) => {
     const { Item } = Form;
-    const submitHandler = () => {
-        const values = form.validateFields();
-        console.log("form values", values);
-    };
+    const { TextArea } = Input;
+
+    const { data: seriveData, isLoading } = useGetServicesDataQuery;
 
     return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={submitHandler}
-            autoComplete="off"
-        >
+        <Form form={form} layout="vertical" autoComplete="off">
             <Item
                 label={<label className="label-styling">Service Name</label>}
                 name="name"
@@ -37,32 +32,38 @@ const ServiceForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Service Price" className="!input-styling" />
-            </Item>
-
-            <Item
-                label={
-                    <label className="label-styling">Service Category</label>
-                }
-                name="category"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please input Category!",
-                    },
-                ]}
-            >
-                <Input
-                    placeholder="Service Category"
+                <InputNumber
+                    placeholder="Service Price"
                     className="!input-styling"
                 />
             </Item>
 
             <Item
                 label={
-                    <label className="label-styling">Service duration</label>
+                    <label className="label-styling">Service Category</label>
                 }
-                name="duration"
+                name="serviceCategory"
+                // rules={[
+                //     {
+                //         required: true,
+                //         message: "Please input Category!",
+                //     },
+                // ]}
+            >
+                <Select
+                    placeholder="Select a category"
+                    loading={isLoading}
+                    options={seriveData}
+                />
+            </Item>
+
+            <Item
+                label={
+                    <label className="label-styling">
+                        Service duration (minutes)
+                    </label>
+                }
+                name="durationInMinutes"
                 rules={[
                     {
                         required: true,
@@ -70,9 +71,21 @@ const ServiceForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input
+                <InputNumber
                     placeholder="Service Duration"
                     className="!input-styling"
+                    // type="number"
+                />
+            </Item>
+
+            <Item
+                label={<label className="label-styling">Description</label>}
+                name="description"
+            >
+                <TextArea
+                    placeholder="Service description"
+                    className="!input-styling"
+                    rows={4}
                 />
             </Item>
         </Form>
