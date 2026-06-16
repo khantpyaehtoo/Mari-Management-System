@@ -93,7 +93,7 @@ const User = () => {
             title: "Username",
             dataIndex: "username",
             key: "username",
-            filteredValue: [searchText],
+            filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
                 return (
                     String(record.phone)

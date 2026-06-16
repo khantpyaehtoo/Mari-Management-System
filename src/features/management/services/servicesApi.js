@@ -21,19 +21,19 @@ export const servicesApi = baseApi.injectEndpoints({
         }),
 
         updateService: builder.mutation({
-            query: (getServicesData) => ({
-                url: `${serviceEndpoint}`,
+            query: ({ id, token }) => ({
+                url: `${serviceEndpoint}/${id}`,
                 method: "PUT",
-                body: getServicesData,
+                headers: { Authorization: `Bearer ${token}` },
             }),
             invalidatesTags: ["services"],
         }),
 
         deleteService: builder.mutation({
-            query: ({ getServicesData }) => ({
-                url: `${serviceEndpoint}`,
+            query: ({ id, token }) => ({
+                url: `${serviceEndpoint}/${id}`,
                 method: "DELETE",
-                body: getServicesData,
+                headers: { Authorization: `Bearer ${token}` },
             }),
             invalidatesTags: ["services"],
         }),

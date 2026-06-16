@@ -119,7 +119,7 @@ const Staff = () => {
             title: "Full Name",
             dataIndex: "fullName",
             key: "fullName",
-            filteredValue: [searchText],
+            filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
                 return (
                     String(record.age)

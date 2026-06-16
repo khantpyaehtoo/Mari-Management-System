@@ -3,6 +3,11 @@ import { Edit, Trash2 } from "lucide-react";
 import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
+import {
+    useDeleteServiceMutation,
+    useGetServicesDataQuery,
+} from "../../features/management/services/servicesApi";
+import { useSelector } from "react-redux";
 
 const data = [
     {
@@ -50,15 +55,58 @@ const data = [
 ];
 
 const Services = () => {
+    const { token } = useSelector((state) => state.authSlice);
     const [searchText, setSearchText] = useState("");
+    const { data: servicesData, isError } = useGetServicesDataQuery();
+    const [deleteService] = useDeleteServiceMutation();
 
-    // const [isFormOpen, setIsFormOpen] = useState(false);
-    // const [isEdit, setIsEdit] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(null);
 
-    // const handleEditBtn = (id) => {
-    //     setIsEdit(null);
-    //     setIsFormOpen(true);
-    // };
+    const handleEditBtn = (serviceId) => {
+        setIsEdit(null);
+        setIsFormOpen(false);
+        if (serviceId) {
+            try {
+                setIsEdit("Edit");
+                setIsFormOpen(true);
+            } catch (error) {
+                console.log("something went wrong!", isError?.message || error);
+            } finally {
+                setIsFormOpen(!isFormOpen);
+            }
+        }
+    };
+
+    const deleteBtn = async (serviceId, name) => {
+        setIsEdit(null);
+        setIsFormOpen(false);
+        if (window.confirm(`Are you sure to delete this ${name}`)) {
+            try {
+                const deleteFunc = await deleteService({
+                    id: serviceId,
+                    token,
+                });
+                return deleteFunc;
+            } catch (error) {
+                console.log("something went wrong!", isError?.message || error);
+            } finally {
+                setIsFormOpen(!isFormOpen);
+            }
+        }
+        try {
+            if (serviceId) {
+                setIsEdit("Edit");
+                setIsFormOpen(true);
+            } else {
+                console.log(isError);
+            }
+        } catch (error) {
+            console.log("something went wrong!", error);
+        } finally {
+            setIsFormOpen(!isFormOpen);
+        }
+    };
     const columns = [
         {
             title: "Id",
@@ -69,7 +117,7 @@ const Services = () => {
             title: "ServiceId",
             dataIndex: "ServiceId",
             key: "ServiceId",
-            filteredValue: [searchText],
+            filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
                 return (
                     String(record.service)
@@ -109,18 +157,22 @@ const Services = () => {
             key: "action",
             render: () => (
                 <Space>
-                    <Button
-                        className="!editBtn"
-                        // onClick={(e) => handleEditBtn(e.target.value)}
-                    >
-                        <Edit size={18} />
-                    </Button>
-                    <Button
-                        className="!deleteBtn"
-                        // onClick={(e) => console.log("clicked", e)}
-                    >
-                        <Trash2 size={18} />
-                    </Button>
+                    {servicesData?.map((data) => (
+                        <>
+                            <Button
+                                className="!editBtn"
+                                onClick={() => handleEditBtn(data.id)}
+                            >
+                                <Edit size={18} />
+                            </Button>
+                            <Button
+                                className="!deleteBtn"
+                                onClick={() => deleteBtn(data.id, data.name)}
+                            >
+                                <Trash2 size={18} />
+                            </Button>
+                        </>
+                    ))}
                 </Space>
             ),
         },
@@ -130,7 +182,7 @@ const Services = () => {
         <div>
             <SubHeaderSection
                 setSearchText={setSearchText}
-                title={"Services"}
+                title={!isEdit ? "Services" : isEdit}
             />
             <div className="table-wrapper">
                 <Table columns={columns} dataSource={data} />
