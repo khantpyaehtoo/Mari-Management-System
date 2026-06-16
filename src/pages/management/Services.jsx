@@ -1,6 +1,5 @@
-import { Image, Space, Table, Button } from "antd";
+import { Space, Table, Button } from "antd";
 import { Edit, Trash2 } from "lucide-react";
-import flowerProfile from "../../../public/flowerProfile.jpg";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
 import {
@@ -9,54 +8,54 @@ import {
 } from "../../features/management/services/servicesApi";
 import { useSelector } from "react-redux";
 
-const data = [
-    {
-        key: "1",
-        service: (
-            <Image
-                src={flowerProfile}
-                width={50}
-                alt="profile"
-                className="!rounded-md !shadow-sm"
-            />
-        ),
-        name: "Nails Cleaning",
-        price: "120,000",
-        serviceId: "DB-200",
-    },
-    {
-        key: "2",
-        service: (
-            <Image
-                src={flowerProfile}
-                width={50}
-                alt="profile"
-                className="!rounded-md !shadow-sm"
-            />
-        ),
-        name: "Nails Cleaning",
-        price: "120,000",
-        serviceId: "DB-200",
-    },
-    {
-        key: "3",
-        service: (
-            <Image
-                src={flowerProfile}
-                width={50}
-                alt="profile"
-                className="!rounded-md !shadow-sm"
-            />
-        ),
-        name: "Nails Cleaning",
-        price: "120,000",
-        serviceId: "DB-200",
-    },
-];
+// const data = [
+//     {
+//         key: "1",
+//         service: (
+//             <Image
+//                 src={flowerProfile}
+//                 width={50}
+//                 alt="profile"
+//                 className="!rounded-md !shadow-sm"
+//             />
+//         ),
+//         name: "Nails Cleaning",
+//         price: "120,000",
+//         serviceId: "DB-200",
+//     },
+//     {
+//         key: "2",
+//         service: (
+//             <Image
+//                 src={flowerProfile}
+//                 width={50}
+//                 alt="profile"
+//                 className="!rounded-md !shadow-sm"
+//             />
+//         ),
+//         name: "Nails Cleaning",
+//         price: "120,000",
+//         serviceId: "DB-200",
+//     },
+//     {
+//         key: "3",
+//         service: (
+//             <Image
+//                 src={flowerProfile}
+//                 width={50}
+//                 alt="profile"
+//                 className="!rounded-md !shadow-sm"
+//             />
+//         ),
+//         name: "Nails Cleaning",
+//         price: "120,000",
+//         serviceId: "DB-200",
+//     },
+// ];
 
 const Services = () => {
     const { token } = useSelector((state) => state?.auth);
-    console.log(token);
+    // console.log(token);
     const [searchText, setSearchText] = useState("");
     const { data: servicesData, isError } = useGetServicesDataQuery();
     const [deleteService] = useDeleteServiceMutation();
@@ -108,35 +107,35 @@ const Services = () => {
             setIsFormOpen(!isFormOpen);
         }
     };
+
     const columns = [
         {
-            title: "Id",
-            dataIndex: "key",
-            key: "key",
+            title: "No.",
+            render: (_, member, index) => <p> {index + 1} </p>,
         },
         {
-            title: "ServiceId",
-            dataIndex: "ServiceId",
-            key: "ServiceId",
+            title: "Service Name",
+            dataIndex: "name",
+            key: "name",
             filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
                 return (
-                    String(record.service)
-                        .toLowerCase()
-                        .includes(value.toLowerCase) ||
                     String(record.name)
                         .toLowerCase()
                         .includes(value.toLowerCase) ||
-                    String(record.serviceId)
+                    String(record.serviceCategory)
+                        .toLowerCase()
+                        .includes(value.toLowerCase) ||
+                    String(record.price)
                         .toLowerCase()
                         .includes(value.toLowerCase)
                 );
             },
         },
         {
-            title: "Service-Name",
-            dataIndex: "serviceName",
-            key: "serviceName",
+            title: "description",
+            dataIndex: "description",
+            key: "description",
         },
         {
             title: "Service-Category",
@@ -145,35 +144,31 @@ const Services = () => {
         },
         {
             title: "Service-Price",
-            dataIndex: "servicePrice",
-            key: "servicePrice",
+            dataIndex: "price",
+            key: "price",
         },
         {
             title: "Service-Duration",
-            dataIndex: "serviceDuration",
-            key: "serviceDuration",
+            dataIndex: "durationInMinutes",
+            key: "durationInMinutes",
         },
         {
             title: "Action",
             key: "action",
-            render: () => (
+            render: (row) => (
                 <Space>
-                    {servicesData?.map((data) => (
-                        <>
-                            <Button
-                                className="!editBtn"
-                                onClick={() => handleEditBtn(data.id)}
-                            >
-                                <Edit size={18} />
-                            </Button>
-                            <Button
-                                className="!deleteBtn"
-                                onClick={() => deleteBtn(data.id, data.name)}
-                            >
-                                <Trash2 size={18} />
-                            </Button>
-                        </>
-                    ))}
+                    <Button
+                        className="!editBtn"
+                        onClick={() => handleEditBtn(row.id)}
+                    >
+                        <Edit size={18} />
+                    </Button>
+                    <Button
+                        className="!deleteBtn"
+                        onClick={() => deleteBtn(row.id, row.name)}
+                    >
+                        <Trash2 size={18} />
+                    </Button>
                 </Space>
             ),
         },
@@ -186,8 +181,11 @@ const Services = () => {
                 title={!isEdit ? "Services" : isEdit}
             />
             <div className="table-wrapper">
-                <Table columns={columns} dataSource={data} />
-                {/* {console.log(data)} */}
+                <Table
+                    columns={columns}
+                    dataSource={servicesData}
+                    rowKey={(record) => record?.id}
+                />
             </div>
         </div>
     );

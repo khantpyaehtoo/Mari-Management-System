@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import SideBar from "../components/Bars/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Bars/NavBar";
-import AppFooter from "../components/Footer";
+// import AppFooter from "../components/Footer";
 
 const { Sider, Header, Content } = Layout;
 
@@ -32,7 +32,7 @@ const MainLayout = () => {
                 <Content className="p-4 md:p-6 bg-gray-50 min-h-screen">
                     <Outlet />
                 </Content>
-                <AppFooter />
+                {/* <AppFooter /> */}
             </Layout>
         </Layout>
     );

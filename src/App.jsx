@@ -11,8 +11,8 @@ import LoginForm from "./pages/auth/LoginForm";
 import PageNotFound from "./pages/PageNotFound";
 import ForgetPasswordForm from "./pages/auth/ForgetPasswordForm";
 import NotificationHandler from "./components/NotificationHandler";
-// import IsAuth from "./components/Guards/IsAuth.jsx";
-// import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
+import IsAuth from "./components/Guards/IsAuth.jsx";
+import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
 export default function App() {
     return (
@@ -22,9 +22,9 @@ export default function App() {
                 <Route
                     path="/login"
                     element={
-                        // <IsNotAuth>
-                        <LoginForm />
-                        // </IsNotAuth>
+                        <IsNotAuth>
+                            <LoginForm />
+                        </IsNotAuth>
                     }
                 />
                 <Route path="/reset" element={<ForgetPasswordForm />} />
@@ -32,9 +32,9 @@ export default function App() {
                 <Route
                     path="/"
                     element={
-                        // <IsAuth>
-                        <MainLayout />
-                        // {/* </IsAuth> */}
+                        <IsAuth>
+                            <MainLayout />
+                        </IsAuth>
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />

@@ -21,20 +21,19 @@ export const userApi = baseApi.injectEndpoints({
         }),
 
         updateUser: builder.mutation({
-            query: ({ getUserData }) => ({
-                url: `admin${userEndpoint}`,
+            query: ({ id, token }) => ({
+                url: `admin${userEndpoint}/${id}`,
                 method: "PUT",
-                body: getUserData,
+                headers: { Authorization: `Bearer ${token}` },
             }),
             invalidatesTags: ["staffs"],
         }),
 
         deleteUser: builder.mutation({
-            query: ({ getUserData, token }) => ({
-                url: `admin${userEndpoint}`,
+            query: ({ id, token }) => ({
+                url: `admin${userEndpoint}/${id}`,
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
-                body: getUserData,
             }),
             invalidatesTags: ["staffs"],
         }),
