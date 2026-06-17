@@ -54,7 +54,12 @@ const data = {
         {
             label: "Total Order",
             data: filteredLabels.map(() => Math.random() * 90),
-            backgroundColor: "#040404",
+            backgroundColor: "#FBB1BD",
+        },
+        {
+            label: "Total income",
+            data: filteredLabels.map(() => Math.random() * 90),
+            backgroundColor: "#FF4262",
         },
     ],
 };

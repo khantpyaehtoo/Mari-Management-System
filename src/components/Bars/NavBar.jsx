@@ -91,14 +91,16 @@ const Navbar = () => {
                 >
                     <MenuOutlined />
                 </button>
-                <h3 className="text-white text-lg md:text-2xl">
+                <h3 className="text-white lg:text-2xl md:text-lg ">
                     Welcome <span className="font-bold">Rebillet</span> !
                 </h3>
             </div>
 
             <div className="text-white">
                 <Space align="center">
-                    <span>Current Date: </span>
+                    <span className="hidden md:block lg:block">
+                        Current Date:{" "}
+                    </span>
                     <DateTimeFormatter />
                     <Badge>
                         <BellOutlined

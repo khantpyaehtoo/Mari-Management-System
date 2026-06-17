@@ -26,7 +26,7 @@ const MainLayout = () => {
                     <SideBar />
                 </div>
 
-                <Header className="!bg-dark-blue px-4 h-16">
+                <Header className="!bg-brand-gradient px-4 h-16">
                     <Navbar />
                 </Header>
                 <Content className="p-4 md:p-6 bg-gray-50 min-h-screen">

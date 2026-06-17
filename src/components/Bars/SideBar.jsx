@@ -125,8 +125,8 @@ const SideBar = () => {
                         <X />
                     </button>
                     <div className="flex justify-center items-center h-20">
-                        <img src={brandLogo} alt="" className="w-15" />
-                        <img src={brandName} alt="" className="w-15" />
+                        <img src={brandLogo} alt="brandLogo" className="w-15" />
+                        <img src={brandName} alt="brandName" className="w-15" />
                     </div>
                     <Menu
                         mode="inline"

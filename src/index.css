@@ -2,7 +2,8 @@
 
 @theme {
     --color-dark-blue: var(--color-blue-950);
-    --color-primary-btn: var("#270C18");
+    --color-primary: #FBB1BD;
+    --background-image-brand-gradient: radial-gradient(circle,rgba(255, 66, 98, 1) 0%, rgba(251, 177, 189, 1) 56%, rgba(255, 66, 98, 1) 100%);
 }
 
 @utility sidemenu-item {
@@ -26,7 +27,7 @@
 
 /* sidebar-mobile slide */
 @utility sidebar-mobile {
-    @apply fixed inset-y-0 left-0 z-50 w-64 bg-blue-500 transform transition-transform duration-300;
+    @apply fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform duration-300;
 }
 
 /* label styling */

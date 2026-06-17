@@ -85,6 +85,14 @@ const Services = () => {
         }
     };
 
+    // useEffect(() => {
+    //     fetch(`${baseApi}/services/categories`)
+    //         .then((res) => res.json())
+    //         .then((data) => setCategories(data))
+    //         .catch((err) => console.log(err));
+    // }, []);
+    // console.log(categories);
+
     const columns = [
         {
             title: "No.",
@@ -116,8 +124,8 @@ const Services = () => {
         },
         {
             title: "Service-Category",
-            dataIndex: "categoryId",
-            key: "categoryId",
+            dataIndex: "categoryName",
+            key: "categoryName",
         },
         {
             title: "Service-Price",

@@ -1,11 +1,14 @@
-import { Form, Input, InputNumber, Select } from "antd";
+import { Form, Input, InputNumber, Select, Space, Button } from "antd";
 import { useGetServicesDataQuery } from "./servicesApi";
+import { PlusCircleFilled } from "@ant-design/icons";
+import { useState } from "react";
 
 const ServiceForm = ({ form }) => {
     const { Item } = Form;
     const { TextArea } = Input;
 
-    const { data: seriveData, isLoading } = useGetServicesDataQuery;
+    const { data: seriveData, isLoading } = useGetServicesDataQuery();
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <Form form={form} layout="vertical" autoComplete="off">
@@ -38,24 +41,53 @@ const ServiceForm = ({ form }) => {
                 />
             </Item>
 
-            <Item
-                label={
-                    <label className="label-styling">Service Category</label>
-                }
-                name="serviceCategory"
-                // rules={[
-                //     {
-                //         required: true,
-                //         message: "Please input Category!",
-                //     },
-                // ]}
-            >
-                <Select
-                    placeholder="Select a category"
-                    loading={isLoading}
-                    options={seriveData}
-                />
-            </Item>
+            <Space align="center" size="medium">
+                <Item
+                    label={
+                        <label className="label-styling">
+                            Service Category
+                        </label>
+                    }
+                    name="categoryName"
+                >
+                    <Select
+                        placeholder="Select a category"
+                        loading={isLoading}
+                        options={seriveData?.map((item) => ({
+                            value: item.id || item.categoryName,
+                            label: item.categoryName,
+                        }))}
+                        className="!w-100"
+                    />
+                </Item>
+
+                <Button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="mt-1 !h-10"
+                >
+                    <PlusCircleFilled />
+                </Button>
+            </Space>
+
+            {isOpen && (
+                <Item
+                    label={
+                        <label className="label-styling">Category Name</label>
+                    }
+                    name="category"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please input new Category name!",
+                        },
+                    ]}
+                >
+                    <Input
+                        placeholder="Category name"
+                        className="!input-styling"
+                    />
+                </Item>
+            )}
 
             <Item
                 label={
