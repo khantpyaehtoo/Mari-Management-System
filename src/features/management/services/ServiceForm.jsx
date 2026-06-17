@@ -48,7 +48,7 @@ const ServiceForm = ({ form }) => {
                             Service Category
                         </label>
                     }
-                    name="categoryName"
+                    name="categoryId"
                 >
                     <Select
                         placeholder="Select a category"
@@ -74,7 +74,7 @@ const ServiceForm = ({ form }) => {
                     label={
                         <label className="label-styling">Category Name</label>
                     }
-                    name="category"
+                    name="categoryName"
                     rules={[
                         {
                             required: true,

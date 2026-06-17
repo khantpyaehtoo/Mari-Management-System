@@ -9,54 +9,8 @@ import {
 } from "../../features/management/services/servicesApi";
 import { useSelector } from "react-redux";
 
-// const data = [
-//     {
-//         key: "1",
-//         service: (
-//             <Image
-//                 src={flowerProfile}
-//                 width={50}
-//                 alt="profile"
-//                 className="!rounded-md !shadow-sm"
-//             />
-//         ),
-//         name: "Nails Cleaning",
-//         price: "120,000",
-//         serviceId: "DB-200",
-//     },
-//     {
-//         key: "2",
-//         service: (
-//             <Image
-//                 src={flowerProfile}
-//                 width={50}
-//                 alt="profile"
-//                 className="!rounded-md !shadow-sm"
-//             />
-//         ),
-//         name: "Nails Cleaning",
-//         price: "120,000",
-//         serviceId: "DB-200",
-//     },
-//     {
-//         key: "3",
-//         service: (
-//             <Image
-//                 src={flowerProfile}
-//                 width={50}
-//                 alt="profile"
-//                 className="!rounded-md !shadow-sm"
-//             />
-//         ),
-//         name: "Nails Cleaning",
-//         price: "120,000",
-//         serviceId: "DB-200",
-//     },
-// ];
-
 const Services = () => {
     const { token } = useSelector((state) => state?.auth);
-    // console.log(token);
     const [searchText, setSearchText] = useState("");
     const { data: servicesData } = useGetServicesDataQuery();
     const [deleteService] = useDeleteServiceMutation();
@@ -71,11 +25,11 @@ const Services = () => {
         setIsFormOpen(true);
     };
 
-    const deleteBtn = async (serviceId, name) => {
+    const deleteBtn = async (id, name) => {
         if (window.confirm(`Are you sure to delete this ${name}?`)) {
             try {
                 await deleteService({
-                    id: serviceId,
+                    id,
                     token,
                 }).unwrap();
             } catch (error) {
@@ -85,18 +39,10 @@ const Services = () => {
         }
     };
 
-    // useEffect(() => {
-    //     fetch(`${baseApi}/services/categories`)
-    //         .then((res) => res.json())
-    //         .then((data) => setCategories(data))
-    //         .catch((err) => console.log(err));
-    // }, []);
-    // console.log(categories);
-
     const columns = [
         {
             title: "No.",
-            render: (_, member, index) => <p> {index + 1} </p>,
+            render: (_, value, index) => <p> {index + 1} </p>,
         },
         {
             title: "Service Name",
@@ -118,7 +64,7 @@ const Services = () => {
             },
         },
         {
-            title: "description",
+            title: "Description",
             dataIndex: "description",
             key: "description",
         },

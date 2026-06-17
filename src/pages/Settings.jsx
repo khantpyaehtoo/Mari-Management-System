@@ -23,16 +23,16 @@ import {
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
-    useGetAdminDataQuery,
     useChangePasswordMutation,
     useUpdateAdminDataMutation,
+    useGetAllSettingsQuery,
 } from "../features/auth/authApi";
 
 const { Title, Text } = Typography;
 
 const Settings = () => {
-    const { token } = useSelector((state) => state.auth);
-    const { data: adminData } = useGetAdminDataQuery(token);
+    const { token } = useSelector((state) => state?.auth);
+    const { data: adminData } = useGetAllSettingsQuery(token);
     const [changePassword, { isLoading: isChangingPassword }] =
         useChangePasswordMutation();
     const [updateAdminData, { isLoading: isUpdatingAdmin }] =
@@ -120,9 +120,12 @@ const Settings = () => {
                                 layout="vertical"
                                 onFinish={onFinishAccount}
                                 initialValues={{
-                                    username: "Admin",
-                                    email: "admin@gmail.com",
-                                    phone: "(+95) 9 956 145 223",
+                                    username: adminData?.username || "Admin",
+                                    email:
+                                        adminData?.email || "admin@gmail.com",
+                                    phone:
+                                        adminData?.phone ||
+                                        "(+95) 9 xxx xxx xxx",
                                 }}
                             >
                                 <Form.Item
