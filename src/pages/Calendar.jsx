@@ -1,12 +1,12 @@
-import { Typography, Calendar } from "antd";
+import { Calendar } from "antd";
+import SubHeaderSection from "../components/SubHeaderSection/SubHeaderSection";
 
 const CalendarSection = () => {
-    const { Title } = Typography;
     return (
         <div>
-            <Title className="title-style" level={3}>
-                Calendar
-            </Title>
+            <div>
+                <SubHeaderSection title="Calendar" />
+            </div>
             <Calendar />
         </div>
     );

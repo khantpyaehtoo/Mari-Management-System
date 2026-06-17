@@ -8,7 +8,7 @@ import { FORM_CONFIG } from "../../lib/config/formConfig";
 const AddForm = ({ title, initialValues, isEditMode, open, onCancel }) => {
     const [isLocalModalOpen, setIsLocalModalOpen] = useState(false);
     const [form] = Form.useForm();
-    const { token } = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state?.auth);
 
     const isModalOpen = open !== undefined ? open : isLocalModalOpen;
 

@@ -14,9 +14,9 @@ createRoot(document.getElementById("root")).render(
                 <ConfigProvider
                     theme={{
                         components: {
-                            // Button: {
-                            //     primaryColor: "black",
-                            // },
+                            Button: {
+                                primaryColor: "#3D1627",
+                            },
                         },
                     }}
                 >

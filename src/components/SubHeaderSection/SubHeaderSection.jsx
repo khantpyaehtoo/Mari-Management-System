@@ -8,12 +8,16 @@ const SubHeaderSection = ({ setSearchText, title }) => {
     return (
         <div className="title-style flex justify-between items-center">
             <Title level={3}>{title}</Title>
-            <Search
-                placeholder="Search somethings ...."
-                onSearch={(value) => setSearchText(value)}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="lg:!w-128 md:!w-64 !w-32"
-            />
+            {setSearchText ? (
+                <Search
+                    placeholder="Search somethings ...."
+                    onSearch={(value) => setSearchText(value)}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="lg:!w-128 md:!w-64 !w-32"
+                />
+            ) : (
+                ""
+            )}
             <AddForm title={title} />
         </div>
     );

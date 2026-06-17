@@ -2,6 +2,7 @@
 
 @theme {
     --color-dark-blue: var(--color-blue-950);
+    --color-primary-btn: var("#270C18");
 }
 
 @utility sidemenu-item {

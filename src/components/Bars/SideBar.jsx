@@ -16,6 +16,8 @@ import { cn } from "../../lib/utils";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import { X } from "lucide-react";
 import { removeCookie, setLoggedIn } from "../../features/auth/authSlice";
+import brandLogo from "../../../public/brandLogo.png";
+import brandName from "../../../public/brandName.png";
 
 const SideBar = () => {
     const navigate = useNavigate();
@@ -122,9 +124,10 @@ const SideBar = () => {
                     >
                         <X />
                     </button>
-                    <h2 className="flex justify-center text-center items-center text-3xl h-20 mb-5 font-bold text-dark-blue">
-                        Logo
-                    </h2>
+                    <div className="flex justify-center items-center h-20">
+                        <img src={brandLogo} alt="" className="w-15" />
+                        <img src={brandName} alt="" className="w-15" />
+                    </div>
                     <Menu
                         mode="inline"
                         items={menuItem}
