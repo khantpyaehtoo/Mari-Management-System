@@ -51,7 +51,7 @@ export const authApi = baseApi.injectEndpoints({
             invalidatesTags: ["auth"],
         }),
 
-        getAllSettings: builder.query({
+        getSettings: builder.query({
             query: (token) => ({
                 url: `${settingEndPoint}`,
                 method: "GET",
@@ -66,7 +66,7 @@ export const {
     useLoginAccountMutation,
     useChangePasswordMutation,
     useGetAdminDataQuery,
-    useGetAllSettingsQuery,
+    useGetSettingsQuery,
     useResetPasswordMutation,
     useUpdateAdminDataMutation,
 } = authApi;

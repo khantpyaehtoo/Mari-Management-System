@@ -25,14 +25,14 @@ import { useSelector } from "react-redux";
 import {
     useChangePasswordMutation,
     useUpdateAdminDataMutation,
-    useGetAllSettingsQuery,
+    useGetSettingsQuery,
 } from "../features/auth/authApi";
 
 const { Title, Text } = Typography;
 
 const Settings = () => {
     const { token } = useSelector((state) => state?.auth);
-    const { data: adminData } = useGetAllSettingsQuery(token);
+    const { data: adminData } = useGetSettingsQuery(token);
     const [changePassword, { isLoading: isChangingPassword }] =
         useChangePasswordMutation();
     const [updateAdminData, { isLoading: isUpdatingAdmin }] =

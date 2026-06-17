@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input } from "antd";
+import { DatePicker, Form, Input, InputNumber } from "antd";
 
 const CalendarForm = ({ form }) => {
     const { Item } = Form;
@@ -15,16 +15,25 @@ const CalendarForm = ({ form }) => {
             autoComplete="off"
         >
             <Item
-                label={<label className="label-styling">Name</label>}
-                name="name"
+                label={<label className="label-styling">Employee Name</label>}
+                name="employeeName"
                 rules={[
                     {
                         required: true,
-                        message: "Please input service name!",
+                        message: "Please input employee name!",
                     },
                 ]}
             >
-                <Input placeholder="Service name" className="!input-styling" />
+                <Input placeholder="Employee name" className="!input-styling" />
+            </Item>
+            <Item
+                label={<label>Attendance Person Count</label>}
+                name="attendance"
+            >
+                <InputNumber
+                    placeholder="Attendance Person Count"
+                    className="!input-styling"
+                />
             </Item>
             <Item
                 label={<label className="label-styling">Attendance</label>}
