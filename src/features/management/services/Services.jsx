@@ -1,12 +1,11 @@
 import { Space, Table, Button } from "antd";
 import { Edit, Trash2 } from "lucide-react";
-import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import AddForm from "../../components/modals/AddForm";
+import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
 import {
     useDeleteServiceMutation,
     useGetServicesDataQuery,
-} from "../../features/management/services/servicesApi";
+} from "./servicesApi";
 import { useSelector } from "react-redux";
 
 const Services = () => {
@@ -18,6 +17,12 @@ const Services = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
+
+    const onCancel = () => {
+        setIsFormOpen(false);
+        setSelectedService(null);
+        setIsEdit(false);
+    };
 
     const handleEditBtn = (service) => {
         setSelectedService(service);
@@ -54,7 +59,7 @@ const Services = () => {
                     String(record.name)
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
-                    String(record.serviceCategory)
+                    String(record.categoryName)
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
                     String(record.price)
@@ -107,18 +112,13 @@ const Services = () => {
 
     return (
         <div>
-            <SubHeaderSection setSearchText={setSearchText} title="Services" />
-
-            <AddForm
+            <SubHeaderSection
                 title="Services"
-                isEditMode={isEdit}
+                setSearchText={setSearchText}
+                isOpen={isFormOpen}
+                isEdit={isEdit}
                 initialValues={selectedService}
-                open={isFormOpen}
-                onCancel={() => {
-                    setIsFormOpen(false);
-                    setSelectedService(null);
-                    setIsEdit(false);
-                }}
+                onCancel={onCancel}
             />
 
             <div className="table-wrapper">

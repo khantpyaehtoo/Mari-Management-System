@@ -7,7 +7,7 @@
 }
 
 @utility sidemenu-item {
-    @apply font-bold text-dark-blue;
+    @apply font-bold;
 }
 
 /* for title style */

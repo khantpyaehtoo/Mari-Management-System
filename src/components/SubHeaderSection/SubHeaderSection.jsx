@@ -1,7 +1,14 @@
 import { Input, Typography } from "antd";
 import AddForm from "../modals/AddForm";
 
-const SubHeaderSection = ({ setSearchText, title }) => {
+const SubHeaderSection = ({
+    setSearchText,
+    title,
+    isEdit,
+    isOpen,
+    onCancel,
+    initialValues,
+}) => {
     const { Title } = Typography;
     const { Search } = Input;
 
@@ -13,12 +20,19 @@ const SubHeaderSection = ({ setSearchText, title }) => {
                     placeholder="Search somethings ...."
                     onSearch={(value) => setSearchText(value)}
                     onChange={(e) => setSearchText(e.target.value)}
-                    className="lg:!w-128 md:!w-64 !w-32"
+                    className="lg:!w-100 md:!w-80 !w-60"
                 />
             ) : (
                 ""
             )}
-            <AddForm title={title} />
+
+            <AddForm
+                title={title}
+                isEdit={isEdit}
+                isOpen={isOpen}
+                onCancel={onCancel}
+                initialValues={initialValues}
+            />
         </div>
     );
 };

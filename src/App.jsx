@@ -1,16 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
-import User from "./pages/management/User";
-import Staff from "./pages/management/Staff";
-import CalendarSection from "./pages/Calendar.jsx";
-import Settings from "./pages/Settings";
-import Booking from "./pages/management/Booking";
-import Services from "./pages/management/Services";
-import Dashboard from "./pages/Dashboard";
-import LoginForm from "./pages/auth/LoginForm";
-import PageNotFound from "./pages/PageNotFound";
-import ForgetPasswordForm from "./pages/auth/ForgetPasswordForm";
 import NotificationHandler from "./components/NotificationHandler";
+import User from "./features/management/user/User.jsx";
+import Services from "./features/management/services/Services.jsx";
+import Booking from "./features/management/booking/Booking.jsx";
+import Staff from "./features/management/staff/Staff.jsx";
+import CalendarSection from "./features/calendar/Calendar.jsx";
+import Settings from "./features/auth/Settings.jsx";
+import Dashboard from "./pages/Dashboard";
+import LoginForm from "./features/auth/LoginForm.jsx";
+import ForgetPasswordForm from "./features/auth/ForgetPasswordForm.jsx";
+import PageNotFound from "./pages/PageNotFound";
 import IsAuth from "./components/Guards/IsAuth.jsx";
 import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 

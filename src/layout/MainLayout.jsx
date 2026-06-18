@@ -8,28 +8,28 @@ const { Sider, Header, Content } = Layout;
 
 const MainLayout = () => {
     return (
-        <Layout>
+        <Layout className="h-screen overflow-hidden">
             {/* for desktop */}
             <Sider
                 theme="light"
                 trigger={null}
                 breakpoint="lg"
-                width={220}
-                className="hidden lg:min-h-screen lg:block "
+                width={270}
+                className="hidden h-full lg:block "
             >
                 <SideBar />
             </Sider>
 
-            <Layout>
+            <Layout className="h-full flex flex-col">
                 {/* for mobile */}
-                <div className="lg:h-full lg:w-full lg:hidden">
+                <div className="lg:hidden">
                     <SideBar />
                 </div>
 
                 <Header className="!bg-brand-gradient px-4 h-16">
                     <Navbar />
                 </Header>
-                <Content className="p-4 md:p-6 bg-gray-50 min-h-screen">
+                <Content className="p-4 md:p-6 bg-gray-50 overflow-y-auto flex-1">
                     <Outlet />
                 </Content>
                 {/* <AppFooter /> */}

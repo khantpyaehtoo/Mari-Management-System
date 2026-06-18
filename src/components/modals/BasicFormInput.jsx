@@ -12,7 +12,11 @@ const BasicFormInput = () => {
                     { required: true, message: `Please input the username` },
                 ]}
             >
-                <Input placeholder={"username"} className="!input-styling" />
+                <Input
+                    placeholder={"username"}
+                    className="!input-styling"
+                    autoComplete="one-time-code"
+                />
             </Item>
             <Item
                 name="fullname"
@@ -21,14 +25,22 @@ const BasicFormInput = () => {
                     { required: true, message: `Please input the fullname` },
                 ]}
             >
-                <Input placeholder={"fullname"} className="!input-styling" />
+                <Input
+                    placeholder={"fullname"}
+                    className="!input-styling"
+                    autoComplete="one-time-code"
+                />
             </Item>
             <Item
                 name="email"
                 label={<label className="label-styling">Email</label>}
                 rules={[{ required: true, message: `Please input the Email` }]}
             >
-                <Input placeholder={"email"} className="!input-styling" />
+                <Input
+                    placeholder={"email"}
+                    className="!input-styling"
+                    autoComplete="one-time-code"
+                />
             </Item>
 
             <Space size="large" align="start">
@@ -48,6 +60,7 @@ const BasicFormInput = () => {
                         prefix="+95"
                         placeholder={"Phone Number"}
                         className="!input-styling"
+                        autoComplete="one-time-code"
                     />
                 </Item>
                 <Item
@@ -68,6 +81,7 @@ const BasicFormInput = () => {
                     <Input.Password
                         placeholder={"password"}
                         className="!input-styling"
+                        autoComplete="one-time-code"
                     />
                 </Item>
             </Space>

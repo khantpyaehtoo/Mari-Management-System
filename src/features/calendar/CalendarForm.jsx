@@ -1,10 +1,22 @@
-import { DatePicker, Form, Input, InputNumber } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { DatePicker, Form, Select } from "antd";
+const options = [];
+for (let i = 10; i < 36; i++) {
+    options.push({
+        value: i.toString(36) + i,
+        label: i.toString(36) + i,
+    });
+}
 
 const CalendarForm = ({ form }) => {
     const { Item } = Form;
     const submitHandler = () => {
         const values = form.validateFields();
         console.log("form values", values);
+    };
+
+    const handleChange = (value) => {
+        console.log(`Selected: ${value} ${value.length}`);
     };
 
     return (
@@ -24,15 +36,15 @@ const CalendarForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Employee name" className="!input-styling" />
-            </Item>
-            <Item
-                label={<label>Attendance Person Count</label>}
-                name="attendance"
-            >
-                <InputNumber
-                    placeholder="Attendance Person Count"
-                    className="!input-styling"
+                <Select
+                    mode="multiple"
+                    size="medium"
+                    placeholder="Please select"
+                    // defaultValue={["a10", "c12"]}
+                    onChange={handleChange}
+                    style={{ width: "100%" }}
+                    options={options}
+                    suffixIcon={<DownOutlined />}
                 />
             </Item>
             <Item

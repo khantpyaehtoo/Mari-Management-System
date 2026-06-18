@@ -1,6 +1,6 @@
 import { Table, Button, Dropdown, message } from "antd";
 import { useState } from "react";
-import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { DownOutlined } from "@ant-design/icons";
 
 const initialData = [

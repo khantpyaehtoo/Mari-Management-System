@@ -117,6 +117,11 @@ const Navbar = () => {
                     open={isNotiOpen}
                     onClose={() => setIsNotiOpen(false)}
                     mask="true"
+                    styles={{
+                        header: {
+                            background: "#FBB1BD",
+                        },
+                    }}
                 >
                     <Tabs defaultActiveKey="1" items={items} />
                 </Drawer>

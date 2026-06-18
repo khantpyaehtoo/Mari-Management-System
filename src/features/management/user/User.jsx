@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import { useState } from "react";
-import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 // import { useGetUserDataQuery } from "../../features/management/user/userApi";
 // import CookieJS from "js-cookie";
 // const data = [

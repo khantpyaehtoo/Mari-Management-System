@@ -1,13 +1,14 @@
 import { Flex, Typography } from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { MonthlyChart } from "../components/dashboard/MonthlyChart";
-import { CalendarCard } from "../components/dashboard/CalendarCard";
+// import { CalendarCard } from "../components/dashboard/CalendarCard";
 import {
     ApartmentOutlined,
     IdcardOutlined,
     UnorderedListOutlined,
     UserOutlined,
 } from "@ant-design/icons";
+import { DemoLine } from "../components/dashboard/LineChart";
 
 const dashboardCardItem = [
     {
@@ -55,9 +56,10 @@ const Dashboard = () => {
             <section className="mt-10 mb-10 px-10">
                 <div className="grid-items">
                     <MonthlyChart />
-                    <div className="h-[200px]">
-                        <CalendarCard />
-                    </div>
+                    {/* <div className="h-[200px]"> */}
+                    {/* <CalendarCard /> */}
+                    {/* </div> */}
+                    <DemoLine />
                 </div>
             </section>
         </Flex>

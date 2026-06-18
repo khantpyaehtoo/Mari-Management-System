@@ -1,10 +1,10 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Flex, Form, Input, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginAccountMutation } from "../../features/auth/authApi";
+import { useLoginAccountMutation } from "./authApi";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import { setLoggedIn } from "../../features/auth/authSlice";
+import { setLoggedIn } from "./authSlice";
 import { setMessage } from "../../app/core/notiSlice";
 import { useState } from "react";
 

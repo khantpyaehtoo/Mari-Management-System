@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../app/core/notiSlice";
 import { FORM_CONFIG } from "../../lib/config/formConfig";
 
-const AddForm = ({ title, initialValues, isEditMode, open, onCancel }) => {
+const AddForm = ({ title, initialValues, isEdit, isOpen, onCancel }) => {
     const [isLocalModalOpen, setIsLocalModalOpen] = useState(false);
     const [form] = Form.useForm();
     const { token } = useSelector((state) => state?.auth);
 
-    const isModalOpen = open !== undefined ? open : isLocalModalOpen;
+    const isModalOpen = isOpen || isLocalModalOpen;
 
     // Get configuration
     const config = FORM_CONFIG[title];
@@ -50,7 +50,7 @@ const AddForm = ({ title, initialValues, isEditMode, open, onCancel }) => {
             const values = await form.validateFields();
             console.log("Form Values", values);
 
-            const triggerMutation = isEditMode
+            const triggerMutation = isEdit
                 ? triggerEditMutation
                 : triggerCreateMutation;
 
@@ -59,7 +59,7 @@ const AddForm = ({ title, initialValues, isEditMode, open, onCancel }) => {
             }
 
             // Returning data for Edit mode handling
-            const payload = isEditMode
+            const payload = isEdit
                 ? { id: initialValues.id, body: values, token }
                 : values;
 
@@ -69,16 +69,15 @@ const AddForm = ({ title, initialValues, isEditMode, open, onCancel }) => {
                 dispatch(
                     setMessage({
                         msgType: "success",
-                        msgContent: isEditMode
+                        msgContent: isEdit
                             ? "Updated successfully"
                             : "Created successfully",
                     }),
                 );
                 form.resetFields();
+                setIsLocalModalOpen(false);
                 if (onCancel) {
                     onCancel();
-                } else {
-                    setIsLocalModalOpen(false);
                 }
             } else {
                 console.log("Mutation Error:", error);
@@ -113,38 +112,36 @@ const AddForm = ({ title, initialValues, isEditMode, open, onCancel }) => {
     };
 
     const handleCancel = () => {
+        setIsLocalModalOpen(false);
         if (onCancel) {
             onCancel();
-        } else {
-            setIsLocalModalOpen(false);
         }
         form.resetFields();
     };
 
     return (
         <>
-            {open === undefined && (
-                <Button
-                    color="default"
-                    variant="solid"
-                    onClick={showModal}
-                    icon={<PlusCircleOutlined />}
-                >
-                    Create {title}
-                </Button>
-            )}
+            <Button
+                color="default"
+                variant="solid"
+                onClick={showModal}
+                icon={<PlusCircleOutlined />}
+            >
+                Create {title}
+            </Button>
 
             <Modal
                 title={
                     <Title className="uppercase" level={3}>
-                        {isEditMode ? "Edit" : "Create"} {title}
+                        {isEdit ? "Edit" : "Create"} {title}
                     </Title>
                 }
                 closable={{ "aria-label": "Custom Close Button" }}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                okText={isEditMode ? "Update" : "Create"}
+                okText={isEdit ? "Update" : "Create"}
+                destroyOnHidden
             >
                 {ActiveComponent && <ActiveComponent form={form} />}
             </Modal>

@@ -26,7 +26,7 @@ import {
     useChangePasswordMutation,
     useUpdateAdminDataMutation,
     useGetSettingsQuery,
-} from "../features/auth/authApi";
+} from "./authApi";
 
 const { Title, Text } = Typography;
 

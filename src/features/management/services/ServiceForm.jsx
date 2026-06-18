@@ -7,7 +7,7 @@ const ServiceForm = ({ form }) => {
     const { Item } = Form;
     const { TextArea } = Input;
 
-    const { data: seriveData, isLoading } = useGetServicesDataQuery();
+    const { data: serviceData, isLoading } = useGetServicesDataQuery();
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -41,35 +41,41 @@ const ServiceForm = ({ form }) => {
                 />
             </Item>
 
-            <Space align="center" size="medium">
-                <Item
-                    label={
-                        <label className="label-styling">
-                            Service Category
-                        </label>
-                    }
-                    name="categoryId"
-                >
-                    <Select
-                        placeholder="Select a category"
-                        loading={isLoading}
-                        options={seriveData?.map((item) => ({
-                            value: item.id || item.categoryName,
-                            label: item.categoryName,
-                        }))}
-                        className="!w-100"
-                    />
-                </Item>
+            {!isOpen ? (
+                <Space align="center" size="medium">
+                    <Item
+                        label={
+                            <label className="label-styling">
+                                Service Category
+                            </label>
+                        }
+                        name="categoryName"
+                    >
+                        <Select
+                            placeholder="Select a category"
+                            loading={isLoading}
+                            options={Array.from(
+                                new Set(
+                                    serviceData
+                                        ?.map((item) => item.categoryName)
+                                        .filter(Boolean),
+                                ),
+                            ).map((category) => ({
+                                value: category,
+                                label: category,
+                            }))}
+                            className="!w-100"
+                        />
+                    </Item>
 
-                <Button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="mt-1 !h-10"
-                >
-                    <PlusCircleFilled />
-                </Button>
-            </Space>
-
-            {isOpen && (
+                    <Button
+                        onClick={() => setIsOpen(true)}
+                        className="mt-1 !h-10"
+                    >
+                        <PlusCircleFilled />
+                    </Button>
+                </Space>
+            ) : (
                 <Item
                     label={
                         <label className="label-styling">Category Name</label>
@@ -85,6 +91,15 @@ const ServiceForm = ({ form }) => {
                     <Input
                         placeholder="Category name"
                         className="!input-styling"
+                        suffix={
+                            <Button
+                                type="text"
+                                size="small"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                X
+                            </Button>
+                        }
                     />
                 </Item>
             )}

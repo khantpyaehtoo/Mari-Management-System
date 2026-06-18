@@ -9,7 +9,7 @@ import {
     UnorderedListOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Menu, Button } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../lib/utils";
@@ -54,22 +54,34 @@ const SideBar = () => {
             children: [
                 {
                     icon: <ApartmentOutlined />,
-                    label: <span className="sidemenu-item">Service</span>,
+                    label: (
+                        <span className="sidemenu-item">
+                            Service Management
+                        </span>
+                    ),
                     key: "/management/service",
                 },
                 {
                     icon: <SolutionOutlined />,
-                    label: <span className="sidemenu-item">User</span>,
+                    label: (
+                        <span className="sidemenu-item">User Management</span>
+                    ),
                     key: "/management/user",
                 },
                 {
                     icon: <UnorderedListOutlined />,
-                    label: <span className="sidemenu-item">Booking</span>,
+                    label: (
+                        <span className="sidemenu-item">
+                            Booking Management
+                        </span>
+                    ),
                     key: "/management/booking",
                 },
                 {
                     icon: <IdcardOutlined />,
-                    label: <span className="sidemenu-item">Staff</span>,
+                    label: (
+                        <span className="sidemenu-item">Staff Management</span>
+                    ),
                     key: "/management/staff",
                 },
             ],
@@ -79,11 +91,11 @@ const SideBar = () => {
             icon: <SettingOutlined />,
             label: <span className="sidemenu-item">Settings</span>,
         },
-        {
-            key: "logout",
-            icon: <LogoutOutlined />,
-            label: <span className="sidemenu-item text-red-500">Logout</span>,
-        },
+        // {
+        //     key: "logout",
+        //     icon: <LogoutOutlined />,
+        //     label: <span className="sidemenu-item text-red-500">Logout</span>,
+        // },
     ];
 
     const closeSidebar = () => dispatch(toggleSidebar(false));
@@ -113,7 +125,7 @@ const SideBar = () => {
             {/* Sidebar content */}
             <aside
                 className={cn(
-                    "sidebar-mobile lg:relative lg:translate-x-0 lg:z-0 lg:w-full h-full;",
+                    "sidebar-mobile fixed inset-y-0 left-0 h-screen z-50 lg:relative lg:translate-x-0 lg:z-0 lg:w-full lg:h-full",
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full",
                 )}
             >
@@ -134,16 +146,24 @@ const SideBar = () => {
                         selectedKeys={[location.pathname]}
                         defaultOpenKeys={getOpenKeys()}
                         onClick={(item) => {
-                            if (item.key !== "logout") {
+                            if (item.key) {
                                 navigate(item.key);
-                            } else {
-                                signOutHandler();
                             }
-
                             if (window.innerWidth < 1024) closeSidebar();
                         }}
                         className="flex-1 border-none"
                     />
+
+                    <div className="p-4 shrink-0">
+                        <Button
+                            onClick={() => signOutHandler()}
+                            className="w-full !text-primary !border-0 hover:!shadow-md hover:!text-red-500"
+                        >
+                            {" "}
+                            <LogoutOutlined />{" "}
+                            <span className="font-bold "> LogOut</span>
+                        </Button>
+                    </div>
                 </div>
             </aside>
         </>

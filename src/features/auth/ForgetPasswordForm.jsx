@@ -6,7 +6,7 @@ import {
     LockOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useResetPasswordMutation } from "../../features/auth/authApi";
+import { useResetPasswordMutation } from "./authApi";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../app/core/notiSlice";
 

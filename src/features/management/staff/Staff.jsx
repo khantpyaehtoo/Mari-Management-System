@@ -1,7 +1,7 @@
 import { Flex, Space, Table, Tag, Image } from "antd";
-import flowerProfile from "../../../public/flowerProfile.jpg";
+import flowerProfile from "../../../../public/flowerProfile.jpg";
 import { useState } from "react";
-import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
+import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 
 const data = [
     {
