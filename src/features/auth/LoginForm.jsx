@@ -1,5 +1,9 @@
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Flex, Form, Input, Typography } from "antd";
+import {
+    ArrowRightOutlined,
+    LockOutlined,
+    UserOutlined,
+} from "@ant-design/icons";
+import { Button, Checkbox, Flex, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginAccountMutation } from "./authApi";
 import Cookies from "js-cookie";
@@ -8,8 +12,6 @@ import { setLoggedIn } from "./authSlice";
 import { setMessage } from "../../app/core/notiSlice";
 import { useState } from "react";
 import loginImg from "../../../public/asset/img1.png";
-
-const { Title } = Typography;
 
 const LoginForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,11 +70,11 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-10 min-h-screen">
             <div>
-                <img src={loginImg} className="rounded-se-[200px] " />
+                <img src={loginImg} className="rounded-se-[200px]" />
             </div>
-            <div className="min-h-screen flex items-center justify-center bg-white-back">
+            <div className="flex items-center justify-start bg-white-back">
                 <div>
                     <div className="mb-10">
                         <h1 className="text-primary text-2xl font-bold mb-2">
@@ -83,18 +85,18 @@ const LoginForm = () => {
                             schedules.
                         </span>
                     </div>
-                    <div className="w-full max-w-[380px] bg-white-form p-8 rounded-xl shadow-sm border border-primary">
+                    <div className="w-full lg:!min-w-[440px] !min-h-[390px] bg-white-form p-8 rounded-xl shadow-sm border border-primary md:!min-w-[220px]">
                         <Form
                             name="login"
                             initialValues={{ remember: true }}
-                            style={{ maxWidth: 360 }}
                             onFinish={onFinish}
+                            layout="vertical"
                         >
                             <Form.Item
-                                layout="vertical"
                                 label="Gmail"
                                 name="email"
                                 hasFeedback
+                                className="!mb-10"
                                 rules={[
                                     {
                                         required: true,
@@ -113,10 +115,10 @@ const LoginForm = () => {
                                 />
                             </Form.Item>
                             <Form.Item
-                                layout="vertical"
                                 label="Password"
                                 name="password"
                                 hasFeedback
+                                className="!mb-10"
                                 rules={[
                                     {
                                         required: true,
@@ -146,7 +148,7 @@ const LoginForm = () => {
                                     </Form.Item>
                                     <Link
                                         to="/reset"
-                                        className="hover:!underline"
+                                        className="hover:!underline hover:!text-primary"
                                     >
                                         Forgot password
                                     </Link>
@@ -158,9 +160,12 @@ const LoginForm = () => {
                                     type="primary"
                                     htmlType="submit"
                                     loading={isSubmitting}
+                                    className="!h-12 hover:!bg-primary 
+                                    hover:!border-dotted hover:!border-black group"
                                     // disabled={isFormEmpty}
                                 >
-                                    Log in
+                                    Log in{" "}
+                                    <ArrowRightOutlined className="mr-2 text-xs group-hover:translate-x-2 transition-transform" />
                                 </Button>
                             </Form.Item>
                         </Form>
