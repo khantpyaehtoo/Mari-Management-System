@@ -16,8 +16,8 @@ import { cn } from "../../lib/utils";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import { X } from "lucide-react";
 import { removeCookie, setLoggedIn } from "../../features/auth/authSlice";
-import brandLogo from "../../../public/brandLogo.png";
-import brandName from "../../../public/brandName.png";
+import brandLogo from "../../../public/asset/brandLogo.png";
+import brandName from "../../../public/asset/brandName.png";
 
 const SideBar = () => {
     const navigate = useNavigate();

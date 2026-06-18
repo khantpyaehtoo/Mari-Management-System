@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
+body {
+    background-color: #FFFAF6;
+}
+
 @theme {
-    --color-dark-blue: var(--color-blue-950);
+    --color-white-back: #FFFAF6;
+    --color-white-form: #F9FAFB;
     --color-primary: #FBB1BD;
     --background-image-brand-gradient: radial-gradient(circle,rgba(255, 66, 98, 1) 0%, rgba(251, 177, 189, 1) 56%, rgba(255, 66, 98, 1) 100%);
 }

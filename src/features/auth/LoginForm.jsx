@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setLoggedIn } from "./authSlice";
 import { setMessage } from "../../app/core/notiSlice";
 import { useState } from "react";
+import loginImg from "../../../public/asset/img1.png";
 
 const { Title } = Typography;
 
@@ -67,80 +68,104 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50/50 px-4">
-            <div className="w-full max-w-[380px] bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <Form
-                    name="login"
-                    initialValues={{ remember: true }}
-                    style={{ maxWidth: 360 }}
-                    onFinish={onFinish}
-                >
-                    <Title level={3} className="!mb-10 !font-bold">
-                        Welcome Back!
-                    </Title>
-                    <Form.Item
-                        name="email"
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input your email!",
-                            },
-                            {
-                                type: "email",
-                                message: "The input is not valid email",
-                            },
-                        ]}
-                    >
-                        <Input prefix={<UserOutlined />} placeholder="email" />
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input your Password!",
-                            },
-                            {
-                                min: 8,
-                            },
-                        ]}
-                    >
-                        <Input.Password
-                            allowClear
-                            prefix={<LockOutlined />}
-                            type="password"
-                            placeholder="Password"
-                        />
-                    </Form.Item>
-                    <Form.Item>
-                        <Flex justify="space-between" align="center">
-                            <Form.Item
-                                name="remember"
-                                valuePropName="checked"
-                                noStyle
-                            >
-                                <Checkbox>Remember me</Checkbox>
-                            </Form.Item>
-                            <Link to="/reset" className="hover:!underline">
-                                Forgot password
-                            </Link>
-                        </Flex>
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Button
-                            block
-                            type="primary"
-                            htmlType="submit"
-                            loading={isSubmitting}
-                            // disabled={isFormEmpty}
+        <div className="grid grid-cols-2">
+            <div>
+                <img src={loginImg} className="rounded-se-[200px] " />
+            </div>
+            <div className="min-h-screen flex items-center justify-center bg-white-back">
+                <div>
+                    <div className="mb-10">
+                        <h1 className="text-primary text-2xl font-bold mb-2">
+                            Welcome to Mari’s Nail Salon
+                        </h1>
+                        <span>
+                            Sign in to manage bookings, services, and staff
+                            schedules.
+                        </span>
+                    </div>
+                    <div className="w-full max-w-[380px] bg-white-form p-8 rounded-xl shadow-sm border border-primary">
+                        <Form
+                            name="login"
+                            initialValues={{ remember: true }}
+                            style={{ maxWidth: 360 }}
+                            onFinish={onFinish}
                         >
-                            Log in
-                        </Button>
-                    </Form.Item>
-                </Form>
+                            <Form.Item
+                                layout="vertical"
+                                label="Gmail"
+                                name="email"
+                                hasFeedback
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input your email!",
+                                    },
+                                    {
+                                        type: "email",
+                                        message: "The input is not valid email",
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    prefix={<UserOutlined />}
+                                    placeholder="Enter Your Gmail"
+                                    className="!p-2"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                layout="vertical"
+                                label="Password"
+                                name="password"
+                                hasFeedback
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input your Password!",
+                                    },
+                                    {
+                                        min: 8,
+                                    },
+                                ]}
+                            >
+                                <Input.Password
+                                    allowClear
+                                    prefix={<LockOutlined />}
+                                    type="password"
+                                    placeholder="Password"
+                                    className="!p-2"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Flex justify="space-between" align="center">
+                                    <Form.Item
+                                        name="remember"
+                                        valuePropName="checked"
+                                        noStyle
+                                    >
+                                        <Checkbox>Remember me</Checkbox>
+                                    </Form.Item>
+                                    <Link
+                                        to="/reset"
+                                        className="hover:!underline"
+                                    >
+                                        Forgot password
+                                    </Link>
+                                </Flex>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    block
+                                    type="primary"
+                                    htmlType="submit"
+                                    loading={isSubmitting}
+                                    // disabled={isFormEmpty}
+                                >
+                                    Log in
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </div>
             </div>
         </div>
     );
