@@ -208,7 +208,11 @@ const Staff = () => {
 
     return (
         <div>
-            <SubHeaderSection setSearchText={setSearchText} title={"Staff"} />
+            <SubHeaderSection
+                setSearchText={setSearchText}
+                title={"Staff"}
+                subTitle="Manage your elite staff to unlock peak operational efficiency. "
+            />
             <div className="table-wrapper">
                 <Table dataSource={data} columns={columns} />
             </div>

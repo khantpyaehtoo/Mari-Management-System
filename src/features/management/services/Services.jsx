@@ -119,6 +119,7 @@ const Services = () => {
                 isEdit={isEdit}
                 initialValues={selectedService}
                 onCancel={onCancel}
+                subTitle="Manage your elite staff to unlock peak operational efficiency."
             />
 
             <div className="table-wrapper">

@@ -69,3 +69,8 @@ body {
 @utility deleteBtn {
     @apply p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100;
 }
+
+/* create Button */
+@utility createFormBtn {
+    @apply bg-white text-black rounded-xl border-gray-200 shadow-md p-5 hover:bg-primary hover:text-white hover:border-primary;
+}

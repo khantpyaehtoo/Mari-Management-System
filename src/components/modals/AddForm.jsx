@@ -122,10 +122,10 @@ const AddForm = ({ title, initialValues, isEdit, isOpen, onCancel }) => {
     return (
         <>
             <Button
-                color="default"
                 variant="solid"
                 onClick={showModal}
                 icon={<PlusCircleOutlined />}
+                className="createFormBtn!"
             >
                 Create {title}
             </Button>

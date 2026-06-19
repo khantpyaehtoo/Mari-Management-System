@@ -8,13 +8,19 @@ const SubHeaderSection = ({
     isOpen,
     onCancel,
     initialValues,
+    subTitle,
 }) => {
     const { Title } = Typography;
     const { Search } = Input;
 
     return (
         <div className="title-style flex justify-between items-center">
-            <Title level={3}>{title}</Title>
+            <div>
+                <Title level={3} className="text-primary! text-3xl!">
+                    {title} Management
+                </Title>
+                <p className="text-gray-600">{subTitle}</p>
+            </div>
             {setSearchText ? (
                 <Search
                     placeholder="Search somethings ...."
