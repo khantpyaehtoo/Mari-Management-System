@@ -1,7 +1,11 @@
 @import "tailwindcss";
-
 body {
     background-color: #FFFAF6;
+    user-select: none;
+}
+
+span {
+    cursor: auto !important;
 }
 
 @theme {
@@ -12,7 +16,7 @@ body {
 }
 
 @utility sidemenu-item {
-    @apply font-bold;
+    @apply font-bold  select-none;
 }
 
 /* for title style */
@@ -32,7 +36,7 @@ body {
 
 /* sidebar-mobile slide */
 @utility sidebar-mobile {
-    @apply fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform duration-300;
+    @apply fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform duration-300 cursor-pointer select-none;
 }
 
 /* label styling */

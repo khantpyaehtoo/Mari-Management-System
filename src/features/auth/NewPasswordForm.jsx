@@ -8,6 +8,7 @@ import { setMessage } from "../../app/core/notiSlice";
 import resetImg2 from "../../../public/asset/Img2.png";
 import resetImg3 from "../../../public/asset/Img3.png";
 import ellipse from "../../../public/asset/Ellipse.png";
+import { ArrowRightOutlined } from "@ant-design/icons/es/icons/index";
 
 const { Title, Text } = Typography;
 
@@ -181,9 +182,10 @@ const NewPasswordForm = () => {
                                 <Form.Item className="mb-0 mt-4 text-center">
                                     <Link
                                         to="/login"
-                                        className="!text-primary hover:!underline font-medium"
+                                        className="!text-primary hover:!underline font-medium group"
                                     >
-                                        Back to Log In
+                                        Back to Log In{" "}
+                                        <ArrowRightOutlined className="mr-2 text-xs group-hover:translate-x-2 transition-transform" />
                                     </Link>
                                 </Form.Item>
                             </Form>

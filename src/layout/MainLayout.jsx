@@ -15,7 +15,7 @@ const MainLayout = () => {
                 trigger={null}
                 breakpoint="lg"
                 width={270}
-                className="hidden h-full lg:block "
+                className="hidden h-full lg:block"
             >
                 <SideBar />
             </Sider>

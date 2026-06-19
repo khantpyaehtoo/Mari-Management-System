@@ -151,7 +151,7 @@ const SideBar = () => {
                             }
                             if (window.innerWidth < 1024) closeSidebar();
                         }}
-                        className="flex-1 border-none"
+                        className="flex-1 border-none "
                     />
 
                     <div className="p-4 shrink-0">

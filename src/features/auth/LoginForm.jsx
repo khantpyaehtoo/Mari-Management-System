@@ -71,13 +71,13 @@ const LoginForm = () => {
 
     return (
         <div className="flex h-screen w-screen overflow-hidden bg-white-back items-center justify-center p-4 md:p-10">
-            <div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-[1200px] h-[90vh] max-h-[750px] bg-white shadow-xl overflow-hidden border border-gray-100">
-                <div className="hidden md:block md:col-span-5 h-full relative">
+            <div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-[1200px] h-[90vh] max-h-[750px] bg-white-form shadow-xl overflow-hidden border border-gray-100">
+                <div className="hidden md:block md:col-span-5 h-full relative  rounded-se-[200px] overflow-hidden ">
                     <img
                         src={loginImg}
-                        className="w-full h-full object-cover rounded-se-[200px]"
+                        className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-primary/10 mix-blend-multiply rounded-se-[200px]" />
+                    <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />
                 </div>
                 <div className="col-span-1 md:col-span-7 flex items-center justify-center bg-white-form p-8 lg:p-16 overflow-y-auto h-full">
                     <div className="max-w-[400px]">
