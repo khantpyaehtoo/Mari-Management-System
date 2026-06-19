@@ -182,7 +182,7 @@ const NewPasswordForm = () => {
                                 <Form.Item className="mb-0 mt-4 text-center">
                                     <Link
                                         to="/login"
-                                        className="!text-primary hover:!underline font-medium group"
+                                        className="text-primary! hover:underline! font-medium group"
                                     >
                                         Back to Log In{" "}
                                         <ArrowRightOutlined className="mr-2 text-xs group-hover:translate-x-2 transition-transform" />

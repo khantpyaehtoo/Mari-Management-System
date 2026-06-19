@@ -15,7 +15,7 @@ const MainLayout = () => {
                 trigger={null}
                 breakpoint="lg"
                 width={270}
-                className="hidden h-full lg:block"
+                className="hidden h-full lg:block cursor-none!"
             >
                 <SideBar />
             </Sider>
@@ -26,7 +26,7 @@ const MainLayout = () => {
                     <SideBar />
                 </div>
 
-                <Header className="!bg-brand-gradient px-4 h-16">
+                <Header className="bg-brand-gradient! px-4 h-16">
                     <Navbar />
                 </Header>
                 <Content className="p-4 md:p-6 bg-gray-50 overflow-y-auto flex-1">

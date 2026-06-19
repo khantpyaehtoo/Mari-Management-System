@@ -1,9 +1,9 @@
 import {
     ApartmentOutlined,
+    ArrowLeftOutlined,
     BranchesOutlined,
     CalendarOutlined,
     IdcardOutlined,
-    LogoutOutlined,
     SettingOutlined,
     SolutionOutlined,
     UnorderedListOutlined,
@@ -154,14 +154,17 @@ const SideBar = () => {
                         className="flex-1 border-none "
                     />
 
-                    <div className="p-4 shrink-0">
+                    <div className="shrink-0 h-12">
                         <Button
                             onClick={() => signOutHandler()}
-                            className="w-full !text-primary !border-0 hover:!shadow-md hover:!text-red-500"
+                            className="w-full! h-full! text-primary border-0! bg-primary! hover:shadow-md p-3! group"
                         >
                             {" "}
-                            <LogoutOutlined />{" "}
-                            <span className="font-bold "> LogOut</span>
+                            <ArrowLeftOutlined className="text-red-500! group-hover:-translate-x-1 transition-transform" />{" "}
+                            <span className="font-bold text-white group-hover:text-red-500! cursor-pointer">
+                                {" "}
+                                LogOut
+                            </span>
                         </Button>
                     </div>
                 </div>

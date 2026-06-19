@@ -104,7 +104,11 @@ const Navbar = () => {
                     <DateTimeFormatter />
                     <Badge>
                         <BellOutlined
-                            style={{ fontSize: 20, color: "white" }}
+                            style={{
+                                fontSize: 20,
+                                color: "white",
+                            }}
+                            className="cursor-pointer!"
                             onClick={() => setIsNotiOpen(true)}
                         />
                     </Badge>

@@ -15,6 +15,11 @@ const config = {
             //     background: "#FBB1BD",
             // },
         },
+        Table: {
+            headerBg: "#FBB1BD",
+            headerColor: "#fff",
+        },
+        Menu: {},
     },
 };
 
