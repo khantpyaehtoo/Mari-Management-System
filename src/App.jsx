@@ -10,6 +10,7 @@ import Settings from "./features/auth/Settings.jsx";
 import Dashboard from "./pages/Dashboard";
 import LoginForm from "./features/auth/LoginForm.jsx";
 import ForgetPasswordForm from "./features/auth/ForgetPasswordForm.jsx";
+import NewPasswordForm from "./features/auth/NewPasswordForm.jsx";
 import PageNotFound from "./pages/PageNotFound";
 import IsAuth from "./components/Guards/IsAuth.jsx";
 import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
@@ -28,6 +29,7 @@ export default function App() {
                     }
                 />
                 <Route path="/reset" element={<ForgetPasswordForm />} />
+                <Route path="/new-password" element={<NewPasswordForm />} />
 
                 <Route
                     path="/"

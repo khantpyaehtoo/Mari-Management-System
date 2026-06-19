@@ -70,105 +70,116 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="grid grid-cols-2 gap-10 min-h-screen">
-            <div>
-                <img src={loginImg} className="rounded-se-[200px]" />
-            </div>
-            <div className="flex items-center justify-start bg-white-back">
-                <div>
-                    <div className="mb-10">
-                        <h1 className="text-primary text-2xl font-bold mb-2">
-                            Welcome to Mari’s Nail Salon
-                        </h1>
-                        <span>
-                            Sign in to manage bookings, services, and staff
-                            schedules.
-                        </span>
-                    </div>
-                    <div className="w-full lg:!min-w-[440px] !min-h-[390px] bg-white-form p-8 rounded-xl shadow-sm border border-primary md:!min-w-[220px]">
-                        <Form
-                            name="login"
-                            initialValues={{ remember: true }}
-                            onFinish={onFinish}
-                            layout="vertical"
-                        >
-                            <Form.Item
-                                label="Gmail"
-                                name="email"
-                                hasFeedback
-                                className="!mb-10"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please input your email!",
-                                    },
-                                    {
-                                        type: "email",
-                                        message: "The input is not valid email",
-                                    },
-                                ]}
+        <div className="flex h-screen w-screen overflow-hidden bg-white-back items-center justify-center p-4 md:p-10">
+            <div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-[1200px] h-[90vh] max-h-[750px] bg-white shadow-xl overflow-hidden border border-gray-100">
+                <div className="hidden md:block md:col-span-5 h-full relative">
+                    <img
+                        src={loginImg}
+                        className="w-full h-full object-cover rounded-se-[200px]"
+                    />
+                    <div className="absolute inset-0 bg-primary/10 mix-blend-multiply rounded-se-[200px]" />
+                </div>
+                <div className="col-span-1 md:col-span-7 flex items-center justify-center bg-white-form p-8 lg:p-16 overflow-y-auto h-full">
+                    <div className="max-w-[400px]">
+                        <div className="mb-6">
+                            <h1 className="text-primary text-3xl font-extrabold tracking-tight mb-2">
+                                Welcome to Mari’s Nail Salon
+                            </h1>
+                            <span className="text-gray-500 text-sm block">
+                                Sign in to manage bookings, services, and staff
+                                schedules.
+                            </span>
+                        </div>
+                        <div className="w-full">
+                            <Form
+                                name="login"
+                                initialValues={{ remember: true }}
+                                onFinish={onFinish}
+                                layout="vertical"
                             >
-                                <Input
-                                    prefix={<UserOutlined />}
-                                    placeholder="Enter Your Gmail"
-                                    className="!p-2"
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                label="Password"
-                                name="password"
-                                hasFeedback
-                                className="!mb-10"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please input your Password!",
-                                    },
-                                    {
-                                        min: 8,
-                                    },
-                                ]}
-                            >
-                                <Input.Password
-                                    allowClear
-                                    prefix={<LockOutlined />}
-                                    type="password"
-                                    placeholder="Password"
-                                    className="!p-2"
-                                />
-                            </Form.Item>
-                            <Form.Item>
-                                <Flex justify="space-between" align="center">
-                                    <Form.Item
-                                        name="remember"
-                                        valuePropName="checked"
-                                        noStyle
-                                    >
-                                        <Checkbox>Remember me</Checkbox>
-                                    </Form.Item>
-                                    <Link
-                                        to="/reset"
-                                        className="hover:!underline hover:!text-primary"
-                                    >
-                                        Forgot password
-                                    </Link>
-                                </Flex>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button
-                                    block
-                                    type="primary"
-                                    htmlType="submit"
-                                    loading={isSubmitting}
-                                    className="!h-12 hover:!bg-primary 
-                                    hover:!border-dotted hover:!border-black group"
-                                    // disabled={isFormEmpty}
+                                <Form.Item
+                                    label="Gmail"
+                                    name="email"
+                                    hasFeedback
+                                    className="!mb-10"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "Please input your email!",
+                                        },
+                                        {
+                                            type: "email",
+                                            message:
+                                                "The input is not valid email",
+                                        },
+                                    ]}
                                 >
-                                    Log in{" "}
-                                    <ArrowRightOutlined className="mr-2 text-xs group-hover:translate-x-2 transition-transform" />
-                                </Button>
-                            </Form.Item>
-                        </Form>
+                                    <Input
+                                        prefix={<UserOutlined />}
+                                        placeholder="Enter Your Gmail"
+                                        className="!p-2"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Password"
+                                    name="password"
+                                    hasFeedback
+                                    className="!mb-10"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                "Please input your Password!",
+                                        },
+                                        {
+                                            min: 8,
+                                        },
+                                    ]}
+                                >
+                                    <Input.Password
+                                        allowClear
+                                        prefix={<LockOutlined />}
+                                        type="password"
+                                        placeholder="Password"
+                                        className="!p-2"
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Flex
+                                        justify="space-between"
+                                        align="center"
+                                    >
+                                        <Form.Item
+                                            name="remember"
+                                            valuePropName="checked"
+                                            noStyle
+                                        >
+                                            <Checkbox>Remember me</Checkbox>
+                                        </Form.Item>
+                                        <Link
+                                            to="/reset"
+                                            className="hover:!underline hover:!text-primary"
+                                        >
+                                            Forgot password
+                                        </Link>
+                                    </Flex>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button
+                                        block
+                                        type="primary"
+                                        htmlType="submit"
+                                        loading={isSubmitting}
+                                        className="!h-12 hover:!bg-primary 
+                                    hover:!border-dotted hover:!border-black group"
+                                        // disabled={isFormEmpty}
+                                    >
+                                        Log in{" "}
+                                        <ArrowRightOutlined className="mr-2 text-xs group-hover:translate-x-2 transition-transform" />
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </div>
                     </div>
                 </div>
             </div>
