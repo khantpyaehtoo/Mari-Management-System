@@ -85,7 +85,7 @@ const LoginForm = () => {
                             <h1 className="text-primary text-3xl tracking-tight mb-2 font-medium">
                                 Welcome to Mari’s Nail Salon
                             </h1>
-                            <span className="text-black text-sm block font-medium">
+                            <span className="text-gray-600 text-sm block font-medium">
                                 Sign in to manage bookings, services, and staff
                                 schedules.
                             </span>

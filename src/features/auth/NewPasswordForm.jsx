@@ -57,16 +57,16 @@ const NewPasswordForm = () => {
         <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-white-back px-4">
             <img
                 src={ellipse}
-                className="absolute pointer-events-none left-[-50px] top-0"
+                className="absolute pointer-events-none -left-12.5 top-0"
                 alt=""
             />
             <img
                 src={ellipse}
-                className="absolute pointer-events-none right-[-50px] bottom-30"
+                className="absolute pointer-events-none -right-12.5 bottom-30"
                 alt=""
             />
 
-            <div className="w-full max-w-[1380px] p-8 rounded-xl shadow-lg bg-white-form relative overflow-hidden">
+            <div className="w-full max-w-345 p-8 rounded-xl shadow-lg bg-white-form relative overflow-hidden">
                 <div className="mb-8">
                     <div className="flex justify-evenly items-center">
                         <img src={resetImg3} alt="Reset Illustration" />
@@ -76,12 +76,12 @@ const NewPasswordForm = () => {
                         />
                         <img
                             src={ellipse}
-                            className="absolute pointer-events-none bottom-[-50px]"
+                            className="absolute pointer-events-none -bottom-12.5"
                             alt=""
                         />
 
-                        <div className="w-full max-w-[440px]">
-                            <Title level={3} className="!mb-2 !font-bold">
+                        <div className="w-full max-w-110">
+                            <Title level={3} className="mb-2! font-bold!">
                                 Create New Password
                             </Title>
                             <Text

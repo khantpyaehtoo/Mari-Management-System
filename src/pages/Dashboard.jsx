@@ -37,7 +37,7 @@ const Dashboard = () => {
     return (
         <Flex vertical>
             <Title className="title-style" level={3}>
-                Dashboard
+                DashboardG
             </Title>
 
             <section className="space-y-6 w-full px-10">

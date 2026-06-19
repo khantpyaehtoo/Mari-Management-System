@@ -2,14 +2,12 @@
 
 * {
     font-family: "Montserrat", sans-serif;
+    /* font-family: "Alien Block", sans-serif; */
+    /* box-sizing: "border-box", */
 }
 body {
     background-color: #FFFAF6;
     user-select: none;
-}
-
-span {
-    cursor: auto !important;
 }
 
 @theme {
@@ -18,16 +16,15 @@ span {
     --color-primary: #FBB1BD;
     --background-image-brand-gradient: radial-gradient(circle,rgba(255, 66, 98, 1) 0%, rgba(251, 177, 189, 1) 56%, rgba(255, 66, 98, 1) 100%);
 
-    /* --font-mont- */
 }
 
 @utility sidemenu-item {
-    @apply font-bold  select-none;
+    @apply font-semibold  select-none;
 }
 
 /* for title style */
 @utility title-style {
-    @apply p-3 border-b-1;
+    @apply p-3 border-b;
 }
 
 /* gird style col 2 */

@@ -5,7 +5,6 @@ import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import { Badge, Drawer, Space, Typography, Tabs, Flex } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import profileImg from "../../../public/user.png";
 
 const bookingData = [
     "For Booking Data",
@@ -83,7 +82,7 @@ const Navbar = () => {
     ];
 
     return (
-        <div className="flex justify-between items-center h-full">
+        <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
                 <button
                     className="text-white text-xl lg:hidden cursor-pointer"
@@ -91,7 +90,7 @@ const Navbar = () => {
                 >
                     <MenuOutlined />
                 </button>
-                <h3 className="text-white lg:text-2xl md:text-lg ">
+                <h3 className="text-white lg:text-2xl md:text-lg">
                     Welcome <span className="font-bold">Rebillet</span> !
                 </h3>
             </div>
@@ -108,12 +107,15 @@ const Navbar = () => {
                                 fontSize: 20,
                                 color: "white",
                             }}
-                            className="cursor-pointer!"
+                            className="cursor-pointer! ms-3"
                             onClick={() => setIsNotiOpen(true)}
                         />
                     </Badge>
                     <Link to={"/settings"}>
-                        <img src={profileImg} className="w-7 ms-5" />
+                        <img
+                            src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
+                            className="w-7 ms-3 mb-1 rounded-full"
+                        />
                     </Link>
                 </Space>
                 <Drawer

@@ -114,7 +114,7 @@ const SideBar = () => {
             {/* Backdrop for mobile */}
             <div
                 className={cn(
-                    "fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300",
+                    "fixed inset-0 bg-black/50 w-full z-40 lg:hidden transition-opacity duration-300",
                     isSidebarOpen
                         ? "opacity-100"
                         : "opacity-0 pointer-events-none",
@@ -125,7 +125,7 @@ const SideBar = () => {
             {/* Sidebar content */}
             <aside
                 className={cn(
-                    "sidebar-mobile fixed inset-y-0 left-0 h-screen z-50 lg:relative lg:translate-x-0 lg:z-0 lg:w-full lg:h-full",
+                    "sidebar-mobile fixed inset-y-0 w-80 left-0 h-screen z-50 lg:relative lg:translate-x-0 lg:z-0 lg:w-full lg:h-full",
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full",
                 )}
             >
@@ -136,7 +136,7 @@ const SideBar = () => {
                     >
                         <X />
                     </button>
-                    <div className="flex justify-center items-center h-20">
+                    <div className="flex justify-center items-center h-16 cursor-default!">
                         <img src={brandLogo} alt="brandLogo" className="w-15" />
                         <img src={brandName} alt="brandName" className="w-15" />
                     </div>
@@ -151,7 +151,7 @@ const SideBar = () => {
                             }
                             if (window.innerWidth < 1024) closeSidebar();
                         }}
-                        className="flex-1 border-none "
+                        className="flex-1 border-none cursor-default! shadow-xl!"
                     />
 
                     <div className="shrink-0 h-12">
