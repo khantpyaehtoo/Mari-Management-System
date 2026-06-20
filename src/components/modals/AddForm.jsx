@@ -17,12 +17,16 @@ const AddForm = ({ title, initialValues, isEdit, isOpen, onCancel }) => {
 
     // Call mutations
     const useCreateMutation = config?.useCreateMutation;
-    const createMutation = useCreateMutation();
-    const [triggerCreateMutation] = createMutation;
+    const triggerCreateMutation = useCreateMutation;
+
+    // const createMutation = useCreateMutation();
+    // const [triggerCreateMutation] = createMutation;
 
     const useEditMutation = config?.useEditMutation;
-    const editMutation = useEditMutation();
-    const [triggerEditMutation] = editMutation;
+    const triggerEditMutation = useEditMutation;
+
+    // const editMutation = useEditMutation();
+    // const [triggerEditMutation] = editMutation;
 
     const ActiveComponent = config?.Component;
 

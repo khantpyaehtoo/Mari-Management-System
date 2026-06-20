@@ -19,7 +19,6 @@ const config = {
             headerBg: "#FBB1BD",
             headerColor: "#fff",
         },
-        Menu: {},
     },
 };
 

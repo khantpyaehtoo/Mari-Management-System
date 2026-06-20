@@ -150,7 +150,7 @@ const User = () => {
 
     return (
         <div>
-            <SubHeaderSection setSearchText={setSearchText} title={"User"} />
+            <SubHeaderSection setSearchText={setSearchText} title="User" />
 
             {/* <UserAddForm /> */}
 

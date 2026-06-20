@@ -39,6 +39,7 @@ const CalendarSection = () => {
                         console.log("Panel Select:", source, date);
                     }
                 }}
+                className="rounded-b-3xl"
             />
         </>
     );

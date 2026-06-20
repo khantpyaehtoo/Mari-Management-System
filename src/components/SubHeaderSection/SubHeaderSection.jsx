@@ -1,5 +1,6 @@
 import { Input, Typography } from "antd";
 import AddForm from "../modals/AddForm";
+import { SearchOutlined } from "@ant-design/icons";
 
 const SubHeaderSection = ({
     setSearchText,
@@ -11,34 +12,36 @@ const SubHeaderSection = ({
     subTitle,
 }) => {
     const { Title } = Typography;
-    const { Search } = Input;
 
     return (
-        <div className="title-style flex justify-between items-center">
+        <div className="title-style">
             <div>
                 <Title level={3} className="text-primary! text-3xl!">
                     {title} Management
                 </Title>
                 <p className="text-gray-600">{subTitle}</p>
             </div>
-            {setSearchText ? (
-                <Search
-                    placeholder="Search somethings ...."
-                    onSearch={(value) => setSearchText(value)}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    className="lg:!w-100 md:!w-80 !w-60"
-                />
-            ) : (
-                ""
-            )}
+            <div className="flex justify-between items-center my-6">
+                {setSearchText ? (
+                    <Input
+                        placeholder="Search somethings ...."
+                        onChange={(e) => setSearchText(e.target.value)}
+                        className="lg:w-120! md:w-120! w-60! shadow-md py-2!"
+                        prefix={<SearchOutlined className="px-3" />}
+                        size="large"
+                    />
+                ) : (
+                    ""
+                )}
 
-            <AddForm
-                title={title}
-                isEdit={isEdit}
-                isOpen={isOpen}
-                onCancel={onCancel}
-                initialValues={initialValues}
-            />
+                <AddForm
+                    title={title}
+                    isEdit={isEdit}
+                    isOpen={isOpen}
+                    onCancel={onCancel}
+                    initialValues={initialValues}
+                />
+            </div>
         </div>
     );
 };
