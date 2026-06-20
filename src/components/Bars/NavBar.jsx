@@ -104,17 +104,18 @@ const Navbar = () => {
                     <Badge>
                         <BellOutlined
                             style={{
-                                fontSize: 20,
-                                color: "white",
+                                fontSize: "20px",
+                                padding: "10px",
+                                color: "#FBB1BD",
                             }}
-                            className="cursor-pointer! ms-3"
+                            className="cursor-pointer! ms-3 bg-white rounded-full hover:bg-gray-200"
                             onClick={() => setIsNotiOpen(true)}
                         />
                     </Badge>
                     <Link to={"/settings"}>
                         <img
                             src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                            className="w-7 ms-3 mb-1 rounded-full"
+                            className="w-10 ms-3 mb-1 rounded-full border-3 border-white"
                         />
                     </Link>
                 </Space>

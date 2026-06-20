@@ -166,9 +166,19 @@ const Booking = () => {
 
     return (
         <div>
-            <SubHeaderSection setSearchText={setSearchText} title={"Booking"} />
+            <SubHeaderSection
+                setSearchText={setSearchText}
+                title={"Customer Bookings"}
+                subTitle={
+                    "Manage, track, and update all salon customer appointments."
+                }
+            />
             <div className="table-wrapper">
-                <Table columns={columns} dataSource={data} />
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                    showSorterTooltip={false}
+                />
             </div>
         </div>
     );

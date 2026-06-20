@@ -75,5 +75,18 @@ body {
 
 /* create Button */
 @utility createFormBtn {
-    @apply bg-white text-black rounded-xl border-gray-200 shadow-md p-5 hover:bg-primary hover:text-white hover:border-primary;
+    @apply bg-white text-black rounded-xl border-gray-200 shadow-md p-5 hover:bg-primary hover:text-white hover:border-primary w-47.5;
+}
+
+
+/* testing antd classes with css */
+.ant-table-tbody > tr > td:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 30%;
+    right: 0;
+    width: 1px; 
+    height: 40%; 
+    background-color: #FBB1BD !important;
+    z-index: 10;
 }
