@@ -1,96 +1,89 @@
-import { Table, Button, Dropdown, message } from "antd";
+import { Table, Button, Space } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
-import { DownOutlined } from "@ant-design/icons";
+import { cn } from "../../../lib/utils";
+import { X } from "lucide-react";
+import { CheckOutlined } from "@ant-design/icons";
 
-const initialData = [
+const randomNumber = Math.floor(Math.random() * 1000);
+const data = [
     {
         key: 1,
-        id: "# 01",
-        serviceName: "nail cleaning",
-        price: "20,000",
-        customerName: "Mya Mya",
-        bookedAt: "4 Jun 2026 12:30",
-        status: "Pending",
-        startedAt: "4 Jun 2026 12:40",
-        employee: "Hla Hla",
+        bookingId: `BK-${String(randomNumber * 5).padStart(4, "0")}`,
+        serviceName: "Manicure Cleansing",
+        customerName: "Thiri Shwe Sin",
+        price: "35,000 MMK",
+        bookedTime: "10:30 AM",
+        date: "20/06/2026",
+        duringTime: "1 hr 30 mins",
+        staffName: "Phyu Phyu",
+        status: "In Progress",
     },
     {
         key: 2,
-        id: "# 01",
-        serviceName: "nail designing",
-        price: "20,000",
-        customerName: "Aung Aung",
-        bookedAt: "4 Jun 2026 12:30",
+        bookingId: `BK-${String(randomNumber * 2).padStart(4, "0")}`,
+        serviceName: "Pedicure Cleansing",
+        customerName: "May Phoo Ngone",
+        price: "18,000 MMK",
+        bookedTime: "01:00 PM",
+        date: "20/06/2026",
+        duringTime: "45 mins",
+        staffName: "Su Su",
         status: "Completed",
-        startedAt: "4 Jun 2026 12:40",
-        employee: "Hla Hla",
     },
     {
         key: 3,
-        id: "# 01",
-        serviceName: "nail removing",
-        price: "20,000",
-        customerName: "Aung Aung",
-        bookedAt: "4 Jun 2026 12:30",
-        status: "Canceled",
-        startedAt: "4 Jun 2026 12:40",
-        employee: "Hla Hla",
+        bookingId: `BK-${String(randomNumber * 4).padStart(4, "0")}`,
+        serviceName: "SNS Extension",
+        customerName: "Hnin Thazin",
+        price: "12,000 MMK",
+        bookedTime: "03:15 PM",
+        date: "21/06/2026",
+        duringTime: "1 hr",
+        staffName: "Aung Aung",
+        status: "Reject",
+    },
+    {
+        key: 4,
+        bookingId: `BK-${String(randomNumber * 3).padStart(4, "0")}`,
+        serviceName: "Cat Eye",
+        customerName: "Ingyin Phyu",
+        price: "25,000 MMK",
+        bookedTime: "05:00 PM",
+        date: "22/06/2026",
+        duringTime: "1 hr 15 mins",
+        staffName: "Kyaw Kyaw",
+        status: "Pending",
     },
 ];
 
-const items = [
-    { label: "Pending", key: "Pending" },
-    { label: "Completed", key: "Completed" },
-    { label: "Canceled", key: "Canceled" },
-    { label: "Progress", key: "Progress" },
-];
-
 const Booking = () => {
-    const [dataSource, setDataSource] = useState(initialData);
     const [searchText, setSearchText] = useState("");
-    const [messageApi, contextHolder] = message.useMessage();
 
-    // Handles the selection from the dropdown
-    const handleMenuClick = (record, e) => {
-        const nextStatus = e.key;
-
-        // Update only the specific row data
-        const updatedData = dataSource.map((item) => {
-            if (item.key === record.key) {
-                return { ...item, status: nextStatus };
-            }
-            return item;
-        });
-
-        setDataSource(updatedData);
-        messageApi.success(`Updated status to ${nextStatus}`);
+    const handleRejectBtn = (row) => {
+        console.log("clicked reject", row.bookingId);
+    };
+    const handleConfirmBtn = (row) => {
+        console.log("clicked confirm", row.bookingId, row.serviceName);
     };
 
     const columns = [
         {
-            title: "Id",
-            dataIndex: "id",
-            key: "id",
+            title: "No.",
+            render: (_, __, index) => <p>{index + 1}</p>,
         },
         {
-            title: "Service",
-            key: "service",
-            children: [
-                {
-                    title: "service name",
-                    dataIndex: "serviceName",
-                    key: "serviceName",
-                },
-                {
-                    title: "price",
-                    dataIndex: "price",
-                    key: "price",
-                },
-            ],
+            title: "Booking Id",
+            dataIndex: "bookingId",
+            key: "bookingId",
         },
         {
-            title: "Customer-name",
+            title: "Service Name",
+            dataIndex: "serviceName",
+            key: "serviceName",
+        },
+        {
+            title: "Customer Name",
             dataIndex: "customerName",
             key: "customerName",
             filteredValue: searchText ? [searchText] : null,
@@ -101,56 +94,81 @@ const Booking = () => {
             },
         },
         {
-            title: "Booking Status",
-            key: "booking",
-            children: [
-                {
-                    title: "Booked At",
-                    dataIndex: "bookedAt",
-                    key: "bookedAt",
-                },
-                {
-                    title: "Current Status",
-                    dataIndex: "status",
-                    key: "status",
-                    render: (text, record) => {
-                        const menuProps = {
-                            items,
-                            onClick: (e) => handleMenuClick(record, e),
-                        };
-
-                        return (
-                            <Dropdown menu={menuProps} trigger={["click"]}>
-                                <Button>
-                                    <span className="bg-amber-400 px-2 rounded-md">
-                                        {text}
-                                    </span>{" "}
-                                    <DownOutlined />
-                                </Button>
-                            </Dropdown>
-                        );
-                    },
-                },
-                {
-                    title: "Started At",
-                    dataIndex: "startedAt",
-                    key: "startedAt",
-                },
-            ],
+            title: "Price",
+            dataIndex: "price",
+            key: "price",
         },
         {
-            title: "Employee",
-            dataIndex: "employee",
-            key: "employee",
+            title: "Booked Time",
+            dataIndex: "bookedTime",
+            key: "bookedTime",
+        },
+        {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+        },
+        {
+            title: "During Time",
+            dataIndex: "duringTime",
+            key: "duringTime",
+        },
+        {
+            title: "Staff Name",
+            dataIndex: "staffName",
+            key: "staffName",
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: (status) => {
+                const statusClasses = {
+                    Pending: "text-progress",
+                    "In Progress": "text-available",
+                    Completed: "text-green-600",
+                    Reject: "text-unavailable",
+                };
+                return (
+                    <p
+                        className={cn(
+                            "font-medium",
+                            statusClasses[status] || "text-gray-500",
+                        )}
+                    >
+                        {status}
+                    </p>
+                );
+            },
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (record) => (
+                <Space>
+                    <Button
+                        onClick={() => handleRejectBtn(record)}
+                        className="editBtn!"
+                    >
+                        <X size={18} />
+                    </Button>
+                    <Button
+                        onClick={() => handleConfirmBtn(record)}
+                        className="editBtn!"
+                        disabled={record.status === "In Progress"}
+                    >
+                        <CheckOutlined />
+                    </Button>
+                </Space>
+            ),
         },
     ];
 
     return (
         <div>
-            {contextHolder} {/* for message alert noti */}
             <SubHeaderSection setSearchText={setSearchText} title={"Booking"} />
             <div className="table-wrapper">
-                <Table columns={columns} dataSource={dataSource} />
+                <Table columns={columns} dataSource={data} />
             </div>
         </div>
     );

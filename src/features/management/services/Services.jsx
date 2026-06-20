@@ -94,13 +94,13 @@ const Services = () => {
             render: (row) => (
                 <Space>
                     <Button
-                        className="!editBtn"
+                        className="editBtn!"
                         onClick={() => handleEditBtn(row)}
                     >
                         <Edit size={18} />
                     </Button>
                     <Button
-                        className="!deleteBtn"
+                        className="deleteBtn!"
                         onClick={() => deleteBtn(row.id, row.name)}
                     >
                         <Trash2 size={18} />

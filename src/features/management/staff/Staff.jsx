@@ -36,7 +36,7 @@ const items = [
 
 const data = [
     {
-        staffId: `St-${String(randomNumber).padStart(4, "0")}`,
+        staffId: `ST-${String(randomNumber).padStart(4, "0")}`,
         profile:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Phyu Phyu",
@@ -50,7 +50,7 @@ const data = [
     },
     {
         key: "2",
-        staffId: `St-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        staffId: `ST-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
         profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Aung Aung",
@@ -64,7 +64,7 @@ const data = [
     },
     {
         key: "3",
-        staffId: `St-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        staffId: `ST-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
         profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Su Su",
@@ -78,7 +78,7 @@ const data = [
     },
     {
         key: "4",
-        staffId: `St-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        staffId: `ST-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
         profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Kyaw Kyaw",
@@ -97,7 +97,7 @@ const Staff = () => {
     const columns = [
         {
             title: "No.",
-            render: (_, value, index) => <p>{index + 1}</p>,
+            render: (_, __, index) => <p>{index + 1}</p>,
         },
         {
             title: "Staff ID",
