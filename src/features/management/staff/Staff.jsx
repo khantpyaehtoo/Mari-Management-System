@@ -2,9 +2,10 @@ import { Table, Image, Dropdown, Space } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { EyeOutlined } from "@ant-design/icons";
+import { cn } from "../../../lib/utils";
 
 const randomNumber = Math.floor(Math.random() * 1000);
-const randomString = Math.random().DownOutlinedtoString(36).substring(2, 9);
+const randomString = Math.random().toString(36).substring(2, 9);
 
 const items = [
     {
@@ -36,28 +37,58 @@ const items = [
 const data = [
     {
         staffId: `St-${String(randomNumber).padStart(4, "0")}`,
-        profile: (
-            <Image
-                src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                width={40}
-                alt="profile"
-                className="!rounded-md !shadow-sm"
-            />
-        ),
+        profile:
+            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Phyu Phyu",
-        contact: (
-            <Space vertical size="small">
-                <p className="font-medium">
-                    09-{String(randomNumber * 7).padStart(9, `${randomNumber}`)}
-                </p>
-                <p className="">{randomString}@gmail.com</p>
-            </Space>
-        ),
+        phone: `09-${String(randomNumber * 7).padStart(9, `${randomNumber}`)}`,
+        email: `${randomString}@gmail.com`,
         dob: "19/09/1999",
         joined: "02/12/2022",
         count: `${String(randomNumber).padStart(3, "1")}`,
         rating: "4.5",
-        status: <p className="text-progress">In Progress</p>,
+        status: "In Progress",
+    },
+    {
+        key: "2",
+        staffId: `St-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        profileUrl:
+            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
+        name: "Aung Aung",
+        phone: "09-450123456",
+        email: `${Math.random().toString(36).substring(2, 7)}@gmail.com`,
+        dob: "12/05/1995",
+        joined: "15/01/2023",
+        count: "142",
+        rating: "4.8",
+        status: "Completed",
+    },
+    {
+        key: "3",
+        staffId: `St-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        profileUrl:
+            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
+        name: "Su Su",
+        phone: "09-798654321",
+        email: `${Math.random().toString(36).substring(2, 7)}@gmail.com`,
+        dob: "24/11/1998",
+        joined: "10/06/2024",
+        count: "95",
+        rating: "4.2",
+        status: "Available",
+    },
+    {
+        key: "4",
+        staffId: `St-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        profileUrl:
+            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
+        name: "Kyaw Kyaw",
+        phone: "09-254889900",
+        email: `${Math.random().toString(36).substring(2, 7)}@gmail.com`,
+        dob: "03/02/1992",
+        joined: "01/09/2021",
+        count: "310",
+        rating: "4.0",
+        status: "Unavailable",
     },
 ];
 
@@ -75,8 +106,16 @@ const Staff = () => {
         },
         {
             title: "Profile",
-            dataIndex: "profile",
+            dataIndex: "profileUrl",
             key: "profile",
+            render: (url) => (
+                <Image
+                    src={url}
+                    width={40}
+                    alt="profile"
+                    className="!rounded-md !shadow-sm"
+                />
+            ),
         },
         {
             title: "Name",
@@ -85,22 +124,20 @@ const Staff = () => {
             filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
                 return (
-                    String(record.age)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.address)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.firstName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase())
+                    record.name.toLowerCase().includes(value.toLowerCase()) ||
+                    record.staffId.toLowerCase().includes(value.toLowerCase())
                 );
             },
         },
         {
             title: "Contact",
-            dataIndex: "contact",
             key: "contact",
+            render: (_, record) => (
+                <Space vertical size="small">
+                    <p className="font-medium">{record.phone}</p>
+                    <p className="text-gray-500">{record.email}</p>
+                </Space>
+            ),
         },
         {
             title: "Date Of Birth",
@@ -126,6 +163,24 @@ const Staff = () => {
             title: "Status",
             dataIndex: "status",
             key: "status",
+            render: (status) => {
+                const statusClasses = {
+                    "In Progress": "text-progress",
+                    Available: "text-available",
+                    Completed: "text-available",
+                    Unavailable: "text-unavailable",
+                };
+                return (
+                    <p
+                        className={cn(
+                            "font-medium",
+                            statusClasses[status] || "text-gray-500",
+                        )}
+                    >
+                        {status}
+                    </p>
+                );
+            },
         },
         // {
         //     title: "Tags",
