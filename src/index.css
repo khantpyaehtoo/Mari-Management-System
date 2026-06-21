@@ -10,10 +10,15 @@ body {
     user-select: none;
 }
 
+:root {
+    --primary-pink: #FBB1BD
+}
+
+
 @theme {
     --color-white-back: #FFFAF6;
     --color-white-form: #F9FAFB;
-    --color-primary: #FBB1BD;
+    --color-primary: var(--primary-pink);
     --color-progress: #D66400;
     --color-available: #04CF70;
     --color-unavailable: #DC1B47;
@@ -89,4 +94,38 @@ body {
     height: 40%; 
     background-color: #FBB1BD !important;
     z-index: 10;
+}
+
+
+/* Pretty tricky, Turns out Ant Design was gatekeeping our styles until we disabled its rules */
+.ant-table-wrapper .ant-table,
+.ant-table-container,
+.ant-table-content {
+    scrollbar-color: unset !important;
+    scrollbar-width: auto !important;
+}
+
+.ant-table-content::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar, ::-webkit-scrollbar {
+    width: 10px !important;
+    height: 10px !important;
+    /* display: block !important; */
+}
+
+.ant-table-content::-webkit-scrollbar-track,
+.table-wrapper::-webkit-scrollbar-track, ::-webkit-scrollbar-track {
+    background: #FFFAF6 !important; 
+    border-radius: 10px !important; 
+}
+
+.ant-table-content::-webkit-scrollbar-thumb,
+.table-wrapper::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
+    background: var(--primary-pink) !important;
+    border-radius: 10px !important; 
+    border: 2px solid #FFFAF6 !important; 
+}
+
+.ant-table-content::-webkit-scrollbar-thumb:hover,
+.table-wrapper::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:hover {
+    background: #f99cb0 !important;
 }

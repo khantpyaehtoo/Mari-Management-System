@@ -1,4 +1,4 @@
-import { Table, Button, Space } from "antd";
+import { Table, Button, Space, Grid } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
@@ -57,8 +57,13 @@ const data = [
     },
 ];
 
+const { useBreakpoint } = Grid;
+
 const Booking = () => {
     const [searchText, setSearchText] = useState("");
+    const screens = useBreakpoint();
+
+    const scrollX = screens.xs ? undefined : "1500";
 
     const handleRejectBtn = (row) => {
         console.log("clicked reject", row.bookingId);
@@ -177,7 +182,7 @@ const Booking = () => {
                 <Table
                     columns={columns}
                     dataSource={data}
-                    showSorterTooltip={false}
+                    scroll={{ x: scrollX }}
                 />
             </div>
         </div>

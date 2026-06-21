@@ -10,11 +10,6 @@ import { ConfigProvider, App as AntdApp } from "antd";
 const config = {
     token: {
         colorPrimary: "#FBB1BD",
-        Calendar: {
-            // header: {
-            //     background: "#FBB1BD",
-            // },
-        },
         Table: {
             headerBg: "#FBB1BD",
             headerColor: "#fff",
