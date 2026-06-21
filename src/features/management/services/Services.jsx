@@ -1,4 +1,4 @@
-import { Space, Table, Button } from "antd";
+import { Space, Table, Button, Grid } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
@@ -10,9 +10,13 @@ import {
 } from "./servicesApi";
 import { useSelector } from "react-redux";
 
+const { useBreakpoint } = Grid;
 const Services = () => {
     const { token } = useSelector((state) => state?.auth);
     const [searchText, setSearchText] = useState("");
+
+    const screens = useBreakpoint();
+    const scrollX = screens.xs ? undefined : "1500";
 
     const { data: servicesData } = useGetServicesDataQuery();
     const [deleteService] = useDeleteServiceMutation();
@@ -134,6 +138,7 @@ const Services = () => {
                     columns={columns}
                     dataSource={servicesData}
                     rowKey={(record) => record?.id}
+                    onScroll={{ x: scrollX }}
                 />
             </div>
         </div>

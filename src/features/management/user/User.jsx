@@ -1,87 +1,15 @@
-import { Table } from "antd";
+import { Grid, Table } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useCreateUserMutation, useUpdateUserMutation } from "./userApi";
-// import { useGetUserDataQuery } from "../../features/management/user/userApi";
-// import CookieJS from "js-cookie";
-// const data = [
-//     {
-//         key: 1,
-//         username: "Joe",
-//         age: 20,
-//         address: "Yangon",
-//     },
-//     {
-//         key: 2,
-//         username: "Green",
-//         age: 32,
-//         address: "Mandalay",
-//     },
-//     {
-//         key: 3,
-//         username: "Brown",
-//         age: 28,
-//         address: "Taunggyi",
-//     },
-//     {
-//         key: 4,
-//         username: "Black",
-//         age: 24,
-//         address: "Bago",
-//     },
-//     {
-//         key: 5,
-//         username: "Joe",
-//         age: 20,
-//         address: "Yangon",
-//     },
-//     {
-//         key: 6,
-//         username: "Green",
-//         age: 32,
-//         address: "Mandalay",
-//     },
-//     {
-//         key: 7,
-//         username: "Brown",
-//         age: 28,
-//         address: "Taunggyi",
-//     },
-//     {
-//         key: 8,
-//         username: "Black",
-//         age: 24,
-//         address: "Bago",
-//     },
-//     {
-//         key: 9,
-//         username: "Joe",
-//         age: 20,
-//         address: "Yangon",
-//     },
-//     {
-//         key: 10,
-//         username: "Green",
-//         age: 32,
-//         address: "Mandalay",
-//     },
-//     {
-//         key: 11,
-//         username: "Brown",
-//         age: 28,
-//         address: "Taunggyi",
-//     },
-//     {
-//         key: 12,
-//         username: "Black",
-//         age: 24,
-//         address: "Bago",
-//     },
-// ];
 
+const { useBreakpoint } = Grid;
 const User = () => {
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+
+    const screens = useBreakpoint();
+    const scrollX = screens.xs ? undefined : "1500";
 
     const [createUser] = useCreateUserMutation();
     const [editUser] = useUpdateUserMutation();
@@ -153,7 +81,7 @@ const User = () => {
                 <Table
                     columns={columns}
                     // dataSource={userList}
-                    rowKey={Math.random}
+                    onScroll={{ x: scrollX }}
                     pagination={{
                         current: currentPage,
                         onChange: handlePageChange,

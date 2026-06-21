@@ -1,7 +1,7 @@
-import { Table, Image, Dropdown, Space } from "antd";
+import { Table, Image, Dropdown, Space, Grid } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
-import { EyeOutlined } from "@ant-design/icons";
+import EyeOutlined from "@ant-design/icons/EyeOutlined";
 import { cn } from "../../../lib/utils";
 import { useCreateStaffMutation, useUpdateStaffMutation } from "./staffApi";
 
@@ -93,8 +93,11 @@ const data = [
     },
 ];
 
+const { useBreakpoint } = Grid;
 const Staff = () => {
     const [searchText, setSearchText] = useState("");
+    const screens = useBreakpoint();
+    const scrollX = screens.xs ? undefined : "1500";
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();
@@ -213,7 +216,11 @@ const Staff = () => {
                 triggerEdit={editStaff}
             />
             <div className="table-wrapper">
-                <Table dataSource={data} columns={columns} />
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    onScroll={{ x: scrollX }}
+                />
             </div>
         </div>
     );

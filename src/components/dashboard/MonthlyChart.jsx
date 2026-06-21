@@ -66,8 +66,8 @@ const data = {
 
 export function MonthlyChart() {
     return (
-        <Card className="w-full shadow-sm p-4 !h-[350px]">
-            <div className="relative w-full !h-[300px]">
+        <Card className="w-full shadow-sm p-4 h-87.5!">
+            <div className="relative w-full h-75!">
                 <Bar options={options} data={data} />
             </div>
         </Card>
