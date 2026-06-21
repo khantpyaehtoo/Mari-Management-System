@@ -22,7 +22,7 @@ const ServiceForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Service name" className="!input-styling" />
+                <Input placeholder="Service name" className="input-styling!" />
             </Item>
 
             <Item
@@ -37,7 +37,7 @@ const ServiceForm = ({ form }) => {
             >
                 <InputNumber
                     placeholder="Service Price"
-                    className="!input-styling"
+                    className="input-styling!"
                 />
             </Item>
 
@@ -64,13 +64,13 @@ const ServiceForm = ({ form }) => {
                                 value: category,
                                 label: category,
                             }))}
-                            className="!w-100"
+                            className="w-100!"
                         />
                     </Item>
 
                     <Button
                         onClick={() => setIsOpen(true)}
-                        className="mt-1 !h-10"
+                        className="mt-1 h-10!"
                     >
                         <PlusCircleFilled />
                     </Button>
@@ -90,7 +90,7 @@ const ServiceForm = ({ form }) => {
                 >
                     <Input
                         placeholder="Category name"
-                        className="!input-styling"
+                        className="input-styling!"
                         suffix={
                             <Button
                                 type="text"
@@ -120,7 +120,7 @@ const ServiceForm = ({ form }) => {
             >
                 <InputNumber
                     placeholder="Service Duration"
-                    className="!input-styling"
+                    className="input-styling!"
                     // type="number"
                 />
             </Item>
@@ -131,7 +131,7 @@ const ServiceForm = ({ form }) => {
             >
                 <TextArea
                     placeholder="Service description"
-                    className="!input-styling"
+                    className="input-styling!"
                     rows={4}
                 />
             </Item>

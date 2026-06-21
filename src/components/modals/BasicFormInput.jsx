@@ -14,7 +14,7 @@ const BasicFormInput = () => {
             >
                 <Input
                     placeholder={"username"}
-                    className="!input-styling"
+                    className="input-styling!"
                     autoComplete="one-time-code"
                 />
             </Item>
@@ -27,7 +27,7 @@ const BasicFormInput = () => {
             >
                 <Input
                     placeholder={"fullname"}
-                    className="!input-styling"
+                    className="input-styling!"
                     autoComplete="one-time-code"
                 />
             </Item>
@@ -38,7 +38,7 @@ const BasicFormInput = () => {
             >
                 <Input
                     placeholder={"email"}
-                    className="!input-styling"
+                    className="input-styling!"
                     autoComplete="one-time-code"
                 />
             </Item>
@@ -59,7 +59,7 @@ const BasicFormInput = () => {
                     <Input
                         prefix="+95"
                         placeholder={"Phone Number"}
-                        className="!input-styling"
+                        className="input-styling!"
                         autoComplete="one-time-code"
                     />
                 </Item>
@@ -80,7 +80,7 @@ const BasicFormInput = () => {
                 >
                     <Input.Password
                         placeholder={"password"}
-                        className="!input-styling"
+                        className="input-styling!"
                         autoComplete="one-time-code"
                     />
                 </Item>

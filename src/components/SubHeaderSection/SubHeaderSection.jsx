@@ -8,8 +8,10 @@ const SubHeaderSection = ({
     isEdit,
     isOpen,
     onCancel,
-    initialValues,
+    initialValue,
     subTitle,
+    triggerCreate,
+    triggerEdit,
 }) => {
     const { Title } = Typography;
 
@@ -39,7 +41,9 @@ const SubHeaderSection = ({
                     isEdit={isEdit}
                     isOpen={isOpen}
                     onCancel={onCancel}
-                    initialValues={initialValues}
+                    initialValue={initialValue}
+                    triggerCreate={triggerCreate}
+                    triggerEdit={triggerEdit}
                 />
             </div>
         </div>

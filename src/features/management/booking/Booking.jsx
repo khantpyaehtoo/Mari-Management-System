@@ -4,6 +4,10 @@ import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSect
 import { cn } from "../../../lib/utils";
 import { X } from "lucide-react";
 import { CheckOutlined } from "@ant-design/icons";
+import {
+    useCreateBookingMutation,
+    useUpdateBookingMutation,
+} from "./bookingApi";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const data = [
@@ -62,6 +66,9 @@ const { useBreakpoint } = Grid;
 const Booking = () => {
     const [searchText, setSearchText] = useState("");
     const screens = useBreakpoint();
+
+    const [createBooking] = useCreateBookingMutation();
+    const [updateBooking] = useUpdateBookingMutation();
 
     const scrollX = screens.xs ? undefined : "1500";
 
@@ -177,6 +184,8 @@ const Booking = () => {
                 subTitle={
                     "Manage, track, and update all salon customer appointments."
                 }
+                triggerCreate={createBooking}
+                triggerEdit={updateBooking}
             />
             <div className="table-wrapper">
                 <Table

@@ -117,7 +117,7 @@ const Services = () => {
                 setSearchText={setSearchText}
                 isOpen={isFormOpen}
                 isEdit={isEdit}
-                initialValues={selectedService}
+                initialValue={selectedService}
                 onCancel={onCancel}
                 subTitle="Manage your elite staff to unlock peak operational efficiency."
             />
