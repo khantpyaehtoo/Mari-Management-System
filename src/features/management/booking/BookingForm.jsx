@@ -24,7 +24,7 @@ const BookingForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Service name" className="!input-styling" />
+                <Input placeholder="Service name" className="input-styling!" />
             </Item>
             <Item
                 label={<label className="label-styling">Service Price</label>}
@@ -36,7 +36,7 @@ const BookingForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Service Price" className="!input-styling" />
+                <Input placeholder="Service Price" className="input-styling!" />
             </Item>
 
             <Item
@@ -49,7 +49,7 @@ const BookingForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Customer Name" className="!input-styling" />
+                <Input placeholder="Customer Name" className="input-styling!" />
             </Item>
 
             <Item
@@ -62,7 +62,7 @@ const BookingForm = ({ form }) => {
                     },
                 ]}
             >
-                <Input placeholder="Employee Name" className="!input-styling" />
+                <Input placeholder="Employee Name" className="input-styling!" />
             </Item>
 
             <Item

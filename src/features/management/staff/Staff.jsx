@@ -3,6 +3,7 @@ import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { EyeOutlined } from "@ant-design/icons";
 import { cn } from "../../../lib/utils";
+import { useCreateStaffMutation, useUpdateStaffMutation } from "./staffApi";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const randomString = Math.random().toString(36).substring(2, 9);
@@ -94,6 +95,10 @@ const data = [
 
 const Staff = () => {
     const [searchText, setSearchText] = useState("");
+
+    const [createStaff] = useCreateStaffMutation();
+    const [editStaff] = useUpdateStaffMutation();
+
     const columns = [
         {
             title: "No.",
@@ -182,26 +187,6 @@ const Staff = () => {
                 );
             },
         },
-        // {
-        //     title: "Tags",
-        //     dataIndex: "tags",
-        //     key: "tags",
-        //     render: (tags) => (
-        //         <Flex gap="small" align="center" wrap>
-        //             {tags.map((tag) => {
-        //                 let color = tag.length > 5 ? "geekblue" : "green";
-        //                 if (tag === "Blah") {
-        //                     color = "volcano";
-        //                 }
-        //                 return (
-        //                     <Tag color={color} key={tag}>
-        //                         {tag.toUpperCase()}
-        //                     </Tag>
-        //                 );
-        //             })}
-        //         </Flex>
-        //     ),
-        // },
         {
             title: "Action",
             key: "action",
@@ -223,7 +208,9 @@ const Staff = () => {
             <SubHeaderSection
                 setSearchText={setSearchText}
                 title="Staff"
-                subTitle="Manage your elite staff to unlock peak operational efficiency. "
+                subTitle="Manage your elite staff to unlock peak operational efficiency."
+                triggerCreate={createStaff}
+                triggerEdit={editStaff}
             />
             <div className="table-wrapper">
                 <Table dataSource={data} columns={columns} />

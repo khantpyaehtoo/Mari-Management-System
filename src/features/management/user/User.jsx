@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
+import { useCreateUserMutation, useUpdateUserMutation } from "./userApi";
 // import { useGetUserDataQuery } from "../../features/management/user/userApi";
 // import CookieJS from "js-cookie";
 // const data = [
@@ -82,11 +83,8 @@ const User = () => {
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
-    // const token = CookieJS.get("lmsToken");
-    // console.log(userList);
-    // const { data: userList, isLoading, isError } = useGetUserDataQuery();
-    // if (isLoading) return <p>Loading ...</p>;
-    // if (isError) return <p>Error ...</p>;
+    const [createUser] = useCreateUserMutation();
+    const [editUser] = useUpdateUserMutation();
 
     const columns = [
         {
@@ -135,14 +133,6 @@ const User = () => {
         },
     ];
 
-    // const handleCreateUser = async () => {
-    //     try {
-    //         const [craeteUser] = await useCreateUserMutation();
-    //     } catch {
-    //     } finally {
-    //     }
-    // };
-
     // console.log(currentPage);
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -150,7 +140,12 @@ const User = () => {
 
     return (
         <div>
-            <SubHeaderSection setSearchText={setSearchText} title="User" />
+            <SubHeaderSection
+                setSearchText={setSearchText}
+                title="User"
+                triggerCreate={createUser}
+                triggerEdit={editUser}
+            />
 
             {/* <UserAddForm /> */}
 

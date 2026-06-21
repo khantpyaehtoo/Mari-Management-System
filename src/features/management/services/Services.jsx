@@ -3,16 +3,21 @@ import { Edit, Trash2 } from "lucide-react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
 import {
+    useCreateServiceMutation,
     useDeleteServiceMutation,
     useGetServicesDataQuery,
+    useUpdateServiceMutation,
 } from "./servicesApi";
 import { useSelector } from "react-redux";
 
 const Services = () => {
     const { token } = useSelector((state) => state?.auth);
     const [searchText, setSearchText] = useState("");
+
     const { data: servicesData } = useGetServicesDataQuery();
     const [deleteService] = useDeleteServiceMutation();
+    const [createService] = useCreateServiceMutation();
+    const [editService] = useUpdateServiceMutation();
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -114,12 +119,14 @@ const Services = () => {
         <div>
             <SubHeaderSection
                 title="Services"
+                subTitle="Manage your elite staff to unlock peak operational efficiency."
                 setSearchText={setSearchText}
                 isOpen={isFormOpen}
                 isEdit={isEdit}
                 initialValue={selectedService}
                 onCancel={onCancel}
-                subTitle="Manage your elite staff to unlock peak operational efficiency."
+                triggerCreate={createService}
+                triggerEdit={editService}
             />
 
             <div className="table-wrapper">
