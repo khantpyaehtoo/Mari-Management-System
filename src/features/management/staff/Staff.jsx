@@ -213,6 +213,7 @@ const Staff = () => {
                 setSearchText={setSearchText}
                 title="Staff"
                 subTitle="Manage your elite staff to unlock peak operational efficiency."
+                subFormTitle="Create your elite staff to unlock peak operational efficiency."
                 triggerCreate={createStaff}
                 triggerEdit={editStaff}
             />

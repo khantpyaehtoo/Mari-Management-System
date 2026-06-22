@@ -5,11 +5,12 @@ import { SearchOutlined } from "@ant-design/icons";
 const SubHeaderSection = ({
     setSearchText,
     title,
+    subTitle,
+    subFormTitle,
     isEdit,
     isOpen,
     onCancel,
     initialValue,
-    subTitle,
     triggerCreate,
     triggerEdit,
 }) => {
@@ -38,6 +39,7 @@ const SubHeaderSection = ({
 
                 <AddForm
                     title={title}
+                    subFormTitle={subFormTitle}
                     isEdit={isEdit}
                     isOpen={isOpen}
                     onCancel={onCancel}

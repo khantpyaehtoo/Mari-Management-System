@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Modal, Typography } from "antd";
+import { Button, Form, Modal } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../app/core/notiSlice";
@@ -7,6 +7,7 @@ import { FORM_CONFIG } from "../../lib/config/formConfig";
 
 const AddForm = ({
     title,
+    subFormTitle,
     initialValue,
     isEdit,
     isOpen,
@@ -24,7 +25,6 @@ const AddForm = ({
     const config = FORM_CONFIG[title];
     const ActiveComponent = config?.Component;
 
-    const { Title } = Typography;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -114,9 +114,14 @@ const AddForm = ({
 
             <Modal
                 title={
-                    <Title className="uppercase" level={3}>
-                        {isEdit ? "Edit" : "Create"} {title}
-                    </Title>
+                    <>
+                        <h1 className="mt-4 mb-2 uppercase text-3xl font-semibold text-primary">
+                            {isEdit ? "Edit" : "Create"} {title}
+                        </h1>
+                        <p className="p-1 mb-10 font-medium  text-xs">
+                            {subFormTitle}
+                        </p>
+                    </>
                 }
                 closable={{ "aria-label": "Custom Close Button" }}
                 open={isModalOpen}

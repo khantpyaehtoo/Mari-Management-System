@@ -14,6 +14,23 @@ const config = {
             headerBg: "#FBB1BD",
             headerColor: "#fff",
         },
+        Form: {
+            labelFontSize: 14,
+        },
+        Input: {
+            colorBorder: "transparent",
+            colorBorderHover: "transparent",
+            activeBorderColor: "transparent",
+            controlOutline: "transparent",
+            borderRadius: 0,
+        },
+        DatePicker: {
+            colorBorder: "transparent",
+            colorBorderHover: "transparent",
+            // activeBorderColor: "transparent",
+            controlOutline: "transparent",
+            borderRadius: 0,
+        },
     },
 };
 

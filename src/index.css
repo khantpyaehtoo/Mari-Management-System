@@ -55,7 +55,12 @@ body {
 
 /* label styling */
 @utility label-styling {
-    @apply text-xs font-bold text-gray-400 uppercase tracking-widest;
+    @apply font-medium;
+}
+
+/* modal form input design */
+@utility input-styling {
+    @apply w-full px-4 py-3 bg-transparent font-semibold border-t-0 border-r-0 border-l-0 outline-none border-b-black hover:border-b-primary focus:border-b-primary;
 }
 
 /* table wrapper styling */
@@ -68,10 +73,6 @@ body {
     @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest;
 }
 
-/* modal form input design */
-@utility input-styling {
-    @apply w-full px-4 py-3 bg-gray-100 border-transparent focus:bg-white focus:border-black border-2 rounded-xl transition-all outline-none font-bold text-gray-700;
-}
 
 @utility editBtn {
     @apply p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors border border-transparent hover:border-gray-200;

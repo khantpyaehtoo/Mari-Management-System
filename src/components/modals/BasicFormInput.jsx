@@ -1,90 +1,81 @@
-import { Form, Input, Space } from "antd";
+import { DatePicker, Form, Input, Space } from "antd";
 
-const BasicFormInput = () => {
+const BasicFormInput = ({ title }) => {
     const { Item } = Form;
 
     return (
         <>
             <Item
-                name="username"
-                label={<label className="label-styling">Username</label>}
-                rules={[
-                    { required: true, message: `Please input the username` },
-                ]}
-            >
-                <Input
-                    placeholder={"username"}
-                    className="input-styling!"
-                    autoComplete="one-time-code"
-                />
-            </Item>
-            <Item
                 name="fullname"
-                label={<label className="label-styling">Full Name</label>}
+                label={
+                    <label className="label-styling">{title} Full Name</label>
+                }
                 rules={[
-                    { required: true, message: `Please input the fullname` },
+                    {
+                        required: true,
+                        message: `Please input the name`,
+                    },
                 ]}
             >
                 <Input
-                    placeholder={"fullname"}
-                    className="input-styling!"
-                    autoComplete="one-time-code"
-                />
-            </Item>
-            <Item
-                name="email"
-                label={<label className="label-styling">Email</label>}
-                rules={[{ required: true, message: `Please input the Email` }]}
-            >
-                <Input
-                    placeholder={"email"}
+                    placeholder={"Enter the name"}
                     className="input-styling!"
                     autoComplete="one-time-code"
                 />
             </Item>
 
-            <Space size="large" align="start">
+            <Space size="large" align="center">
                 <Item
                     name="phoneNumber"
                     label={
-                        <label className="label-styling">Phone Number</label>
+                        <label className="label-styling">
+                            {title} Phone No.
+                        </label>
                     }
                     rules={[
                         {
                             required: true,
-                            message: `Please input the Phone Number`,
+                            message: "Please input the Phone Number",
                         },
                     ]}
                 >
                     <Input
-                        prefix="+95"
+                        prefix={<span className="font-medium me-2">+95</span>}
                         placeholder={"Phone Number"}
                         className="input-styling!"
                         autoComplete="one-time-code"
                     />
                 </Item>
+
                 <Item
-                    hasFeedback
-                    name="password"
-                    label={<label className="label-styling">Password</label>}
+                    name="dob"
+                    label={
+                        <label className="label-styling">
+                            {title} Date of Birth
+                        </label>
+                    }
                     rules={[
                         {
                             required: true,
-                            message: `Please input the password`,
-                        },
-                        {
-                            min: 8,
-                            message: "Password must be at least 8 characters",
+                            message: "Please input the Date of Birth",
                         },
                     ]}
                 >
-                    <Input.Password
-                        placeholder={"password"}
-                        className="input-styling!"
-                        autoComplete="one-time-code"
-                    />
+                    <DatePicker className="input-styling!" />
                 </Item>
             </Space>
+
+            <Item
+                name="email"
+                label={<label className="label-styling">{title} Email</label>}
+                rules={[{ required: true, message: `Please input the Email` }]}
+            >
+                <Input
+                    placeholder={"example@gmail.com"}
+                    className="input-styling!"
+                    autoComplete="one-time-code"
+                />
+            </Item>
         </>
     );
 };
