@@ -89,6 +89,7 @@ const User = () => {
                         pageSize: 5,
                         placement: ["topEnd"],
                     }}
+                    bordered
                 />
             </div>
         </div>

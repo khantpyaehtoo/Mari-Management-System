@@ -1,4 +1,5 @@
 import { Select } from "antd";
+import { cn } from "../../lib/utils";
 
 const TableHeaderSection = ({
     renderlists,
@@ -16,8 +17,23 @@ const TableHeaderSection = ({
             <ul className="flex gap-4">
                 {renderlists?.map((lists, index) => {
                     const counts = statusCounts?.[lists] || 0;
+                    const statusClasses = {
+                        Pending: "text-progress",
+                        "In Progress": "text-available",
+                        Confirm: "text-confirm",
+                        Completed: "text-green-700",
+                        Reject: "text-unavailable",
+                    };
+
                     return (
-                        <li key={index}>
+                        <li
+                            key={index}
+                            className={cn(
+                                "font-medium",
+                                statusClasses[lists] || "text-gray-500",
+                                "hover:underline",
+                            )}
+                        >
                             {lists} <span>{counts}</span>
                         </li>
                     );

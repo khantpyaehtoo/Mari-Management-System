@@ -176,7 +176,7 @@ const Staff = () => {
                 const statusClasses = {
                     "In Progress": "text-progress",
                     Available: "text-available",
-                    Completed: "text-available",
+                    Completed: "text-confirm",
                     Unavailable: "text-unavailable",
                 };
                 return (
@@ -222,6 +222,7 @@ const Staff = () => {
                     dataSource={data}
                     columns={columns}
                     onScroll={{ x: scrollX }}
+                    bordered
                 />
             </div>
         </div>

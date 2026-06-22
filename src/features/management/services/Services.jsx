@@ -139,6 +139,7 @@ const Services = () => {
                     dataSource={servicesData}
                     rowKey={(record) => record?.id}
                     onScroll={{ x: scrollX }}
+                    bordered
                 />
             </div>
         </div>

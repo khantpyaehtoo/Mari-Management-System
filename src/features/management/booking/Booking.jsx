@@ -2,8 +2,7 @@ import { Table, Button, Space, Grid } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
-import { X } from "lucide-react";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EyeOutlined } from "@ant-design/icons";
 import {
     useCreateBookingMutation,
     useUpdateBookingMutation,
@@ -72,6 +71,30 @@ const data = [
         staffName: "Kyaw Kyaw",
         status: "Pending",
     },
+    {
+        key: 6,
+        bookingId: `BK-${String(randomNumber * 2).padStart(4, "0")}`,
+        serviceName: "Pedicure Cleansing",
+        customerName: "May Phoo Ngone",
+        price: "18,000 MMK",
+        bookedTime: "01:00 PM",
+        date: "20/06/2026",
+        duringTime: "45 mins",
+        staffName: "Su Su",
+        status: "Confirm",
+    },
+    {
+        key: 7,
+        bookingId: `BK-${String(randomNumber * 4).padStart(4, "0")}`,
+        serviceName: "SNS Extension",
+        customerName: "Hnin Thazin",
+        price: "12,000 MMK",
+        bookedTime: "03:15 PM",
+        date: "21/06/2026",
+        duringTime: "1 hr",
+        staffName: "Aung Aung",
+        status: "Confirm",
+    },
 ];
 
 const { useBreakpoint } = Grid;
@@ -91,6 +114,10 @@ const Booking = () => {
     };
     const handleConfirmBtn = (row) => {
         console.log("clicked confirm", row.bookingId, row.serviceName);
+    };
+
+    const handleViewBtn = (row) => {
+        console.log("clicked view", row.bookingId, row.serviceName);
     };
 
     const columns = [
@@ -114,9 +141,17 @@ const Booking = () => {
             key: "customerName",
             filteredValue: searchText ? [searchText] : null,
             onFilter: (value, record) => {
-                return String(record.customerName)
-                    .toLowerCase()
-                    .includes(value.toLowerCase());
+                return (
+                    String(record.customerName)
+                        .toLowerCase()
+                        .includes(value.toLowerCase()),
+                    String(record.serviceName)
+                        .toLowerCase()
+                        .includes(value.toLowerCase),
+                    String(record.bookingId)
+                        .toLowerCase()
+                        .includes(value.toLowerCase)
+                );
             },
         },
         {
@@ -154,8 +189,8 @@ const Booking = () => {
                 const statusClasses = {
                     Pending: "text-progress",
                     "In Progress": "text-available",
-                    Confirm: "text-green-600",
-                    Completed: "text-indigo-500",
+                    Confirm: "text-confirm",
+                    Completed: "text-green-700",
                     Reject: "text-unavailable",
                 };
                 return (
@@ -173,23 +208,32 @@ const Booking = () => {
         {
             title: "Action",
             key: "action",
-            render: (record) => (
-                <Space>
+            render: (record) => {
+                // console.log(record?.status);
+                return record?.status === "Pending" ? (
+                    <Space size="medium">
+                        <Button
+                            onClick={() => handleRejectBtn(record)}
+                            className="editBtn! bg-red-500! text-white! hover:bg-red-700!"
+                        >
+                            <CloseOutlined />
+                        </Button>
+                        <Button
+                            onClick={() => handleConfirmBtn(record)}
+                            className="editBtn! bg-green-500! text-white! hover:bg-green-700!"
+                        >
+                            <CheckOutlined />
+                        </Button>
+                    </Space>
+                ) : (
                     <Button
-                        onClick={() => handleRejectBtn(record)}
-                        className="editBtn!"
+                        className="border-primary! rounded-2xl! hover:bg-primary! hover:text-white!"
+                        onClick={() => handleViewBtn(record)}
                     >
-                        <X size={18} />
+                        <EyeOutlined /> View
                     </Button>
-                    <Button
-                        onClick={() => handleConfirmBtn(record)}
-                        className="editBtn!"
-                        disabled={record.status === "In Progress"}
-                    >
-                        <CheckOutlined />
-                    </Button>
-                </Space>
-            ),
+                );
+            },
         },
     ];
 
@@ -244,6 +288,7 @@ const Booking = () => {
                     columns={columns}
                     dataSource={data}
                     scroll={{ x: scrollX }}
+                    bordered
                 />
             </div>
         </div>
