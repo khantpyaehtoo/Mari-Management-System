@@ -16,22 +16,24 @@ const CalendarSection = () => {
                 styles={{
                     root: {
                         borderRadius: "20px",
-                        boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.2)",
                         marginTop: "20px",
                     },
                     header: {
                         background: "#FBB1BD",
                         padding: "20px",
                         borderRadius: "20px 20px 0 0",
+                        boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.2)",
                     },
                     body: {
                         background: "#FFFAF6",
                         padding: "20px",
                         border: "2px solid #FBB1BD",
                         borderRadius: "0 0 20px 20px",
+                        boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.2)",
                     },
                     item: {
                         border: "1px solid #FBB1BD",
+                        borderRadius: "10px",
                     },
                 }}
                 onSelect={(date, { source }) => {
