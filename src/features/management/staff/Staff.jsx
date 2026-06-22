@@ -4,6 +4,7 @@ import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSect
 import EyeOutlined from "@ant-design/icons/EyeOutlined";
 import { cn } from "../../../lib/utils";
 import { useCreateStaffMutation, useUpdateStaffMutation } from "./staffApi";
+import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const randomString = Math.random().toString(36).substring(2, 9);
@@ -215,6 +216,7 @@ const Staff = () => {
                 triggerCreate={createStaff}
                 triggerEdit={editStaff}
             />
+            <TableHeaderSection />
             <div className="table-wrapper">
                 <Table
                     dataSource={data}

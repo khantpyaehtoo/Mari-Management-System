@@ -8,6 +8,7 @@ import {
     useCreateBookingMutation,
     useUpdateBookingMutation,
 } from "./bookingApi";
+import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const data = [
@@ -59,12 +60,25 @@ const data = [
         staffName: "Kyaw Kyaw",
         status: "Pending",
     },
+    {
+        key: 5,
+        bookingId: `BK-${String(randomNumber * 3).padStart(4, "0")}`,
+        serviceName: "Cat Eye",
+        customerName: "Ingyin Phyu",
+        price: "25,000 MMK",
+        bookedTime: "05:00 PM",
+        date: "22/06/2026",
+        duringTime: "1 hr 15 mins",
+        staffName: "Kyaw Kyaw",
+        status: "Pending",
+    },
 ];
 
 const { useBreakpoint } = Grid;
 
 const Booking = () => {
     const [searchText, setSearchText] = useState("");
+    const [filterValue, setFilterValue] = useState(null);
     const screens = useBreakpoint();
 
     const [createBooking] = useCreateBookingMutation();
@@ -134,11 +148,14 @@ const Booking = () => {
             title: "Status",
             dataIndex: "status",
             key: "status",
+            filteredValue: filterValue ? [filterValue] : null,
+            onFilter: (value, record) => record.status === value,
             render: (status) => {
                 const statusClasses = {
                     Pending: "text-progress",
                     "In Progress": "text-available",
-                    Completed: "text-green-600",
+                    Confirm: "text-green-600",
+                    Completed: "text-indigo-500",
                     Reject: "text-unavailable",
                 };
                 return (
@@ -176,6 +193,15 @@ const Booking = () => {
         },
     ];
 
+    const renderlists = ["Pending", "In Progress", "Confirm", "Completed"];
+    const options = [
+        { label: "All", value: null },
+        { label: "Pending", value: "Pending" },
+        { label: "In Progress", value: "In Progress" },
+        { label: "Completed", value: "Completed" },
+        { label: "Reject", value: "Reject" },
+    ];
+
     return (
         <div>
             <SubHeaderSection
@@ -186,6 +212,11 @@ const Booking = () => {
                 }
                 triggerCreate={createBooking}
                 triggerEdit={updateBooking}
+            />
+            <TableHeaderSection
+                renderlists={renderlists}
+                options={options}
+                setFilterValue={setFilterValue}
             />
             <div className="table-wrapper">
                 <Table
