@@ -24,7 +24,7 @@ const BasicFormInput = ({ title }) => {
                 />
             </Item>
 
-            <Space size="large" align="center">
+            <Space size="small" align="center">
                 <Item
                     name="phoneNumber"
                     label={

@@ -187,10 +187,10 @@ const Booking = () => {
             onFilter: (value, record) => record.status === value,
             render: (status) => {
                 const statusClasses = {
-                    Pending: "text-progress",
-                    "In Progress": "text-available",
+                    Pending: "text-pending",
+                    "In Progress": "text-progress",
                     Confirm: "text-confirm",
-                    Completed: "text-green-700",
+                    Completed: "text-completed",
                     Reject: "text-unavailable",
                 };
                 return (

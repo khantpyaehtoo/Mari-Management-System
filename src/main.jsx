@@ -31,6 +31,9 @@ const config = {
             controlOutline: "transparent",
             borderRadius: 0,
         },
+        Dropdown: {
+            paddingBlock: 12,
+        },
     },
 };
 

@@ -21,6 +21,8 @@ body {
     --color-primary: var(--primary-pink);
 
     --color-progress: #D66400;
+    --color-pending: #FF9800;
+    --color-completed: #2DC72D;
     --color-available: #04CF70;
     --color-unavailable: #DC1B47;
     --color-confirm: #1257ED;

@@ -1,10 +1,14 @@
 import { Table, Image, Dropdown, Space, Grid } from "antd";
 import { useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
-import EyeOutlined from "@ant-design/icons/EyeOutlined";
 import { cn } from "../../../lib/utils";
 import { useCreateStaffMutation, useUpdateStaffMutation } from "./staffApi";
 import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
+import {
+    DisconnectOutlined,
+    MoreOutlined,
+    UserOutlined,
+} from "@ant-design/icons";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const randomString = Math.random().toString(36).substring(2, 9);
@@ -17,7 +21,7 @@ const items = [
                 rel="noopener noreferrer"
                 href="https://www.antgroup.com"
             >
-                1st menu item
+                <UserOutlined className="me-3" /> View Details
             </a>
         ),
         key: "0",
@@ -28,8 +32,9 @@ const items = [
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://www.aliyun.com"
+                className="text-red-500!"
             >
-                2nd menu item
+                <DisconnectOutlined className="me-3" /> Terminate
             </a>
         ),
         key: "1",
@@ -97,6 +102,7 @@ const data = [
 const { useBreakpoint } = Grid;
 const Staff = () => {
     const [searchText, setSearchText] = useState("");
+    const [filterValue, setFilterValue] = useState(null);
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
 
@@ -172,11 +178,13 @@ const Staff = () => {
             title: "Status",
             dataIndex: "status",
             key: "status",
+            filteredValue: filterValue ? [filterValue] : null,
+            onFilter: (value, record) => record.status === value,
             render: (status) => {
                 const statusClasses = {
                     "In Progress": "text-progress",
                     Available: "text-available",
-                    Completed: "text-confirm",
+                    Completed: "text-completed",
                     Unavailable: "text-unavailable",
                 };
                 return (
@@ -195,17 +203,42 @@ const Staff = () => {
             title: "Action",
             key: "action",
             render: () => (
-                <Dropdown menu={{ items }}>
-                    <a onClick={(e) => e.preventDefault()}>
-                        <Space>
-                            View Details
-                            <EyeOutlined />
-                        </Space>
+                <Dropdown menu={{ items }} placement="bottom">
+                    <a
+                        onClick={(e) => e.preventDefault()}
+                        className="text-black!"
+                    >
+                        <MoreOutlined className="text-3xl" />
                     </a>
                 </Dropdown>
             ),
         },
     ];
+
+    const renderlists = [
+        "In Progress",
+        "Completed",
+        "Available",
+        "Unavailable",
+    ];
+
+    const options = [
+        { label: "In Progress", value: "In Progress" },
+        { label: "Completed", value: "Completed" },
+        { label: "Available", value: "Available" },
+        { label: "Unavailable", value: "Unavailable" },
+    ];
+
+    const statusCounts = {
+        "In Progress":
+            data?.filter((item) => item.status === "In Progress").length || 0,
+        Completed:
+            data?.filter((item) => item.status === "Completed").length || 0,
+        Available:
+            data?.filter((item) => item.status === "Available").length || 0,
+        Unavailable:
+            data?.filter((item) => item.status === "Unavailable").length || 0,
+    };
 
     return (
         <div>
@@ -217,7 +250,12 @@ const Staff = () => {
                 triggerCreate={createStaff}
                 triggerEdit={editStaff}
             />
-            <TableHeaderSection />
+            <TableHeaderSection
+                renderlists={renderlists}
+                options={options}
+                setFilterValue={setFilterValue}
+                statusCounts={statusCounts}
+            />
             <div className="table-wrapper">
                 <Table
                     dataSource={data}

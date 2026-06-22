@@ -18,10 +18,12 @@ const TableHeaderSection = ({
                 {renderlists?.map((lists, index) => {
                     const counts = statusCounts?.[lists] || 0;
                     const statusClasses = {
-                        Pending: "text-progress",
-                        "In Progress": "text-available",
+                        "In Progress": "text-progress",
+                        Pending: "text-pending",
                         Confirm: "text-confirm",
-                        Completed: "text-green-700",
+                        Completed: "text-completed",
+                        Available: "text-available",
+                        Unavailable: "text-unavailable",
                         Reject: "text-unavailable",
                     };
 
