@@ -193,12 +193,32 @@ const Booking = () => {
         },
     ];
 
-    const renderlists = ["Pending", "In Progress", "Confirm", "Completed"];
+    // => show header list section
+    const renderlists = [
+        "Pending",
+        "In Progress",
+        "Confirm",
+        "Completed",
+        "Reject",
+    ];
+
+    // => show header list item length section
+    const statusCounts = {
+        Pending: data?.filter((item) => item.status === "Pending").length || 0,
+        "In Progress":
+            data?.filter((item) => item.status === "In Progress").length || 0,
+        Completed:
+            data?.filter((item) => item.status === "Completed").length || 0,
+        Confirm: data?.filter((item) => item.status === "Confirm").length || 0,
+        Reject: data?.filter((item) => item.status === "Reject").length || 0,
+    };
+
+    // select dropdown filter section
     const options = [
-        { label: "All", value: null },
         { label: "Pending", value: "Pending" },
         { label: "In Progress", value: "In Progress" },
         { label: "Completed", value: "Completed" },
+        { label: "Confirm", value: "Confirm" },
         { label: "Reject", value: "Reject" },
     ];
 
@@ -216,6 +236,7 @@ const Booking = () => {
             <TableHeaderSection
                 renderlists={renderlists}
                 options={options}
+                statusCounts={statusCounts}
                 setFilterValue={setFilterValue}
             />
             <div className="table-wrapper">
