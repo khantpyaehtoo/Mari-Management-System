@@ -70,7 +70,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="flex h-screen w-screen overflow-hidden bg-white-back items-center justify-center p-4 md:p-10">
+        <div className="flex h-screen w-screen overflow-hidden bg-white-back items-center justify-center p-4 md:p-10 font-montserrat!">
             <div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-300 h-[90vh] max-h-187 bg-white-form shadow-xl overflow-hidden border border-gray-100">
                 <div className="hidden md:block md:col-span-5 h-full relative rounded-se-[200px] overflow-hidden ">
                     <img
@@ -80,12 +80,12 @@ const LoginForm = () => {
                     <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />
                 </div>
                 <div className="col-span-1 md:col-span-7 flex items-center justify-center bg-white-form p-8 lg:p-16 overflow-y-auto h-full">
-                    <div className="max-w-100">
+                    <div className="max-w-120">
                         <div className="mb-6">
                             <h1 className="text-primary text-3xl tracking-tight mb-2 font-medium">
                                 Welcome to Mari’s Nail Salon
                             </h1>
-                            <span className="text-gray-600 text-sm block font-medium">
+                            <span className="text-gray-600 text-sm block font-medium ps-1">
                                 Sign in to manage bookings, services, and staff
                                 schedules.
                             </span>
@@ -117,7 +117,7 @@ const LoginForm = () => {
                                     <Input
                                         prefix={<UserOutlined />}
                                         placeholder="Enter Your Gmail"
-                                        className="p-3!"
+                                        className="login-input!"
                                     />
                                 </Form.Item>
                                 <Form.Item
@@ -141,7 +141,7 @@ const LoginForm = () => {
                                         prefix={<LockOutlined />}
                                         type="password"
                                         placeholder="Password"
-                                        className="p-3!"
+                                        className="login-input!"
                                     />
                                 </Form.Item>
                                 <Form.Item>
@@ -171,7 +171,7 @@ const LoginForm = () => {
                                         htmlType="submit"
                                         loading={isSubmitting}
                                         className="h-12! hover:bg-primary! 
-                                    hover:border-dotted! hover:border-black! group"
+                                    hover:border-dotted! hover:border-3! hover:border-black! group"
                                         // disabled={isFormEmpty}
                                     >
                                         Log in{" "}

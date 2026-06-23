@@ -81,12 +81,15 @@ const NewPasswordForm = () => {
                         />
 
                         <div className="w-full max-w-110">
-                            <Title level={3} className="mb-2! font-bold!">
+                            <Title
+                                level={3}
+                                className="mb-2! font-semi-bold! font-montserrat!"
+                            >
                                 Create New Password
                             </Title>
                             <Text
                                 type="secondary"
-                                className="text-sm block mb-6"
+                                className="text-sm block mb-6 font-montserrat!"
                             >
                                 Please set a strong, secure new password for
                                 your account.
@@ -122,7 +125,7 @@ const NewPasswordForm = () => {
                                         }
                                         placeholder="Min. 8 characters"
                                         size="large"
-                                        className="rounded-lg"
+                                        className="login-input!"
                                     />
                                 </Form.Item>
 
@@ -162,7 +165,7 @@ const NewPasswordForm = () => {
                                         }
                                         placeholder="Repeat your password"
                                         size="large"
-                                        className="rounded-lg"
+                                        className="login-input!"
                                     />
                                 </Form.Item>
 

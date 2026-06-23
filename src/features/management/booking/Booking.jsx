@@ -18,7 +18,7 @@ const data = [
         customerName: "Thiri Shwe Sin",
         price: "35,000 MMK",
         bookedTime: "10:30 AM",
-        date: "20/06/2026",
+        date: "2026/06/20",
         duringTime: "1 hr 30 mins",
         staffName: "Phyu Phyu",
         status: "In Progress",
@@ -30,7 +30,7 @@ const data = [
         customerName: "May Phoo Ngone",
         price: "18,000 MMK",
         bookedTime: "01:00 PM",
-        date: "20/06/2026",
+        date: "2026/06/20",
         duringTime: "45 mins",
         staffName: "Su Su",
         status: "Completed",
@@ -42,7 +42,7 @@ const data = [
         customerName: "Hnin Thazin",
         price: "12,000 MMK",
         bookedTime: "03:15 PM",
-        date: "21/06/2026",
+        date: "2026/06/22",
         duringTime: "1 hr",
         staffName: "Aung Aung",
         status: "Reject",
@@ -54,7 +54,7 @@ const data = [
         customerName: "Ingyin Phyu",
         price: "25,000 MMK",
         bookedTime: "05:00 PM",
-        date: "22/06/2026",
+        date: "2026/06/28",
         duringTime: "1 hr 15 mins",
         staffName: "Kyaw Kyaw",
         status: "Pending",
@@ -66,7 +66,7 @@ const data = [
         customerName: "Ingyin Phyu",
         price: "25,000 MMK",
         bookedTime: "05:00 PM",
-        date: "22/06/2026",
+        date: "2026/06/28",
         duringTime: "1 hr 15 mins",
         staffName: "Kyaw Kyaw",
         status: "Pending",
@@ -78,7 +78,7 @@ const data = [
         customerName: "May Phoo Ngone",
         price: "18,000 MMK",
         bookedTime: "01:00 PM",
-        date: "20/06/2026",
+        date: "2026/06/20",
         duringTime: "45 mins",
         staffName: "Su Su",
         status: "Confirm",
@@ -90,7 +90,7 @@ const data = [
         customerName: "Hnin Thazin",
         price: "12,000 MMK",
         bookedTime: "03:15 PM",
-        date: "21/06/2026",
+        date: "2026/06/22",
         duringTime: "1 hr",
         staffName: "Aung Aung",
         status: "Confirm",
@@ -101,7 +101,10 @@ const { useBreakpoint } = Grid;
 
 const Booking = () => {
     const [searchText, setSearchText] = useState("");
-    const [filterValue, setFilterValue] = useState(null);
+    const [filterValue, setFilterValue] = useState(null); // => Status
+    const [calendarFilterType, setCalendarFilterType] = useState(null);
+    const [selectedDates, setSelectedDates] = useState(null);
+
     const screens = useBreakpoint();
 
     const [createBooking] = useCreateBookingMutation();
@@ -266,6 +269,22 @@ const Booking = () => {
         { label: "Reject", value: "Reject" },
     ];
 
+    const dateOptions = [
+        { label: "Date Selector", value: "date" },
+        { label: "Range Selector", value: "range" },
+        { label: "Month Selector", value: "month" },
+    ];
+
+    const dateConfig = {
+        calendarFilterType: calendarFilterType,
+        setCalendarFilterType: (type) => {
+            setCalendarFilterType(type);
+            setSelectedDates(null);
+        },
+        selectedDates: selectedDates,
+        setSelectedDates: setSelectedDates,
+    };
+
     return (
         <div>
             <SubHeaderSection
@@ -282,6 +301,8 @@ const Booking = () => {
                 options={options}
                 statusCounts={statusCounts}
                 setFilterValue={setFilterValue}
+                dateOptions={dateOptions}
+                dateConfig={dateConfig}
             />
             <div className="table-wrapper">
                 <Table

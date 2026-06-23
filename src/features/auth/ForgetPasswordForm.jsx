@@ -3,7 +3,7 @@ import { Button, Form, Input, Typography, message } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import resetImg2 from "../../../public/asset/Img2.png";
-import resetImg3 from "../../../public/asset/Img3.png";
+import heroImg from "../../../public/asset/Img3.png";
 import ellipse from "../../../public/asset/Ellipse.png";
 
 const { Title, Text } = Typography;
@@ -70,7 +70,7 @@ const ForgetPasswordForm = () => {
             <div className="w-full max-w-345 p-8 rounded-xl shadow-lg bg-white-form relative overflow-hidden">
                 <div className="mb-8">
                     <div className="flex justify-evenly items-center">
-                        <img src={resetImg3} />
+                        <img src={heroImg} className="md:block hidden" />
                         <img
                             src={resetImg2}
                             className="absolute top-0 right-0 lg:block md:hidden hidden "
@@ -88,14 +88,17 @@ const ForgetPasswordForm = () => {
                                 <ArrowLeftOutlined className="mr-2 text-xs group-hover:-translate-x-1 transition-transform" />
                                 Back to Login
                             </Link> */}
-                            <Title level={3} className="!mb-2 !font-bold">
+                            <Title
+                                level={3}
+                                className="mb-2! font-semi-bold! font-montserrat!"
+                            >
                                 {currentStep === "email"
                                     ? "Forgot Password?"
                                     : "Check your Email"}
                             </Title>
                             <Text
                                 type="secondary"
-                                className="text-sm block mb-6"
+                                className="text-sm block mb-6 font-montserrat!"
                             >
                                 {currentStep === "email"
                                     ? "Please Enter your Email and we will send a code to reset your password."
@@ -132,7 +135,7 @@ const ForgetPasswordForm = () => {
                                                 }
                                                 placeholder="e.g. name@company.com"
                                                 size="large"
-                                                className="rounded-lg"
+                                                className="login-input!"
                                             />
                                         </Form.Item>
 
@@ -156,7 +159,7 @@ const ForgetPasswordForm = () => {
                                             </span>{" "}
                                             <Link
                                                 to="/login"
-                                                className="mt-2 !text-primary hover:!underline"
+                                                className="mt-2 text-primary! hover:underline!"
                                             >
                                                 Log In
                                             </Link>
