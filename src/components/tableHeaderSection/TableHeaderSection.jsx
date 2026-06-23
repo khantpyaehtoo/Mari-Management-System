@@ -1,6 +1,7 @@
 import { Button, DatePicker, Select, Space } from "antd";
 import { cn } from "../../lib/utils";
 import { CloseOutlined } from "@ant-design/icons";
+import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 
 const TableHeaderSection = ({
     renderlists,
@@ -59,11 +60,12 @@ const TableHeaderSection = ({
                 {dateOptions && !calendarFilterType ? (
                     <Select
                         allowClear
-                        placeholder="Date"
-                        style={{ width: 130 }}
+                        placeholder={<DateTimeFormatter />}
+                        style={{ width: 200 }}
                         value={calendarFilterType}
                         onChange={handleCalendarChange}
                         options={dateOptions}
+                        popupClassName="my-custom-popup"
                     />
                 ) : (
                     <Space gap={4}>

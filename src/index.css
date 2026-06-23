@@ -84,6 +84,26 @@ body {
     border: 1px solid var(--primary-pink);
 }
 
+/* dropdown custom styling */
+.my-custom-popup {
+    background: transparent !important;
+    box-shadow: none;
+}
+.my-custom-popup .ant-select-item {
+    border: 1px solid black;
+    border-radius: 10px;
+    background: white;
+    margin-bottom: 10px;
+}
+.my-custom-popup .ant-select-item:hover{
+    color: var(--primary-pink);
+    border: 1px solid var(--primary-pink);
+}
+.my-custom-popup .ant-select-item-option:active {
+    border: 1px solid black;
+    background: white !important;
+}
+
 /* table wrapper styling */
 @utility table-wrapper {
     @apply bg-white-back border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3;

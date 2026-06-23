@@ -1,5 +1,14 @@
-import { Table, Image, Dropdown, Space, Grid } from "antd";
-import { useState } from "react";
+import {
+    Table,
+    Image,
+    Dropdown,
+    Space,
+    Grid,
+    Modal,
+    Button,
+    Avatar,
+} from "antd";
+import { useState, useMemo } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
 import { useCreateStaffMutation, useUpdateStaffMutation } from "./staffApi";
@@ -10,59 +19,29 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 
-const randomNumber = Math.floor(Math.random() * 1000);
-const randomString = Math.random().toString(36).substring(2, 9);
-
-const items = [
+const STATIC_DATA = [
     {
-        label: (
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.antgroup.com"
-            >
-                <UserOutlined className="me-3" /> View Details
-            </a>
-        ),
-        key: "0",
-    },
-    {
-        label: (
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.aliyun.com"
-                className="text-red-500!"
-            >
-                <DisconnectOutlined className="me-3" /> Terminate
-            </a>
-        ),
         key: "1",
-    },
-];
-
-const data = [
-    {
-        staffId: `ST-${String(randomNumber).padStart(4, "0")}`,
-        profile:
+        staffId: "ST-0042",
+        profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Phyu Phyu",
-        phone: `09-${String(randomNumber * 7).padStart(9, `${randomNumber}`)}`,
-        email: `${randomString}@gmail.com`,
+        phone: "09-459112233",
+        email: "phyuphyu@gmail.com",
         dob: "19/09/1999",
         joined: "02/12/2022",
-        count: `${String(randomNumber).padStart(3, "1")}`,
+        count: "115",
         rating: "4.5",
         status: "In Progress",
     },
     {
         key: "2",
-        staffId: `ST-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        staffId: "ST-0182",
         profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Aung Aung",
         phone: "09-450123456",
-        email: `${Math.random().toString(36).substring(2, 7)}@gmail.com`,
+        email: "aungaung@gmail.com",
         dob: "12/05/1995",
         joined: "15/01/2023",
         count: "142",
@@ -71,12 +50,12 @@ const data = [
     },
     {
         key: "3",
-        staffId: `ST-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        staffId: "ST-0934",
         profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Su Su",
         phone: "09-798654321",
-        email: `${Math.random().toString(36).substring(2, 7)}@gmail.com`,
+        email: "susu@gmail.com",
         dob: "24/11/1998",
         joined: "10/06/2024",
         count: "95",
@@ -85,12 +64,12 @@ const data = [
     },
     {
         key: "4",
-        staffId: `ST-${String(Math.floor(Math.random() * 1000)).padStart(4, "0")}`,
+        staffId: "ST-0512",
         profileUrl:
             "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
         name: "Kyaw Kyaw",
         phone: "09-254889900",
-        email: `${Math.random().toString(36).substring(2, 7)}@gmail.com`,
+        email: "kyawkyaw@gmail.com",
         dob: "03/02/1992",
         joined: "01/09/2021",
         count: "310",
@@ -99,15 +78,49 @@ const data = [
     },
 ];
 
+const renderlists = ["In Progress", "Completed", "Available", "Unavailable"];
+const options = renderlists.map((status) => ({ label: status, value: status }));
+
 const { useBreakpoint } = Grid;
+
 const Staff = () => {
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [isTerminateOpen, setIsTerminateOpen] = useState(false);
+    const [selectedStaff, setSelectedStaff] = useState(null);
+
     const [searchText, setSearchText] = useState("");
     const [filterValue, setFilterValue] = useState(null);
+
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();
+
+    // Derived State calculated only when data changes
+    const statusCounts = useMemo(() => {
+        return {
+            "In Progress": STATIC_DATA.filter(
+                (item) => item.status === "In Progress",
+            ).length,
+            Completed: STATIC_DATA.filter((item) => item.status === "Completed")
+                .length,
+            Available: STATIC_DATA.filter((item) => item.status === "Available")
+                .length,
+            Unavailable: STATIC_DATA.filter(
+                (item) => item.status === "Unavailable",
+            ).length,
+        };
+    }, []);
+
+    const handleActionClick = (actionType, record) => {
+        setSelectedStaff(record);
+        if (actionType === "view") {
+            setIsDetailOpen(true);
+        } else if (actionType === "terminate") {
+            setIsTerminateOpen(true);
+        }
+    };
 
     const columns = [
         {
@@ -137,12 +150,9 @@ const Staff = () => {
             dataIndex: "name",
             key: "name",
             filteredValue: searchText ? [searchText] : null,
-            onFilter: (value, record) => {
-                return (
-                    record.name.toLowerCase().includes(value.toLowerCase()) ||
-                    record.staffId.toLowerCase().includes(value.toLowerCase())
-                );
-            },
+            onFilter: (value, record) =>
+                record.name.toLowerCase().includes(value.toLowerCase()) ||
+                record.staffId.toLowerCase().includes(value.toLowerCase()),
         },
         {
             title: "Contact",
@@ -154,26 +164,10 @@ const Staff = () => {
                 </Space>
             ),
         },
-        {
-            title: "Date Of Birth",
-            dataIndex: "dob",
-            key: "dob",
-        },
-        {
-            title: "Joined Date",
-            dataIndex: "joined",
-            key: "joined",
-        },
-        {
-            title: "Count",
-            dataIndex: "count",
-            key: "count",
-        },
-        {
-            title: "Rating",
-            dataIndex: "rating",
-            key: "rating",
-        },
+        { title: "Date Of Birth", dataIndex: "dob", key: "dob" },
+        { title: "Joined Date", dataIndex: "joined", key: "joined" },
+        { title: "Count", dataIndex: "count", key: "count" },
+        { title: "Rating", dataIndex: "rating", key: "rating" },
         {
             title: "Status",
             dataIndex: "status",
@@ -202,43 +196,54 @@ const Staff = () => {
         {
             title: "Action",
             key: "action",
-            render: () => (
-                <Dropdown menu={{ items }} placement="bottom">
-                    <a
-                        onClick={(e) => e.preventDefault()}
-                        className="text-black!"
+            render: (_, record) => {
+                const items = [
+                    {
+                        label: (
+                            <Button
+                                type="text"
+                                className="w-full! text-left!"
+                                onClick={() =>
+                                    handleActionClick("view", record)
+                                }
+                            >
+                                <p>
+                                    <UserOutlined className="me-3" /> View
+                                    Details
+                                </p>
+                            </Button>
+                        ),
+                        key: "0",
+                    },
+                    {
+                        label: (
+                            <Button
+                                type="text"
+                                danger
+                                className="w-full! text-left!"
+                                onClick={() =>
+                                    handleActionClick("terminate", record)
+                                }
+                            >
+                                <DisconnectOutlined className="me-3" />{" "}
+                                Terminate
+                            </Button>
+                        ),
+                        key: "1",
+                    },
+                ];
+                return (
+                    <Dropdown
+                        menu={{ items }}
+                        placement="bottom"
+                        // trigger={["click"]}
                     >
-                        <MoreOutlined className="text-3xl" />
-                    </a>
-                </Dropdown>
-            ),
+                        <MoreOutlined className="text-3xl cursor-pointer" />
+                    </Dropdown>
+                );
+            },
         },
     ];
-
-    const renderlists = [
-        "In Progress",
-        "Completed",
-        "Available",
-        "Unavailable",
-    ];
-
-    const options = [
-        { label: "In Progress", value: "In Progress" },
-        { label: "Completed", value: "Completed" },
-        { label: "Available", value: "Available" },
-        { label: "Unavailable", value: "Unavailable" },
-    ];
-
-    const statusCounts = {
-        "In Progress":
-            data?.filter((item) => item.status === "In Progress").length || 0,
-        Completed:
-            data?.filter((item) => item.status === "Completed").length || 0,
-        Available:
-            data?.filter((item) => item.status === "Available").length || 0,
-        Unavailable:
-            data?.filter((item) => item.status === "Unavailable").length || 0,
-    };
 
     return (
         <div>
@@ -258,12 +263,76 @@ const Staff = () => {
             />
             <div className="table-wrapper">
                 <Table
-                    dataSource={data}
+                    dataSource={STATIC_DATA}
                     columns={columns}
-                    onScroll={{ x: scrollX }}
+                    scroll={{ x: scrollX }}
                     bordered
                 />
             </div>
+
+            <Modal
+                title={<h1>View Detail</h1>}
+                open={isDetailOpen}
+                okText="Edit"
+                cancelText="Delete"
+                onCancel={() => setIsDetailOpen(false)}
+            >
+                {selectedStaff && (
+                    <div className="w-full">
+                        <Space size="large" className="border-b w-full py-4">
+                            <Avatar
+                                src={selectedStaff.profileUrl}
+                                size="large"
+                                className="w-15! h-15!"
+                            />
+                            <Space vertical>
+                                <h1 className="text-xl font-semibold">
+                                    {selectedStaff.name}
+                                </h1>
+                                <p>{selectedStaff.staffId}</p>
+                            </Space>
+                        </Space>
+                        <Space vertical className="border-b w-full py-3">
+                            <p>Phone: {selectedStaff.phone}</p>
+                            <p>Email: {selectedStaff.email}</p>
+                            <p>DATE OF BIRTH: {selectedStaff.dob}</p>
+                        </Space>
+                        <Space vertical className="border-b w-full py-3 mb-10">
+                            <p>Customer Count: {selectedStaff.count}</p>
+                            <p>Rating: {selectedStaff.rating}</p>
+                        </Space>
+                    </div>
+                )}
+            </Modal>
+
+            <Modal
+                title={<h1>Terminate</h1>}
+                open={isTerminateOpen}
+                okText="Terminate"
+                okButtonProps={{ danger: true }}
+                onCancel={() => setIsTerminateOpen(false)}
+            >
+                {selectedStaff && (
+                    <>
+                        <Space size="large" className="w-full py-4">
+                            <Avatar
+                                src={selectedStaff.profileUrl}
+                                size="large"
+                                className="w-15! h-15!"
+                            />
+                            <Space vertical>
+                                <h1 className="text-xl font-semibold">
+                                    {selectedStaff.name}
+                                </h1>
+                                <p>{selectedStaff.staffId}</p>
+                            </Space>
+                        </Space>
+                        <p className="text-xl py-3 mb-5">
+                            Are you sure you want to terminate this staff?
+                        </p>
+                    </>
+                )}
+            </Modal>
         </div>
     );
 };
