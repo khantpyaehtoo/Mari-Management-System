@@ -1,5 +1,5 @@
 import { Table, Button, Space, Grid } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
 import { CheckOutlined, CloseOutlined, EyeOutlined } from "@ant-design/icons";
@@ -98,6 +98,33 @@ const data = [
 ];
 
 const { useBreakpoint } = Grid;
+
+const renderlists = [
+    "All",
+    "Pending",
+    "In Progress",
+    "Confirm",
+    "Completed",
+    "Reject",
+];
+const statusClasses = {
+    "In Progress": "text-progress",
+    Pending: "text-pending",
+    Confirm: "text-confirm",
+    Completed: "text-completed",
+    Available: "text-available",
+    Unavailable: "text-unavailable",
+    Reject: "text-unavailable",
+};
+// select dropdown filter section
+const options = renderlists.map((status) => ({
+    label: (
+        <span className={statusClasses[status] || "text-gray-500"}>
+            {status}
+        </span>
+    ),
+    value: status,
+}));
 
 const Booking = () => {
     const [searchText, setSearchText] = useState("");
@@ -240,49 +267,23 @@ const Booking = () => {
         },
     ];
 
-    // => show header list section
-    const renderlists = [
-        "Pending",
-        "In Progress",
-        "Confirm",
-        "Completed",
-        "Reject",
-    ];
-
     // => show header list item length section
-    const statusCounts = {
-        Pending: data?.filter((item) => item.status === "Pending").length || 0,
-        "In Progress":
-            data?.filter((item) => item.status === "In Progress").length || 0,
-        Completed:
-            data?.filter((item) => item.status === "Completed").length || 0,
-        Confirm: data?.filter((item) => item.status === "Confirm").length || 0,
-        Reject: data?.filter((item) => item.status === "Reject").length || 0,
-    };
-
-    // select dropdown filter section
-    const options = [
-        {
-            label: <span className="text-pending">Pending</span>,
-            value: "Pending",
-        },
-        {
-            label: <span className="text-progress">In Progress</span>,
-            value: "In Progress",
-        },
-        {
-            label: <span className="text-completed">Completed</span>,
-            value: "Completed",
-        },
-        {
-            label: <span className="text-confirm">Confirm</span>,
-            value: "Confirm",
-        },
-        {
-            label: <span className="text-unavailable">Reject</span>,
-            value: "Reject",
-        },
-    ];
+    const statusCounts = useMemo(() => {
+        return {
+            All: data?.filter((item) => item.status).length,
+            Pending:
+                data?.filter((item) => item.status === "Pending").length || 0,
+            "In Progress":
+                data?.filter((item) => item.status === "In Progress").length ||
+                0,
+            Completed:
+                data?.filter((item) => item.status === "Completed").length || 0,
+            Confirm:
+                data?.filter((item) => item.status === "Confirm").length || 0,
+            Reject:
+                data?.filter((item) => item.status === "Reject").length || 0,
+        };
+    }, []);
 
     const dateOptions = [
         { label: "Select Date", value: "date" },

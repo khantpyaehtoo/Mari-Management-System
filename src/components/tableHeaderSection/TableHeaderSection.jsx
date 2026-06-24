@@ -13,7 +13,11 @@ const TableHeaderSection = ({
 }) => {
     const handleChange = (value) => {
         console.log("clicked", value);
-        setFilterValue(value || null);
+        if (value === "All" || !value) {
+            setFilterValue(null);
+        } else {
+            setFilterValue(value);
+        }
     };
 
     const {
@@ -50,6 +54,7 @@ const TableHeaderSection = ({
                                 statusClasses[lists] || "text-gray-500",
                                 "hover:underline",
                             )}
+                            onClick={() => handleChange(lists)}
                         >
                             {lists} <span>{counts}</span>
                         </li>
@@ -68,7 +73,7 @@ const TableHeaderSection = ({
                         popupClassName="my-custom-popup"
                     />
                 ) : (
-                    <Space gap={4}>
+                    <Space size={4}>
                         {calendarFilterType === "date" && (
                             <DatePicker
                                 value={selectedDates}

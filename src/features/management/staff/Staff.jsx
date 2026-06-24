@@ -78,8 +78,31 @@ const STATIC_DATA = [
     },
 ];
 
-const renderlists = ["In Progress", "Completed", "Available", "Unavailable"];
-const options = renderlists.map((status) => ({ label: status, value: status }));
+const renderlists = [
+    "All",
+    "In Progress",
+    "Completed",
+    "Available",
+    "Unavailable",
+    "Terminate",
+];
+const statusClasses = {
+    "In Progress": "text-progress",
+    Pending: "text-pending",
+    Confirm: "text-confirm",
+    Completed: "text-completed",
+    Available: "text-available",
+    Unavailable: "text-unavailable",
+    Reject: "text-unavailable",
+};
+const options = renderlists.map((status) => ({
+    label: (
+        <span className={statusClasses[status] || "text-gray-500"}>
+            {status}
+        </span>
+    ),
+    value: status,
+}));
 
 const { useBreakpoint } = Grid;
 
@@ -100,14 +123,17 @@ const Staff = () => {
     // Derived State calculated only when data changes
     const statusCounts = useMemo(() => {
         return {
-            "In Progress": STATIC_DATA.filter(
+            All: STATIC_DATA?.length,
+            "In Progress": STATIC_DATA?.filter(
                 (item) => item.status === "In Progress",
             ).length,
-            Completed: STATIC_DATA.filter((item) => item.status === "Completed")
-                .length,
-            Available: STATIC_DATA.filter((item) => item.status === "Available")
-                .length,
-            Unavailable: STATIC_DATA.filter(
+            Completed: STATIC_DATA?.filter(
+                (item) => item.status === "Completed",
+            ).length,
+            Available: STATIC_DATA?.filter(
+                (item) => item.status === "Available",
+            ).length,
+            Unavailable: STATIC_DATA?.filter(
                 (item) => item.status === "Unavailable",
             ).length,
         };
@@ -141,7 +167,7 @@ const Staff = () => {
                     src={url}
                     width={40}
                     alt="profile"
-                    className="!rounded-md !shadow-sm"
+                    className="rounded-md! shadow-sm!"
                 />
             ),
         },
