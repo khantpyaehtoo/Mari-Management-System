@@ -18,6 +18,7 @@ import {
     MoreOutlined,
     UserOutlined,
 } from "@ant-design/icons";
+import StaffDetailModal from "./StaffDetailsModal";
 
 const STATIC_DATA = [
     {
@@ -107,6 +108,7 @@ const options = renderlists.map((status) => ({
 const { useBreakpoint } = Grid;
 
 const Staff = () => {
+    const [dataList, setDataList] = useState(STATIC_DATA);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [isTerminateOpen, setIsTerminateOpen] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState(null);
@@ -123,21 +125,19 @@ const Staff = () => {
     // Derived State calculated only when data changes
     const statusCounts = useMemo(() => {
         return {
-            All: STATIC_DATA?.length,
-            "In Progress": STATIC_DATA?.filter(
+            All: dataList?.length,
+            "In Progress": dataList?.filter(
                 (item) => item.status === "In Progress",
             ).length,
-            Completed: STATIC_DATA?.filter(
-                (item) => item.status === "Completed",
-            ).length,
-            Available: STATIC_DATA?.filter(
-                (item) => item.status === "Available",
-            ).length,
-            Unavailable: STATIC_DATA?.filter(
+            Completed: dataList?.filter((item) => item.status === "Completed")
+                .length,
+            Available: dataList?.filter((item) => item.status === "Available")
+                .length,
+            Unavailable: dataList?.filter(
                 (item) => item.status === "Unavailable",
             ).length,
         };
-    }, []);
+    }, [dataList]);
 
     const handleActionClick = (actionType, record) => {
         setSelectedStaff(record);
@@ -145,6 +145,28 @@ const Staff = () => {
             setIsDetailOpen(true);
         } else if (actionType === "terminate") {
             setIsTerminateOpen(true);
+        }
+    };
+
+    const handleSaveStaffDetail = async (updatedStaffFields) => {
+        try {
+            await editStaff(updatedStaffFields).unwrap();
+
+            setDataList((prevList) =>
+                prevList.map((item) =>
+                    item.key === updatedStaffFields.key
+                        ? { ...item, ...updatedStaffFields }
+                        : item,
+                ),
+            );
+
+            setSelectedStaff(updatedStaffFields);
+            console.log("Saved successfully!");
+        } catch (error) {
+            console.error(
+                "Failed to save changes onto backend database:",
+                error,
+            );
         }
     };
 
@@ -271,37 +293,11 @@ const Staff = () => {
         },
     ];
 
-    return (
-        <div>
-            <SubHeaderSection
-                setSearchText={setSearchText}
-                title="Staff"
-                subTitle="Manage your elite staff to unlock peak operational efficiency."
-                subFormTitle="Create your elite staff to unlock peak operational efficiency."
-                triggerCreate={createStaff}
-                triggerEdit={editStaff}
-            />
-            <TableHeaderSection
-                renderlists={renderlists}
-                options={options}
-                setFilterValue={setFilterValue}
-                statusCounts={statusCounts}
-            />
-            <div className="table-wrapper">
-                <Table
-                    dataSource={STATIC_DATA}
-                    columns={columns}
-                    scroll={{ x: scrollX }}
-                    bordered
-                />
-            </div>
-
-            <Modal
+    {
+        /* <Modal
                 title={<h1>View Detail</h1>}
                 open={isDetailOpen}
-                okText="Edit"
-                cancelText="Delete"
-                onCancel={() => setIsDetailOpen(false)}
+                footer={null}
             >
                 {selectedStaff && (
                     <div className="w-full">
@@ -327,9 +323,50 @@ const Staff = () => {
                             <p>Customer Count: {selectedStaff.count}</p>
                             <p>Rating: {selectedStaff.rating}</p>
                         </Space>
+                        <Space size="large">
+                            <Button className="bg-primary! p-5! rounded-lg! text-white! hover:bg-pink-200!">
+                                Edit
+                            </Button>
+                            <Button className="bg-red-500! p-5! rounded-lg! text-white! hover:bg-red-800!">
+                                Delete
+                            </Button>
+                        </Space>
                     </div>
                 )}
-            </Modal>
+            </Modal> */
+    }
+
+    return (
+        <div>
+            <SubHeaderSection
+                setSearchText={setSearchText}
+                title="Staff"
+                subTitle="Manage your elite staff to unlock peak operational efficiency."
+                subFormTitle="Create your elite staff to unlock peak operational efficiency."
+                triggerCreate={createStaff}
+                triggerEdit={editStaff}
+            />
+            <TableHeaderSection
+                renderlists={renderlists}
+                options={options}
+                setFilterValue={setFilterValue}
+                statusCounts={statusCounts}
+            />
+            <div className="table-wrapper">
+                <Table
+                    dataSource={STATIC_DATA}
+                    columns={columns}
+                    scroll={{ x: scrollX }}
+                    bordered
+                />
+            </div>
+
+            <StaffDetailModal
+                isDetailOpen={isDetailOpen}
+                handleClose={() => setIsDetailOpen(false)}
+                selectedStaff={selectedStaff}
+                onSave={handleSaveStaffDetail}
+            />
 
             <Modal
                 title={<h1>Terminate</h1>}

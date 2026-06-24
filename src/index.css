@@ -72,7 +72,6 @@ body {
     @apply border-black rounded-xl p-3 hover:shadow-md hover:border-primary focus-within:shadow-md focus-within:border-primary
 }
 
-
 /* ant otp input section */
 .ant-otp-input {
     border: 1px solid rgba(0, 0, 0, 0.39);
