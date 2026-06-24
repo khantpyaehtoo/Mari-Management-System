@@ -70,7 +70,9 @@ const TableHeaderSection = ({
                         value={calendarFilterType}
                         onChange={handleCalendarChange}
                         options={dateOptions}
-                        popupClassName="my-custom-popup"
+                        classNames={{
+                            popup: "my-custom-popup",
+                        }}
                     />
                 ) : (
                     <Space size={4}>

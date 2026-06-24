@@ -1,4 +1,13 @@
-import { Table, Button, Space, Grid } from "antd";
+import {
+    Table,
+    Button,
+    Space,
+    Grid,
+    Modal,
+    Typography,
+    Flex,
+    Input,
+} from "antd";
 import { useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
@@ -127,7 +136,13 @@ const options = renderlists.map((status) => ({
 }));
 
 const Booking = () => {
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [viewConfirmModal, setViewConfirmModal] = useState(false);
+    const [viewCancelModal, setViewCancelModal] = useState(false);
+
     const [searchText, setSearchText] = useState("");
+    const [selectedBooking, setSelectedBooking] = useState(null);
+
     const [filterValue, setFilterValue] = useState(null); // => Status
     const [calendarFilterType, setCalendarFilterType] = useState(null);
     const [selectedDates, setSelectedDates] = useState(null);
@@ -139,15 +154,16 @@ const Booking = () => {
 
     const scrollX = screens.xs ? undefined : "1500";
 
-    const handleRejectBtn = (row) => {
-        console.log("clicked reject", row.bookingId);
-    };
-    const handleConfirmBtn = (row) => {
-        console.log("clicked confirm", row.bookingId, row.serviceName);
-    };
-
-    const handleViewBtn = (row) => {
-        console.log("clicked view", row.bookingId, row.serviceName);
+    const handleActionBtn = (action, record) => {
+        setSelectedBooking(record);
+        console.log("clicked view", record.bookingId, record.serviceName);
+        if (action === "view") {
+            setIsViewModalOpen(true);
+        } else if (action === "confirm") {
+            setViewConfirmModal(true);
+        } else {
+            setViewCancelModal(true);
+        }
     };
 
     const columns = [
@@ -174,13 +190,13 @@ const Booking = () => {
                 return (
                     String(record.customerName)
                         .toLowerCase()
-                        .includes(value.toLowerCase()),
+                        .includes(value.toLowerCase()) ||
                     String(record.serviceName)
                         .toLowerCase()
-                        .includes(value.toLowerCase),
+                        .includes(value.toLowerCase()) ||
                     String(record.bookingId)
                         .toLowerCase()
-                        .includes(value.toLowerCase)
+                        .includes(value.toLowerCase())
                 );
             },
         },
@@ -243,13 +259,13 @@ const Booking = () => {
                 return record?.status === "Pending" ? (
                     <Space size="medium">
                         <Button
-                            onClick={() => handleRejectBtn(record)}
+                            onClick={() => handleActionBtn("cancel", record)}
                             className="editBtn! bg-red-500! text-white! hover:bg-red-700!"
                         >
                             <CloseOutlined />
                         </Button>
                         <Button
-                            onClick={() => handleConfirmBtn(record)}
+                            onClick={() => handleActionBtn("confirm", record)}
                             className="editBtn! bg-green-500! text-white! hover:bg-green-700!"
                         >
                             <CheckOutlined />
@@ -258,7 +274,7 @@ const Booking = () => {
                 ) : (
                     <Button
                         className="border-primary! rounded-2xl! hover:bg-primary! hover:text-white!"
-                        onClick={() => handleViewBtn(record)}
+                        onClick={() => handleActionBtn("view", record)}
                     >
                         <EyeOutlined /> View
                     </Button>
@@ -270,7 +286,7 @@ const Booking = () => {
     // => show header list item length section
     const statusCounts = useMemo(() => {
         return {
-            All: data?.filter((item) => item.status).length,
+            All: data?.length,
             Pending:
                 data?.filter((item) => item.status === "Pending").length || 0,
             "In Progress":
@@ -328,6 +344,156 @@ const Booking = () => {
                     bordered
                 />
             </div>
+
+            {selectedBooking && (
+                <>
+                    {/* view modal */}
+                    <Modal
+                        title={
+                            <h1>Booking Overview {selectedBooking.status}</h1>
+                        }
+                        open={isViewModalOpen}
+                        onCancel={() => setIsViewModalOpen(false)}
+                        footer={null}
+                    >
+                        <div className="w-full">
+                            <Space vertical className="w-full py-4">
+                                <p>
+                                    <span className="font-semibold">
+                                        Booking ID :
+                                    </span>{" "}
+                                    {selectedBooking.bookingId}
+                                </p>
+                                <p>
+                                    <span className="font-semibold">
+                                        Customer Name :
+                                    </span>{" "}
+                                    {selectedBooking.customerName}
+                                </p>
+                                <p>
+                                    <span className="font-semibold">
+                                        Phone :
+                                    </span>{" "}
+                                    {selectedBooking.phone}
+                                </p>
+                            </Space>
+                            <div className="w-full border-gray-400! border p-4 rounded-xl">
+                                <Typography.Title
+                                    level={3}
+                                    className="font-montserrat! font-medium! text-primary!"
+                                >
+                                    Appointment Details
+                                </Typography.Title>
+                                <ul className="border-b border-b-gray-400 px-7 pb-4 flex flex-col list-disc marker:text-primary marker:text-2xl">
+                                    <li>
+                                        {selectedBooking.date}.{" "}
+                                        {selectedBooking.bookedTime}
+                                    </li>
+                                    <li>{selectedBooking.staffName}</li>
+                                    <li>
+                                        {selectedBooking.serviceName} (
+                                        {selectedBooking.duringTime})
+                                    </li>
+                                </ul>
+                                <Flex
+                                    justify="space-between"
+                                    className="p-3! font-semibold!"
+                                >
+                                    <h3>Total Charges</h3>
+                                    <h3>{selectedBooking.price}</h3>
+                                </Flex>
+                            </div>
+                            {selectedBooking.status === "In Progress" && (
+                                <h2 className="text-xl font-medium text-red-600 text-center p-7">
+                                    You can’t cancel this booking.
+                                </h2>
+                            )}
+                            {selectedBooking.status === "Completed" && (
+                                <h2 className="text-xl font-medium text-green-600 text-center p-7">
+                                    Booking completed successfully.
+                                </h2>
+                            )}
+                            {selectedBooking.status === "Reject" && (
+                                <h2 className="text-xl font-medium text-red-600 text-center p-7">
+                                    Booking Rejected.
+                                </h2>
+                            )}
+                            {selectedBooking.status === "Confirm" && (
+                                <div className="flex justify-center my-6">
+                                    <Button className="w-full! h-10! bg-red-600! text-gray-200! rounded-lg! hover:shadow-md! hover:bg-red-800!">
+                                        Cancel Booking
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </Modal>
+
+                    {/* confirm modal */}
+                    <Modal
+                        title={
+                            <h1 className="text-xl text-primary">
+                                Confirm Booking?
+                            </h1>
+                        }
+                        open={viewConfirmModal}
+                        onCancel={() => setViewConfirmModal(false)}
+                        footer={null}
+                    >
+                        <Typography.Title
+                            level={5}
+                            className="font-medium! font-montserrat! my-10!"
+                        >
+                            Are you sure you want to confirm this booking?
+                        </Typography.Title>
+                        <Space size={13}>
+                            <Button
+                                className="bg-red-500! h-10! px-10! rounded-xl! text-white! hover:bg-red-800!"
+                                onClick={() => setViewConfirmModal(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button className="bg-green-500! h-10! px-10! rounded-xl! text-white! hover:bg-green-800!">
+                                Confirm
+                            </Button>
+                        </Space>
+                    </Modal>
+
+                    {/* cancel modal */}
+                    <Modal
+                        title={
+                            <h1 className="text-xl text-primary">
+                                Cancel Booking?
+                            </h1>
+                        }
+                        open={viewCancelModal}
+                        onCancel={() => setViewCancelModal(false)}
+                        footer={null}
+                    >
+                        <Typography.Title
+                            level={5}
+                            className="font-medium! font-montserrat!"
+                        >
+                            Are you sure you want to reject this booking?
+                        </Typography.Title>
+                        <Input.TextArea
+                            rows={4}
+                            className=" border! border-gray-300! rounded-xl! my-8! p-3!"
+                            placeholder="Enter reason for rejection…"
+                        />
+                        <Space size={13}>
+                            <Button
+                                className="bg-red-500! h-10! px-10! rounded-xl! text-white! hover:bg-red-800!"
+                                onClick={() => setViewCancelModal(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button className="bg-green-500! h-10! px-10! rounded-xl! text-white! hover:bg-green-800!">
+                                Confirm
+                            </Button>
+                        </Space>
+                    </Modal>
+                </>
+            )}
         </div>
     );
 };
