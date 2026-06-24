@@ -1,13 +1,4 @@
-import {
-    Table,
-    Button,
-    Space,
-    Grid,
-    Modal,
-    Typography,
-    Flex,
-    Input,
-} from "antd";
+import { Table, Button, Space, Grid } from "antd";
 import { useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
@@ -17,6 +8,9 @@ import {
     useUpdateBookingMutation,
 } from "./bookingApi";
 import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
+import ConfirmModal from "./ConfirmModal";
+import OverviewModal from "./OverviewModal";
+import CancelModal from "./CancelModal";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const data = [
@@ -347,151 +341,19 @@ const Booking = () => {
 
             {selectedBooking && (
                 <>
-                    {/* view modal */}
-                    <Modal
-                        title={
-                            <h1>Booking Overview {selectedBooking.status}</h1>
-                        }
-                        open={isViewModalOpen}
-                        onCancel={() => setIsViewModalOpen(false)}
-                        footer={null}
-                    >
-                        <div className="w-full">
-                            <Space vertical className="w-full py-4">
-                                <p>
-                                    <span className="font-semibold">
-                                        Booking ID :
-                                    </span>{" "}
-                                    {selectedBooking.bookingId}
-                                </p>
-                                <p>
-                                    <span className="font-semibold">
-                                        Customer Name :
-                                    </span>{" "}
-                                    {selectedBooking.customerName}
-                                </p>
-                                <p>
-                                    <span className="font-semibold">
-                                        Phone :
-                                    </span>{" "}
-                                    {selectedBooking.phone}
-                                </p>
-                            </Space>
-                            <div className="w-full border-gray-400! border p-4 rounded-xl">
-                                <Typography.Title
-                                    level={3}
-                                    className="font-montserrat! font-medium! text-primary!"
-                                >
-                                    Appointment Details
-                                </Typography.Title>
-                                <ul className="border-b border-b-gray-400 px-7 pb-4 flex flex-col list-disc marker:text-primary marker:text-2xl">
-                                    <li>
-                                        {selectedBooking.date}.{" "}
-                                        {selectedBooking.bookedTime}
-                                    </li>
-                                    <li>{selectedBooking.staffName}</li>
-                                    <li>
-                                        {selectedBooking.serviceName} (
-                                        {selectedBooking.duringTime})
-                                    </li>
-                                </ul>
-                                <Flex
-                                    justify="space-between"
-                                    className="p-3! font-semibold!"
-                                >
-                                    <h3>Total Charges</h3>
-                                    <h3>{selectedBooking.price}</h3>
-                                </Flex>
-                            </div>
-                            {selectedBooking.status === "In Progress" && (
-                                <h2 className="text-xl font-medium text-red-600 text-center p-7">
-                                    You can’t cancel this booking.
-                                </h2>
-                            )}
-                            {selectedBooking.status === "Completed" && (
-                                <h2 className="text-xl font-medium text-green-600 text-center p-7">
-                                    Booking completed successfully.
-                                </h2>
-                            )}
-                            {selectedBooking.status === "Reject" && (
-                                <h2 className="text-xl font-medium text-red-600 text-center p-7">
-                                    Booking Rejected.
-                                </h2>
-                            )}
-                            {selectedBooking.status === "Confirm" && (
-                                <div className="flex justify-center my-6">
-                                    <Button className="w-full! h-10! bg-red-600! text-gray-200! rounded-lg! hover:shadow-md! hover:bg-red-800!">
-                                        Cancel Booking
-                                    </Button>
-                                </div>
-                            )}
-                        </div>
-                    </Modal>
-
-                    {/* confirm modal */}
-                    <Modal
-                        title={
-                            <h1 className="text-xl text-primary">
-                                Confirm Booking?
-                            </h1>
-                        }
-                        open={viewConfirmModal}
-                        onCancel={() => setViewConfirmModal(false)}
-                        footer={null}
-                    >
-                        <Typography.Title
-                            level={5}
-                            className="font-medium! font-montserrat! my-10!"
-                        >
-                            Are you sure you want to confirm this booking?
-                        </Typography.Title>
-                        <Space size={13}>
-                            <Button
-                                className="bg-red-500! h-10! px-10! rounded-xl! text-white! hover:bg-red-800!"
-                                onClick={() => setViewConfirmModal(false)}
-                            >
-                                Cancel
-                            </Button>
-                            <Button className="bg-green-500! h-10! px-10! rounded-xl! text-white! hover:bg-green-800!">
-                                Confirm
-                            </Button>
-                        </Space>
-                    </Modal>
-
-                    {/* cancel modal */}
-                    <Modal
-                        title={
-                            <h1 className="text-xl text-primary">
-                                Cancel Booking?
-                            </h1>
-                        }
-                        open={viewCancelModal}
-                        onCancel={() => setViewCancelModal(false)}
-                        footer={null}
-                    >
-                        <Typography.Title
-                            level={5}
-                            className="font-medium! font-montserrat!"
-                        >
-                            Are you sure you want to reject this booking?
-                        </Typography.Title>
-                        <Input.TextArea
-                            rows={4}
-                            className=" border! border-gray-300! rounded-xl! my-8! p-3!"
-                            placeholder="Enter reason for rejection…"
-                        />
-                        <Space size={13}>
-                            <Button
-                                className="bg-red-500! h-10! px-10! rounded-xl! text-white! hover:bg-red-800!"
-                                onClick={() => setViewCancelModal(false)}
-                            >
-                                Cancel
-                            </Button>
-                            <Button className="bg-green-500! h-10! px-10! rounded-xl! text-white! hover:bg-green-800!">
-                                Confirm
-                            </Button>
-                        </Space>
-                    </Modal>
+                    <OverviewModal
+                        isViewModalOpen={isViewModalOpen}
+                        setIsViewModalOpen={setIsViewModalOpen}
+                        selectedBooking={selectedBooking}
+                    />
+                    <ConfirmModal
+                        viewConfirmModal={viewConfirmModal}
+                        setViewConfirmModal={setViewConfirmModal}
+                    />
+                    <CancelModal
+                        viewCancelModal={viewCancelModal}
+                        setViewCancelModal={setViewCancelModal}
+                    />
                 </>
             )}
         </div>
