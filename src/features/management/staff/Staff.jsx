@@ -1,17 +1,13 @@
-import {
-    Table,
-    Image,
-    Dropdown,
-    Space,
-    Grid,
-    Modal,
-    Button,
-    Avatar,
-} from "antd";
+import { Table, Image, Dropdown, Space, Grid, Button } from "antd";
 import { useState, useMemo } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
-import { useCreateStaffMutation, useUpdateStaffMutation } from "./staffApi";
+import {
+    useCreateStaffMutation,
+    useDeleteStaffMutation,
+    useTerminateStaffMutation,
+    useUpdateStaffMutation,
+} from "./staffApi";
 import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
 import {
     DisconnectOutlined,
@@ -19,6 +15,9 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import StaffDetailModal from "./StaffDetailsModal";
+import TerminateStaffModal from "./TerminateStaffModal";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../../app/core/notiSlice";
 
 const STATIC_DATA = [
     {
@@ -108,6 +107,7 @@ const options = renderlists.map((status) => ({
 const { useBreakpoint } = Grid;
 
 const Staff = () => {
+    const dispatch = useDispatch();
     const [dataList, setDataList] = useState(STATIC_DATA);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [isTerminateOpen, setIsTerminateOpen] = useState(false);
@@ -121,6 +121,8 @@ const Staff = () => {
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();
+    const [deleteStaff] = useDeleteStaffMutation();
+    const [terminateStaff] = useTerminateStaffMutation();
 
     // Derived State calculated only when data changes
     const statusCounts = useMemo(() => {
@@ -148,9 +150,62 @@ const Staff = () => {
         }
     };
 
-    const handleSaveStaffDetail = async (updatedStaffFields) => {
+    const handleTerminateStaff = async (staffId) => {
+        if (window.confirm(`Are you sure to terminate this ${staffId}`)) {
+            try {
+                await terminateStaff(staffId).unwrap();
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Deleted successfully.",
+                    }),
+                );
+            } catch (error) {
+                const errorMessage =
+                    error?.data?.message ||
+                    error?.error ||
+                    "Error while Terminate";
+
+                dispatch(
+                    setMessage({
+                        msgType: "error",
+                        msgContent: errorMessage,
+                    }),
+                );
+            }
+        }
+    };
+
+    const handleDeleteStaff = async (staffId) => {
+        if (window.confirm(`Are you sure to delete this ${staffId}`)) {
+            try {
+                await deleteStaff(staffId).unwrap();
+
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Deleted successfully.",
+                    }),
+                );
+            } catch (error) {
+                const errorMessage =
+                    error?.data?.message ||
+                    error?.error ||
+                    "Error while deleteing";
+
+                dispatch(
+                    setMessage({
+                        msgType: "error",
+                        msgContent: errorMessage,
+                    }),
+                );
+            }
+        }
+    };
+
+    const handleSaveStaffDetail = async (staffId, updatedStaffFields) => {
         try {
-            await editStaff(updatedStaffFields).unwrap();
+            await editStaff(staffId, updatedStaffFields).unwrap();
 
             setDataList((prevList) =>
                 prevList.map((item) =>
@@ -161,7 +216,7 @@ const Staff = () => {
             );
 
             setSelectedStaff(updatedStaffFields);
-            console.log("Saved successfully!");
+            console.log("Saved successfully!", staffId, updatedStaffFields);
         } catch (error) {
             console.error(
                 "Failed to save changes onto backend database:",
@@ -293,49 +348,6 @@ const Staff = () => {
         },
     ];
 
-    {
-        /* <Modal
-                title={<h1>View Detail</h1>}
-                open={isDetailOpen}
-                footer={null}
-            >
-                {selectedStaff && (
-                    <div className="w-full">
-                        <Space size="large" className="border-b w-full py-4">
-                            <Avatar
-                                src={selectedStaff.profileUrl}
-                                size="large"
-                                className="w-15! h-15!"
-                            />
-                            <Space vertical>
-                                <h1 className="text-xl font-semibold">
-                                    {selectedStaff.name}
-                                </h1>
-                                <p>{selectedStaff.staffId}</p>
-                            </Space>
-                        </Space>
-                        <Space vertical className="border-b w-full py-3">
-                            <p>Phone: {selectedStaff.phone}</p>
-                            <p>Email: {selectedStaff.email}</p>
-                            <p>DATE OF BIRTH: {selectedStaff.dob}</p>
-                        </Space>
-                        <Space vertical className="border-b w-full py-3 mb-10">
-                            <p>Customer Count: {selectedStaff.count}</p>
-                            <p>Rating: {selectedStaff.rating}</p>
-                        </Space>
-                        <Space size="large">
-                            <Button className="bg-primary! p-5! rounded-lg! text-white! hover:bg-pink-200!">
-                                Edit
-                            </Button>
-                            <Button className="bg-red-500! p-5! rounded-lg! text-white! hover:bg-red-800!">
-                                Delete
-                            </Button>
-                        </Space>
-                    </div>
-                )}
-            </Modal> */
-    }
-
     return (
         <div>
             <SubHeaderSection
@@ -365,37 +377,18 @@ const Staff = () => {
                 isDetailOpen={isDetailOpen}
                 handleClose={() => setIsDetailOpen(false)}
                 selectedStaff={selectedStaff}
-                onSave={handleSaveStaffDetail}
+                onSave={(staffId, updatedStaffFields) =>
+                    handleSaveStaffDetail(staffId, updatedStaffFields)
+                }
+                onDelete={(staffId) => handleDeleteStaff(staffId)}
             />
 
-            <Modal
-                title={<h1>Terminate</h1>}
-                open={isTerminateOpen}
-                okText="Terminate"
-                okButtonProps={{ danger: true }}
-                onCancel={() => setIsTerminateOpen(false)}
-            >
-                {selectedStaff && (
-                    <>
-                        <Space size="large" className="w-full py-4">
-                            <Avatar
-                                src={selectedStaff.profileUrl}
-                                size="large"
-                                className="w-15! h-15!"
-                            />
-                            <Space vertical>
-                                <h1 className="text-xl font-semibold">
-                                    {selectedStaff.name}
-                                </h1>
-                                <p>{selectedStaff.staffId}</p>
-                            </Space>
-                        </Space>
-                        <p className="text-xl py-3 mb-5">
-                            Are you sure you want to terminate this staff?
-                        </p>
-                    </>
-                )}
-            </Modal>
+            <TerminateStaffModal
+                isTerminateOpen={isTerminateOpen}
+                handleClose={() => setIsTerminateOpen(false)}
+                selectedStaff={selectedStaff}
+                onTerminate={(staffId) => handleTerminateStaff(staffId)}
+            />
         </div>
     );
 };

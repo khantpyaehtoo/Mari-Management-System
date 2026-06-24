@@ -27,6 +27,13 @@ const StaffDetailModal = ({
         form.resetFields();
     };
 
+    const handleDelete = () => {
+        if (onDelete) {
+            onDelete(selectedStaff.staffId);
+        }
+        handleClose();
+    };
+
     const handleSave = async () => {
         try {
             const values = await form.validateFields();
@@ -130,7 +137,6 @@ const StaffDetailModal = ({
                         </div>
                     </Space>
 
-                    {/* Metrics Section - Read Only (Always Static) */}
                     <Space
                         vertical
                         className="border-b w-full py-3 mb-10"
@@ -177,9 +183,7 @@ const StaffDetailModal = ({
                                     Edit
                                 </Button>
                                 <Button
-                                    onClick={() =>
-                                        onDelete?.(selectedStaff.staffId)
-                                    }
+                                    onClick={handleDelete}
                                     className="bg-red-500! p-5! rounded-lg! text-white! hover:bg-red-800!"
                                 >
                                     Delete

@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
 
 const randomNumber = Math.floor(Math.random() * 1000);
-const data = [
+const STATIC_DATA = [
     {
         key: 1,
         bookingId: `BK-${String(randomNumber * 5).padStart(4, "0")}`,
@@ -132,6 +132,7 @@ const options = renderlists.map((status) => ({
 }));
 
 const Booking = () => {
+    const [dataList, setDataList] = useState(STATIC_DATA);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewConfirmModal, setViewConfirmModal] = useState(false);
     const [viewCancelModal, setViewCancelModal] = useState(false);
@@ -167,10 +168,18 @@ const Booking = () => {
         try {
             await updateBooking({ id: bookingId }).unwrap();
 
+            setDataList((prev) =>
+                prev.map((item) =>
+                    item.id === bookingId
+                        ? { ...item, status: "Confirmed" }
+                        : item,
+                ),
+            );
+
             dispatch(
                 setMessage({
                     msgType: "success",
-                    msgContent: "Booking assign successfully.",
+                    msgContent: "Booking assigned successfully.",
                 }),
             );
         } catch (error) {
@@ -342,20 +351,24 @@ const Booking = () => {
     // => show header list item length section
     const statusCounts = useMemo(() => {
         return {
-            All: data?.length,
+            All: dataList?.length,
             Pending:
-                data?.filter((item) => item.status === "Pending").length || 0,
-            "In Progress":
-                data?.filter((item) => item.status === "In Progress").length ||
+                dataList?.filter((item) => item.status === "Pending").length ||
                 0,
+            "In Progress":
+                dataList?.filter((item) => item.status === "In Progress")
+                    .length || 0,
             Completed:
-                data?.filter((item) => item.status === "Completed").length || 0,
+                dataList?.filter((item) => item.status === "Completed")
+                    .length || 0,
             Confirm:
-                data?.filter((item) => item.status === "Confirm").length || 0,
+                dataList?.filter((item) => item.status === "Confirm").length ||
+                0,
             Reject:
-                data?.filter((item) => item.status === "Reject").length || 0,
+                dataList?.filter((item) => item.status === "Reject").length ||
+                0,
         };
-    }, []);
+    }, [dataList]);
 
     const dateOptions = [
         { label: "Select Date", value: "date" },
@@ -393,7 +406,7 @@ const Booking = () => {
             <div className="table-wrapper">
                 <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={dataList}
                     scroll={{ x: scrollX }}
                     bordered
                 />
