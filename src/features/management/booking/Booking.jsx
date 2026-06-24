@@ -4,6 +4,7 @@ import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSect
 import { cn } from "../../../lib/utils";
 import { CheckOutlined, CloseOutlined, EyeOutlined } from "@ant-design/icons";
 import {
+    useCancelBookingMutation,
     useCreateBookingMutation,
     useUpdateBookingMutation,
 } from "./bookingApi";
@@ -145,6 +146,7 @@ const Booking = () => {
 
     const [createBooking] = useCreateBookingMutation();
     const [updateBooking] = useUpdateBookingMutation();
+    const [cancelBooking] = useCancelBookingMutation();
 
     const scrollX = screens.xs ? undefined : "1500";
 
@@ -157,6 +159,24 @@ const Booking = () => {
             setViewConfirmModal(true);
         } else {
             setViewCancelModal(true);
+        }
+    };
+
+    const handleBookingStatusChange = async (bookingId, reason, actionType) => {
+        try {
+            console.log(
+                `Cancelling booking ${bookingId} for reason: ${reason}`,
+            );
+
+            await cancelBooking({
+                id: bookingId,
+                cancelReason: reason,
+                actionType,
+            }).unwrap();
+
+            alert("Booking successfully cancelled!");
+        } catch (error) {
+            console.error("Failed to cancel booking:", error);
         }
     };
 
@@ -345,14 +365,21 @@ const Booking = () => {
                         isViewModalOpen={isViewModalOpen}
                         setIsViewModalOpen={setIsViewModalOpen}
                         selectedBooking={selectedBooking}
+                        onConfirmCancel={(id) =>
+                            handleBookingStatusChange(id, "CANCEL")
+                        }
                     />
                     <ConfirmModal
                         viewConfirmModal={viewConfirmModal}
                         setViewConfirmModal={setViewConfirmModal}
                     />
                     <CancelModal
+                        selectedBooking={selectedBooking}
                         viewCancelModal={viewCancelModal}
                         setViewCancelModal={setViewCancelModal}
+                        onConfirmReject={(id, reason) =>
+                            handleBookingStatusChange(id, reason, "REJECT")
+                        }
                     />
                 </>
             )}

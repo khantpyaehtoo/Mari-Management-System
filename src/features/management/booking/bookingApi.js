@@ -11,29 +11,19 @@ export const bookingApi = baseApi.injectEndpoints({
             providesTags: ["booking"],
         }),
 
-        createBooking: builder.mutation({
-            query: (body) => ({
-                url: `${bookingEndPoint}`,
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["booking"],
-        }),
-
         updateBooking: builder.mutation({
-            query: ({ getAllBooking }) => ({
-                url: `${bookingEndPoint}`,
-                method: "PUT",
-                body: getAllBooking,
+            query: ({ bookingId }) => ({
+                url: `${bookingEndPoint}/${bookingId}`,
+                method: "POST",
             }),
             invalidatesTags: ["booking"],
         }),
 
-        deleteBooking: builder.mutation({
-            query: ({ getAllBooking }) => ({
-                url: `${bookingEndPoint}`,
-                method: "DELETE",
-                body: getAllBooking,
+        cancelBooking: builder.mutation({
+            query: ({ bookingId, reason, actionType }) => ({
+                url: `${bookingEndPoint}/${bookingId}/${actionType}`,
+                method: "POST",
+                body: { reason },
             }),
             invalidatesTags: ["booking"],
         }),
@@ -44,5 +34,6 @@ export const {
     useCreateBookingMutation,
     useGetAllBookingQuery,
     useUpdateBookingMutation,
+    useCancelBookingMutation,
     useDeleteBookingMutation,
 } = bookingApi;
