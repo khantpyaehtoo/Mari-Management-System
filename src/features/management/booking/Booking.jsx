@@ -262,11 +262,26 @@ const Booking = () => {
 
     // select dropdown filter section
     const options = [
-        { label: "Pending", value: "Pending" },
-        { label: "In Progress", value: "In Progress" },
-        { label: "Completed", value: "Completed" },
-        { label: "Confirm", value: "Confirm" },
-        { label: "Reject", value: "Reject" },
+        {
+            label: <span className="text-pending">Pending</span>,
+            value: "Pending",
+        },
+        {
+            label: <span className="text-progress">In Progress</span>,
+            value: "In Progress",
+        },
+        {
+            label: <span className="text-completed">Completed</span>,
+            value: "Completed",
+        },
+        {
+            label: <span className="text-confirm">Confirm</span>,
+            value: "Confirm",
+        },
+        {
+            label: <span className="text-unavailable">Reject</span>,
+            value: "Reject",
+        },
     ];
 
     const dateOptions = [

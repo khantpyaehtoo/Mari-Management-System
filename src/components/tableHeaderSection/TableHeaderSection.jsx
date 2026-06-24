@@ -61,7 +61,7 @@ const TableHeaderSection = ({
                     <Select
                         allowClear
                         placeholder={<DateTimeFormatter />}
-                        style={{ width: 200 }}
+                        style={{ width: 200, borderRadius: 10 }}
                         value={calendarFilterType}
                         onChange={handleCalendarChange}
                         options={dateOptions}
@@ -74,6 +74,7 @@ const TableHeaderSection = ({
                                 value={selectedDates}
                                 onChange={(date) => setSelectedDates(date)}
                                 autoFocus
+                                className="rounded-xl!"
                             />
                         )}
                         {calendarFilterType === "range" && (
@@ -81,6 +82,7 @@ const TableHeaderSection = ({
                                 value={selectedDates}
                                 onChange={(dates) => setSelectedDates(dates)}
                                 autoFocus
+                                className="rounded-xl!"
                             />
                         )}
                         {calendarFilterType === "month" && (
@@ -89,6 +91,7 @@ const TableHeaderSection = ({
                                 onChange={(date) => setSelectedDates(date)}
                                 picker="month"
                                 autoFocus
+                                className="rounded-xl!"
                             />
                         )}
                         {dateOptions && calendarFilterType && (

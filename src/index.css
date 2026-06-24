@@ -98,8 +98,9 @@ body {
 .my-custom-popup .ant-select-item:hover{
     color: var(--primary-pink);
     border: 1px solid var(--primary-pink);
+    background: white !important;
 }
-.my-custom-popup .ant-select-item-option:active {
+.ant-select-item-option-active{
     border: 1px solid black;
     background: white !important;
 }
