@@ -49,7 +49,8 @@ const CancelModal = ({
                     Cancel
                 </Button>
                 <Button
-                    className="bg-green-500! h-10! px-10! rounded-xl! text-white! hover:bg-green-800!"
+                    className="bg-green-400! disabled:bg-gray-300! h-10! px-10! rounded-xl! text-white!"
+                    disabled={!cancelReason.trim()}
                     onClick={handleConfirmReject}
                 >
                     Confirm

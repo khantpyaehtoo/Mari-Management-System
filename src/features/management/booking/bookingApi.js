@@ -20,8 +20,8 @@ export const bookingApi = baseApi.injectEndpoints({
         }),
 
         cancelBooking: builder.mutation({
-            query: ({ bookingId, reason, actionType }) => ({
-                url: `${bookingEndPoint}/${bookingId}/${actionType}`,
+            query: ({ id, reason, actionType }) => ({
+                url: `${bookingEndPoint}/${id}/${actionType}`,
                 method: "POST",
                 body: { reason },
             }),
@@ -31,9 +31,7 @@ export const bookingApi = baseApi.injectEndpoints({
 });
 
 export const {
-    useCreateBookingMutation,
     useGetAllBookingQuery,
     useUpdateBookingMutation,
     useCancelBookingMutation,
-    useDeleteBookingMutation,
 } = bookingApi;

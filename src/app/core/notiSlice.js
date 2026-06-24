@@ -22,6 +22,7 @@ export const notiSlice = createSlice({
             state.message = {
                 msgType: null,
                 msgContent: null,
+                duration: 10,
             };
         },
         setAlert: (state, { payload }) => {

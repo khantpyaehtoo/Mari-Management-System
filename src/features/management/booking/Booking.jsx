@@ -5,13 +5,14 @@ import { cn } from "../../../lib/utils";
 import { CheckOutlined, CloseOutlined, EyeOutlined } from "@ant-design/icons";
 import {
     useCancelBookingMutation,
-    useCreateBookingMutation,
     useUpdateBookingMutation,
 } from "./bookingApi";
 import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
 import ConfirmModal from "./ConfirmModal";
 import OverviewModal from "./OverviewModal";
 import CancelModal from "./CancelModal";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../../app/core/notiSlice";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const data = [
@@ -135,6 +136,7 @@ const Booking = () => {
     const [viewConfirmModal, setViewConfirmModal] = useState(false);
     const [viewCancelModal, setViewCancelModal] = useState(false);
 
+    const dispatch = useDispatch();
     const [searchText, setSearchText] = useState("");
     const [selectedBooking, setSelectedBooking] = useState(null);
 
@@ -144,7 +146,6 @@ const Booking = () => {
 
     const screens = useBreakpoint();
 
-    const [createBooking] = useCreateBookingMutation();
     const [updateBooking] = useUpdateBookingMutation();
     const [cancelBooking] = useCancelBookingMutation();
 
@@ -162,6 +163,31 @@ const Booking = () => {
         }
     };
 
+    const handleConfirmBtn = async (bookingId) => {
+        try {
+            await updateBooking({ id: bookingId }).unwrap();
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Booking assign successfully.",
+                }),
+            );
+        } catch (error) {
+            const errorMessage =
+                error?.data?.message ||
+                error?.error ||
+                "Error while confirming";
+
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
+        }
+    };
+
     const handleBookingStatusChange = async (bookingId, reason, actionType) => {
         try {
             console.log(
@@ -170,12 +196,28 @@ const Booking = () => {
 
             await cancelBooking({
                 id: bookingId,
-                cancelReason: reason,
+                reason,
                 actionType,
             }).unwrap();
 
-            alert("Booking successfully cancelled!");
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Booking successfully cancelled!",
+                }),
+            );
         } catch (error) {
+            const errorMessage =
+                error?.data?.message ||
+                error?.error ||
+                "Failed to cancel booking";
+
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
             console.error("Failed to cancel booking:", error);
         }
     };
@@ -339,8 +381,6 @@ const Booking = () => {
                 subTitle={
                     "Manage, track, and update all salon customer appointments."
                 }
-                triggerCreate={createBooking}
-                triggerEdit={updateBooking}
             />
             <TableHeaderSection
                 renderlists={renderlists}
@@ -372,6 +412,8 @@ const Booking = () => {
                     <ConfirmModal
                         viewConfirmModal={viewConfirmModal}
                         setViewConfirmModal={setViewConfirmModal}
+                        handleConfirmBtn={handleConfirmBtn}
+                        selectedBooking={selectedBooking}
                     />
                     <CancelModal
                         selectedBooking={selectedBooking}
