@@ -51,7 +51,7 @@ const Services = () => {
 
     const categories = [
         {
-            key: "/packages",
+            key: "/category-packages",
             title: "Packages",
         },
         {
@@ -97,8 +97,8 @@ const Services = () => {
             />
 
             <Row gutter={[16, 16]} className="mt-10!">
-                {categories.map((item) => (
-                    <Col span={6}>
+                {categories.map((item, index) => (
+                    <Col span={6} key={index}>
                         <Link to={item.key}>
                             <Card
                                 className={cn(
@@ -106,7 +106,7 @@ const Services = () => {
                                         item.title === "All Services"
                                         ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
                                         : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
-                                    "py-3! rounded-xl! border-primary! border-2! hover:shadow-md!",
+                                    "py-3! rounded-xl! border-primary! border-2! duration-200! hover:shadow-md!",
                                 )}
                             >
                                 <h1 className="w-auto text-2xl text-center">

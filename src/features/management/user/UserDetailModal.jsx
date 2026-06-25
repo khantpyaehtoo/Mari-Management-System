@@ -75,8 +75,9 @@ const UserDetailModal = ({
                 </Flex>
 
                 <div className="grid-items-2 mt-5 mx-auto">
-                    {customerDetailCardItem.map((item) => (
+                    {customerDetailCardItem.map((item, index) => (
                         <Card
+                            key={index}
                             className="rounded-xl! border-2! border-gray-300"
                             style={{ width: 200 }}
                         >
