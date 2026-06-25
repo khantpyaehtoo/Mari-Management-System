@@ -42,9 +42,21 @@ body {
     @apply p-3 border-b;
 }
 
+
+
 /* gird style col 2 */
 @utility grid-items {
    @apply grid lg:grid-cols-2 gap-3 md:grid-cols-1;
+}
+
+/* Customer View Grid Wrapper Container */
+@utility customer-grid-wrapper {
+   @apply bg-white-back p-5 rounded-xl border-gray-300 border-2;
+}
+
+/* Customer View Grid */
+@utility grid-items-2 {
+   @apply grid grid-cols-2 gap-5;
 }
 
 /* grid style cols 4*/

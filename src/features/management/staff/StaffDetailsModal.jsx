@@ -164,7 +164,7 @@ const StaffDetailModal = ({
                                 <Button
                                     type="primary"
                                     onClick={handleSave}
-                                    className="bg-primary! p-5! rounded-lg! text-white!"
+                                    className="p-5! rounded-lg! text-white!"
                                 >
                                     Save
                                 </Button>
@@ -178,8 +178,9 @@ const StaffDetailModal = ({
                         ) : (
                             <>
                                 <Button
+                                    type="primary"
                                     onClick={() => setIsEditing(true)}
-                                    className="bg-primary! p-5! rounded-lg! text-white! hover:bg-pink-200!"
+                                    className="p-5! rounded-lg! text-white!"
                                 >
                                     Edit
                                 </Button>

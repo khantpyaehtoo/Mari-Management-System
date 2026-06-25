@@ -23,7 +23,7 @@ const staffApi = baseApi.injectEndpoints({
         updateStaff: builder.mutation({
             query: ({ staffId, updatedStaffFields }) => ({
                 url: `${staffEndPoint}/${staffId}`,
-                method: "PATCH",
+                method: "PUT",
                 body: updatedStaffFields,
             }),
             invalidatesTags: ["staffs"],

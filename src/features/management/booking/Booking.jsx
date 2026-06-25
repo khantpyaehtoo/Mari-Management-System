@@ -1,5 +1,5 @@
 import { Table, Button, Space, Grid } from "antd";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
 import { CheckOutlined, CloseOutlined, EyeOutlined } from "@ant-design/icons";
@@ -152,7 +152,7 @@ const Booking = () => {
 
     const scrollX = screens.xs ? undefined : "1500";
 
-    const handleActionBtn = (action, record) => {
+    const handleActionBtn = useCallback((action, record) => {
         setSelectedBooking(record);
         console.log("clicked view", record.bookingId, record.serviceName);
         if (action === "view") {
@@ -162,7 +162,7 @@ const Booking = () => {
         } else {
             setViewCancelModal(true);
         }
-    };
+    }, []);
 
     const handleConfirmBtn = async (bookingId) => {
         try {
@@ -231,122 +231,129 @@ const Booking = () => {
         }
     };
 
-    const columns = [
-        {
-            title: "No.",
-            render: (_, __, index) => <p>{index + 1}</p>,
-        },
-        {
-            title: "Booking Id",
-            dataIndex: "bookingId",
-            key: "bookingId",
-        },
-        {
-            title: "Service Name",
-            dataIndex: "serviceName",
-            key: "serviceName",
-        },
-        {
-            title: "Customer Name",
-            dataIndex: "customerName",
-            key: "customerName",
-            filteredValue: searchText ? [searchText] : null,
-            onFilter: (value, record) => {
-                return (
-                    String(record.customerName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.serviceName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.bookingId)
-                        .toLowerCase()
-                        .includes(value.toLowerCase())
-                );
+    const columns = useMemo(
+        () => [
+            {
+                title: "No.",
+                render: (_, __, index) => <p>{index + 1}</p>,
             },
-        },
-        {
-            title: "Price",
-            dataIndex: "price",
-            key: "price",
-        },
-        {
-            title: "Booked Time",
-            dataIndex: "bookedTime",
-            key: "bookedTime",
-        },
-        {
-            title: "Date",
-            dataIndex: "date",
-            key: "date",
-        },
-        {
-            title: "During Time",
-            dataIndex: "duringTime",
-            key: "duringTime",
-        },
-        {
-            title: "Staff Name",
-            dataIndex: "staffName",
-            key: "staffName",
-        },
-        {
-            title: "Status",
-            dataIndex: "status",
-            key: "status",
-            filteredValue: filterValue ? [filterValue] : null,
-            onFilter: (value, record) => record.status === value,
-            render: (status) => {
-                const statusClasses = {
-                    Pending: "text-pending",
-                    "In Progress": "text-progress",
-                    Confirm: "text-confirm",
-                    Completed: "text-completed",
-                    Reject: "text-unavailable",
-                };
-                return (
-                    <p
-                        className={cn(
-                            "font-medium",
-                            statusClasses[status] || "text-gray-500",
-                        )}
-                    >
-                        {status}
-                    </p>
-                );
+            {
+                title: "Booking Id",
+                dataIndex: "bookingId",
+                key: "bookingId",
             },
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (record) => {
-                // console.log(record?.status);
-                return record?.status === "Pending" ? (
-                    <Space size="medium">
-                        <Button
-                            onClick={() => handleActionBtn("cancel", record)}
-                            className="editBtn! bg-red-500! text-white! hover:bg-red-700!"
+            {
+                title: "Service Name",
+                dataIndex: "serviceName",
+                key: "serviceName",
+            },
+            {
+                title: "Customer Name",
+                dataIndex: "customerName",
+                key: "customerName",
+                filteredValue: searchText ? [searchText] : null,
+                onFilter: (value, record) => {
+                    return (
+                        String(record.customerName)
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        String(record.serviceName)
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        String(record.bookingId)
+                            .toLowerCase()
+                            .includes(value.toLowerCase())
+                    );
+                },
+            },
+            {
+                title: "Price",
+                dataIndex: "price",
+                key: "price",
+            },
+            {
+                title: "Booked Time",
+                dataIndex: "bookedTime",
+                key: "bookedTime",
+            },
+            {
+                title: "Date",
+                dataIndex: "date",
+                key: "date",
+            },
+            {
+                title: "During Time",
+                dataIndex: "duringTime",
+                key: "duringTime",
+            },
+            {
+                title: "Staff Name",
+                dataIndex: "staffName",
+                key: "staffName",
+            },
+            {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+                filteredValue: filterValue ? [filterValue] : null,
+                onFilter: (value, record) => record.status === value,
+                render: (status) => {
+                    const statusClasses = {
+                        Pending: "text-pending",
+                        "In Progress": "text-progress",
+                        Confirm: "text-confirm",
+                        Completed: "text-completed",
+                        Reject: "text-unavailable",
+                    };
+                    return (
+                        <p
+                            className={cn(
+                                "font-medium",
+                                statusClasses[status] || "text-gray-500",
+                            )}
                         >
-                            <CloseOutlined />
-                        </Button>
-                        <Button
-                            onClick={() => handleActionBtn("confirm", record)}
-                            className="editBtn! bg-green-500! text-white! hover:bg-green-700!"
-                        >
-                            <CheckOutlined />
-                        </Button>
-                    </Space>
-                ) : (
-                    <Button
-                        className="border-primary! rounded-2xl! hover:bg-primary! hover:text-white!"
-                        onClick={() => handleActionBtn("view", record)}
-                    >
-                        <EyeOutlined /> View
-                    </Button>
-                );
+                            {status}
+                        </p>
+                    );
+                },
             },
-        },
-    ];
+            {
+                title: "Action",
+                key: "action",
+                render: (record) => {
+                    // console.log(record?.status);
+                    return record?.status === "Pending" ? (
+                        <Space size="medium">
+                            <Button
+                                onClick={() =>
+                                    handleActionBtn("cancel", record)
+                                }
+                                className="editBtn! bg-red-500! text-white! hover:bg-red-700!"
+                            >
+                                <CloseOutlined />
+                            </Button>
+                            <Button
+                                onClick={() =>
+                                    handleActionBtn("confirm", record)
+                                }
+                                className="editBtn! bg-green-500! text-white! hover:bg-green-700!"
+                            >
+                                <CheckOutlined />
+                            </Button>
+                        </Space>
+                    ) : (
+                        <Button
+                            className="border-primary! rounded-2xl! hover:bg-primary! hover:text-white!"
+                            onClick={() => handleActionBtn("view", record)}
+                        >
+                            <EyeOutlined /> View
+                        </Button>
+                    );
+                },
+            },
+        ],
+        [searchText, filterValue, handleActionBtn],
+    );
 
     // => show header list item length section
     const statusCounts = useMemo(() => {

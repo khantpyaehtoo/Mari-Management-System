@@ -56,7 +56,7 @@ const Services = () => {
     const columns = [
         {
             title: "No.",
-            render: (_, value, index) => <p> {index + 1} </p>,
+            render: (_, __, index) => <p> {index + 1} </p>,
         },
         {
             title: "Service Name",
@@ -110,7 +110,7 @@ const Services = () => {
                     </Button>
                     <Button
                         className="deleteBtn!"
-                        onClick={() => deleteBtn(row.id, row.name)}
+                        onClick={() => deleteBtn(row.key, row.name)}
                     >
                         <Trash2 size={18} />
                     </Button>
