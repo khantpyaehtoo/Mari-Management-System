@@ -117,10 +117,12 @@ const dummyData = [
 ];
 const User = () => {
     const dispatch = useDispatch();
+
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+
     const [viewModalOpen, setViewModalOpen] = useState(false);
-    const [selectedCustomer, setSelectedCustomer] = useState("");
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";

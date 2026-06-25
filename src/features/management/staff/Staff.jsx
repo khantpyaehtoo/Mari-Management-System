@@ -108,6 +108,7 @@ const { useBreakpoint } = Grid;
 
 const Staff = () => {
     const dispatch = useDispatch();
+
     const [dataList, setDataList] = useState(STATIC_DATA);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [isTerminateOpen, setIsTerminateOpen] = useState(false);

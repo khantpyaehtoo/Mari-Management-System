@@ -1,25 +1,21 @@
-import { Space, Table, Button, Grid } from "antd";
-import { Edit, Trash2 } from "lucide-react";
+import { Card, Col, Row } from "antd";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
     useCreateServiceMutation,
-    useDeleteServiceMutation,
-    useGetServicesDataQuery,
     useUpdateServiceMutation,
 } from "./servicesApi";
-import { useSelector } from "react-redux";
+import { cn } from "../../../lib/utils";
+// import { useSelector } from "react-redux";
 
-const { useBreakpoint } = Grid;
 const Services = () => {
-    const { token } = useSelector((state) => state?.auth);
-    const [searchText, setSearchText] = useState("");
+    // const { token } = useSelector((state) => state?.auth);
+    const [createCategoryInput, setCreateCategoryInput] = useState("");
+    // const nav = useNavigate();
 
-    const screens = useBreakpoint();
-    const scrollX = screens.xs ? undefined : "1500";
-
-    const { data: servicesData } = useGetServicesDataQuery();
-    const [deleteService] = useDeleteServiceMutation();
+    // const { data: servicesData } = useGetServicesDataQuery();
+    // const [deleteService] = useDeleteServiceMutation();
     const [createService] = useCreateServiceMutation();
     const [editService] = useUpdateServiceMutation();
 
@@ -33,98 +29,65 @@ const Services = () => {
         setIsEdit(false);
     };
 
-    const handleEditBtn = (service) => {
-        setSelectedService(service);
-        setIsEdit(true);
-        setIsFormOpen(true);
-    };
+    // const handleEditBtn = (service) => {
+    //     setSelectedService(service);
+    //     setIsEdit(true);
+    //     setIsFormOpen(true);
+    // };
 
-    const deleteBtn = async (id, name) => {
-        if (window.confirm(`Are you sure to delete this ${name}?`)) {
-            try {
-                await deleteService({
-                    id,
-                    token,
-                }).unwrap();
-            } catch (error) {
-                console.error("Delete failed:", error);
-                alert("Something went wrong while deleting!");
-            }
-        }
-    };
+    // const deleteBtn = async (id, name) => {
+    //     if (window.confirm(`Are you sure to delete this ${name}?`)) {
+    //         try {
+    //             await deleteService({
+    //                 id,
+    //                 token,
+    //             }).unwrap();
+    //         } catch (error) {
+    //             console.error("Delete failed:", error);
+    //             alert("Something went wrong while deleting!");
+    //         }
+    //     }
+    // };
 
-    const columns = [
+    const categories = [
         {
-            title: "No.",
-            render: (_, __, index) => <p> {index + 1} </p>,
+            key: "/packages",
+            title: "Packages",
         },
         {
-            title: "Service Name",
-            dataIndex: "name",
-            key: "name",
-            filteredValue: searchText ? [searchText] : null,
-            onFilter: (value, record) => {
-                return (
-                    String(record.name)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.categoryName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.price)
-                        .toLowerCase()
-                        .includes(value.toLowerCase())
-                );
-            },
+            key: "/all-services",
+            title: "All Services",
         },
         {
-            title: "Description",
-            dataIndex: "description",
-            key: "description",
+            key: "/basic-care",
+            title: "Basic Care",
         },
         {
-            title: "Service-Category",
-            dataIndex: "categoryName",
-            key: "categoryName",
+            key: "/gel-polish",
+            title: "Gel Polish Services",
         },
         {
-            title: "Service-Price",
-            dataIndex: "price",
-            key: "price",
+            key: "/nail-art",
+            title: "Nail Art",
         },
         {
-            title: "Service-Duration",
-            dataIndex: "durationInMinutes",
-            key: "durationInMinutes",
+            key: "/extension",
+            title: "Extensions",
         },
         {
-            title: "Action",
-            key: "action",
-            render: (row) => (
-                <Space>
-                    <Button
-                        className="editBtn!"
-                        onClick={() => handleEditBtn(row)}
-                    >
-                        <Edit size={18} />
-                    </Button>
-                    <Button
-                        className="deleteBtn!"
-                        onClick={() => deleteBtn(row.key, row.name)}
-                    >
-                        <Trash2 size={18} />
-                    </Button>
-                </Space>
-            ),
+            key: "/treatments",
+            title: "Treatments and removal",
         },
     ];
-
     return (
-        <div>
+        <>
             <SubHeaderSection
                 title="Services"
-                subTitle="Manage your elite staff to unlock peak operational efficiency."
-                setSearchText={setSearchText}
+                btnTitle="Category"
+                subTitle="Create, customize, and optimize your service catalog. Easily manage pricing, duration, and staff assignments in one place."
+                placeholderTitle="Write the category name"
+                setCreateCategoryInput={setCreateCategoryInput}
+                createCategoryInput={createCategoryInput}
                 isOpen={isFormOpen}
                 isEdit={isEdit}
                 initialValue={selectedService}
@@ -133,16 +96,28 @@ const Services = () => {
                 triggerEdit={editService}
             />
 
-            <div className="table-wrapper">
-                <Table
-                    columns={columns}
-                    dataSource={servicesData}
-                    rowKey={(record) => record?.id}
-                    onScroll={{ x: scrollX }}
-                    bordered
-                />
-            </div>
-        </div>
+            <Row gutter={[16, 16]} className="mt-10!">
+                {categories.map((item) => (
+                    <Col span={6}>
+                        <Link to={item.key}>
+                            <Card
+                                className={cn(
+                                    item.title === "Packages" ||
+                                        item.title === "All Services"
+                                        ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
+                                        : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
+                                    "py-3! rounded-xl! border-primary! border-2! hover:shadow-md!",
+                                )}
+                            >
+                                <h1 className="w-auto text-2xl text-center">
+                                    {item.title}
+                                </h1>
+                            </Card>
+                        </Link>
+                    </Col>
+                ))}
+            </Row>
+        </>
     );
 };
 
