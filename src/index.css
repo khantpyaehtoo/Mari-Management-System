@@ -37,13 +37,6 @@ body {
     @apply font-semibold  select-none;
 }
 
-/* for title style */
-@utility title-style {
-    @apply p-3 border-b;
-}
-
-
-
 /* gird style col 2 */
 @utility grid-items {
    @apply grid lg:grid-cols-2 gap-3 md:grid-cols-1;

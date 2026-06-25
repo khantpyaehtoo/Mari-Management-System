@@ -1,6 +1,7 @@
 import { Input, Typography } from "antd";
 import AddForm from "../modals/AddForm";
 import { SearchOutlined } from "@ant-design/icons";
+import { cn } from "../../lib/utils";
 
 const SubHeaderSection = ({
     setSearchText,
@@ -13,11 +14,16 @@ const SubHeaderSection = ({
     initialValue,
     triggerCreate,
     triggerEdit,
+    placeholderTitle,
 }) => {
     const { Title } = Typography;
 
     return (
-        <div className="title-style">
+        <div
+            className={cn(
+                title === "Customer" ? "border-0 px-3" : "p-3 border-b",
+            )}
+        >
             <div>
                 <Title level={3} className="text-primary! text-3xl!">
                     {title} Management
@@ -27,7 +33,7 @@ const SubHeaderSection = ({
             <div className="flex justify-between items-center my-6">
                 {setSearchText ? (
                     <Input
-                        placeholder="Search somethings ...."
+                        placeholder={placeholderTitle}
                         onChange={(e) => setSearchText(e.target.value)}
                         className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
                         prefix={<SearchOutlined className="px-3" />}

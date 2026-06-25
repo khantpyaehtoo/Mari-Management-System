@@ -401,6 +401,7 @@ const Booking = () => {
                 subTitle={
                     "Manage, track, and update all salon customer appointments."
                 }
+                placeholderTitle="Search the all customer’s booking ..."
             />
             <TableHeaderSection
                 renderlists={renderlists}

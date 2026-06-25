@@ -11,38 +11,14 @@ export const userApi = baseApi.injectEndpoints({
             providesTags: ["staffs"],
         }),
 
-        createUser: builder.mutation({
-            query: (body) => ({
-                url: `admin${userEndpoint}`,
+        blockUser: builder.mutation({
+            query: (customerId) => ({
+                url: `admin${userEndpoint}/${customerId}/block`,
                 method: "POST",
-                body,
-            }),
-            invalidatesTags: ["staffs"],
-        }),
-
-        updateUser: builder.mutation({
-            query: ({ id, token }) => ({
-                url: `admin${userEndpoint}/${id}`,
-                method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-            invalidatesTags: ["staffs"],
-        }),
-
-        deleteUser: builder.mutation({
-            query: ({ id, token }) => ({
-                url: `admin${userEndpoint}/${id}`,
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
             }),
             invalidatesTags: ["staffs"],
         }),
     }),
 });
 
-export const {
-    useCreateUserMutation,
-    useGetUserDataQuery,
-    useUpdateUserMutation,
-    useDeleteUserMutation,
-} = userApi;
+export const { useBlockUserMutation, useGetUserDataQuery } = userApi;
