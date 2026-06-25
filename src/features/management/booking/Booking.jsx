@@ -170,7 +170,7 @@ const Booking = () => {
 
             setDataList((prev) =>
                 prev.map((item) =>
-                    item.id === bookingId
+                    item.key === bookingId
                         ? { ...item, status: "Confirmed" }
                         : item,
                 ),

@@ -3,6 +3,7 @@ import {
     ArrowLeftOutlined,
     BranchesOutlined,
     CalendarOutlined,
+    EnvironmentOutlined,
     IdcardOutlined,
     SettingOutlined,
     SolutionOutlined,
@@ -53,22 +54,6 @@ const SideBar = () => {
             label: <span className="sidemenu-item">Management</span>,
             children: [
                 {
-                    icon: <ApartmentOutlined />,
-                    label: (
-                        <span className="sidemenu-item">
-                            Service Management
-                        </span>
-                    ),
-                    key: "/management/service",
-                },
-                {
-                    icon: <SolutionOutlined />,
-                    label: (
-                        <span className="sidemenu-item">User Management</span>
-                    ),
-                    key: "/management/user",
-                },
-                {
                     icon: <UnorderedListOutlined />,
                     label: (
                         <span className="sidemenu-item">
@@ -78,13 +63,36 @@ const SideBar = () => {
                     key: "/management/booking",
                 },
                 {
+                    icon: <ApartmentOutlined />,
+                    label: (
+                        <span className="sidemenu-item">
+                            Service Management
+                        </span>
+                    ),
+                    key: "/management/service",
+                },
+                {
                     icon: <IdcardOutlined />,
                     label: (
                         <span className="sidemenu-item">Staff Management</span>
                     ),
                     key: "/management/staff",
                 },
+                {
+                    icon: <SolutionOutlined />,
+                    label: (
+                        <span className="sidemenu-item">
+                            Customer Management
+                        </span>
+                    ),
+                    key: "/management/user",
+                },
             ],
+        },
+        {
+            key: "/walk-in",
+            icon: <EnvironmentOutlined />,
+            label: <span className="sidemenu-item">Walk In</span>,
         },
         {
             key: "/settings",

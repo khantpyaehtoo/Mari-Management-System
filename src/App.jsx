@@ -12,6 +12,7 @@ import LoginForm from "./features/auth/LoginForm.jsx";
 import ForgetPasswordForm from "./features/auth/ForgetPasswordForm.jsx";
 import NewPasswordForm from "./features/auth/NewPasswordForm.jsx";
 import PageNotFound from "./pages/PageNotFound";
+import WalkIn from "./features/walkIn/WalkIn.jsx";
 // import IsAuth from "./components/Guards/IsAuth.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
@@ -46,6 +47,7 @@ export default function App() {
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />
                     </Route>
+                    <Route path="/walk-in" element={<WalkIn />} />
                     <Route path="/calendar" element={<CalendarSection />} />
                     <Route path="/settings" element={<Settings />} />
                 </Route>

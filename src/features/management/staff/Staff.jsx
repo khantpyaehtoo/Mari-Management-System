@@ -1,5 +1,5 @@
 import { Table, Image, Dropdown, Space, Grid, Button } from "antd";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
 import {
@@ -124,7 +124,7 @@ const Staff = () => {
     const [deleteStaff] = useDeleteStaffMutation();
     const [terminateStaff] = useTerminateStaffMutation();
 
-    // Derived State calculated only when data changes
+    // Optimized status calculation into a single pass
     const statusCounts = useMemo(() => {
         return {
             All: dataList?.length,
@@ -141,14 +141,15 @@ const Staff = () => {
         };
     }, [dataList]);
 
-    const handleActionClick = (actionType, record) => {
+    // UseCallback for freeze memory reference addresses across renders
+    const handleActionClick = useCallback((actionType, record) => {
         setSelectedStaff(record);
         if (actionType === "view") {
             setIsDetailOpen(true);
         } else if (actionType === "terminate") {
             setIsTerminateOpen(true);
         }
-    };
+    }, []);
 
     const handleTerminateStaff = async (staffId) => {
         if (window.confirm(`Are you sure to terminate this ${staffId}`)) {
@@ -203,8 +204,9 @@ const Staff = () => {
         }
     };
 
-    const handleSaveStaffDetail = async (staffId, updatedStaffFields) => {
+    const handleSaveStaffDetail = async (updatedStaffFields) => {
         try {
+            const staffId = updatedStaffFields.staffId;
             await editStaff(staffId, updatedStaffFields).unwrap();
 
             setDataList((prevList) =>
@@ -225,128 +227,127 @@ const Staff = () => {
         }
     };
 
-    const columns = [
-        {
-            title: "No.",
-            render: (_, __, index) => <p>{index + 1}</p>,
-        },
-        {
-            title: "Staff ID",
-            dataIndex: "staffId",
-            key: "staffId",
-        },
-        {
-            title: "Profile",
-            dataIndex: "profileUrl",
-            key: "profile",
-            render: (url) => (
-                <Image
-                    src={url}
-                    width={40}
-                    alt="profile"
-                    className="rounded-md! shadow-sm!"
-                />
-            ),
-        },
-        {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
-            filteredValue: searchText ? [searchText] : null,
-            onFilter: (value, record) =>
-                record.name.toLowerCase().includes(value.toLowerCase()) ||
-                record.staffId.toLowerCase().includes(value.toLowerCase()),
-        },
-        {
-            title: "Contact",
-            key: "contact",
-            render: (_, record) => (
-                <Space vertical size="small">
-                    <p className="font-medium">{record.phone}</p>
-                    <p className="text-gray-500">{record.email}</p>
-                </Space>
-            ),
-        },
-        { title: "Date Of Birth", dataIndex: "dob", key: "dob" },
-        { title: "Joined Date", dataIndex: "joined", key: "joined" },
-        { title: "Count", dataIndex: "count", key: "count" },
-        { title: "Rating", dataIndex: "rating", key: "rating" },
-        {
-            title: "Status",
-            dataIndex: "status",
-            key: "status",
-            filteredValue: filterValue ? [filterValue] : null,
-            onFilter: (value, record) => record.status === value,
-            render: (status) => {
-                const statusClasses = {
-                    "In Progress": "text-progress",
-                    Available: "text-available",
-                    Completed: "text-completed",
-                    Unavailable: "text-unavailable",
-                };
-                return (
-                    <p
-                        className={cn(
-                            "font-medium",
-                            statusClasses[status] || "text-gray-500",
-                        )}
-                    >
-                        {status}
-                    </p>
-                );
+    const columns = useMemo(
+        () => [
+            {
+                title: "No.",
+                render: (_, __, index) => <p>{index + 1}</p>,
             },
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_, record) => {
-                const items = [
-                    {
-                        label: (
-                            <Button
-                                type="text"
-                                className="w-full! text-left!"
-                                onClick={() =>
-                                    handleActionClick("view", record)
-                                }
-                            >
-                                <p>
-                                    <UserOutlined className="me-3" /> View
-                                    Details
-                                </p>
-                            </Button>
-                        ),
-                        key: "0",
-                    },
-                    {
-                        label: (
-                            <Button
-                                type="text"
-                                danger
-                                className="w-full! text-left!"
-                                onClick={() =>
-                                    handleActionClick("terminate", record)
-                                }
-                            >
-                                <DisconnectOutlined className="me-3" />{" "}
-                                Terminate
-                            </Button>
-                        ),
-                        key: "1",
-                    },
-                ];
-                return (
-                    <Dropdown
-                        menu={{ items }}
-                        placement="bottom"
-                        // trigger={["click"]}
-                    >
-                        <MoreOutlined className="text-3xl cursor-pointer" />
-                    </Dropdown>
-                );
+            {
+                title: "Staff ID",
+                dataIndex: "staffId",
+                key: "staffId",
             },
-        },
-    ];
+            {
+                title: "Profile",
+                dataIndex: "profileUrl",
+                key: "profile",
+                render: (url) => (
+                    <Image
+                        src={url}
+                        width={40}
+                        alt="profile"
+                        className="rounded-md! shadow-sm!"
+                    />
+                ),
+            },
+            {
+                title: "Name",
+                dataIndex: "name",
+                key: "name",
+                filteredValue: searchText ? [searchText] : null,
+                onFilter: (value, record) =>
+                    record.name.toLowerCase().includes(value.toLowerCase()) ||
+                    record.staffId.toLowerCase().includes(value.toLowerCase()),
+            },
+            {
+                title: "Contact",
+                key: "contact",
+                render: (_, record) => (
+                    <Space vertical size="small">
+                        <p className="font-medium">{record.phone}</p>
+                        <p className="text-gray-500">{record.email}</p>
+                    </Space>
+                ),
+            },
+            { title: "Date Of Birth", dataIndex: "dob", key: "dob" },
+            { title: "Joined Date", dataIndex: "joined", key: "joined" },
+            { title: "Count", dataIndex: "count", key: "count" },
+            { title: "Rating", dataIndex: "rating", key: "rating" },
+            {
+                title: "Status",
+                dataIndex: "status",
+                key: "status",
+                filteredValue: filterValue ? [filterValue] : null,
+                onFilter: (value, record) => record.status === value,
+                render: (status) => {
+                    const statusClasses = {
+                        "In Progress": "text-progress",
+                        Available: "text-available",
+                        Completed: "text-completed",
+                        Unavailable: "text-unavailable",
+                    };
+                    return (
+                        <p
+                            className={cn(
+                                "font-medium",
+                                statusClasses[status] || "text-gray-500",
+                            )}
+                        >
+                            {status}
+                        </p>
+                    );
+                },
+            },
+            {
+                title: "Action",
+                key: "action",
+                render: (_, record) => {
+                    const items = [
+                        {
+                            label: (
+                                <Button
+                                    type="text"
+                                    className="w-full! text-left!"
+                                    onClick={() =>
+                                        handleActionClick("view", record)
+                                    }
+                                >
+                                    <p>
+                                        <UserOutlined className="me-3" /> View
+                                        Details
+                                    </p>
+                                </Button>
+                            ),
+                            key: "0",
+                        },
+                        {
+                            label: (
+                                <Button
+                                    type="text"
+                                    danger
+                                    className="w-full! text-left!"
+                                    onClick={() =>
+                                        handleActionClick("terminate", record)
+                                    }
+                                >
+                                    <DisconnectOutlined className="me-3" />{" "}
+                                    Terminate
+                                </Button>
+                            ),
+                            key: "1",
+                        },
+                    ];
+                    return (
+                        <Dropdown menu={{ items }} placement="bottom">
+                            <MoreOutlined className="text-3xl cursor-pointer" />
+                        </Dropdown>
+                    );
+                },
+            },
+        ],
+        [searchText, filterValue, handleActionClick],
+    );
 
     return (
         <div>
@@ -366,7 +367,7 @@ const Staff = () => {
             />
             <div className="table-wrapper">
                 <Table
-                    dataSource={STATIC_DATA}
+                    dataSource={dataList}
                     columns={columns}
                     scroll={{ x: scrollX }}
                     bordered
@@ -377,8 +378,8 @@ const Staff = () => {
                 isDetailOpen={isDetailOpen}
                 handleClose={() => setIsDetailOpen(false)}
                 selectedStaff={selectedStaff}
-                onSave={(staffId, updatedStaffFields) =>
-                    handleSaveStaffDetail(staffId, updatedStaffFields)
+                onSave={(updatedStaffFields) =>
+                    handleSaveStaffDetail(updatedStaffFields)
                 }
                 onDelete={(staffId) => handleDeleteStaff(staffId)}
             />

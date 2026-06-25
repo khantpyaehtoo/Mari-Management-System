@@ -12,7 +12,7 @@ const StaffDetailModal = ({
     const [form] = Form.useForm();
 
     useEffect(() => {
-        if (selectedStaff && isEditing) {
+        if (selectedStaff) {
             form.setFieldsValue({
                 name: selectedStaff.name,
                 phone: selectedStaff.phone,
@@ -20,7 +20,7 @@ const StaffDetailModal = ({
                 dob: selectedStaff.dob,
             });
         }
-    }, [selectedStaff, isEditing, form]);
+    }, [selectedStaff, isDetailOpen, form]);
 
     const handleCancelEdit = () => {
         setIsEditing(false);
@@ -36,9 +36,10 @@ const StaffDetailModal = ({
 
     const handleSave = async () => {
         try {
-            const values = await form.validateFields();
-            if (onSave) {
-                await onSave({ ...selectedStaff, ...values });
+            const formValue = await form.validateFields();
+            if (onSave && selectedStaff) {
+                const updateStaffFields = { ...selectedStaff, ...formValue };
+                await onSave(updateStaffFields);
             }
             setIsEditing(false);
         } catch (error) {
