@@ -114,13 +114,15 @@ const TableHeaderSection = ({
                     </Space>
                 )}
 
-                <Select
-                    allowClear
-                    placeholder="All Status"
-                    style={{ width: 130 }}
-                    onChange={handleChange}
-                    options={options}
-                />
+                {!!options && (
+                    <Select
+                        allowClear
+                        placeholder="All Status"
+                        style={{ width: 130 }}
+                        onChange={handleChange}
+                        options={options}
+                    />
+                )}
             </Space>
         </div>
     );

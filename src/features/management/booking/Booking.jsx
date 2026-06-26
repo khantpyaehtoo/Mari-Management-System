@@ -122,7 +122,7 @@ const statusClasses = {
     Reject: "text-unavailable",
 };
 // select dropdown filter section
-const options = renderlists.map((status) => ({
+const filterOptions = renderlists.map((status) => ({
     label: (
         <span className={statusClasses[status] || "text-gray-500"}>
             {status}
@@ -146,11 +146,10 @@ const Booking = () => {
     const [selectedDates, setSelectedDates] = useState(null);
 
     const screens = useBreakpoint();
+    const scrollX = screens.xs ? undefined : "1500";
 
     const [updateBooking] = useUpdateBookingMutation();
     const [cancelBooking] = useCancelBookingMutation();
-
-    const scrollX = screens.xs ? undefined : "1500";
 
     const handleActionBtn = useCallback((action, record) => {
         setSelectedBooking(record);
@@ -394,7 +393,7 @@ const Booking = () => {
     };
 
     return (
-        <div>
+        <>
             <SubHeaderSection
                 setSearchText={setSearchText}
                 title={"Customer Bookings"}
@@ -405,7 +404,7 @@ const Booking = () => {
             />
             <TableHeaderSection
                 renderlists={renderlists}
-                options={options}
+                options={filterOptions}
                 statusCounts={statusCounts}
                 setFilterValue={setFilterValue}
                 dateOptions={dateOptions}
@@ -446,7 +445,7 @@ const Booking = () => {
                     />
                 </>
             )}
-        </div>
+        </>
     );
 };
 
