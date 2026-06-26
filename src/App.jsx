@@ -14,6 +14,7 @@ import NewPasswordForm from "./features/auth/NewPasswordForm.jsx";
 import PageNotFound from "./pages/PageNotFound";
 import WalkIn from "./features/walkIn/WalkIn.jsx";
 import Category from "./features/management/services/Category.jsx";
+import AllServices from "./features/management/services/AllServices.jsx";
 // import IsAuth from "./components/Guards/IsAuth.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
@@ -47,11 +48,15 @@ export default function App() {
                     <Route path="/management">
                         <Route path="user" element={<User />} />
                         <Route path="service" element={<Services />} />
-
                         <Route
                             path="service/category-packages"
                             element={<Category />}
                         />
+                        <Route
+                            path="service/all-services"
+                            element={<AllServices />}
+                        />
+                        <Route path="service/:id" />
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />
                     </Route>

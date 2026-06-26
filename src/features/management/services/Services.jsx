@@ -51,11 +51,11 @@ const Services = () => {
 
     const categories = [
         {
-            key: "/management/service/category-packages",
+            key: "category-packages",
             title: "Packages",
         },
         {
-            key: "/all-services",
+            key: "all-services",
             title: "All Services",
         },
         {
