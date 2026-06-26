@@ -12,54 +12,146 @@ const WalkInDummyData = [
     {
         key: "1",
         walkInId: "CUST-001",
-        serviceName: "Deep Tissue Massage",
         staffName: "Sarah Jenkins",
         date: "2026-06-25",
         startedTime: "10:00 AM",
-        totalTime: "60 mins",
-        baseAmount: 85.0,
+        services: [
+            {
+                name: "Deep Tissue Massage",
+                duration: 60,
+                baseAmount: 85.0,
+                extraCharges: 0,
+            },
+            {
+                name: "Hydrating Facial",
+                duration: 45,
+                baseAmount: 50.0,
+                extraCharges: 15.0,
+            },
+        ],
     },
     {
         key: "2",
         walkInId: "CUST-084",
-        serviceName: "Premium Haircut & Styling",
         staffName: "Marcus Vance",
         date: "2026-06-25",
         startedTime: "11:30 AM",
-        totalTime: "45 mins",
-        baseAmount: 50.0,
+        services: [
+            {
+                name: "Hydrating Facial",
+                duration: 45,
+                baseAmount: 50.0,
+                extraCharges: 0,
+            },
+        ],
     },
     {
         key: "3",
         walkInId: "CUST-112",
-        serviceName: "Gel Manicure & Pedicure",
         staffName: "Elena Rostova",
         date: "2026-06-26",
         startedTime: "01:00 PM",
-        totalTime: "90 mins",
-        baseAmount: 75.0,
+        services: [
+            {
+                name: "Gel Manicure",
+                duration: 45,
+                baseAmount: 35.0,
+                extraCharges: 0,
+            },
+            {
+                name: "Gel Pedicure",
+                duration: 45,
+                baseAmount: 40.0,
+                extraCharges: 0,
+            },
+        ],
     },
     {
         key: "4",
         walkInId: "CUST-023",
-        serviceName: "Hydrating Facial Treatment",
         staffName: "Sarah Jenkins",
         date: "2026-06-26",
         startedTime: "03:00 PM",
-        totalTime: "75 mins",
-        baseAmount: 110.0,
-        extraCharges: 5.0,
+        services: [
+            {
+                name: "Hydrating Facial Treatment",
+                duration: 75,
+                baseAmount: 110.0,
+                extraCharges: 5.0,
+            },
+        ],
     },
     {
         key: "5",
         walkInId: "CUST-057",
-        serviceName: "Beard Trim & Hot Towel Shave",
         staffName: "Marcus Vance",
         date: "2026-06-27",
         startedTime: "09:15 AM",
-        totalTime: "30 mins",
-        baseAmount: 103.0,
-        extraCharges: 10.0,
+        services: [
+            {
+                name: "Beard Trim & Hot Towel Shave",
+                duration: 30,
+                baseAmount: 103.0,
+                extraCharges: 10.0,
+            },
+        ],
+    },
+    {
+        key: "6",
+        walkInId: "CUST-144",
+        staffName: "Elena Rostova",
+        date: "2026-06-27",
+        startedTime: "11:00 AM",
+        services: [
+            {
+                name: "Hair Coloring (Balayage)",
+                duration: 120,
+                baseAmount: 150.0,
+                extraCharges: 25.0,
+            },
+            {
+                name: "Premium Haircut & Styling",
+                duration: 45,
+                baseAmount: 50.0,
+                extraCharges: 0,
+            },
+        ],
+    },
+    {
+        key: "7",
+        walkInId: "CUST-201",
+        staffName: "Sarah Jenkins",
+        date: "2026-06-28",
+        startedTime: "02:30 PM",
+        services: [
+            {
+                name: "Aromatherapy Body Scrub",
+                duration: 60,
+                baseAmount: 95.0,
+                extraCharges: 0,
+            },
+        ],
+    },
+    {
+        key: "8",
+        walkInId: "CUST-099",
+        staffName: "Marcus Vance",
+        date: "2026-06-28",
+        startedTime: "04:00 PM",
+        services: [
+            {
+                name: "Express Facial",
+                duration: 30,
+                baseAmount: 40.0,
+                extraCharges: 5.0,
+            },
+            {
+                name: "Eyebrow Threading & Wax",
+                duration: 15,
+                baseAmount: 20.0,
+                extraCharges: 0,
+            },
+        ],
     },
 ];
 
@@ -90,8 +182,18 @@ const WalkIn = () => {
             },
             {
                 title: "Service Name",
-                dataIndex: "serviceName",
+                dataIndex: "services",
                 key: "serviceName",
+                render: (services) => (
+                    <section className="max-w-100 overflow-x-auto whitespace-nowrap p-3">
+                        {services.map((svc, i) => (
+                            <span key={i}>
+                                {svc.name}
+                                {i < services.length - 1 ? ", " : ""}
+                            </span>
+                        ))}
+                    </section>
+                ),
                 filteredValue: searchText ? [searchText] : null,
                 onFilter: (value, record) =>
                     String(record.staffName)
@@ -121,21 +223,36 @@ const WalkIn = () => {
             },
             {
                 title: "Total Time",
-                dataIndex: "totalTime",
+                dataIndex: "services",
                 key: "totalTime",
+                render: (services) => {
+                    const totalTime = services.reduce(
+                        (sum, s) => sum + s.duration,
+                        0,
+                    );
+                    return <span>{totalTime}</span>;
+                },
             },
             {
                 title: "Total Amount",
+                dataIndex: "services",
                 key: "totalAmount",
-                render: (_, record) => {
-                    const total =
-                        record.baseAmount + (record.extraCharges || 0);
+                render: (services) => {
+                    const totalAmount = services.reduce(
+                        (sum, s) => sum + s.baseAmount + (s.extraCharges || 0),
+                        0,
+                    );
+                    const totalExtraAmount = services.reduce(
+                        (sum, s) => sum + (s.extraCharges || 0),
+                        0,
+                    );
+
                     return (
                         <Space>
-                            <span>{total.toFixed(2)}</span>
-                            {record.extraCharges > 0 && (
+                            <span>{totalAmount}</span>
+                            {totalExtraAmount > 0 && (
                                 <Tag color="green" variant="filled">
-                                    +{record.extraCharges.toFixed(2)} Extra
+                                    +{totalExtraAmount} Extra
                                 </Tag>
                             )}
                         </Space>
@@ -156,6 +273,24 @@ const WalkIn = () => {
             },
         ],
         [searchText],
+    );
+
+    const totalTime = selectedWalkin?.services.reduce(
+        (sum, s) => sum + s.duration,
+        0,
+    );
+
+    const totalAmount = selectedWalkin?.services.reduce(
+        (sum, s) => sum + s.baseAmount + (s.extraCharges || 0),
+        0,
+    );
+    const totalBaseAmount = selectedWalkin?.services.reduce(
+        (sum, s) => sum + s.baseAmount,
+        0,
+    );
+    const totalExtraAmount = selectedWalkin?.services.reduce(
+        (sum, s) => sum + (s.extraCharges || 0),
+        0,
     );
 
     return (
@@ -180,6 +315,7 @@ const WalkIn = () => {
                     title={<h1>WalkIn Overview</h1>}
                     open={isDetailFormOpen}
                     onCancel={() => setIsDetailFormOpen(false)}
+                    onOk={() => setIsDetailFormOpen(false)}
                 >
                     <div className="w-full">
                         <Space vertical className="w-full py-4">
@@ -218,22 +354,38 @@ const WalkIn = () => {
                                     <span className="font-semibold">
                                         Service Name :{" "}
                                     </span>
-                                    {selectedWalkin.serviceName} (
-                                    {selectedWalkin.totalTime})
+                                    {selectedWalkin?.services.map((svc, i) => (
+                                        <span key={i}>
+                                            {svc.name}
+                                            {i <
+                                            selectedWalkin?.services.length - 1
+                                                ? ", "
+                                                : ""}
+                                        </span>
+                                    ))}
+                                </li>
+                                <li>
+                                    <span className="font-semibold">
+                                        Duration :{" "}
+                                    </span>
+                                    {totalTime} mins
                                 </li>
                                 <li>
                                     <span className="font-semibold">
                                         Base Amount :{" "}
                                     </span>
-                                    {selectedWalkin.baseAmount}
+                                    {totalBaseAmount} mmk
                                 </li>
-                                {selectedWalkin.extraCharges > 0 && (
+
+                                {totalExtraAmount ? (
                                     <li>
                                         <span className="font-semibold">
                                             Extra Amount :{" "}
                                         </span>
-                                        {selectedWalkin.extraCharges}
+                                        {totalExtraAmount} mmk
                                     </li>
+                                ) : (
+                                    ""
                                 )}
                             </ul>
                             <Flex
@@ -241,10 +393,7 @@ const WalkIn = () => {
                                 className="p-3! font-semibold!"
                             >
                                 <h3>Total Amount</h3>
-                                <h3>
-                                    {selectedWalkin.baseAmount +
-                                        (selectedWalkin.extraCharges || 0)}{" "}
-                                </h3>
+                                <h3>{totalAmount} mmk</h3>
                             </Flex>
                         </div>
                     </div>
