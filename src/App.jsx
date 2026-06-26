@@ -18,6 +18,8 @@ import Category from "./features/management/services/Category.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
 export default function App() {
+    // const { id } = useParams();
+
     return (
         <>
             <NotificationHandler />
@@ -45,10 +47,14 @@ export default function App() {
                     <Route path="/management">
                         <Route path="user" element={<User />} />
                         <Route path="service" element={<Services />} />
+
+                        <Route
+                            path="service/category-packages"
+                            element={<Category />}
+                        />
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />
                     </Route>
-                    <Route path="/category-packages" element={<Category />} />
                     <Route path="/walk-in" element={<WalkIn />} />
                     <Route path="/calendar" element={<CalendarSection />} />
                     <Route path="/settings" element={<Settings />} />

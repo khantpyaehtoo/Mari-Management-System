@@ -51,7 +51,7 @@ const Services = () => {
 
     const categories = [
         {
-            key: "/category-packages",
+            key: "/management/service/category-packages",
             title: "Packages",
         },
         {
@@ -106,10 +106,10 @@ const Services = () => {
                                         item.title === "All Services"
                                         ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
                                         : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
-                                    "py-3! rounded-xl! border-primary! border-2! duration-200! hover:shadow-md!",
+                                    "pt-6! min-h-30! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
                                 )}
                             >
-                                <h1 className="w-auto text-2xl text-center">
+                                <h1 className="w-auto text-center text-base">
                                     {item.title}
                                 </h1>
                             </Card>

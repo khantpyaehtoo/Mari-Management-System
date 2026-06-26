@@ -99,22 +99,27 @@ const SideBar = () => {
             icon: <SettingOutlined />,
             label: <span className="sidemenu-item">Settings</span>,
         },
-        // {
-        //     key: "logout",
-        //     icon: <LogoutOutlined />,
-        //     label: <span className="sidemenu-item text-red-500">Logout</span>,
-        // },
     ];
 
     const closeSidebar = () => dispatch(toggleSidebar(false));
 
-    // for sidebar menu dropdown
+    // for sidebar menu dropdown not to close
     const getOpenKeys = () => {
         const pathParts = location.pathname.split("/");
         if (pathParts.length > 2) {
             return [`/${pathParts[1]}`];
         }
         return [];
+    };
+
+    // sidebar activeKey handler
+    const getActiveKey = (pathname) => {
+        if (!pathname) return;
+
+        if (pathname.startsWith("/management/service")) {
+            return "/management/service";
+        }
+        return pathname;
     };
 
     return (
@@ -151,7 +156,7 @@ const SideBar = () => {
                     <Menu
                         mode="inline"
                         items={menuItem}
-                        selectedKeys={[location.pathname]}
+                        selectedKeys={[getActiveKey(location?.pathname)]}
                         defaultOpenKeys={getOpenKeys()}
                         onClick={(item) => {
                             if (item.key) {

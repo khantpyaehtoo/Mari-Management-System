@@ -1,10 +1,10 @@
 import { Grid, Table, Button } from "antd";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import UserDetailModal from "./UserDetailModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
-import { useBlockUserMutation } from "./userApi";
+import { useBlockUserMutation, useGetBlockUserDataQuery } from "./userApi";
 import CustomerSummaryCard from "./CustomerSummaryCard";
 
 const { useBreakpoint } = Grid;
@@ -123,17 +123,23 @@ const User = () => {
 
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
+    // const [filteredValue, setFilteredValue] = useState("All");
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
 
     const [blockCustomer] = useBlockUserMutation();
+    const { data: getBlockUserData } = useGetBlockUserDataQuery();
 
-    const handleViewDetail = (record) => {
+    // const filterBtn = () => {
+    //     setFilteredValue(getBlockUserData);
+    // };
+
+    const handleViewDetail = useCallback((record) => {
         console.log(record);
         setSelectedCustomer(record);
         setViewModalOpen(true);
-    };
+    }, []);
 
     const handleBlockCustomer = async (customerId) => {
         console.log("Block", customerId);
@@ -166,89 +172,92 @@ const User = () => {
         }
     };
 
-    const columns = [
-        {
-            title: "No.",
-            render: (_, __, index) => <p>{index + 1}</p>,
-        },
-        {
-            title: "Customer Id",
-            dataIndex: "customerId",
-            key: "customerId",
-            filteredValue: searchText ? [searchText] : null,
-            onFilter: (value, record) => {
-                return (
-                    String(record.customerId)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.fullName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.username)
-                        .toLowerCase()
-                        .includes(value.toLowerCase())
-                );
+    const columns = useMemo(
+        () => [
+            {
+                title: "No.",
+                render: (_, __, index) => <p>{index + 1}</p>,
             },
-        },
-        {
-            title: "Customer Name",
-            dataIndex: "customerName",
-            key: "customerName",
-        },
-        {
-            title: "Profile",
-            dataIndex: "profileUrl",
-            key: "profileUrl",
-        },
-        {
-            title: "Contact",
-            dataIndex: "contact",
-            key: "contact",
-            render: (contact) => (
-                <div>
-                    <p style={{ margin: 0, fontWeight: 500 }}>
-                        {contact.phone}
-                    </p>
-                    <p
-                        style={{
-                            margin: 0,
-                            fontSize: "12px",
-                            color: "#8c8c8c",
-                        }}
+            {
+                title: "Customer Id",
+                dataIndex: "customerId",
+                key: "customerId",
+                filteredValue: searchText ? [searchText] : null,
+                onFilter: (value, record) => {
+                    return (
+                        String(record.customerId)
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        String(record.fullName)
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        String(record.username)
+                            .toLowerCase()
+                            .includes(value.toLowerCase())
+                    );
+                },
+            },
+            {
+                title: "Customer Name",
+                dataIndex: "customerName",
+                key: "customerName",
+            },
+            {
+                title: "Profile",
+                dataIndex: "profileUrl",
+                key: "profileUrl",
+            },
+            {
+                title: "Contact",
+                dataIndex: "contact",
+                key: "contact",
+                render: (contact) => (
+                    <div>
+                        <p style={{ margin: 0, fontWeight: 500 }}>
+                            {contact.phone}
+                        </p>
+                        <p
+                            style={{
+                                margin: 0,
+                                fontSize: "12px",
+                                color: "#8c8c8c",
+                            }}
+                        >
+                            {contact.email}
+                        </p>
+                    </div>
+                ),
+            },
+            {
+                title: "Gender",
+                dataIndex: "gender",
+                key: "gender",
+            },
+            {
+                title: "Joined Date",
+                dataIndex: "joinedDate",
+                key: "joinedDate",
+            },
+            {
+                title: "Booking Count",
+                dataIndex: "count",
+                key: "count",
+            },
+            {
+                title: "Action",
+                key: "action",
+                render: (_, row) => (
+                    <Button
+                        onClick={() => handleViewDetail(row)}
+                        className="rounded-xl! hover:bg-primary! hover:text-white!"
                     >
-                        {contact.email}
-                    </p>
-                </div>
-            ),
-        },
-        {
-            title: "Gender",
-            dataIndex: "gender",
-            key: "gender",
-        },
-        {
-            title: "Joined Date",
-            dataIndex: "joinedDate",
-            key: "joinedDate",
-        },
-        {
-            title: "Booking Count",
-            dataIndex: "count",
-            key: "count",
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_, row) => (
-                <Button
-                    onClick={() => handleViewDetail(row)}
-                    className="rounded-xl! hover:bg-primary! hover:text-white!"
-                >
-                    View
-                </Button>
-            ),
-        },
-    ];
+                        View
+                    </Button>
+                ),
+            },
+        ],
+        [searchText, handleViewDetail],
+    );
 
     // console.log(currentPage);
     const handlePageChange = (page) => {
@@ -264,7 +273,10 @@ const User = () => {
                 placeholderTitle="Search by name or phone..."
             />
 
-            <CustomerSummaryCard dummyData={dummyData} />
+            <CustomerSummaryCard
+                dummyData={dummyData}
+                data={getBlockUserData}
+            />
 
             <div className="table-wrapper">
                 <Table

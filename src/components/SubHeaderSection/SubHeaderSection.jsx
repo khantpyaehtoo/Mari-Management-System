@@ -30,12 +30,14 @@ const SubHeaderSection = ({
                 title === "Customer" ? "border-0 px-3" : "p-3 border-b",
             )}
         >
-            <>
-                <Title level={3} className="text-primary! text-3xl!">
-                    {title} Management
-                </Title>
-                <p className="text-gray-600">{subTitle}</p>
-            </>
+            {!!title && (
+                <>
+                    <Title level={3} className="text-primary! text-3xl!">
+                        {title} Management
+                    </Title>
+                    <p className="text-gray-600">{subTitle}</p>
+                </>
+            )}
 
             {title !== "Services" && (
                 <div className="flex justify-between items-center my-6">

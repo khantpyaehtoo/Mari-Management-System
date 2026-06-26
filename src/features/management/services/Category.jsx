@@ -1,5 +1,11 @@
+import ServiceHeader from "./ServiceHeader";
+location?.pathnam;
 const Category = () => {
-    return <div className="text-2xl text-primary">Category</div>;
+    return (
+        <>
+            <ServiceHeader />
+        </>
+    );
 };
 
 export default Category;

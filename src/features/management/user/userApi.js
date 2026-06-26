@@ -1,19 +1,28 @@
 import { baseApi } from "../../../app/core/basicApi";
-const userEndpoint = "/staffs";
+const userEndpoint = "customer";
+
 // admin/staffs
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getUserData: builder.query({
             query: () => ({
-                url: `admin${userEndpoint}`,
+                url: `admin/${userEndpoint}`,
                 method: "GET",
             }),
             providesTags: ["staffs"],
         }),
 
+        getBlockUserData: builder.query({
+            query: () => ({
+                url: `admin/${userEndpoint}/block`,
+                method: "GET",
+            }),
+            providesTags: ["block"],
+        }),
+
         blockUser: builder.mutation({
             query: (customerId) => ({
-                url: `admin${userEndpoint}/${customerId}/block`,
+                url: `admin/${userEndpoint}/${customerId}/block`,
                 method: "POST",
             }),
             invalidatesTags: ["staffs"],
@@ -21,4 +30,8 @@ export const userApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useBlockUserMutation, useGetUserDataQuery } = userApi;
+export const {
+    useBlockUserMutation,
+    useGetUserDataQuery,
+    useGetBlockUserDataQuery,
+} = userApi;
