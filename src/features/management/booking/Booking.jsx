@@ -383,6 +383,7 @@ const Booking = () => {
     ];
 
     const dateConfig = {
+        dateOptions: dateOptions,
         calendarFilterType: calendarFilterType,
         setCalendarFilterType: (type) => {
             setCalendarFilterType(type);

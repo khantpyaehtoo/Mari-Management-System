@@ -1,8 +1,9 @@
-import { Grid, Table, Button, Modal, Space, Tag, Typography, Flex } from "antd";
+import { Grid, Table, Button, Space, Tag } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useMemo, useState } from "react";
 import TableHeaderSection from "../../components/tableHeaderSection/TableHeaderSection";
 import { EyeOutlined } from "@ant-design/icons";
+import WalkInDetailModal from "./WalkInDetailModal";
 
 const { useBreakpoint } = Grid;
 
@@ -27,6 +28,7 @@ const WalkInDummyData = [
                 duration: 45,
                 baseAmount: 50.0,
                 extraCharges: 15.0,
+                note: "Premium Charcoal Mask upgrade",
             },
         ],
     },
@@ -78,6 +80,7 @@ const WalkInDummyData = [
                 duration: 75,
                 baseAmount: 110.0,
                 extraCharges: 5.0,
+                note: "Premium Charcoal Mask upgrade",
             },
         ],
     },
@@ -159,6 +162,7 @@ const WalkIn = () => {
     const [searchText, setSearchText] = useState("");
     const [selectedWalkin, setSelectedWalkin] = useState(null);
     const [isDetailFormOpen, setIsDetailFormOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
@@ -168,6 +172,12 @@ const WalkIn = () => {
         setSelectedWalkin(record);
         setIsDetailFormOpen(true);
     };
+
+    const statusCounts = useMemo(() => {
+        return {
+            All: WalkInDummyData?.length,
+        };
+    }, []);
 
     const column = useMemo(
         () => [
@@ -275,23 +285,9 @@ const WalkIn = () => {
         [searchText],
     );
 
-    const totalTime = selectedWalkin?.services.reduce(
-        (sum, s) => sum + s.duration,
-        0,
-    );
-
-    const totalAmount = selectedWalkin?.services.reduce(
-        (sum, s) => sum + s.baseAmount + (s.extraCharges || 0),
-        0,
-    );
-    const totalBaseAmount = selectedWalkin?.services.reduce(
-        (sum, s) => sum + s.baseAmount,
-        0,
-    );
-    const totalExtraAmount = selectedWalkin?.services.reduce(
-        (sum, s) => sum + (s.extraCharges || 0),
-        0,
-    );
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <>
@@ -301,103 +297,33 @@ const WalkIn = () => {
                 setSearchText={setSearchText}
                 placeholderTitle="Search ..."
             />
-            <TableHeaderSection renderlists={renderLists} />
+
+            <TableHeaderSection
+                renderlists={renderLists}
+                statusCounts={statusCounts}
+            />
+
             <div className="table-wrapper">
                 <Table
                     columns={column}
                     dataSource={WalkInDummyData}
                     bordered
                     scroll={{ x: scrollX }}
+                    pagination={{
+                        current: currentPage,
+                        onChange: handlePageChange,
+                        size: "large",
+                        pageSize: 3,
+                    }}
                 />
             </div>
-            {selectedWalkin && (
-                <Modal
-                    title={<h1>WalkIn Overview</h1>}
-                    open={isDetailFormOpen}
-                    onCancel={() => setIsDetailFormOpen(false)}
-                    onOk={() => setIsDetailFormOpen(false)}
-                >
-                    <div className="w-full">
-                        <Space vertical className="w-full py-4">
-                            <p>
-                                <span className="font-semibold">
-                                    WalkIn ID :
-                                </span>{" "}
-                                {selectedWalkin.walkInId}
-                            </p>
-                            <p>
-                                <span className="font-semibold">Date :</span>{" "}
-                                {selectedWalkin.date}
-                            </p>
-                            <p>
-                                <span className="font-semibold">
-                                    Staff Name :
-                                </span>{" "}
-                                {selectedWalkin.staffName}
-                            </p>
-                        </Space>
-                        <div className="w-full border-gray-400 border p-4 rounded-xl">
-                            <Typography.Title
-                                level={3}
-                                className="font-montserrat! font-medium! text-primary!"
-                            >
-                                Details
-                            </Typography.Title>
-                            <ul className="border-b border-b-gray-400 px-7 pb-4 flex flex-col list-disc marker:text-primary marker:text-2xl">
-                                <li>
-                                    <span className="font-semibold">
-                                        Started Time :
-                                    </span>{" "}
-                                    {selectedWalkin.startedTime}
-                                </li>
-                                <li>
-                                    <span className="font-semibold">
-                                        Service Name :{" "}
-                                    </span>
-                                    {selectedWalkin?.services.map((svc, i) => (
-                                        <span key={i}>
-                                            {svc.name}
-                                            {i <
-                                            selectedWalkin?.services.length - 1
-                                                ? ", "
-                                                : ""}
-                                        </span>
-                                    ))}
-                                </li>
-                                <li>
-                                    <span className="font-semibold">
-                                        Duration :{" "}
-                                    </span>
-                                    {totalTime} mins
-                                </li>
-                                <li>
-                                    <span className="font-semibold">
-                                        Base Amount :{" "}
-                                    </span>
-                                    {totalBaseAmount} mmk
-                                </li>
 
-                                {totalExtraAmount ? (
-                                    <li>
-                                        <span className="font-semibold">
-                                            Extra Amount :{" "}
-                                        </span>
-                                        {totalExtraAmount} mmk
-                                    </li>
-                                ) : (
-                                    ""
-                                )}
-                            </ul>
-                            <Flex
-                                justify="space-between"
-                                className="p-3! font-semibold!"
-                            >
-                                <h3>Total Amount</h3>
-                                <h3>{totalAmount} mmk</h3>
-                            </Flex>
-                        </div>
-                    </div>
-                </Modal>
+            {selectedWalkin && (
+                <WalkInDetailModal
+                    selectedWalkin={selectedWalkin}
+                    isOpen={isDetailFormOpen}
+                    onClose={() => setIsDetailFormOpen(false)}
+                />
             )}
         </>
     );

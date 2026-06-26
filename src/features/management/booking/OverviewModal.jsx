@@ -85,14 +85,6 @@ const OverviewModal = ({
                     </h2>
                 )}
 
-                {/* {selectedBooking.status === "Confirm" && (
-                    <div className="flex justify-center my-6">
-                        <Button className="w-full! h-10! bg-red-600! text-gray-200! rounded-lg! hover:shadow-md! hover:bg-red-800!">
-                            Cancel Booking
-                        </Button>
-                    </div>
-                )} */}
-
                 {selectedBooking.status === "Confirm" && (
                     <div className="my-6">
                         {!isCancelling ? (

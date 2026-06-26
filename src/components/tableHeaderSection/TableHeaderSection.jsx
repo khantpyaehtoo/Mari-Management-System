@@ -8,7 +8,6 @@ const TableHeaderSection = ({
     options,
     setFilterValue,
     statusCounts,
-    dateOptions,
     dateConfig,
 }) => {
     const handleChange = (value) => {
@@ -25,6 +24,7 @@ const TableHeaderSection = ({
         setCalendarFilterType,
         selectedDates,
         setSelectedDates,
+        dateOptions,
     } = dateConfig || {};
 
     const handleCalendarChange = (value) => {
