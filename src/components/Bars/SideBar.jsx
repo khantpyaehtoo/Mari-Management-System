@@ -1,6 +1,7 @@
 import {
     ApartmentOutlined,
     ArrowLeftOutlined,
+    BarChartOutlined,
     BranchesOutlined,
     CalendarOutlined,
     EnvironmentOutlined,
@@ -93,6 +94,11 @@ const SideBar = () => {
             key: "/walk-in",
             icon: <EnvironmentOutlined />,
             label: <span className="sidemenu-item">Walk In</span>,
+        },
+        {
+            key: "/reports",
+            icon: <BarChartOutlined />,
+            label: <span className="sidemenu-item">Reports</span>,
         },
         {
             key: "/settings",

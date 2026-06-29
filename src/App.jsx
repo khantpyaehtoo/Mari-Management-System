@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import WalkIn from "./features/walkIn/WalkIn.jsx";
 import Category from "./features/management/services/Category.jsx";
 import AllServices from "./features/management/services/AllServices.jsx";
+import Reports from "./features/management/reports/Reports.jsx";
 // import IsAuth from "./components/Guards/IsAuth.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
@@ -45,6 +46,7 @@ export default function App() {
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />
+                    <Route path="/calendar" element={<CalendarSection />} />
                     <Route path="/management">
                         <Route path="user" element={<User />} />
                         <Route path="service" element={<Services />} />
@@ -61,7 +63,7 @@ export default function App() {
                         <Route path="staff" element={<Staff />} />
                     </Route>
                     <Route path="/walk-in" element={<WalkIn />} />
-                    <Route path="/calendar" element={<CalendarSection />} />
+                    <Route path="/reports" element={<Reports />} />
                     <Route path="/settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import ServiceHeader from "./ServiceHeader";
 import { Button, Card, Col, Row, Space } from "antd";
 
-const Category = ({ categories }) => {
+const Category = () => {
     return (
         <>
             <ServiceHeader title="package" />
@@ -24,8 +24,10 @@ const Category = ({ categories }) => {
                                 </div>
                             </div>
                             <Space size="middle">
-                                <Button>Edit</Button>
-                                <Button>Delete</Button>
+                                <Button className="bg-primary!">Edit</Button>
+                                <Button className="border! border-black!">
+                                    Delete
+                                </Button>
                             </Space>
                         </Card>
                     </Link>
