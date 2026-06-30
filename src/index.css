@@ -110,67 +110,77 @@ body {
     background: white !important;
 }
 
-/* antd tab bar setting */
-/* Container wrapper setup */
+
+/* ant custom tabs and animation pill */
 .custom-tabs-wrapper {
     position: relative;
-    display: inline-block;
+    display: flex !important;
+    align-items: center !important;
     width: 100%;
     border-bottom: none !important;
 }
 
-/* Hide default Ant Design indicators and default backgrounds */
+/* Hide default Ant Design ink bar (the default underline) */
 .custom-settings-tab .ant-tabs-ink-bar {
     display: none !important;
 }
+
+/* Tab Navigation Bar Styling */
 .custom-settings-tab .ant-tabs-nav {
-    background: #F9FAFB !important;
-    margin-bottom: 3rem;
+    background: #FFFAF6 !important;
+    margin-bottom: 0rem !important;
     color: black !important;
-}
-
-/* Ensure tab item buttons sit safely on top layer */
-.custom-settings-tab .ant-tabs-tab {
-    position: relative;
-    padding: 10px 20px !important;
-    transition: color 0.3s ease;
-}
-
-/* for sticky bar */
-.custom-settings-tab > .ant-tabs-nav {
-    position: sticky !important;
-    top: 0;
-    z-index: 10;
-}
-
-
-.custom-settings-tab .ant-tabs-nav {
-    box-shadow: 0px 5px 5px rgba(0,0,0,0.2) !important;
-    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 10px;
 }
 
 .custom-settings-tab .ant-tabs-nav::before {
-    content: "";
+    content: "" !important;
     border-bottom: none !important;
+}
+
+/* Tab Item Base Styling */
+.custom-settings-tab .ant-tabs-tab {
+    position: relative;
+    padding: 12px 20px !important;
+    transition: color 0.3s ease;
+    isolation: isolate !important; 
+    z-index: 40 !important; 
+}
+
+/* Text Wrapper inside Tab */
+.custom-settings-tab .ant-tabs-tab-btn {
+    position: relative;
+    z-index: 999 !important;
+    color: #4B5563 !important; /* Normal text color (Gray 600) */
+    transition: color 0.3s ease;
 }
 
 .custom-settings-tab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
     color: white !important;
 }
+.custom-settings-tab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn span,
+.custom-settings-tab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn svg {
+    color: white !important;
+    fill: white !important;
+    position: relative !important;
+    z-index: 999 !important;
+}
 
 .custom-animated-pill {
     position: absolute;
-    top: 0;
-
-  /* handle dynamic size */
+    top: 50%; 
+    
+    /* Handle dynamic size & slide animation */
     width: var(--pill-width, 0px);
-    height: 44px; 
-
+    height: 100%; 
+    max-height: 44px;
+    
     background-color: var(--primary-pink);
     border-radius: 10px;
     pointer-events: none;
 
-    transform: translateX(var(--pill-left, 0px));
+    transform: translateY(-50%) translateX(var(--pill-left, 0px));
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
                 width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
