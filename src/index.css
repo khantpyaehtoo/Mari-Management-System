@@ -110,6 +110,58 @@ body {
     background: white !important;
 }
 
+/* antd tab bar setting */
+/* Container wrapper setup */
+.custom-tabs-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  border-bottom: none !important;
+}
+
+/* Hide default Ant Design indicators and default backgrounds */
+.custom-settings-tab .ant-tabs-ink-bar {
+  display: none !important;
+}
+.custom-settings-tab .ant-tabs-nav {
+  background: transparent !important;
+  margin-bottom: 16px;
+  color: black !important;
+  
+}
+
+/* Ensure tab item buttons sit safely on top layer */
+.custom-settings-tab .ant-tabs-tab {
+  position: relative;
+  padding: 10px 20px !important;
+  transition: color 0.3s ease;
+}
+
+.custom-settings-tab .ant-tabs-nav::before {
+    border-bottom: none !important;
+}
+
+.custom-settings-tab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: white !important;
+}
+
+.custom-animated-pill {
+  position: absolute;
+  top: 0;
+  
+  /* handle dynamic size */
+  width: var(--pill-width, 0px);
+  height: 44px; 
+  
+  background-color: var(--primary-pink);
+  border-radius: 10px;
+  pointer-events: none;
+  
+  transform: translateX(var(--pill-left, 0px));
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* table wrapper styling */
 @utility table-wrapper {
     @apply bg-white-back border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3;

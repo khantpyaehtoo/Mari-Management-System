@@ -22,7 +22,7 @@ import {
     SoundOutlined,
     PlusOutlined,
 } from "@ant-design/icons";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
     useChangePasswordMutation,
@@ -41,9 +41,40 @@ const Settings = () => {
     const [updateAdminData, { isLoading: isUpdatingAdmin }] =
         useUpdateAdminDataMutation();
 
+    const containerRef = useRef(null);
+    const [pillStyles, setPillStyles] = useState({ width: 0, left: 0 });
+    const [activeKey, setActiveKey] = useState("1");
+
     const { message } = App.useApp();
     const [form] = Form.useForm();
     const [passwordForm] = Form.useForm();
+
+    const updatePillPosition = (key) => {
+        if (!containerRef.current) return;
+
+        // Find the actual Antd tab DOM element currently active
+        const activeTabEl = containerRef.current.querySelector(
+            `[data-node-key="${key}"]`,
+        );
+
+        if (activeTabEl) {
+            setPillStyles({
+                width: activeTabEl.offsetWidth,
+                left: activeTabEl.offsetLeft,
+            });
+        }
+    };
+
+    useEffect(() => {
+        updatePillPosition(activeKey);
+
+        // Recalculate if window resizes
+        window.addEventListener("resize", () => updatePillPosition(activeKey));
+        return () =>
+            window.removeEventListener("resize", () =>
+                updatePillPosition(activeKey),
+            );
+    }, [activeKey]);
 
     useEffect(() => {
         if (adminData) {
@@ -188,19 +219,21 @@ const Settings = () => {
                                     </Col>
                                     <Col md={12}>
                                         <Form.Item label="Role" name="role">
-                                            <Tag
-                                                style={{
-                                                    background:
-                                                        "oklch(0.8334 0.0876 8.43 / 71.79%)",
-                                                    color: "black",
-                                                    padding: "5px 18px",
-                                                    marginTop: "5px",
-                                                    borderRadius: "10px",
-                                                }}
-                                                variant="filled"
-                                            >
-                                                admin
-                                            </Tag>
+                                            <div className="border-b pb-3">
+                                                <Tag
+                                                    style={{
+                                                        background:
+                                                            "oklch(0.8334 0.0876 8.43 / 71.79%)",
+                                                        color: "black",
+                                                        padding: "5px 18px",
+                                                        marginTop: "2px",
+                                                        borderRadius: "10px",
+                                                    }}
+                                                    variant="filled"
+                                                >
+                                                    admin
+                                                </Tag>
+                                            </div>
                                         </Form.Item>
                                     </Col>
                                 </Row>
@@ -397,7 +430,9 @@ const Settings = () => {
                             </Button>
                         </Form.Item>
                         <Form.Item>
-                            <Link to="/reset">Forgot Password</Link>
+                            <Link to="/reset" className="hover:underline!">
+                                Forgot Password?
+                            </Link>
                         </Form.Item>
                     </Form>
                 </Card>
@@ -414,7 +449,24 @@ const Settings = () => {
                 </Text>
             </div>
 
-            <Tabs defaultActiveKey="1" items={items} />
+            <div
+                ref={containerRef}
+                className="custom-tabs-wrapper"
+                style={{
+                    "--pill-width": `${pillStyles.width}px`,
+                    "--pill-left": `${pillStyles.left}px`,
+                }}
+            >
+                <div className="custom-animated-pill" />
+
+                <Tabs
+                    defaultActiveKey="1"
+                    activeKey={activeKey}
+                    onChange={(key) => setActiveKey(key)}
+                    className="custom-settings-tab"
+                    items={items}
+                />
+            </div>
         </div>
     );
 };
