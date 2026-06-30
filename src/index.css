@@ -113,27 +113,27 @@ body {
 /* antd tab bar setting */
 /* Container wrapper setup */
 .custom-tabs-wrapper {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-  border-bottom: none !important;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    border-bottom: none !important;
 }
 
 /* Hide default Ant Design indicators and default backgrounds */
 .custom-settings-tab .ant-tabs-ink-bar {
-  display: none !important;
+    display: none !important;
 }
 .custom-settings-tab .ant-tabs-nav {
-  background: #F9FAFB !important;
-  margin-bottom: 3rem;
-  color: black !important;
+    background: #F9FAFB !important;
+    margin-bottom: 3rem;
+    color: black !important;
 }
 
 /* Ensure tab item buttons sit safely on top layer */
 .custom-settings-tab .ant-tabs-tab {
-  position: relative;
-  padding: 10px 20px !important;
-  transition: color 0.3s ease;
+    position: relative;
+    padding: 10px 20px !important;
+    transition: color 0.3s ease;
 }
 
 /* for sticky bar */
@@ -145,14 +145,13 @@ body {
 
 
 .custom-settings-tab .ant-tabs-nav {
-     box-shadow: 0px 5px 5px rgba(0,0,0,0.2) !important;
-     border-radius: 10px 10px 10px 10px;
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.2) !important;
+    border-radius: 10px 10px 10px 10px;
 }
 
 .custom-settings-tab .ant-tabs-nav::before {
     content: "";
     border-bottom: none !important;
-   
 }
 
 .custom-settings-tab .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
@@ -160,20 +159,20 @@ body {
 }
 
 .custom-animated-pill {
-  position: absolute;
-  top: 0;
-  
+    position: absolute;
+    top: 0;
+
   /* handle dynamic size */
-  width: var(--pill-width, 0px);
-  height: 44px; 
-  
-  background-color: var(--primary-pink);
-  border-radius: 10px;
-  pointer-events: none;
-  
-  transform: translateX(var(--pill-left, 0px));
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
-              width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    width: var(--pill-width, 0px);
+    height: 44px; 
+
+    background-color: var(--primary-pink);
+    border-radius: 10px;
+    pointer-events: none;
+
+    transform: translateX(var(--pill-left, 0px));
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* table wrapper styling */
