@@ -11,7 +11,6 @@ import {
     Col,
     App,
     Tag,
-    Affix,
 } from "antd";
 import {
     UserOutlined,
@@ -598,7 +597,7 @@ const Settings = () => {
 
     return (
         <div className="w-full px-6">
-            <div className="px-2  pb-10">
+            <div className="px-2 pb-10 header-sticky">
                 <Title level={2}>Settings</Title>
                 <Text type="secondary">
                     Manage your account settings and preferences.

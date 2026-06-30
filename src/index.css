@@ -124,7 +124,7 @@ body {
   display: none !important;
 }
 .custom-settings-tab .ant-tabs-nav {
-  background: transparent !important;
+  background: #F9FAFB !important;
   margin-bottom: 3rem;
   color: black !important;
 }
@@ -136,7 +136,15 @@ body {
   transition: color 0.3s ease;
 }
 
-.custom-settings-tab .ant-tabs-nav{
+/* for sticky bar */
+.custom-settings-tab > .ant-tabs-nav {
+    position: sticky !important;
+    top: 0;
+    z-index: 10;
+}
+
+
+.custom-settings-tab .ant-tabs-nav {
      box-shadow: 0px 5px 5px rgba(0,0,0,0.2) !important;
      border-radius: 10px 10px 10px 10px;
 }
