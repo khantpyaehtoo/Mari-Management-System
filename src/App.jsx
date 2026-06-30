@@ -15,7 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import WalkIn from "./features/walkIn/WalkIn.jsx";
 import Category from "./features/management/services/Category.jsx";
 import AllServices from "./features/management/services/AllServices.jsx";
-import Reports from "./features/management/reports/Reports.jsx";
+import ReportsPage from "./features/reports/ReportsPage.jsx";
 // import IsAuth from "./components/Guards/IsAuth.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
@@ -63,7 +63,7 @@ export default function App() {
                         <Route path="staff" element={<Staff />} />
                     </Route>
                     <Route path="/walk-in" element={<WalkIn />} />
-                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/reports" element={<ReportsPage />} />
                     <Route path="/settings" element={<Settings />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />

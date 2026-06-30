@@ -19,6 +19,7 @@ body {
     --color-white-back: #FFFAF6;
     --color-white-form: #F9FAFB;
     --color-primary: var(--primary-pink);
+    --color-primary-sec: #FEE1EB;
 
     --color-progress: #D66400;
     --color-pending: #FF9800;

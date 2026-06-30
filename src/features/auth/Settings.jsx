@@ -7,18 +7,20 @@ import {
     Typography,
     Avatar,
     Upload,
-    Switch,
     Row,
     Col,
-    Space,
     App,
+    Tag,
 } from "antd";
 import {
     UserOutlined,
     LockOutlined,
-    BellOutlined,
     UploadOutlined,
     SaveOutlined,
+    InfoCircleOutlined,
+    DesktopOutlined,
+    SoundOutlined,
+    PlusOutlined,
 } from "@ant-design/icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -27,6 +29,7 @@ import {
     useUpdateAdminDataMutation,
     useGetSettingsQuery,
 } from "./authApi";
+import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -53,7 +56,6 @@ const Settings = () => {
     }, [adminData, form]);
 
     const onFinishAccount = async (values) => {
-        // console.log(values);
         try {
             await updateAdminData({
                 adminData: values,
@@ -93,28 +95,48 @@ const Settings = () => {
                 </span>
             ),
             children: (
-                <Card title="Account Information" className="shadow-sm">
-                    <Row gutter={24}>
-                        <Col
-                            xs={24}
-                            md={8}
-                            className="flex flex-col items-center mb-6"
+                <Card
+                    title="Account Information"
+                    extra={
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            icon={<SaveOutlined />}
+                            className="bg-blue-600"
+                            loading={isUpdatingAdmin}
                         >
-                            <Space vertical size="large">
-                                <Avatar
-                                    size={120}
-                                    src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                                    icon={<UserOutlined />}
-                                    className="mb-4"
-                                />
-                                <Upload showUploadList={false}>
-                                    <Button icon={<UploadOutlined />}>
-                                        Change Avatar
-                                    </Button>
-                                </Upload>
-                            </Space>
+                            Save Changes
+                        </Button>
+                    }
+                    className="shadow-sm rounded-2xl!"
+                >
+                    <Row gutter={24}>
+                        <Col xs={24} md={6}>
+                            <div className="border-r border-gray-300 h-full ps-10">
+                                <div className="relative">
+                                    <Upload
+                                        showUploadList={false}
+                                        className="cursor-pointer!"
+                                    >
+                                        <Avatar
+                                            size={140}
+                                            src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
+                                            icon={<UserOutlined />}
+                                            className="border-3! border-primary!"
+                                        />
+
+                                        <Button
+                                            icon={<UploadOutlined size={10} />}
+                                            className="absolute! bottom-0! left-25! rounded-full! bg-primary! text-white! border-primary!"
+                                        />
+                                    </Upload>
+                                </div>
+                                <p className="text-xs text-center w-40 mt-5">
+                                    Allowed JPG, GIF or PNG. Max size of 800kB
+                                </p>
+                            </div>
                         </Col>
-                        <Col xs={24} md={16}>
+                        <Col xs={24} md={18} className="mx-auto">
                             <Form
                                 form={form}
                                 layout="vertical"
@@ -128,49 +150,71 @@ const Settings = () => {
                                         "(+95) 9 xxx xxx xxx",
                                 }}
                             >
-                                <Form.Item
-                                    label="Username"
-                                    name="username"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                                "Please input your username!",
-                                        },
-                                    ]}
-                                >
-                                    <Input prefix={<UserOutlined />} />
-                                </Form.Item>
-                                <Form.Item
-                                    label="Email Address"
-                                    name="email"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Please input your email!",
-                                        },
-                                        {
-                                            type: "email",
-                                            message:
-                                                "Please enter a valid email!",
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item label="Phone Number" name="phone">
-                                    <Input />
-                                </Form.Item>
+                                <Row gutter={[24, 24]}>
+                                    <Col md={12}>
+                                        <Form.Item
+                                            label="Username"
+                                            name="username"
+                                        >
+                                            <Input
+                                                prefix={<UserOutlined />}
+                                                className="input-styling!"
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col md={12}>
+                                        <Form.Item
+                                            label="Phone Number"
+                                            name="phone"
+                                        >
+                                            <Input className="input-styling!" />
+                                        </Form.Item>
+                                    </Col>
+
+                                    <Col md={12}>
+                                        <Form.Item
+                                            label="Email Address"
+                                            name="email"
+                                            rules={[
+                                                {
+                                                    type: "email",
+                                                    message:
+                                                        "Please enter a valid email!",
+                                                },
+                                            ]}
+                                        >
+                                            <Input className="input-styling!" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col md={12}>
+                                        <Form.Item label="Role" name="role">
+                                            <Tag
+                                                style={{
+                                                    background:
+                                                        "oklch(0.8334 0.0876 8.43 / 71.79%)",
+                                                    color: "black",
+                                                    padding: "5px 18px",
+                                                    marginTop: "5px",
+                                                    borderRadius: "10px",
+                                                }}
+                                                variant="filled"
+                                            >
+                                                admin
+                                            </Tag>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+
                                 <Form.Item>
-                                    <Button
-                                        type="primary"
-                                        htmlType="submit"
-                                        icon={<SaveOutlined />}
-                                        className="bg-blue-600"
-                                        loading={isUpdatingAdmin}
-                                    >
-                                        Save Changes
-                                    </Button>
+                                    <div className="flex gap-3 px-3 py-2 w-175 rounded-xl text-gray-600 bg-primary-sec text-xs mt-10!">
+                                        <InfoCircleOutlined />
+                                        <p>
+                                            Changes made to your personal
+                                            information will be reflected across
+                                            the salon's booking and artist
+                                            directory.
+                                        </p>
+                                    </div>
                                 </Form.Item>
                             </Form>
                         </Col>
@@ -182,12 +226,91 @@ const Settings = () => {
             key: "2",
             label: (
                 <span className="flex items-center gap-2">
+                    <DesktopOutlined />
+                    Salon Profile
+                </span>
+            ),
+            children: (
+                <Card className="shadow-sm w-[60%] rounded-2xl!">
+                    <section className="flex justify-between items-center mb-10!">
+                        <Card.Meta
+                            title="Salon Identity"
+                            description="Your public-facing name & logo"
+                        />
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            icon={<UploadOutlined />}
+                            className="bg-blue-600"
+                            loading={isUpdatingAdmin}
+                        >
+                            Upload
+                        </Button>
+                    </section>
+
+                    <Form layout="vertical">
+                        <div className="grid grid-cols-2 mx-10">
+                            <Form.Item
+                                label="Salon Logo"
+                                valuePropName="fileList"
+                            >
+                                <Upload
+                                    action="/upload.do"
+                                    showUploadList={false}
+                                >
+                                    <button
+                                        style={{
+                                            color: "inherit",
+                                            cursor: "inherit",
+                                            background: "none",
+                                        }}
+                                        type="button"
+                                        className="w-50 h-33 border-2 border-black border-dotted rounded-2xl mt-3"
+                                    >
+                                        <PlusOutlined />
+                                        <div style={{ marginTop: 8 }}>
+                                            Upload Logo
+                                        </div>
+                                    </button>
+                                    <p className="text-center mt-5">PNG, SVG</p>
+                                </Upload>
+                            </Form.Item>
+                            <Form.Item label="Salon Name" name="name">
+                                <Input
+                                    className="input-styling!"
+                                    placeholder="Enter the Salon Name"
+                                />
+                            </Form.Item>
+                        </div>
+                    </Form>
+                </Card>
+            ),
+        },
+        {
+            key: "3",
+            label: (
+                <span className="flex items-center gap-2">
+                    <SoundOutlined />
+                    Media & Uploads
+                </span>
+            ),
+            children: (
+                <Card title="Media & Uploads" className="shadow-sm"></Card>
+            ),
+        },
+        {
+            key: "4",
+            label: (
+                <span className="flex items-center gap-2">
                     <LockOutlined />
                     Security
                 </span>
             ),
             children: (
-                <Card title="Change Password" className="shadow-sm">
+                <Card
+                    title="Change Password"
+                    className="shadow-sm! w-[60%] rounded-2xl!"
+                >
                     <Form
                         form={passwordForm}
                         layout="vertical"
@@ -205,7 +328,10 @@ const Settings = () => {
                                 },
                             ]}
                         >
-                            <Input.Password prefix={<LockOutlined />} />
+                            <Input.Password
+                                prefix={<LockOutlined />}
+                                className="input-styling!"
+                            />
                         </Form.Item>
                         <Form.Item
                             label="New Password"
@@ -222,7 +348,10 @@ const Settings = () => {
                                 },
                             ]}
                         >
-                            <Input.Password prefix={<LockOutlined />} />
+                            <Input.Password
+                                prefix={<LockOutlined />}
+                                className="input-styling!"
+                            />
                         </Form.Item>
                         <Form.Item
                             label="Confirm New Password"
@@ -252,7 +381,10 @@ const Settings = () => {
                                 }),
                             ]}
                         >
-                            <Input.Password prefix={<LockOutlined />} />
+                            <Input.Password
+                                prefix={<LockOutlined />}
+                                className="input-styling!"
+                            />
                         </Form.Item>
                         <Form.Item>
                             <Button
@@ -264,70 +396,24 @@ const Settings = () => {
                                 Update Password
                             </Button>
                         </Form.Item>
+                        <Form.Item>
+                            <Link to="/reset">Forgot Password</Link>
+                        </Form.Item>
                     </Form>
-                </Card>
-            ),
-        },
-        {
-            key: "3",
-            label: (
-                <span className="flex items-center gap-2">
-                    <BellOutlined />
-                    Notifications
-                </span>
-            ),
-            children: (
-                <Card title="Notification Preferences" className="shadow-sm">
-                    <div className="flex flex-col gap-6">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <Text strong className="block">
-                                    Email Notifications
-                                </Text>
-                                <Text type="secondary">
-                                    Receive emails about account activity and
-                                    security.
-                                </Text>
-                            </div>
-                            <Switch defaultChecked />
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <Text strong className="block">
-                                    Push Notifications
-                                </Text>
-                                <Text type="secondary">
-                                    Receive push notifications on your device.
-                                </Text>
-                            </div>
-                            <Switch defaultChecked />
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <Text strong className="block">
-                                    Newsletter
-                                </Text>
-                                <Text type="secondary">
-                                    Receive our weekly newsletter about new
-                                    features.
-                                </Text>
-                            </div>
-                            <Switch />
-                        </div>
-                    </div>
                 </Card>
             ),
         },
     ];
 
     return (
-        <div className="max-w-5xl mx-auto py-4">
+        <div className="w-full px-6">
             <div className="mb-6">
                 <Title level={2}>Settings</Title>
                 <Text type="secondary">
                     Manage your account settings and preferences.
                 </Text>
             </div>
+
             <Tabs defaultActiveKey="1" items={items} />
         </div>
     );
