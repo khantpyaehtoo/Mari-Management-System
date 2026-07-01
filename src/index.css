@@ -110,6 +110,14 @@ body {
     background: white !important;
 }
 
+.ant-layout-content {
+    padding-top: 0 !important;
+}
+
+.custom-header-stickys {
+    width: 100% !important;
+    box-shadow: 0 10px 5px rgba(0,0,0,0.2);
+}
 
 /* ant custom tabs and animation pill */
 .custom-tabs-wrapper {
@@ -153,6 +161,7 @@ body {
     position: relative;
     z-index: 999 !important;
     color: #4B5563 !important; /* Normal text color (Gray 600) */
+    transform: translate(0px, 10px);
     transition: color 0.3s ease;
 }
 
@@ -171,7 +180,6 @@ body {
     position: absolute;
     top: 50%; 
     
-    /* Handle dynamic size & slide animation */
     width: var(--pill-width, 0px);
     height: 100%; 
     max-height: 44px;

@@ -206,6 +206,16 @@ const Settings = () => {
                                     form={form}
                                     layout="vertical"
                                     onFinish={onFinishAccount}
+                                    initialValues={{
+                                        username:
+                                            adminData?.username || "Admin",
+                                        email:
+                                            adminData?.email ||
+                                            "admin@gmail.com",
+                                        phone:
+                                            adminData?.phone ||
+                                            "(+95) 9 xxx xxx xxx",
+                                    }}
                                 >
                                     <Row gutter={[24, 0]}>
                                         <Col xs={24} md={12}>
@@ -264,7 +274,7 @@ const Settings = () => {
                                         </Col>
                                     </Row>
                                     <Form.Item>
-                                        <div className="flex gap-3 px-3 py-2 w-full max-w-[700px] rounded-xl text-gray-600 bg-primary-sec text-xs mt-10!">
+                                        <div className="flex gap-3 px-3 py-2 w-full max-w-175 rounded-xl text-gray-600 bg-primary-sec text-xs mt-10!">
                                             <InfoCircleOutlined className="mt-0.5" />
                                             <p>
                                                 Changes made to your personal
@@ -290,7 +300,7 @@ const Settings = () => {
                 ),
                 children: (
                     <Card className="shadow-sm w-full lg:w-[60%] rounded-2xl!">
-                        <section className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-10!">
+                        <section className="flex flex-col border-b-black sm:flex-row gap-4 justify-between items-start sm:items-center mb-10!">
                             <Card.Meta
                                 title="Salon Identity"
                                 description="Your public-facing name & logo"
@@ -322,7 +332,7 @@ const Settings = () => {
                                                 background: "none",
                                             }}
                                             type="button"
-                                            className="w-full max-w-[200px] h-33 border-2 border-black border-dotted rounded-2xl mt-3"
+                                            className="w-50 h-33 border-2 border-black border-dotted rounded-2xl mt-3"
                                         >
                                             <CloudUploadOutlined className="text-2xl" />
                                             <div style={{ marginTop: 8 }}>
@@ -358,7 +368,7 @@ const Settings = () => {
                         {[1, 2, 3].map((index) => (
                             <Card
                                 key={index}
-                                className="shadow-sm rounded-2xl!"
+                                className="shadow-sm rounded-2xl! mb-10!"
                             >
                                 <section className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-10! border-b border-gray-400 pb-5">
                                     <Card.Meta
@@ -374,9 +384,18 @@ const Settings = () => {
                                         Upload
                                     </Button>
                                 </section>
+                                <section className="flex justify-between items-center pb-5">
+                                    <Card.Meta
+                                        title="Hero Banner"
+                                        description="Shown full-width on the client booking home screen. Use a high-quality lifestyle image of your salon or nail work."
+                                    />
+                                    <div className="border border-gray-300 px-3 py-2 rounded-md">
+                                        16:5 — 1600 × 500px
+                                    </div>
+                                </section>
                                 <Dragger
                                     {...uploadProps}
-                                    className="h-125! w-full max-w-[400px]!"
+                                    className="h-125! w-full max-w-100!"
                                 >
                                     <div className="p-5 md:p-15">
                                         <p className="ant-upload-drag-icon">
@@ -510,8 +529,8 @@ const Settings = () => {
 
     const renderTabBar = useCallback(
         (props, DefaultTabBar) => (
-            <div className="sticky top-0 bg-white-back z-50 shadow-2xl">
-                <div className="px-2 pb-4 md:pb-6 mb-10 w-[95%]">
+            <div className="sticky top-0 bg-white-back mb-10 z-50">
+                <div className="mb-2 px-10 py-4">
                     <Title level={2} className="text-xl md:text-2xl">
                         Settings
                     </Title>
@@ -528,7 +547,10 @@ const Settings = () => {
                     }}
                 >
                     <div className="custom-animated-pill" />
-                    <DefaultTabBar {...props} className="bg-white-back" />
+                    <DefaultTabBar
+                        {...props}
+                        className="bg-white-back w-full"
+                    />
                 </div>
             </div>
         ),
@@ -536,7 +558,7 @@ const Settings = () => {
     );
 
     return (
-        <div className="w-full px-4 py-0! md:px-6">
+        <div>
             <Tabs
                 activeKey={activeKey}
                 onChange={setActiveKey}
