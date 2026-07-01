@@ -1,21 +1,6 @@
 import { Typography } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import DashboardCard from "../../components/dashboard/DashboardCard";
-
-const items = [
-    {
-        title: "Total Revenue This Month (June,2026)",
-        value: "476K",
-    },
-    {
-        title: "Total Bookings This Month (June,2026)",
-        value: "100",
-    },
-    {
-        title: "Total Customers (June,2026)",
-        value: "876",
-    },
-];
+import ReportCards from "./ReportCards";
 
 const ReportsPage = () => {
     return (
@@ -33,14 +18,8 @@ const ReportsPage = () => {
                     Report Summary (May, 2026)
                 </Typography.Title>
 
-                <div className="grid-items-4 mx-auto!">
-                    {items.map((item, idx) => (
-                        <DashboardCard
-                            key={idx}
-                            title={item.title}
-                            value={item.value}
-                        />
-                    ))}
+                <div className="mx-auto">
+                    <ReportCards />
                 </div>
             </section>
         </>

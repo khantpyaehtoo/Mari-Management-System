@@ -27,8 +27,9 @@ const SubHeaderSection = ({
     return (
         <div
             className={cn(
-                title === "Customer" ? "border-0 px-3" : "p-3 border-b",
-                title === "Reports & Analystics" && "border-0 px-3 py-3 mb-3",
+                title.includes("Customer") ? "border-0 px-3" : "p-3 border-b",
+                title.includes("Reports & Analystics") &&
+                    "border-0 px-3 py-3 mb-3",
             )}
         >
             {!!title && (
