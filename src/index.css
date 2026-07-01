@@ -160,7 +160,7 @@ body {
 .custom-settings-tab .ant-tabs-tab-btn {
     position: relative;
     z-index: 80 !important;
-    color: #4B5563 !important; /* Normal text color (Gray 600) */
+    color: #4B5563 !important; 
     transform: translate(0px, 10px);
     transition: color 0.3s ease;
 }

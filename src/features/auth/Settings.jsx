@@ -192,7 +192,7 @@ const Settings = () => {
         (props, DefaultTabBar) => (
             <div className="sticky top-0 bg-white-back mb-10 z-50">
                 <div className="mb-2 px-3 py-3">
-                    <Title level={2} className="text-xl md:text-2xl">
+                    <Title level={2} className="text-primary!">
                         Settings
                     </Title>
                     <Text type="secondary" className="text-xs md:text-sm">
