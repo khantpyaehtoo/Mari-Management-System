@@ -1,10 +1,5 @@
 import { Tabs, Form, Typography, App } from "antd";
-import {
-    UserOutlined,
-    LockOutlined,
-    DesktopOutlined,
-    SoundOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, LockOutlined, SoundOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,7 +8,6 @@ import {
     useGetSettingsQuery,
 } from "./authApi";
 import { setMessage } from "../../app/core/notiSlice";
-import SalonProfile from "./Settings/SalonProfile";
 import SecuritySettings from "./Settings/SecuritySettings";
 import AccountSettings from "./Settings/AccountSettings";
 import MediaUploadsSetting from "./Settings/MediaUploadsSetting";
@@ -38,7 +32,6 @@ const Settings = () => {
     const [form] = Form.useForm();
     const [passwordForm] = Form.useForm();
 
-    // 💡 useCallback သုံးပြီး function ကို memoize လုပ်ထားပါတယ်
     const updatePillPosition = useCallback((key) => {
         if (!containerRef.current) return;
         const activeTabEl = containerRef.current.querySelector(
@@ -155,16 +148,6 @@ const Settings = () => {
                 key: "2",
                 label: (
                     <span className="flex items-center gap-2">
-                        <DesktopOutlined />
-                        Salon Profile
-                    </span>
-                ),
-                children: <SalonProfile isUpdatingAdmin={isUpdatingAdmin} />,
-            },
-            {
-                key: "3",
-                label: (
-                    <span className="flex items-center gap-2">
                         <SoundOutlined />
                         Media & Uploads
                     </span>
@@ -208,7 +191,7 @@ const Settings = () => {
     const renderTabBar = useCallback(
         (props, DefaultTabBar) => (
             <div className="sticky top-0 bg-white-back mb-10 z-50">
-                <div className="mb-2 px-10 py-4">
+                <div className="mb-2 px-3 py-3">
                     <Title level={2} className="text-xl md:text-2xl">
                         Settings
                     </Title>

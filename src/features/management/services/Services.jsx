@@ -102,8 +102,8 @@ const Services = () => {
                         <Link to={item.key}>
                             <Card
                                 className={cn(
-                                    item.title === "Packages" ||
-                                        item.title === "All Services"
+                                    item.title.includes("Packages") ||
+                                        item.title.includes("All Services")
                                         ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
                                         : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
                                     "pt-6! min-h-30! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
