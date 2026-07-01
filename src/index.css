@@ -159,7 +159,7 @@ body {
 /* Text Wrapper inside Tab */
 .custom-settings-tab .ant-tabs-tab-btn {
     position: relative;
-    z-index: 999 !important;
+    z-index: 80 !important;
     color: #4B5563 !important; /* Normal text color (Gray 600) */
     transform: translate(0px, 10px);
     transition: color 0.3s ease;

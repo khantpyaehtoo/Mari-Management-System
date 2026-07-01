@@ -191,7 +191,7 @@ const Settings = () => {
                                                 icon={
                                                     <UploadOutlined size={10} />
                                                 }
-                                                className="absolute! bottom-1! right-1! rounded-full! bg-primary! text-white! border-primary! transform translate-x-1/4 translate-y-1/4"
+                                                className="absolute! bottom-3! right-3! rounded-full! bg-primary! text-white! border-primary! transform translate-x-1/4 translate-y-1/4"
                                             />
                                         </Upload>
                                     </div>
@@ -517,6 +517,7 @@ const Settings = () => {
             },
         ],
         [
+            adminData,
             isUpdatingAdmin,
             form,
             onFinishAccount,
