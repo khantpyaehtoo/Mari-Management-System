@@ -142,7 +142,6 @@ const Staff = () => {
         };
     }, [dataList]);
 
-    // UseCallback for freeze memory reference addresses across renders
     const handleActionClick = useCallback((actionType, record) => {
         setSelectedStaff(record);
         if (actionType === "view") {

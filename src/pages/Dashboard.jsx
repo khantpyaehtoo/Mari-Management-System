@@ -1,4 +1,4 @@
-import { Flex, Radio, Space, Typography } from "antd";
+import { Flex, Radio, Space, Table, Typography } from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
@@ -33,6 +33,18 @@ const dashboardCardItem = [
     },
 ];
 
+const dummyData = [
+    {
+        key: "1",
+        employeeInfo: "ST-0042",
+        name: "Phyu Phyu",
+        count: "115",
+        rating: "4.5",
+        revenue: "200,000",
+        commission: "20000",
+    },
+];
+
 const radioBtnOptions = [
     {
         label: "Weekly",
@@ -43,6 +55,35 @@ const radioBtnOptions = [
         value: "monthly",
     },
 ];
+
+const column = [
+    {
+        title: "Employee Info",
+        dataIndex: "employeeInfo",
+        key: "employeeInfo",
+    },
+    {
+        title: "Services Completed",
+        dataIndex: "count",
+        key: "count",
+    },
+    {
+        title: "Client Rating",
+        dataIndex: "rating",
+        key: "rating",
+    },
+    {
+        title: "Revenue",
+        dataIndex: "revenue",
+        key: "revenue",
+    },
+    {
+        title: "Commission",
+        dataIndex: "commission",
+        key: "commission",
+    },
+];
+
 const Dashboard = () => {
     const { Title } = Typography;
     const [viewType, setViewType] = useState("weekly");
@@ -89,6 +130,26 @@ const Dashboard = () => {
                 ) : (
                     <YearlyLineChart />
                 )}
+            </section>
+
+            <section className="space-y-6 w-full px-10">
+                <div className="mb-6!">
+                    <Space vertical size="small">
+                        <Typography.Title
+                            level={3}
+                            className="text-xl! font-medium!"
+                        >
+                            Nail Artist’s Performance (Monthly)
+                        </Typography.Title>
+                        <p className="text-gray-600">
+                            Track completed bookings, customer ratings, and
+                            overall performance.
+                        </p>
+                    </Space>
+                </div>
+                <div className="table-wrapper">
+                    <Table columns={column} dataSource={dummyData} />
+                </div>
             </section>
         </Flex>
     );
