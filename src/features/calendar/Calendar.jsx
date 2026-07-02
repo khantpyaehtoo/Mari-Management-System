@@ -2,6 +2,7 @@ import {
     Avatar,
     Button,
     Calendar,
+    Card,
     Col,
     Flex,
     Row,
@@ -119,32 +120,35 @@ const CalendarSection = () => {
             </Flex>
 
             <Row gutter={12}>
-                <Col
-                    lg={6}
-                    className="w-full p-5! rounded-2xl mt-5 broder-2! border-black bg-indigo-600! space-y-5!"
-                >
-                    <Typography.Title level={4} className="text-center!">
-                        Staff Today (June, 30)
-                    </Typography.Title>
-                    <Flex
-                        justify="space-between"
-                        items="center"
-                        className="border-2! border-primary! rounded-2xl! px-10! py-2!"
-                    >
-                        <Space size="middle">
-                            <Avatar
-                                src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                                size={40}
-                            />
-                            <Space size="small" vertical>
-                                <h1 className="text-lg! font-medium!">
-                                    Myo Myo
-                                </h1>
-                                <p className="text-sm!">Nail Artist</p>
+                <Col lg={6}>
+                    <Card className="w-full rounded-2xl! border-2! border-primary! mt-5!">
+                        <Flex justify="space-between">
+                            <Space vertical size="small">
+                                <Typography.Title
+                                    level={4}
+                                    className="font-medium! text-center! m-0!"
+                                >
+                                    Today's Staffs (June 24)
+                                </Typography.Title>
                             </Space>
-                        </Space>
-                        <div className="w-5 h-5 bg-green-500 rounded-full" />
-                    </Flex>
+                        </Flex>
+
+                        <section className="mt-5">
+                            <div className="border-2! border-primary! rounded-2xl! px-10! py-5! mb-3">
+                                <Flex vertical>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h1 className="text-2xl! font-medium!">
+                                            Myo Myo
+                                        </h1>
+                                        <p className="text-end">10:00 AM</p>
+                                    </div>
+                                    <p className="text-sm mb-2">
+                                        Gel Manicure + Nail Art
+                                    </p>
+                                </Flex>
+                            </div>
+                        </section>
+                    </Card>
                 </Col>
                 <Col lg={18}>
                     <Calendar

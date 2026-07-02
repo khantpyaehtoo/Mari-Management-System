@@ -1,4 +1,15 @@
-import { Flex, Radio, Space, Table, Typography } from "antd";
+import {
+    Avatar,
+    Card,
+    Col,
+    Flex,
+    Radio,
+    Row,
+    Space,
+    Table,
+    Tag,
+    Typography,
+} from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
@@ -9,6 +20,9 @@ import {
 } from "@ant-design/icons";
 import { YearlyLineChart } from "../components/dashboard/YearlyLineChart";
 import { useState } from "react";
+import ServicePieChart from "../components/dashboard/ServicePieChart";
+import { Link } from "react-router-dom";
+import BookingCard from "../components/dashboard/BookingCard";
 
 const dashboardCardItem = [
     {
@@ -150,6 +164,30 @@ const Dashboard = () => {
                 <div className="table-wrapper">
                     <Table columns={column} dataSource={dummyData} />
                 </div>
+            </section>
+
+            <section className="mt-10 mx-10">
+                <Row gutter={24}>
+                    <Col md={12} lg={12}>
+                        <section>
+                            <Card>
+                                <Space vertical size="small">
+                                    <Typography.Title
+                                        level={3}
+                                        className="text-xl! font-medium!"
+                                    >
+                                        Revenue by Services
+                                    </Typography.Title>
+                                    <p className="text-gray-600">This month</p>
+                                </Space>
+                                <ServicePieChart />
+                            </Card>
+                        </section>
+                    </Col>
+                    <Col md={12} lg={12}>
+                        <BookingCard />
+                    </Col>
+                </Row>
             </section>
         </Flex>
     );
