@@ -1,25 +1,25 @@
-import { Flex, Typography } from "antd";
+import { Flex, Radio, Space, Typography } from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
-import { MonthlyChart } from "../components/dashboard/MonthlyChart";
-// import { CalendarCard } from "../components/dashboard/CalendarCard";
+import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
     ApartmentOutlined,
     IdcardOutlined,
     UnorderedListOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { DemoLine } from "../components/dashboard/LineChart";
+import { YearlyLineChart } from "../components/dashboard/YearlyLineChart";
+import { useState } from "react";
 
 const dashboardCardItem = [
     {
         icon: <UserOutlined />,
-        title: "Total User",
-        value: "400",
+        title: "Total Booking",
+        value: "1.1K",
     },
     {
         icon: <ApartmentOutlined />,
-        title: "Total Services",
-        value: "35",
+        title: "Total Revenue",
+        value: "467k",
     },
     {
         icon: <IdcardOutlined />,
@@ -28,12 +28,25 @@ const dashboardCardItem = [
     },
     {
         icon: <UnorderedListOutlined />,
-        title: "Total Booking",
+        title: "Total Customer",
         value: "2,000",
+    },
+];
+
+const radioBtnOptions = [
+    {
+        label: "Weekly",
+        value: "weekly",
+    },
+    {
+        label: "Monthly",
+        value: "monthly",
     },
 ];
 const Dashboard = () => {
     const { Title } = Typography;
+    const [viewType, setViewType] = useState("weekly");
+
     return (
         <Flex vertical>
             <Title className="title-style" level={3}>
@@ -54,13 +67,28 @@ const Dashboard = () => {
             </section>
 
             <section className="mt-10 mb-10 px-10">
-                <div className="grid-items">
-                    <MonthlyChart />
-                    {/* <div className="h-[200px]"> */}
-                    {/* <CalendarCard /> */}
-                    {/* </div> */}
-                    <DemoLine />
+                <div className="flex justify-start items-center! mb-6!">
+                    <Space size="large">
+                        <Typography.Title
+                            level={3}
+                            className="text-xl! font-medium!"
+                        >
+                            Weekly Bookings & Cancellations
+                        </Typography.Title>
+                        <Radio.Group
+                            options={radioBtnOptions}
+                            optionType="button"
+                            buttonStyle="solid"
+                            onChange={(e) => setViewType(e.target.value)}
+                            value={viewType}
+                        />
+                    </Space>
                 </div>
+                {viewType === "weekly" ? (
+                    <WeeklyBarChart />
+                ) : (
+                    <YearlyLineChart />
+                )}
             </section>
         </Flex>
     );
