@@ -3,15 +3,15 @@ import { Card } from "antd";
 
 export const YearlyLineChart = () => {
     const data = [
-        { year: "1991", value: 3, count: 10 },
-        { year: "1992", value: 4, count: 4 },
-        { year: "1993", value: 3.5, count: 5 },
-        { year: "1994", value: 5, count: 5 },
-        { year: "1995", value: 4.9, count: 4.9 },
-        { year: "1996", value: 6, count: 35 },
-        { year: "1997", value: 7, count: 7 },
-        { year: "1998", value: 9, count: 1 },
-        { year: "1999", value: 13, count: 20 },
+        { year: "1999", value: 3, count: 10 },
+        { year: "2000", value: 4, count: 4 },
+        { year: "2001", value: 3.5, count: 5 },
+        { year: "2002", value: 5, count: 5 },
+        { year: "2003", value: 4.9, count: 4.9 },
+        { year: "2004", value: 6, count: 35 },
+        { year: "2005", value: 7, count: 7 },
+        { year: "2006", value: 9, count: 1 },
+        { year: "2007", value: 13, count: 20 },
     ];
 
     const config = {

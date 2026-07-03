@@ -19,11 +19,11 @@ const BookingCard = () => {
                 </Link>
             </Flex>
 
-            <section className="mt-5">
-                <div className="border-2! border-primary! rounded-2xl! px-10! py-5! mb-3">
+            <section className="mt-5 space-y-4">
+                <div className="border-2 border-primary rounded-2xl px-5 py-3">
                     <Flex vertical>
                         <div className="flex items-center justify-between mb-2">
-                            <h1 className="text-2xl! font-medium!">Myo Myo</h1>
+                            <h1 className="text-xl! font-semibold!">Myo Myo</h1>
                             <p className="text-end">10:00 AM</p>
                         </div>
                         <p className="text-sm mb-2">Gel Manicure + Nail Art</p>
@@ -31,11 +31,12 @@ const BookingCard = () => {
                         <div className="flex items-center justify-between">
                             <Tag
                                 style={{
-                                    background: "oklch(0.7 0.1 218 / 67.78%)",
-                                    color: "black",
+                                    background: "skyblue",
+                                    color: "white",
                                     padding: "5px 18px",
                                     marginTop: "2px",
-                                    borderRadius: "10px",
+                                    borderRadius: "20px",
+                                    borderColor: "blue",
                                 }}
                                 variant="filled"
                             >
@@ -45,10 +46,10 @@ const BookingCard = () => {
                         </div>
                     </Flex>
                 </div>
-                <div className="border-2! border-primary! rounded-2xl! px-10! py-5! mb-3">
+                <div className="border-2 border-primary rounded-2xl px-5 py-3">
                     <Flex vertical>
                         <div className="flex items-center justify-between mb-2">
-                            <h1 className="text-2xl! font-medium!">Myo Myo</h1>
+                            <h1 className="text-xl! font-semibold!">Myo Myo</h1>
                             <p className="text-end">10:00 AM</p>
                         </div>
                         <p className="text-sm mb-2">Gel Manicure + Nail Art</p>
@@ -56,11 +57,12 @@ const BookingCard = () => {
                         <div className="flex items-center justify-between">
                             <Tag
                                 style={{
-                                    background: "oklch(0.7 0.1 218 / 67.78%)",
-                                    color: "black",
+                                    background: "skyblue",
+                                    color: "white",
                                     padding: "5px 18px",
                                     marginTop: "2px",
-                                    borderRadius: "10px",
+                                    borderRadius: "20px",
+                                    borderColor: "blue",
                                 }}
                                 variant="filled"
                             >

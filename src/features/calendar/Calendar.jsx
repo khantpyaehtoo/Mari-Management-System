@@ -12,9 +12,10 @@ import {
     Typography,
 } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
+import EmployeeAttendance from "./EmployeeAttendance";
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
     const [fetching, setFetching] = useState(false);
@@ -37,6 +38,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
         };
         return debounce(loadOptions, debounceTimeout);
     }, [fetchOptions, debounceTimeout]);
+
     return (
         <Select
             labelInValue
@@ -112,76 +114,96 @@ const CalendarSection = () => {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        icon={<UploadOutlined />}
+                        icon={<PlusCircleOutlined />}
                     >
                         Assign Leave
                     </Button>
                 </Space>
             </Flex>
 
-            <Row gutter={12}>
-                <Col lg={6}>
-                    <Card className="w-full rounded-2xl! border-2! border-primary! mt-5!">
-                        <Flex justify="space-between">
-                            <Space vertical size="small">
-                                <Typography.Title
-                                    level={4}
-                                    className="font-medium! text-center! m-0!"
-                                >
-                                    Today's Staffs (June 24)
-                                </Typography.Title>
-                            </Space>
-                        </Flex>
-
-                        <section className="mt-5">
-                            <div className="border-2! border-primary! rounded-2xl! px-10! py-5! mb-3">
-                                <Flex vertical>
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h1 className="text-2xl! font-medium!">
-                                            Myo Myo
-                                        </h1>
-                                        <p className="text-end">10:00 AM</p>
-                                    </div>
-                                    <p className="text-sm mb-2">
-                                        Gel Manicure + Nail Art
-                                    </p>
-                                </Flex>
-                            </div>
-                        </section>
-                    </Card>
+            <Row gutter={20}>
+                <Col md={8} lg={6}>
+                    <EmployeeAttendance />
                 </Col>
-                <Col lg={18}>
-                    <Calendar
-                        // cellRender={cellRender}
-                        styles={{
-                            root: {
-                                borderRadius: "20px",
-                                marginTop: "20px",
-                            },
-                            header: {
-                                background: "#FBB1BD",
-                                padding: "20px",
-                                borderRadius: "20px 20px 0 0",
-                                boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.2)",
-                            },
-                            body: {
-                                background: "#FFFAF6",
-                                padding: "20px",
-                                border: "2px solid #FBB1BD",
-                                borderRadius: "0 0 20px 20px",
-                                boxShadow: "1px 1px 10px rgba(0, 0, 0, 0.2)",
-                            },
-                            item: {
-                                border: "1px solid #FBB1BD",
-                                borderRadius: "10px",
-                            },
-                        }}
-                        onSelect={(date, { source }) => {
-                            if (source === "date") {
-                                console.log("Panel Select:", source, date);
-                            }
-                        }}
-                    />
+                <Col md={16} lg={18}>
+                    <Space vertical>
+                        <Calendar
+                            // cellRender={cellRender}
+                            styles={{
+                                root: {
+                                    borderRadius: "20px",
+                                    marginTop: "20px",
+                                },
+                                header: {
+                                    background: "#FBB1BD",
+                                    padding: "20px",
+                                    borderRadius: "20px 20px 0 0",
+                                    boxShadow:
+                                        "1px 1px 10px rgba(0, 0, 0, 0.2)",
+                                },
+                                body: {
+                                    background: "#FFFAF6",
+                                    padding: "20px",
+                                    border: "2px solid #FBB1BD",
+                                    borderRadius: "0 0 20px 20px",
+                                    boxShadow:
+                                        "1px 1px 10px rgba(0, 0, 0, 0.2)",
+                                },
+                                item: {
+                                    border: "1px solid #FBB1BD",
+                                    borderRadius: "10px",
+                                },
+                            }}
+                            onSelect={(date, { source }) => {
+                                if (source === "date") {
+                                    console.log("Panel Select:", source, date);
+                                }
+                            }}
+                        />
+
+                        {/* This is for click event when user clicked one date it'll shows information about that date */}
+                        <Card className="w-full rounded-2xl! border-2! border-primary! mt-5!">
+                            <div className="p-4">
+                                <Flex justify="space-between">
+                                    <Space vertical size="small">
+                                        <Typography.Title
+                                            level={4}
+                                            className="font-medium! text-center! m-0!"
+                                        >
+                                            Tuesday, 30 June
+                                        </Typography.Title>
+                                    </Space>
+                                </Flex>
+
+                                <section className="mt-5 space-y-4">
+                                    <div className="border-2 border-primary rounded-2xl px-5 py-2">
+                                        <Flex vertical>
+                                            <div className="flex items-center justify-between">
+                                                <Space size="small">
+                                                    <Avatar
+                                                        src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
+                                                        size={40}
+                                                    />
+
+                                                    <div>
+                                                        <h1 className="lg:text-xl! font-semibold! md:text-md">
+                                                            Myo Myo
+                                                        </h1>
+                                                        <p className="text-sm mb-2">
+                                                            Nail Artist
+                                                        </p>
+                                                    </div>
+                                                </Space>
+                                                <p className="text-pending font-medium">
+                                                    Day OFF
+                                                </p>
+                                            </div>
+                                        </Flex>
+                                    </div>
+                                </section>
+                            </div>
+                        </Card>
+                    </Space>
                 </Col>
             </Row>
         </>
