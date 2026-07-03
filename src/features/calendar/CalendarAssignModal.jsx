@@ -10,7 +10,7 @@ import {
 } from "antd";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
-    const [form] = Form.useForm;
+    const [form] = Form.useForm();
     const {
         optionsStaff,
         setSelectedDates,
@@ -73,10 +73,6 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                     label={
                         <div
                             style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                width: "100%",
-                                alignItems: "center",
                                 marginBottom: "5px",
                             }}
                         >

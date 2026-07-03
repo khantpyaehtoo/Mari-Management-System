@@ -1,4 +1,4 @@
-import { Button, Input, Space, Typography } from "antd";
+import { Button, Input, Select, Space, Typography } from "antd";
 import AddForm from "../modals/AddForm";
 import {
     AppstoreAddOutlined,
@@ -33,6 +33,21 @@ const SubHeaderSection = ({
         setOpenCalForm,
     } = CalendarConfig || {};
 
+    const options = [
+        { label: "gold", value: "gold" },
+        { label: "lime", value: "lime" },
+        { label: "green", value: "green" },
+        { label: "cyan", value: "cyan" },
+    ];
+
+    const labelRender = (props) => {
+        const { label, value } = props;
+        if (label) {
+            return value;
+        }
+        return <span>No option match</span>;
+    };
+
     return (
         <div
             className={cn(
@@ -44,7 +59,8 @@ const SubHeaderSection = ({
             {!!title && (
                 <div
                     className={cn(
-                        title.includes("Staff Schedule and Calendar")
+                        title.includes("Staff Schedule and Calendar") ||
+                            title.includes("Reports & Analystics")
                             ? "flex justify-between items-center"
                             : "",
                     )}
@@ -79,6 +95,23 @@ const SubHeaderSection = ({
                             >
                                 Assign Leave
                             </Button>
+                        </Space>
+                    )}
+
+                    {title.includes("Reports & Analystics") && (
+                        <Space>
+                            <Select
+                                labelRender={labelRender}
+                                defaultValue="1"
+                                style={{ width: "100%" }}
+                                options={options}
+                            />
+                            <Select
+                                labelRender={labelRender}
+                                defaultValue="1"
+                                style={{ width: "100%" }}
+                                options={options}
+                            />
                         </Space>
                     )}
                 </div>

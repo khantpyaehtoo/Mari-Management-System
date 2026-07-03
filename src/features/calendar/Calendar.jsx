@@ -1,18 +1,4 @@
-import {
-    Avatar,
-    Button,
-    Calendar,
-    Col,
-    DatePicker,
-    Form,
-    Input,
-    Modal,
-    Radio,
-    Row,
-    Select,
-    Space,
-    Spin,
-} from "antd";
+import { Avatar, Calendar, Col, Row, Select, Space, Spin } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
@@ -97,8 +83,6 @@ const CalendarSection = () => {
     const [calendarFilterType, setCalendarFilterType] = useState("");
     const [selectedDates, setSelectedDates] = useState(null);
 
-    const [form] = Form.useForm();
-
     const CalendarConfig = {
         DebounceSelect: DebounceSelect,
         fetchUserList: fetchUserList,
@@ -108,7 +92,7 @@ const CalendarSection = () => {
         openCalForm: openCalForm,
     };
 
-    const LeaveOptions = [
+    const leaveOptions = [
         { label: "Holiday", value: "Holiday" },
         { label: "Sick Leave", value: "Sick Leave" },
         { label: "Personal", value: "Personal" },
@@ -156,7 +140,7 @@ const CalendarSection = () => {
         setCalendarFilterType: setCalendarFilterType,
         setOpenCalForm: setOpenCalForm,
         openCalForm: openCalForm,
-        LeaveOptions: LeaveOptions,
+        leaveOptions: leaveOptions,
     };
 
     return (

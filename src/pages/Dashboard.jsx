@@ -1,15 +1,4 @@
-import {
-    Avatar,
-    Card,
-    Col,
-    Flex,
-    Radio,
-    Row,
-    Space,
-    Table,
-    Tag,
-    Typography,
-} from "antd";
+import { Card, Col, Flex, Radio, Row, Space, Table, Typography } from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
@@ -21,7 +10,6 @@ import {
 import { YearlyLineChart } from "../components/dashboard/YearlyLineChart";
 import { useState } from "react";
 import ServicePieChart from "../components/dashboard/ServicePieChart";
-import { Link } from "react-router-dom";
 import BookingCard from "../components/dashboard/BookingCard";
 
 const dashboardCardItem = [
