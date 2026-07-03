@@ -1,9 +1,12 @@
 import {
     Avatar,
     Calendar,
-    Card,
     Col,
-    Flex,
+    DatePicker,
+    Form,
+    Input,
+    Modal,
+    Radio,
     Row,
     Select,
     Space,
@@ -14,7 +17,7 @@ import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection
 import { useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import EmployeeAttendance from "./EmployeeAttendance";
-import { callback } from "chart.js/helpers";
+import CalendarDetailOverview from "./CalendarDetailOverview";
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
     const [fetching, setFetching] = useState(false);
@@ -89,13 +92,58 @@ const CalendarSection = () => {
     //     console.log("search:", value);
     // };
     const [value, setValue] = useState([]);
+    const [openCalForm, setOpenCalForm] = useState(false);
+    const [form] = Form.useForm();
+    const { Title } = Typography;
 
     const CalendarConfig = {
         DebounceSelect: DebounceSelect,
         fetchUserList: fetchUserList,
         value: value,
         setValue: setValue,
+        setOpenCalForm: setOpenCalForm,
+        openCalForm: openCalForm,
     };
+
+    const options = [
+        { label: "Holiday", value: "Holiday" },
+        { label: "Sick Leave", value: "Sick Leave" },
+        { label: "Personal", value: "Personal" },
+        { label: "Maternity", value: "Maternity" },
+    ];
+
+    const optionsStaff = [
+        {
+            label: "Happy",
+            value: "happy",
+            emoji: "😄",
+            desc: "Feeling Good",
+        },
+        {
+            label: "Sad",
+            value: "sad",
+            emoji: "😢",
+            desc: "Feeling Blue",
+        },
+        {
+            label: "Angry",
+            value: "angry",
+            emoji: "😡",
+            desc: "Furious",
+        },
+        {
+            label: "Cool",
+            value: "cool",
+            emoji: "😎",
+            desc: "Chilling",
+        },
+        {
+            label: "Sleepy",
+            value: "sleepy",
+            emoji: "😴",
+            desc: "Need Sleep",
+        },
+    ];
 
     return (
         <>
@@ -146,48 +194,69 @@ const CalendarSection = () => {
                             }}
                         />
 
+                        <Modal
+                            open={openCalForm}
+                            onCancel={() => setOpenCalForm(!openCalForm)}
+                            title="Assign Leave"
+                            footer={null}
+                        >
+                            <Form layout="vertical" form={form}>
+                                <Form.Item
+                                    label="Staff Member"
+                                    name="staff-member"
+                                >
+                                    <Select
+                                        mode="multiple"
+                                        style={{ width: "100%" }}
+                                        placeholder="Please select your current mood."
+                                        defaultValue={["happy"]}
+                                        onChange={(value) => {
+                                            console.log(`selected ${value}`);
+                                        }}
+                                        options={optionsStaff}
+                                        optionRender={(option) => (
+                                            <Space>
+                                                <span
+                                                    role="img"
+                                                    aria-label={
+                                                        option.data.label
+                                                    }
+                                                >
+                                                    {option.data.emoji}
+                                                </span>
+                                                {`${option.data.label} (${option.data.desc})`}
+                                            </Space>
+                                        )}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item label="Leave Type" name="leave-type">
+                                    <Radio.Group
+                                        block
+                                        options={options}
+                                        optionType="button"
+                                        buttonStyle="solid"
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    label="Select Date"
+                                    name="select-date"
+                                >
+                                    <DatePicker />
+                                </Form.Item>
+
+                                <Form.Item label="Note">
+                                    <Input.TextArea
+                                        rows={2}
+                                        className="border! border-gray-300! rounded-xl! p-3!"
+                                    />
+                                </Form.Item>
+                            </Form>
+                        </Modal>
+
                         {/* This is for click event when user clicked one date it'll shows information about that date */}
-                        <Card className="w-full rounded-2xl! border-2! border-primary! mt-5!">
-                            <div className="p-4">
-                                <Flex justify="space-between">
-                                    <Space vertical size="small">
-                                        <Typography.Title
-                                            level={4}
-                                            className="font-medium! text-center! m-0!"
-                                        >
-                                            Tuesday, 30 June
-                                        </Typography.Title>
-                                    </Space>
-                                </Flex>
-
-                                <section className="mt-5 space-y-4">
-                                    <div className="border-2 border-primary rounded-2xl px-5 py-2">
-                                        <Flex vertical>
-                                            <div className="flex items-center justify-between">
-                                                <Space size="small">
-                                                    <Avatar
-                                                        src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                                                        size={40}
-                                                    />
-
-                                                    <div>
-                                                        <h1 className="lg:text-xl! font-semibold! md:text-md">
-                                                            Myo Myo
-                                                        </h1>
-                                                        <p className="text-sm mb-2">
-                                                            Nail Artist
-                                                        </p>
-                                                    </div>
-                                                </Space>
-                                                <p className="text-pending font-medium">
-                                                    Day OFF
-                                                </p>
-                                            </div>
-                                        </Flex>
-                                    </div>
-                                </section>
-                            </div>
-                        </Card>
+                        <CalendarDetailOverview />
                     </Space>
                 </Col>
             </Row>

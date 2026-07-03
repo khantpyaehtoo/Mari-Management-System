@@ -24,8 +24,14 @@ const SubHeaderSection = ({
     CalendarConfig,
 }) => {
     const { Title } = Typography;
-    const { DebounceSelect, fetchUserList, value, setValue } =
-        CalendarConfig || {};
+    const {
+        DebounceSelect,
+        fetchUserList,
+        value,
+        setValue,
+        openCalForm,
+        setOpenCalForm,
+    } = CalendarConfig || {};
 
     return (
         <div
@@ -68,6 +74,8 @@ const SubHeaderSection = ({
                                 type="primary"
                                 htmlType="submit"
                                 icon={<PlusCircleOutlined />}
+                                onClick={() => setOpenCalForm(true)}
+                                value={openCalForm}
                             >
                                 Assign Leave
                             </Button>
