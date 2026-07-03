@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Button,
     Calendar,
     Col,
     DatePicker,
@@ -11,13 +12,13 @@ import {
     Select,
     Space,
     Spin,
-    Typography,
 } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import EmployeeAttendance from "./EmployeeAttendance";
 import CalendarDetailOverview from "./CalendarDetailOverview";
+import CalendarAssignModal from "./CalendarAssignModal";
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
     const [fetching, setFetching] = useState(false);
@@ -93,8 +94,10 @@ const CalendarSection = () => {
     // };
     const [value, setValue] = useState([]);
     const [openCalForm, setOpenCalForm] = useState(false);
+    const [calendarFilterType, setCalendarFilterType] = useState("");
+    const [selectedDates, setSelectedDates] = useState(null);
+
     const [form] = Form.useForm();
-    const { Title } = Typography;
 
     const CalendarConfig = {
         DebounceSelect: DebounceSelect,
@@ -105,7 +108,7 @@ const CalendarSection = () => {
         openCalForm: openCalForm,
     };
 
-    const options = [
+    const LeaveOptions = [
         { label: "Holiday", value: "Holiday" },
         { label: "Sick Leave", value: "Sick Leave" },
         { label: "Personal", value: "Personal" },
@@ -144,6 +147,17 @@ const CalendarSection = () => {
             desc: "Need Sleep",
         },
     ];
+
+    const calendarAssignConfig = {
+        optionsStaff: optionsStaff,
+        setSelectedDates: setSelectedDates,
+        selectedDates: selectedDates,
+        calendarFilterType: calendarFilterType,
+        setCalendarFilterType: setCalendarFilterType,
+        setOpenCalForm: setOpenCalForm,
+        openCalForm: openCalForm,
+        LeaveOptions: LeaveOptions,
+    };
 
     return (
         <>
@@ -194,66 +208,9 @@ const CalendarSection = () => {
                             }}
                         />
 
-                        <Modal
-                            open={openCalForm}
-                            onCancel={() => setOpenCalForm(!openCalForm)}
-                            title="Assign Leave"
-                            footer={null}
-                        >
-                            <Form layout="vertical" form={form}>
-                                <Form.Item
-                                    label="Staff Member"
-                                    name="staff-member"
-                                >
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: "100%" }}
-                                        placeholder="Please select your current mood."
-                                        defaultValue={["happy"]}
-                                        onChange={(value) => {
-                                            console.log(`selected ${value}`);
-                                        }}
-                                        options={optionsStaff}
-                                        optionRender={(option) => (
-                                            <Space>
-                                                <span
-                                                    role="img"
-                                                    aria-label={
-                                                        option.data.label
-                                                    }
-                                                >
-                                                    {option.data.emoji}
-                                                </span>
-                                                {`${option.data.label} (${option.data.desc})`}
-                                            </Space>
-                                        )}
-                                    />
-                                </Form.Item>
-
-                                <Form.Item label="Leave Type" name="leave-type">
-                                    <Radio.Group
-                                        block
-                                        options={options}
-                                        optionType="button"
-                                        buttonStyle="solid"
-                                    />
-                                </Form.Item>
-
-                                <Form.Item
-                                    label="Select Date"
-                                    name="select-date"
-                                >
-                                    <DatePicker />
-                                </Form.Item>
-
-                                <Form.Item label="Note">
-                                    <Input.TextArea
-                                        rows={2}
-                                        className="border! border-gray-300! rounded-xl! p-3!"
-                                    />
-                                </Form.Item>
-                            </Form>
-                        </Modal>
+                        <CalendarAssignModal
+                            calendarAssignConfig={calendarAssignConfig}
+                        />
 
                         {/* This is for click event when user clicked one date it'll shows information about that date */}
                         <CalendarDetailOverview />
