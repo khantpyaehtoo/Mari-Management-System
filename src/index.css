@@ -89,6 +89,10 @@ body {
     border: 1px solid var(--primary-pink);
 }
 
+.ant-drawer-close {
+    color: white !important;
+}
+
 /* dropdown custom styling */
 .my-custom-popup {
     background: transparent !important;

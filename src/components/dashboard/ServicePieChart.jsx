@@ -3,6 +3,22 @@ import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const options = {
+    reponsive: true,
+    plugins: {
+        legend: {
+            position: "bottom",
+            align: "start",
+            labels: {
+                usePointStyle: true,
+                pointStyle: "circle",
+                boxWidth: 20,
+                boxHeight: 20,
+            },
+        },
+    },
+};
+
 export const ServicePieChart = () => {
     const data = {
         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -30,7 +46,7 @@ export const ServicePieChart = () => {
             },
         ],
     };
-    return <Doughnut data={data} />;
+    return <Doughnut data={data} options={options} className="p-10!" />;
 };
 
 export default ServicePieChart;

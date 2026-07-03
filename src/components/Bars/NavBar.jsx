@@ -126,7 +126,8 @@ const Navbar = () => {
                     mask="true"
                     styles={{
                         header: {
-                            background: "#FBB1BD",
+                            background: "#A76D83",
+                            color: "white",
                         },
                     }}
                 >

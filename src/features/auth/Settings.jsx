@@ -210,7 +210,7 @@ const Settings = () => {
                     <div className="custom-animated-pill" />
                     <DefaultTabBar
                         {...props}
-                        className="bg-white-back w-full"
+                        className="bg-white-back w-full!"
                     />
                 </div>
             </div>

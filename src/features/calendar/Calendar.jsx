@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Button,
     Calendar,
     Card,
     Col,
@@ -12,10 +11,10 @@ import {
     Typography,
 } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import { PlusCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import EmployeeAttendance from "./EmployeeAttendance";
+import { callback } from "chart.js/helpers";
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
     const [fetching, setFetching] = useState(false);
@@ -90,36 +89,22 @@ const CalendarSection = () => {
     //     console.log("search:", value);
     // };
     const [value, setValue] = useState([]);
+
+    const CalendarConfig = {
+        DebounceSelect: DebounceSelect,
+        fetchUserList: fetchUserList,
+        value: value,
+        setValue: setValue,
+    };
+
     return (
         <>
-            <Flex justify="space-between" items="center" className="w-full">
-                <SubHeaderSection
-                    title="Staff Schedule and Calendar"
-                    subTitle="Manage staff shifts, salon operating days, leaves, and time-off requests."
-                    // handleCreateAttendance={handleCreateAttendance}
-                />
-                <Space>
-                    <DebounceSelect
-                        mode="multiple"
-                        value={value}
-                        placeholder="Select users"
-                        fetchOptions={fetchUserList}
-                        style={{ width: "400px" }}
-                        onChange={(newValue) => {
-                            if (Array.isArray(newValue)) {
-                                setValue(newValue);
-                            }
-                        }}
-                    />
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        icon={<PlusCircleOutlined />}
-                    >
-                        Assign Leave
-                    </Button>
-                </Space>
-            </Flex>
+            <SubHeaderSection
+                title="Staff Schedule and Calendar"
+                subTitle="Manage staff shifts, salon operating days, leaves, and time-off requests."
+                CalendarConfig={CalendarConfig}
+                // handleCreateAttendance={handleCreateAttendance}
+            />
 
             <Row gutter={20}>
                 <Col md={8} lg={6}>

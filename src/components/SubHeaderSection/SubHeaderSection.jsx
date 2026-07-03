@@ -1,4 +1,4 @@
-import { Button, Input, Typography } from "antd";
+import { Button, Input, Space, Typography } from "antd";
 import AddForm from "../modals/AddForm";
 import {
     AppstoreAddOutlined,
@@ -21,8 +21,11 @@ const SubHeaderSection = ({
     placeholderTitle,
     setCreateCategoryInput,
     createCategoryInput,
+    CalendarConfig,
 }) => {
     const { Title } = Typography;
+    const { DebounceSelect, fetchUserList, value, setValue } =
+        CalendarConfig || {};
 
     return (
         <div
@@ -33,12 +36,44 @@ const SubHeaderSection = ({
             )}
         >
             {!!title && (
-                <>
-                    <Title level={3} className="text-primary! text-3xl!">
-                        {title} Management
-                    </Title>
-                    <p className="text-gray-600">{subTitle}</p>
-                </>
+                <div
+                    className={cn(
+                        title.includes("Staff Schedule and Calendar")
+                            ? "flex justify-between items-center"
+                            : "",
+                    )}
+                >
+                    <div>
+                        <Title level={3} className="text-primary! text-3xl!">
+                            {title} Management
+                        </Title>
+                        <p className="text-gray-600">{subTitle}</p>
+                    </div>
+
+                    {title.includes("Staff Schedule and Calendar") && (
+                        <Space>
+                            <DebounceSelect
+                                mode="multiple"
+                                value={value}
+                                placeholder="Select users"
+                                fetchOptions={fetchUserList}
+                                style={{ width: "400px" }}
+                                onChange={(newValue) => {
+                                    if (Array.isArray(newValue)) {
+                                        setValue(newValue);
+                                    }
+                                }}
+                            />
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                icon={<PlusCircleOutlined />}
+                            >
+                                Assign Leave
+                            </Button>
+                        </Space>
+                    )}
+                </div>
             )}
 
             {title !== "Services" && (
