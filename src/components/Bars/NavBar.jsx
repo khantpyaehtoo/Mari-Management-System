@@ -1,8 +1,8 @@
-import { BellOutlined, MenuOutlined } from "@ant-design/icons";
+import { BellOutlined, MenuOutlined, SendOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
-import { Badge, Drawer, Space, Typography, Tabs, Flex } from "antd";
+import { Badge, Drawer, Space, Typography, Tabs, Flex, Button } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -26,15 +26,6 @@ const commentData = [
     "The End of Comment Data",
 ];
 
-const promotionsData = [
-    "For Promotions Data",
-    "Racing car sprays burning fuel into crowd.",
-    "Japanese princess to wed commoner.",
-    "Australian walks 100km after outback crash.",
-    "Man charged over missing wedding girl.",
-    "Los Angeles battles huge wildfires.",
-    "The End of Promotions Data",
-];
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const dispatch = useDispatch();
@@ -42,7 +33,7 @@ const Navbar = () => {
     const items = [
         {
             key: "1",
-            label: <span className="flex items-center gap-2">Bookings</span>,
+            label: <span className="flex items-center gap-2">Incoming</span>,
             children: (
                 <Flex vertical gap="1px">
                     {bookingData.map((item, index) => (
@@ -55,23 +46,12 @@ const Navbar = () => {
         },
         {
             key: "2",
-            label: <span className="flex items-center gap-2">Comments</span>,
+            label: (
+                <span className="flex items-center gap-2">Sent History</span>
+            ),
             children: (
                 <Flex vertical gap="1px">
                     {commentData.map((item, index) => (
-                        <Typography.Title level={5} key={index}>
-                            {item}
-                        </Typography.Title>
-                    ))}
-                </Flex>
-            ),
-        },
-        {
-            key: "3",
-            label: <span className="flex items-center gap-2">Promotions</span>,
-            children: (
-                <Flex vertical gap="1px">
-                    {promotionsData.map((item, index) => (
                         <Typography.Title level={5} key={index}>
                             {item}
                         </Typography.Title>
@@ -129,8 +109,19 @@ const Navbar = () => {
                             background: "#A76D83",
                             color: "white",
                         },
+                        body: {
+                            padding: "0",
+                        },
                     }}
                 >
+                    <div className="flex justify-between items-center px-3 py-4 ">
+                        <p>
+                            <BellOutlined /> Inbox
+                        </p>
+                        <Button type="primary">
+                            <SendOutlined /> Send Noti
+                        </Button>
+                    </div>
                     <Tabs defaultActiveKey="1" items={items} />
                 </Drawer>
             </div>

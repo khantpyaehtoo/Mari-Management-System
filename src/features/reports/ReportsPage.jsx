@@ -246,7 +246,7 @@ const ReportsPage = () => {
             <section className="mb-12">
                 <Typography.Title
                     level={2}
-                    className="text-xl! font-medium! px-3 mb-5!"
+                    className="text-xl! font-medium! px-3 mt-5! mb-5!"
                 >
                     Report Summary (May, 2026)
                 </Typography.Title>

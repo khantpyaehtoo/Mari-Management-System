@@ -46,18 +46,6 @@ const dummyData = [
         commission: "20000",
     },
 ];
-
-const radioBtnOptions = [
-    {
-        label: "Weekly",
-        value: "weekly",
-    },
-    {
-        label: "Monthly",
-        value: "monthly",
-    },
-];
-
 const column = [
     {
         title: "Employee Info",
@@ -83,6 +71,17 @@ const column = [
         title: "Commission",
         dataIndex: "commission",
         key: "commission",
+    },
+];
+
+const radioBtnOptions = [
+    {
+        label: "Weekly",
+        value: "weekly",
+    },
+    {
+        label: "Monthly",
+        value: "monthly",
     },
 ];
 
