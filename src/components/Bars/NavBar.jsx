@@ -11,17 +11,17 @@ import {
     Badge,
     Drawer,
     Space,
-    Typography,
     Tabs,
-    Flex,
     Button,
     Modal,
     Form,
     Input,
     Upload,
+    Radio,
 } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { FilteredTabContent } from "./FilteredTabContent";
 
 const { Dragger } = Upload;
 
@@ -45,6 +45,25 @@ const commentData = [
     "The End of Comment Data",
 ];
 
+const NotiSendOptions = [
+    {
+        label: "Announcement",
+        value: "announcement",
+    },
+    {
+        label: "Promotion",
+        value: "promotion",
+    },
+    {
+        label: "Reminder",
+        value: "reminder",
+    },
+    {
+        label: "Alert",
+        value: "alert",
+    },
+];
+
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const [sendNotiModal, setSendNotiModal] = useState(false);
@@ -60,15 +79,7 @@ const Navbar = () => {
                     Incoming
                 </span>
             ),
-            children: (
-                <Flex vertical gap="1px">
-                    {bookingData.map((item, index) => (
-                        <Typography.Title level={5} key={index}>
-                            {item}
-                        </Typography.Title>
-                    ))}
-                </Flex>
-            ),
+            children: <FilteredTabContent data={bookingData} />,
         },
         {
             key: "2",
@@ -77,15 +88,7 @@ const Navbar = () => {
                     Sent History
                 </span>
             ),
-            children: (
-                <Flex vertical gap="1px">
-                    {commentData.map((item, index) => (
-                        <Typography.Title level={5} key={index}>
-                            {item}
-                        </Typography.Title>
-                    ))}
-                </Flex>
-            ),
+            children: <FilteredTabContent data={commentData} />,
         },
     ];
 
@@ -132,6 +135,7 @@ const Navbar = () => {
                     open={isNotiOpen}
                     onClose={() => setIsNotiOpen(false)}
                     mask="true"
+                    size={600}
                     styles={{
                         header: {
                             background: "#A76D83",
@@ -142,7 +146,7 @@ const Navbar = () => {
                         },
                     }}
                 >
-                    <div className="flex justify-between items-center px-3 py-4 ">
+                    <div className="flex justify-between items-center px-3 py-4 shadow-md">
                         <p>
                             <BellOutlined /> Inbox
                         </p>
@@ -155,6 +159,9 @@ const Navbar = () => {
                         </Button>
                         <Modal
                             title="Send Noti"
+                            classNames={{
+                                container: "bg-white-back!",
+                            }}
                             open={sendNotiModal}
                             onCancel={() => setSendNotiModal(false)}
                             footer={null}
@@ -176,19 +183,22 @@ const Navbar = () => {
                                         </div>
                                     </Dragger>
                                 </Form.Item>
-                                <Form.Item label="Type">
-                                    <Space>
-                                        <Button>A</Button>
-                                        <Button>B</Button>
-                                        <Button>C</Button>
-                                        <Button>D</Button>
-                                    </Space>
+                                <Form.Item label="Leave Type" name="leave-type">
+                                    <Radio.Group
+                                        block
+                                        options={NotiSendOptions}
+                                        optionType="button"
+                                        buttonStyle="solid"
+                                    />
                                 </Form.Item>
                                 <Form.Item label="Title">
-                                    <Input />
+                                    <Input className="input-styling! bg-white!" />
                                 </Form.Item>
                                 <Form.Item label="Description">
-                                    <Input.TextArea rows={4} />
+                                    <Input.TextArea
+                                        rows={4}
+                                        className="input-styling! bg-white!"
+                                    />
                                 </Form.Item>
                                 <Form.Item>
                                     <Button

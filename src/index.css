@@ -221,6 +221,39 @@ body {
     @apply bg-white text-black rounded-xl border-gray-200 shadow-md p-5 hover:bg-primary hover:text-white hover:border-primary w-47.5;
 }
 
+/* NOTIFICATIONS SUBTAB PILL */
+/* Remove the line dividers for the inner sub-tabs */
+.sub-pill-tabs .ant-tabs-ink-bar {
+  display: none !important;
+}
+.sub-pill-tabs .ant-tabs-nav::before {
+  display: none !important;
+}
+
+/* Base style for unselected sub-tab pill buttons */
+.sub-pill-tabs .ant-tabs-tab {
+  border: 1px solid #f7b3c2 !important;
+  background-color: transparent !important;
+  border-radius: 9999px !important; /* Makes it a pill */
+  padding: 4px 16px !important;
+  margin: 0 4px !important;
+  transition: all 0.2s ease;
+}
+
+/* Text style for unselected sub-tabs */
+.sub-pill-tabs .ant-tabs-tab .ant-tabs-tab-btn {
+  color: #f7b3c2 !important;
+  font-size: 13px;
+}
+
+/* Active solid pink state matching image_a68c39.png */
+.sub-pill-tabs .ant-tabs-tab-active {
+  background-color: #f7b3c2 !important; /* Solid pink background */
+}
+
+.sub-pill-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #ffffff !important; /* White text on active */
+}
 
 /* testing antd classes with css */
 /* .ant-table-tbody > tr > td:not(:last-child)::before {
