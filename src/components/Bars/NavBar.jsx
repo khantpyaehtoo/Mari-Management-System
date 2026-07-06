@@ -1,10 +1,29 @@
-import { BellOutlined, MenuOutlined, SendOutlined } from "@ant-design/icons";
+import {
+    BellOutlined,
+    InboxOutlined,
+    MenuOutlined,
+    SendOutlined,
+} from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
-import { Badge, Drawer, Space, Typography, Tabs, Flex, Button } from "antd";
+import {
+    Badge,
+    Drawer,
+    Space,
+    Typography,
+    Tabs,
+    Flex,
+    Button,
+    Modal,
+    Form,
+    Input,
+    Upload,
+} from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
+const { Dragger } = Upload;
 
 const bookingData = [
     "For Booking Data",
@@ -28,12 +47,19 @@ const commentData = [
 
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
+    const [sendNotiModal, setSendNotiModal] = useState(false);
+    const [form] = Form.useForm();
+
     const dispatch = useDispatch();
 
     const items = [
         {
             key: "1",
-            label: <span className="flex items-center gap-2">Incoming</span>,
+            label: (
+                <span className="w-full text-center flex items-center justify-center px-4 font-medium">
+                    Incoming
+                </span>
+            ),
             children: (
                 <Flex vertical gap="1px">
                     {bookingData.map((item, index) => (
@@ -47,7 +73,9 @@ const Navbar = () => {
         {
             key: "2",
             label: (
-                <span className="flex items-center gap-2">Sent History</span>
+                <span className="w-full text-center flex items-center justify-center px-4 font-medium">
+                    Sent History
+                </span>
             ),
             children: (
                 <Flex vertical gap="1px">
@@ -118,11 +146,69 @@ const Navbar = () => {
                         <p>
                             <BellOutlined /> Inbox
                         </p>
-                        <Button type="primary">
+                        <Button
+                            type="primary"
+                            onClick={() => setSendNotiModal(true)}
+                            value={sendNotiModal}
+                        >
                             <SendOutlined /> Send Noti
                         </Button>
+                        <Modal
+                            title="Send Noti"
+                            open={sendNotiModal}
+                            onCancel={() => setSendNotiModal(false)}
+                            footer={null}
+                        >
+                            <Form layout="vertical" form={form}>
+                                <Form.Item label="Image">
+                                    <Dragger
+                                        // {...uploadProps}
+                                        className="h-125! w-full max-w-100!"
+                                    >
+                                        <div className="p-5 md:p-15">
+                                            <p className="ant-upload-drag-icon">
+                                                <InboxOutlined />
+                                            </p>
+                                            <p className="ant-upload-text">
+                                                Click or drag file to this area
+                                                to upload
+                                            </p>
+                                        </div>
+                                    </Dragger>
+                                </Form.Item>
+                                <Form.Item label="Type">
+                                    <Space>
+                                        <Button>A</Button>
+                                        <Button>B</Button>
+                                        <Button>C</Button>
+                                        <Button>D</Button>
+                                    </Space>
+                                </Form.Item>
+                                <Form.Item label="Title">
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item label="Description">
+                                    <Input.TextArea rows={4} />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button
+                                        onClick={() => setSendNotiModal(false)}
+                                        value={sendNotiModal}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button>Send</Button>
+                                </Form.Item>
+                            </Form>
+                        </Modal>
                     </div>
-                    <Tabs defaultActiveKey="1" items={items} />
+                    <Tabs
+                        defaultActiveKey="1"
+                        items={items}
+                        tabBarStyle={{ width: "100%" }}
+                        centered
+                        className="w-full"
+                    />
                 </Drawer>
             </div>
         </div>
