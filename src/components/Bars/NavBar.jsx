@@ -3,6 +3,7 @@ import {
     InboxOutlined,
     MenuOutlined,
     SendOutlined,
+    ArrowLeftOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/layoutSlice";
@@ -13,7 +14,6 @@ import {
     Space,
     Tabs,
     Button,
-    Modal,
     Form,
     Input,
     Upload,
@@ -46,27 +46,15 @@ const commentData = [
 ];
 
 const NotiSendOptions = [
-    {
-        label: "Announcement",
-        value: "announcement",
-    },
-    {
-        label: "Promotion",
-        value: "promotion",
-    },
-    {
-        label: "Reminder",
-        value: "reminder",
-    },
-    {
-        label: "Alert",
-        value: "alert",
-    },
+    { label: "Announcement", value: "announcement" },
+    { label: "Promotion", value: "promotion" },
+    { label: "Reminder", value: "reminder" },
+    { label: "Alert", value: "alert" },
 ];
 
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
-    const [sendNotiModal, setSendNotiModal] = useState(false);
+    const [drawerPage, setDrawerPage] = useState("list");
     const [form] = Form.useForm();
 
     const dispatch = useDispatch();
@@ -91,6 +79,17 @@ const Navbar = () => {
             children: <FilteredTabContent data={commentData} />,
         },
     ];
+
+    const onCloseDrawer = () => {
+        setIsNotiOpen(false);
+        setDrawerPage("list");
+    };
+
+    const onFinish = (values) => {
+        console.log("Sent Notification Data:", values);
+        form.resetFields();
+        setDrawerPage("list");
+    };
 
     return (
         <div className="flex justify-between items-center">
@@ -127,98 +126,134 @@ const Navbar = () => {
                         <img
                             src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
                             className="w-10 ms-3 mb-1 rounded-full border-3 border-white"
+                            alt="avatar"
                         />
                     </Link>
                 </Space>
+
                 <Drawer
-                    title="notifications"
+                    title={
+                        drawerPage === "list"
+                            ? "Notifications"
+                            : "Send New Notification"
+                    }
                     open={isNotiOpen}
-                    onClose={() => setIsNotiOpen(false)}
-                    mask="true"
-                    size={600}
+                    onClose={onCloseDrawer}
+                    mask={true}
+                    size={550}
                     styles={{
-                        header: {
-                            background: "#A76D83",
-                            color: "white",
-                        },
-                        body: {
-                            padding: "0",
-                        },
+                        header: { background: "#A76D83", color: "white" },
+                        body: { padding: "0" },
                     }}
                 >
-                    <div className="flex justify-between items-center px-3 py-4 shadow-md">
-                        <p>
-                            <BellOutlined /> Inbox
-                        </p>
-                        <Button
-                            type="primary"
-                            onClick={() => setSendNotiModal(true)}
-                            value={sendNotiModal}
-                        >
-                            <SendOutlined /> Send Noti
-                        </Button>
-                        <Modal
-                            title="Send Noti"
-                            classNames={{
-                                container: "bg-white-back!",
-                            }}
-                            open={sendNotiModal}
-                            onCancel={() => setSendNotiModal(false)}
-                            footer={null}
-                        >
-                            <Form layout="vertical" form={form}>
-                                <Form.Item label="Image">
-                                    <Dragger
-                                        // {...uploadProps}
-                                        className="h-125! w-full max-w-100!"
+                    {drawerPage === "list" ? (
+                        <>
+                            <div className="flex justify-between items-center px-4 py-4 shadow-md border-b border-gray-100">
+                                <p className="text-gray-700 font-semibold m-0 flex items-center gap-2">
+                                    <BellOutlined className="text-primary" />{" "}
+                                    Inbox
+                                </p>
+                                <Button
+                                    type="primary"
+                                    onClick={() => setDrawerPage("send")}
+                                    className="border-primary"
+                                >
+                                    <SendOutlined /> Send Noti
+                                </Button>
+                            </div>
+                            <Tabs
+                                defaultActiveKey="1"
+                                items={items}
+                                tabBarStyle={{ width: "100%" }}
+                                centered
+                                className="w-full"
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <div className="mb-6 py-5 shadow-md">
+                                <Button
+                                    type="text"
+                                    icon={<ArrowLeftOutlined />}
+                                    onClick={() => setDrawerPage("list")}
+                                    className=" hover:bg-transparent! text-gray-500 hover:text-gray-800"
+                                >
+                                    Back to Inbox
+                                </Button>
+                            </div>
+                            <div className="p-6">
+                                <Form
+                                    layout="vertical"
+                                    form={form}
+                                    onFinish={onFinish}
+                                >
+                                    <Form.Item label="Image" name="image">
+                                        <Dragger className="w-full">
+                                            <div className="p-5">
+                                                <p className="ant-upload-drag-icon text-primary">
+                                                    <InboxOutlined />
+                                                </p>
+                                                <p className="ant-upload-text text-sm">
+                                                    Click or drag file to this
+                                                    area to upload
+                                                </p>
+                                            </div>
+                                        </Dragger>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="Leave Type"
+                                        name="leave-type"
+                                        rules={[{ required: true }]}
                                     >
-                                        <div className="p-5 md:p-15">
-                                            <p className="ant-upload-drag-icon">
-                                                <InboxOutlined />
-                                            </p>
-                                            <p className="ant-upload-text">
-                                                Click or drag file to this area
-                                                to upload
-                                            </p>
-                                        </div>
-                                    </Dragger>
-                                </Form.Item>
-                                <Form.Item label="Leave Type" name="leave-type">
-                                    <Radio.Group
-                                        block
-                                        options={NotiSendOptions}
-                                        optionType="button"
-                                        buttonStyle="solid"
-                                    />
-                                </Form.Item>
-                                <Form.Item label="Title">
-                                    <Input className="input-styling! bg-white!" />
-                                </Form.Item>
-                                <Form.Item label="Description">
-                                    <Input.TextArea
-                                        rows={4}
-                                        className="input-styling! bg-white!"
-                                    />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button
-                                        onClick={() => setSendNotiModal(false)}
-                                        value={sendNotiModal}
+                                        <Radio.Group
+                                            block
+                                            options={NotiSendOptions}
+                                            optionType="button"
+                                            buttonStyle="solid"
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="Title"
+                                        name="title"
+                                        rules={[{ required: true }]}
                                     >
-                                        Cancel
-                                    </Button>
-                                    <Button>Send</Button>
-                                </Form.Item>
-                            </Form>
-                        </Modal>
-                    </div>
-                    <Tabs
-                        defaultActiveKey="1"
-                        items={items}
-                        tabBarStyle={{ width: "100%" }}
-                        centered
-                        className="w-full"
-                    />
+                                        <Input className="input-styling! bg-white! h-10 rounded-lg" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        label="Description"
+                                        name="description"
+                                    >
+                                        <Input.TextArea
+                                            rows={4}
+                                            className="input-styling! bg-white! rounded-lg"
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item className="mt-8 flex justify-end gap-3">
+                                        <Space>
+                                            <Button
+                                                onClick={() =>
+                                                    setDrawerPage("list")
+                                                }
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                type="primary"
+                                                htmlType="submit"
+                                                className="bg-primary border-primary"
+                                            >
+                                                Send
+                                            </Button>
+                                        </Space>
+                                    </Form.Item>
+                                </Form>
+                            </div>
+                        </>
+                    )}
                 </Drawer>
             </div>
         </div>
