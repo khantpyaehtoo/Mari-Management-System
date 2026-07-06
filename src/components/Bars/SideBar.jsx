@@ -1,6 +1,7 @@
 import {
     ApartmentOutlined,
     BarChartOutlined,
+    BlockOutlined,
     BranchesOutlined,
     CalendarOutlined,
     EnvironmentOutlined,
@@ -15,7 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../lib/utils";
 import { toggleSidebar } from "../../layout/layoutSlice";
-import { X } from "lucide-react";
+import { LogOut, X } from "lucide-react";
 import { removeCookie, setLoggedIn } from "../../features/auth/authSlice";
 import brandLogo from "../../../public/asset/brandLogo.png";
 import brandName from "../../../public/asset/brandName.png";
@@ -70,6 +71,15 @@ const SideBar = () => {
                         </span>
                     ),
                     key: "/management/service",
+                },
+                {
+                    icon: <BlockOutlined />,
+                    label: (
+                        <span className="sidemenu-item">
+                            Packages Management
+                        </span>
+                    ),
+                    key: "/management/packages",
                 },
                 {
                     icon: <IdcardOutlined />,
@@ -178,21 +188,7 @@ const SideBar = () => {
                             className="w-full! h-full! text-primary border-0! bg-primary! hover:shadow-md p-3! group"
                         >
                             {" "}
-                            <svg
-                                width="22"
-                                height="22"
-                                viewBox="0 0 22 22"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M7.5 20H3.33333C2.7808 20 2.25089 19.7805 1.86019 19.3898C1.46949 18.9991 1.25 18.4692 1.25 17.9167V3.33333C1.25 2.7808 1.46949 2.25089 1.86019 1.86019C2.25089 1.46949 2.7808 1.25 3.33333 1.25H7.5M14.7917 5.41667L20 10.625L14.7917 15.8333M20 10.625H7.5"
-                                    stroke="white"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
+                            <LogOut className="text-white group-hover:text-red-500! cursor-pointer" />
                             <span className="font-bold text-white group-hover:text-red-500! cursor-pointer">
                                 {" "}
                                 LogOut

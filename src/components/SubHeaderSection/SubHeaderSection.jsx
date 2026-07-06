@@ -1,10 +1,6 @@
 import { Button, Input, Select, Space, Typography } from "antd";
 import AddForm from "../modals/AddForm";
-import {
-    AppstoreAddOutlined,
-    PlusCircleOutlined,
-    SearchOutlined,
-} from "@ant-design/icons";
+import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { cn } from "../../lib/utils";
 
 const SubHeaderSection = ({
@@ -19,8 +15,6 @@ const SubHeaderSection = ({
     triggerCreate,
     triggerEdit,
     placeholderTitle,
-    setCreateCategoryInput,
-    createCategoryInput,
     CalendarConfig,
 }) => {
     const { Title } = Typography;
@@ -115,18 +109,18 @@ const SubHeaderSection = ({
                 </div>
             )}
 
-            {title !== "Services" && (
-                <div className="flex justify-between items-center my-6">
-                    {setSearchText && (
-                        <Input
-                            placeholder={placeholderTitle}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
-                            prefix={<SearchOutlined className="px-3" />}
-                            size="large"
-                        />
-                    )}
+            <div className="flex justify-between items-center my-6">
+                {setSearchText && (
+                    <Input
+                        placeholder={placeholderTitle}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
+                        prefix={<SearchOutlined className="px-3" />}
+                        size="large"
+                    />
+                )}
 
+                {title !== "Services" ? (
                     <AddForm
                         title={title}
                         subFormTitle={subFormTitle}
@@ -137,10 +131,12 @@ const SubHeaderSection = ({
                         triggerCreate={triggerCreate}
                         triggerEdit={triggerEdit}
                     />
-                </div>
-            )}
+                ) : (
+                    ""
+                )}
+            </div>
 
-            {setCreateCategoryInput && (
+            {/* {setCreateCategoryInput && (
                 <div className="my-6 flex gap-8">
                     <Input
                         placeholder={placeholderTitle}
@@ -158,7 +154,7 @@ const SubHeaderSection = ({
                         Create Category
                     </Button>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };

@@ -11,7 +11,8 @@ import { cn } from "../../../lib/utils";
 
 const Services = () => {
     // const { token } = useSelector((state) => state?.auth);
-    const [createCategoryInput, setCreateCategoryInput] = useState("");
+    // const [createCategoryInput, setCreateCategoryInput] = useState("");
+    const [searchText, setSearchText] = useState("");
     // const nav = useNavigate();
 
     // const { data: servicesData } = useGetServicesDataQuery();
@@ -51,10 +52,6 @@ const Services = () => {
 
     const categories = [
         {
-            key: "category-packages",
-            title: "Packages",
-        },
-        {
             key: "all-services",
             title: "All Services",
         },
@@ -83,11 +80,11 @@ const Services = () => {
         <>
             <SubHeaderSection
                 title="Services"
-                btnTitle="Category"
                 subTitle="Create, customize, and optimize your service catalog. Easily manage pricing, duration, and staff assignments in one place."
-                placeholderTitle="Write the category name"
-                setCreateCategoryInput={setCreateCategoryInput}
-                createCategoryInput={createCategoryInput}
+                btnTitle="All Services"
+                placeholderTitle="Search the category name"
+                setSearchText={setSearchText}
+                searchText={searchText}
                 isOpen={isFormOpen}
                 isEdit={isEdit}
                 initialValue={selectedService}

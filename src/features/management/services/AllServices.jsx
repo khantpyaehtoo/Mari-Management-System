@@ -1,7 +1,7 @@
 import ServiceHeader from "./ServiceHeader";
 
 const AllServices = () => {
-    return <ServiceHeader />;
+    return <ServiceHeader title="Services" />;
 };
 
 export default AllServices;

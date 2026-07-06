@@ -1,7 +1,6 @@
 import { baseApi } from "../../../app/core/basicApi";
 const serviceEndpoint = "services";
 const categoryEndpoint = "category";
-const packageEndpoint = "package";
 
 export const servicesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -28,34 +27,6 @@ export const servicesApi = baseApi.injectEndpoints({
                 body,
             }),
             providesTags: ["category"],
-        }),
-
-        getPackageData: builder.query({
-            query: (body) => ({
-                url: `${packageEndpoint}`,
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["services"],
-        }),
-
-        createPackage: builder.mutation({
-            query: (body) => ({
-                url: `${packageEndpoint}`,
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["services"],
-        }),
-
-        updatePackage: builder.mutation({
-            query: ({ id, body, token }) => ({
-                url: `${packageEndpoint}/${id}`,
-                method: "PUT",
-                body,
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-            invalidatesTags: ["services"],
         }),
 
         createService: builder.mutation({
