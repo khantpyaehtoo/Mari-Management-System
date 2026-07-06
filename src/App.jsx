@@ -16,6 +16,7 @@ import WalkIn from "./features/walkIn/WalkIn.jsx";
 import AllServices from "./features/management/services/AllServices.jsx";
 import ReportsPage from "./features/reports/ReportsPage.jsx";
 import Packages from "./features/management/PackageSection/Packages.jsx";
+import Notifications from "./features/notifications/Notifications.jsx";
 // import IsAuth from "./components/Guards/IsAuth.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
@@ -60,6 +61,10 @@ export default function App() {
                         <Route path="staff" element={<Staff />} />
                     </Route>
                     <Route path="/walk-in" element={<WalkIn />} />
+                    <Route
+                        path="/send-notifications"
+                        element={<Notifications />}
+                    />
                     <Route path="/reports" element={<ReportsPage />} />
                     <Route path="/settings" element={<Settings />} />
                 </Route>

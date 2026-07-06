@@ -6,6 +6,7 @@ import {
     CalendarOutlined,
     EnvironmentOutlined,
     IdcardOutlined,
+    SendOutlined,
     SettingOutlined,
     SolutionOutlined,
     UnorderedListOutlined,
@@ -103,6 +104,11 @@ const SideBar = () => {
             key: "/walk-in",
             icon: <EnvironmentOutlined />,
             label: <span className="sidemenu-item">Walk In</span>,
+        },
+        {
+            key: "/send-notifications",
+            icon: <SendOutlined />,
+            label: <span className="sidemenu-item">Send Notifications</span>,
         },
         {
             key: "/reports",
