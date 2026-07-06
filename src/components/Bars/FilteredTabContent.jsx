@@ -62,7 +62,9 @@ export const FilteredTabContent = ({ data }) => {
                 <Select
                     defaultValue="all"
                     className="w-full custom-filter-select"
-                    popupClassName="rounded-xl shadow-lg"
+                    classNames={{
+                        popup: { root: "rounded-xl shadow-lg" },
+                    }}
                     suffixIcon={
                         <DownCircleOutlined className="text-gray-700 text-base" />
                     }

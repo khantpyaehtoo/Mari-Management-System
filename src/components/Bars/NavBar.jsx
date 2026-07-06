@@ -18,6 +18,7 @@ import {
     Input,
     Upload,
     Radio,
+    Checkbox,
 } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -52,6 +53,11 @@ const NotiSendOptions = [
     { label: "Alert", value: "alert" },
 ];
 
+const sendType = [
+    { label: "Staffs", value: "staffs" },
+    { label: "Customers", value: "customers" },
+];
+
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const [drawerPage, setDrawerPage] = useState("list");
@@ -79,6 +85,10 @@ const Navbar = () => {
             children: <FilteredTabContent data={commentData} />,
         },
     ];
+
+    // const onChange = (checkedValues) => {
+    //     console.log("checked = ", checkedValues);
+    // };
 
     const onCloseDrawer = () => {
         setIsNotiOpen(false);
@@ -155,7 +165,10 @@ const Navbar = () => {
                                 </p>
                                 <Button
                                     type="primary"
-                                    onClick={() => setDrawerPage("send")}
+                                    onClick={() => {
+                                        setDrawerPage("send");
+                                        console.log("send noti button hint");
+                                    }}
                                     className="border-primary"
                                 >
                                     <SendOutlined /> Send Noti
@@ -200,7 +213,6 @@ const Navbar = () => {
                                             </div>
                                         </Dragger>
                                     </Form.Item>
-
                                     <Form.Item
                                         label="Leave Type"
                                         name="leave-type"
@@ -213,7 +225,6 @@ const Navbar = () => {
                                             buttonStyle="solid"
                                         />
                                     </Form.Item>
-
                                     <Form.Item
                                         label="Title"
                                         name="title"
@@ -221,7 +232,6 @@ const Navbar = () => {
                                     >
                                         <Input className="input-styling! bg-white! h-10 rounded-lg" />
                                     </Form.Item>
-
                                     <Form.Item
                                         label="Description"
                                         name="description"
@@ -231,7 +241,19 @@ const Navbar = () => {
                                             className="input-styling! bg-white! rounded-lg"
                                         />
                                     </Form.Item>
-
+                                    <Form.Item label="Send to">
+                                        <Checkbox.Group className="flex gap-3 flex-wrap">
+                                            {sendType.map((type, idx) => (
+                                                <Checkbox
+                                                    key={idx}
+                                                    className="completely-custom-checkbox"
+                                                    value={type.value}
+                                                >
+                                                    {type.label}
+                                                </Checkbox>
+                                            ))}
+                                        </Checkbox.Group>
+                                    </Form.Item>
                                     <Form.Item className="mt-8 flex justify-end gap-3">
                                         <Space>
                                             <Button
