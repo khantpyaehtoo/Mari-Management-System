@@ -44,7 +44,7 @@ const OverviewModal = ({
                         {selectedBooking.phone}
                     </p>
                 </Space>
-                <div className="w-full border-gray-400 border p-4 rounded-xl">
+                <div className="w-full bg-white-back border-gray-400 border p-4 rounded-xl">
                     <Typography.Title
                         level={3}
                         className="font-montserrat! font-medium! text-primary!"

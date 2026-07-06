@@ -209,7 +209,7 @@ const dummyData = [
 ];
 const column = [
     {
-        title: "Employee Info",
+        title: "Staff Info",
         dataIndex: "employeeInfo",
         key: "employeeInfo",
     },

@@ -1,4 +1,4 @@
-import { Grid, Table, Button } from "antd";
+import { Grid, Table, Button, Avatar } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import UserDetailModal from "./UserDetailModal";
@@ -206,6 +206,7 @@ const User = () => {
                 title: "Profile",
                 dataIndex: "profileUrl",
                 key: "profileUrl",
+                render: (profileUrl) => <Avatar src={profileUrl} />,
             },
             {
                 title: "Contact",

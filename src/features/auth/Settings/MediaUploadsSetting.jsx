@@ -22,7 +22,7 @@ const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
     const [isTrendingFormOpen, setIsTrendingFormOpen] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
-    const [fileList, setFileList] = useState([]);
+    // const [fileList, setFileList] = useState([]);
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -49,17 +49,29 @@ const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
                     </Button>
                 </div>
                 <article className="grid-items-4 mx-5">
-                    <div className="w-90 border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img src={heroBanner1} />
+                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
+                        <img
+                            src={heroBanner1}
+                            className="w-full h-auto object-cover"
+                        />
                     </div>
-                    <div className="w-90 border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img src={heroBanner1} />
+                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
+                        <img
+                            src={heroBanner1}
+                            className="w-full h-auto object-cover"
+                        />
                     </div>
-                    <div className="w-90 border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img src={heroBanner1} />
+                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
+                        <img
+                            src={heroBanner1}
+                            className="w-full h-auto object-cover"
+                        />
                     </div>
-                    <div className="w-90 border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img src={heroBanner1} />
+                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
+                        <img
+                            src={heroBanner1}
+                            className="w-full h-auto object-cover"
+                        />
                     </div>
                 </article>
                 <Modal
@@ -68,15 +80,11 @@ const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
                     className="w-[80%]!"
                     footer={null}
                 >
-                    <section className="flex gap-4 justify-between items-center mb-5 border-b border-gray-400 pt-5 pb-5">
+                    <section className="flex gap-4 justify-between items-center mb-5 border-b border-gray-400 mt-5 pt-5 pb-5">
                         <Space vertical>
-                            <h1 className="font-bold text-xl">
+                            <h1 className="font-bold text-2xl">
                                 Home Screen Banner
                             </h1>
-                            <p className="w-[80%]">
-                                Hero image displayed at the top of your
-                                client-facing booking page
-                            </p>
                         </Space>
                         <Button
                             type="primary"
@@ -129,42 +137,78 @@ const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
                     Add Banner
                 </Button>
             </div>
-            <article className="grid lg:grid-cols-6 md:grid-cols-4 gap-4 ms-6">
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+            <article className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 ms-6">
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
-                <div className="w-40 border border-primary rounded-2xl overflow-hidden">
-                    <img src={trendingDesign} className="" />
+                <div className="w-full border border-primary rounded-2xl overflow-hidden">
+                    <img
+                        src={trendingDesign}
+                        className="w-full h-auto object-cover"
+                    />
                 </div>
             </article>
 
@@ -177,7 +221,7 @@ const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
                 onPreview={handlePreview}
             >
                 <section className="rounded-2xl! mb-10!">
-                    <section className="gap-4 flex justify-between items-center mx-10 mb-10! border-b border-gray-400 pt-5 pb-5">
+                    <section className="gap-4 flex justify-between items-center mt-4 mb-10! border-b border-gray-400 pt-5 pb-5">
                         <Space vertical>
                             <h1 className="font-bold text-xl">
                                 Trending Nail Designs

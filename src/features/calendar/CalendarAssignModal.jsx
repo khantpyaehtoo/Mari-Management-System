@@ -7,6 +7,7 @@ import {
     Radio,
     Select,
     Space,
+    Typography,
 } from "antd";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
@@ -26,7 +27,11 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         <Modal
             open={openCalForm}
             onCancel={() => setOpenCalForm(!openCalForm)}
-            title="Assign Leave"
+            title={
+                <Typography.Title level={3} className="font-semibold!">
+                    Assign Leave
+                </Typography.Title>
+            }
             footer={null}
             classNames={{
                 container: "bg-white-back!",
@@ -38,13 +43,13 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 form={form}
                 clearOnDestroy
                 autoComplete="off"
+                className="mt-8!"
             >
                 <Form.Item label="Staff Member" name="staff-member">
                     <Select
                         mode="multiple"
                         style={{ width: "100%" }}
-                        placeholder="Please select your current mood."
-                        // defaultValue={["happy"]}
+                        placeholder="Please select your staff."
                         onChange={(value) => {
                             console.log(`selected ${value}`);
                         }}
@@ -78,8 +83,8 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                         >
                             <span className="me-10">
                                 {calendarFilterType === "date"
-                                    ? "Date Range"
-                                    : "Single Date"}
+                                    ? "Single Date"
+                                    : "Date Range"}
                             </span>
                             <Button
                                 type="primary"
@@ -125,8 +130,15 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button>Cancel</Button>
-                    <Button type="primary">Assgin Leave</Button>
+                    <Space
+                        size="medium"
+                        className="flex! justify-end! items-center!"
+                    >
+                        <Button onClick={() => setOpenCalForm(false)}>
+                            Cancel
+                        </Button>
+                        <Button type="primary">Assgin Leave</Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </Modal>
