@@ -1,7 +1,12 @@
 import { Button, Input, Select, Space, Typography } from "antd";
 import AddForm from "../modals/AddForm";
-import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+    PlusCircleOutlined,
+    SearchOutlined,
+    ArrowLeftOutlined,
+} from "@ant-design/icons";
 import { cn } from "../../lib/utils";
+import { useNavigate } from "react-router-dom";
 
 const SubHeaderSection = ({
     setSearchText,
@@ -9,6 +14,7 @@ const SubHeaderSection = ({
     subTitle,
     btnTitle,
     subFormTitle,
+    searchText,
     isEdit,
     isOpen,
     onCancel,
@@ -17,8 +23,12 @@ const SubHeaderSection = ({
     triggerEdit,
     placeholderTitle,
     CalendarConfig,
+    formType,
+    showBackButton = false,
 }) => {
     const { Title } = Typography;
+    const nav = useNavigate();
+
     const {
         DebounceSelect,
         fetchUserList,
@@ -37,18 +47,27 @@ const SubHeaderSection = ({
 
     const labelRender = (props) => {
         const { label, value } = props;
-        if (label) {
-            return value;
-        }
-        return <span>No option match</span>;
+        return label ? value : <span>No option match</span>;
     };
 
     return (
         <div
             className={cn(
-                title.includes("Customer") ? "border-0 px-3" : "p-3 border-b",
+                title?.includes("Customer") ? "border-0 px-3" : "p-3 border-b",
             )}
         >
+            {showBackButton && (
+                <Button
+                    onClick={() =>
+                        nav("/management/service", { replace: true })
+                    }
+                    className="bg-transparent! border-none! shadow-none! hover:underline! hover:text-black! text-lg! p-0! mb-4! group flex items-center gap-1"
+                >
+                    <ArrowLeftOutlined className="group-hover:-translate-x-1 transition-transform" />{" "}
+                    Back to Services
+                </Button>
+            )}
+
             {!!title && (
                 <div
                     className={cn(
@@ -60,7 +79,11 @@ const SubHeaderSection = ({
                 >
                     <div>
                         <Title level={3} className="text-primary! text-3xl!">
-                            {title} Management
+                            {title.includes("Services") ||
+                            title.includes("Calendar") ||
+                            title.includes("Reports")
+                                ? title
+                                : `${title} Management`}
                         </Title>
                         <p className="text-gray-600">{subTitle}</p>
                     </div>
@@ -74,17 +97,15 @@ const SubHeaderSection = ({
                                 fetchOptions={fetchUserList}
                                 style={{ width: "400px" }}
                                 onChange={(newValue) => {
-                                    if (Array.isArray(newValue)) {
+                                    if (Array.isArray(newValue))
                                         setValue(newValue);
-                                    }
                                 }}
                             />
                             <Button
+                                value={openCalForm}
                                 type="primary"
-                                htmlType="submit"
                                 icon={<PlusCircleOutlined />}
                                 onClick={() => setOpenCalForm(true)}
-                                value={openCalForm}
                             >
                                 Assign Leave
                             </Button>
@@ -114,10 +135,8 @@ const SubHeaderSection = ({
                 {setSearchText && (
                     <Input
                         placeholder={placeholderTitle}
-                        onChange={(e) => {
-                            setSearchText(e.target.value);
-                            console.log(e.target.value);
-                        }}
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
                         className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
                         prefix={<SearchOutlined className="px-3" />}
                         size="large"
@@ -125,7 +144,7 @@ const SubHeaderSection = ({
                 )}
 
                 <AddForm
-                    title={title}
+                    title={formType || title}
                     btnTitle={btnTitle}
                     subFormTitle={subFormTitle}
                     isEdit={isEdit}
@@ -136,26 +155,6 @@ const SubHeaderSection = ({
                     triggerEdit={triggerEdit}
                 />
             </div>
-
-            {/* {setCreateCategoryInput && (
-                <div className="my-6 flex gap-8">
-                    <Input
-                        placeholder={placeholderTitle}
-                        value={createCategoryInput}
-                        onChange={(e) => setCreateCategoryInput(e.target.value)}
-                        className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
-                        prefix={<AppstoreAddOutlined className="px-3" />}
-                        size="large"
-                    />
-                    <Button
-                        variant="solid"
-                        icon={<PlusCircleOutlined />}
-                        className="createFormBtn!"
-                    >
-                        Create Category
-                    </Button>
-                </div>
-            )} */}
         </div>
     );
 };

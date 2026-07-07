@@ -1,36 +1,36 @@
 import { Button, Card, Col, Row } from "antd";
-import ServiceHeader from "./ServiceHeader";
 import { Edit, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 // import { useGetServicesDataQuery } from "./servicesApi";
 import ServiceDeleteModal from "./ServiceDeleteModal";
+import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 
 const mockPackages = [
     {
         id: 1,
-        categoryId: "1", // 👈 Category 1 (ဥပမာ: Nail Art)
+        categoryId: "1",
         name: "Basic Nail Art",
         price: "5000 mmk",
         duration: "50 mins",
     },
     {
         id: 2,
-        categoryId: "1", // 👈 ဒါလည်း Category 1 အောက်ကပဲ
+        categoryId: "1",
         name: "Premium Nail Art",
         price: "12000 mmk",
         duration: "90 mins",
     },
     {
         id: 3,
-        categoryId: "2", // 👈 Category 2 (ဥပမာ: Hair Spa)
+        categoryId: "2",
         name: "Standard Hair Spa",
         price: "25000 mmk",
         duration: "120 mins",
     },
     {
         id: 4,
-        categoryId: "2", // 👈 ဒါလည်း Category 2 အောက်ကပဲ
+        categoryId: "2",
         name: "VIP Hair Treatment",
         price: "40000 mmk",
         duration: "45 mins",
@@ -94,8 +94,13 @@ const CategoryDetails = () => {
 
     return (
         <>
-            <ServiceHeader
-                title="Services"
+            <SubHeaderSection
+                title="Category Services"
+                subTitle="Manage all services under this category"
+                formType="Services"
+                btnTitle="Services"
+                placeholderTitle="Search service name..."
+                showBackButton={true}
                 searchText={searchText}
                 setSearchText={setSearchText}
                 isEdit={editModalOpen}
