@@ -5,10 +5,11 @@ import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSect
 import { useState } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import {
-    useCreatePackageMutation,
-    useUpdatePackageMutation,
-} from "../services/servicesApi";
+// import {
+// useCreatePackageMutation,
+// useUpdatePackageMutation,
+// } from "../services/servicesApi";
+import PackageForm from "./PackageForm";
 
 const mockPackages = [
     {
@@ -45,8 +46,8 @@ const Packages = () => {
     // Track the entire object instead of just the ID to make it easy to display in modals
     const [selectedPackage, setSelectedPackage] = useState(null);
 
-    const [createPackage] = useCreatePackageMutation();
-    const [editPackage] = useUpdatePackageMutation();
+    // const [createPackage] = useCreatePackageMutation();
+    // const [editPackage] = useUpdatePackageMutation();
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -67,13 +68,12 @@ const Packages = () => {
         <>
             <SubHeaderSection
                 title="Packages"
-                btnTitle="Packages"
                 subTitle="Create, customize, and optimize your packages. Easily manage pricing, duration, and staff assignments in one place."
                 placeholderTitle="Search the category name"
                 setSearchText={setSearchText}
                 searchText={searchText}
-                triggerCreate={createPackage}
-                triggerEdit={editPackage}
+                // triggerCreate={createPackage}
+                // triggerEdit={editPackage}
             />
 
             {/* <ServiceHeader title="Packages" /> */}
@@ -81,7 +81,7 @@ const Packages = () => {
             {/* Main Cards Grid */}
             <Row gutter={[16, 16]} className="mt-10!">
                 {mockPackages.map((item) => (
-                    <Col key={item.id} span={6}>
+                    <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
                         <Link
                             to={`/packages/${item.id}`}
                             className="block no-underline"
@@ -104,32 +104,25 @@ const Packages = () => {
                                         <p className="my-2">{item.duration}</p>
                                     </div>
                                 </div>
-                                <Space size="middle">
+                                <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-4">
                                     <Button
                                         onClick={(e) =>
                                             handleActionClick("edit", item, e)
                                         }
-                                        className="bg-primary! text-white"
+                                        className="bg-primary! text-white flex-1 min-w-17.5 flex items-center justify-center"
                                     >
-                                        <Edit
-                                            size={14}
-                                            className="inline mr-1"
-                                        />{" "}
-                                        Edit
+                                        <Edit size={14} className="mr-1" /> Edit
                                     </Button>
                                     <Button
                                         onClick={(e) =>
                                             handleActionClick("delete", item, e)
                                         }
-                                        className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500!"
+                                        className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
                                     >
-                                        <Trash2
-                                            size={14}
-                                            className="inline mr-1"
-                                        />{" "}
+                                        <Trash2 size={14} className="mr-1" />{" "}
                                         Delete
                                     </Button>
-                                </Space>
+                                </div>
                             </Card>
                         </Link>
                     </Col>
@@ -164,17 +157,14 @@ const Packages = () => {
             <Modal
                 open={editModalOpen}
                 title={
-                    <h1>
+                    <h1 className="text-2xl text-primary mb-3">
                         {selectedPackage ? "Edit Package" : "Create Package"}
                     </h1>
                 }
                 onCancel={() => setEditModalOpen(false)}
                 footer={null}
             >
-                <p className="py-4">
-                    Editing settings for:
-                    <strong>{selectedPackage?.name}</strong>
-                </p>
+                <PackageForm isEditing={editModalOpen} />
             </Modal>
         </>
     );

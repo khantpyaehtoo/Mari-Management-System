@@ -1,5 +1,5 @@
 import CalendarForm from "../../features/calendar/CalendarForm";
-import PackageCreateForm from "../../features/management/PackageSection/PackageCreateForm";
+import PackageForm from "../../features/management/PackageSection/PackageForm";
 import ServiceForm from "../../features/management/services/ServiceForm";
 import StaffForm from "../../features/management/staff/StaffForm";
 
@@ -13,7 +13,7 @@ export const FORM_CONFIG = {
     Calendar: {
         Component: CalendarForm,
     },
-    Package: {
-        Component: PackageCreateForm,
+    Packages: {
+        Component: PackageForm,
     },
 };
