@@ -2,22 +2,22 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Space, Typography } from "antd";
 import { Trash2 } from "lucide-react";
 
-const PackageDeleteModal = ({
+const ServiceDeleteModal = ({
     deleteModalOpen,
-    selectedPackage,
+    selectedService,
     setDeleteModalOpen,
     handleDeleteConfirm,
 }) => {
     return (
         <Modal
             open={deleteModalOpen}
-            title={selectedPackage?.name || "Delete Package"}
+            title={selectedService?.name || "Delete Service"}
             onCancel={() => setDeleteModalOpen(false)}
             footer={null}
         >
             <Typography.Title level={4} className="mt-4!">
                 Are you sure you want to delete this "
-                {selectedPackage?.name || "Package"}"?
+                {selectedService?.name || "Service"}"?
             </Typography.Title>
             <Space className="my-4 w-full justify-end">
                 <Button
@@ -37,4 +37,4 @@ const PackageDeleteModal = ({
     );
 };
 
-export default PackageDeleteModal;
+export default ServiceDeleteModal;

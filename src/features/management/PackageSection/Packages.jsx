@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 // import ServiceHeader from "./ServiceHeader";
 import { Button, Card, Col, Modal, Row } from "antd";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Edit, Trash2 } from "lucide-react";
 // import {
 // useCreatePackageMutation,
@@ -45,30 +45,29 @@ const Packages = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState(null);
 
-    const [searchPackage, setSearchPackage] = useState(mockPackages);
-
     // const [createPackage] = useCreatePackageMutation();
     // const [editPackage] = useUpdatePackageMutation();
     const { data: packagesData } = useGetPackageDataQuery();
     const packages = packagesData;
 
-    useEffect(() => {
+    const searchPackages = useMemo(() => {
         const sourceData = packages || mockPackages;
 
-        const filterPackages = sourceData?.filter((pack) => {
-            if (!pack || !pack.name) return false;
+        return (
+            sourceData?.filter((item) => {
+                if (!item || !item.name) return false;
 
-            return pack.name
-                .toString()
-                .toLowerCase()
-                .includes(searchText.toLowerCase());
-        });
-
-        setSearchPackage(filterPackages || []);
+                return item.name
+                    .toString()
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase());
+            }) || []
+        );
     }, [searchText, packages]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
+        e.stopPropagation();
         setSelectedPackage(item);
         if (actionType === "edit") {
             setEditModalOpen(true);
@@ -94,11 +93,9 @@ const Packages = () => {
                 // triggerEdit={editPackage}
             />
 
-            {/* <ServiceHeader title="Packages" /> */}
-
             {/* Main Cards Grid */}
             <Row gutter={[16, 16]} className="mt-10!">
-                {searchPackage.map((item) => (
+                {searchPackages.map((item) => (
                     <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
                         <Link
                             to={`/packages/${item.id}`}

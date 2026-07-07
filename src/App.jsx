@@ -55,7 +55,7 @@ export default function App() {
                             path="service/all-services"
                             element={<AllServices />}
                         />
-                        <Route path="service/:id" />
+                        {/* <Route path="service/:id" element={<ServiceDetail />} /> */}
                         <Route path="packages" element={<Packages />} />
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />

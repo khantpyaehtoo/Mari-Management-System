@@ -1,141 +1,139 @@
-import { Form, Input, InputNumber, Select, Space, Button } from "antd";
-import { useGetServicesDataQuery } from "./servicesApi";
-import { PlusCircleFilled } from "@ant-design/icons";
-import { useState } from "react";
+import { Form, Input, Space, Button, Modal } from "antd";
 
-const ServiceForm = ({ form }) => {
+const ServiceForm = ({
+    form,
+    handleCancel,
+    isModalVisible,
+    isEdit,
+    selectedService,
+    title,
+}) => {
     const { Item } = Form;
-    const { TextArea } = Input;
-
-    const { data: serviceData, isLoading } = useGetServicesDataQuery();
-    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <Form form={form} layout="vertical" autoComplete="off">
-            <Item
-                label={<label className="label-styling">Service Name</label>}
-                name="name"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please input service name!",
-                    },
-                ]}
+        <Modal
+            title={
+                <>
+                    <h1 className="mt-4 mb-2 uppercase text-3xl font-semibold text-primary">
+                        {isEdit
+                            ? `Edit "${selectedService?.name || "Service"}"`
+                            : `Create New ${title}`}
+                    </h1>
+                </>
+            }
+            open={isModalVisible}
+            onCancel={handleCancel}
+            destroyOnHidden
+            forceRender
+            footer={null}
+        >
+            <Form
+                form={form}
+                layout="vertical"
+                autoComplete="off"
+                className="mt-5!"
             >
-                <Input placeholder="Service name" className="input-styling!" />
-            </Item>
-
-            <Item
-                label={<label className="label-styling">Service Price</label>}
-                name="price"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please input price!",
-                    },
-                ]}
-            >
-                <InputNumber
-                    placeholder="Service Price"
-                    className="input-styling!"
-                />
-            </Item>
-
-            {!isOpen ? (
-                <Space align="center" size="medium">
-                    <Item
-                        label={
-                            <label className="label-styling">
-                                Service Category
-                            </label>
-                        }
-                        name="categoryName"
-                    >
-                        <Select
-                            placeholder="Select a category"
-                            loading={isLoading}
-                            options={Array.from(
-                                new Set(
-                                    serviceData
-                                        ?.map((item) => item.categoryName)
-                                        .filter(Boolean),
-                                ),
-                            ).map((category) => ({
-                                value: category,
-                                label: category,
-                            }))}
-                            className="w-100!"
-                        />
-                    </Item>
-
-                    <Button
-                        onClick={() => setIsOpen(true)}
-                        className="mt-1 h-10!"
-                    >
-                        <PlusCircleFilled />
-                    </Button>
-                </Space>
-            ) : (
                 <Item
                     label={
-                        <label className="label-styling">Category Name</label>
+                        <label className="label-styling">Service Name</label>
                     }
-                    name="categoryName"
+                    name="service-name"
                     rules={[
                         {
                             required: true,
-                            message: "Please input new Category name!",
+                            message: "Please input service name!",
                         },
                     ]}
                 >
                     <Input
-                        placeholder="Category name"
+                        placeholder="Service name"
                         className="input-styling!"
-                        suffix={
-                            <Button
-                                type="text"
-                                size="small"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                X
-                            </Button>
-                        }
                     />
                 </Item>
-            )}
-
-            <Item
-                label={
-                    <label className="label-styling">
-                        Service duration (minutes)
-                    </label>
-                }
-                name="durationInMinutes"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please input duration!",
-                    },
-                ]}
-            >
-                <InputNumber
-                    placeholder="Service Duration"
-                    className="input-styling!"
-                    // type="number"
-                />
-            </Item>
-
-            <Item
-                label={<label className="label-styling">Description</label>}
-                name="description"
-            >
-                <TextArea
-                    placeholder="Service description"
-                    className="input-styling!"
-                    rows={4}
-                />
-            </Item>
-        </Form>
+                {/* {title === "Services" && (
+                                <Item
+                                    label={
+                                        <label className="label-styling">
+                                            Package Name
+                                        </label>
+                                    }
+                                    name="package-name"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                "Please input Package name!",
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        placeholder="Package name"
+                                        className="input-styling!"
+                                    />
+                                </Item>
+                            )} */}
+                <Space>
+                    <Item
+                        label={
+                            <label className="label-styling">
+                                Service Price
+                            </label>
+                        }
+                        name="price"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input service price!",
+                            },
+                        ]}
+                    >
+                        <Input
+                            placeholder="Enter the Service price"
+                            className="input-styling!"
+                        />
+                    </Item>
+                    <Item
+                        label={
+                            <label className="label-styling">
+                                Time Duration
+                            </label>
+                        }
+                        name="time-duration"
+                        rules={[
+                            {
+                                required: true,
+                                message: "need time duration!",
+                            },
+                        ]}
+                    >
+                        <Input
+                            placeholder="Time Duration"
+                            className="input-styling!"
+                        />
+                    </Item>
+                </Space>
+                {isEdit ? (
+                    <Space>
+                        <Button
+                            className="w-full hover:border! hover:text-primary! hover:border-black!"
+                            onClick={handleCancel}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="primary"
+                            className="w-full bg-primary! text-white! hover:border! hover:border-black!"
+                        >
+                            Save
+                        </Button>
+                    </Space>
+                ) : (
+                    <Button className="w-full bg-primary! text-white! hover:border! hover:border-black!">
+                        Create {title}
+                    </Button>
+                )}
+            </Form>
+        </Modal>
     );
 };
 
