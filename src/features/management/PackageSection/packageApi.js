@@ -5,10 +5,9 @@ const packageEndPoint = "package";
 export const packageApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getPackageData: builder.query({
-            query: (body) => ({
+            query: () => ({
                 url: `${packageEndPoint}`,
                 method: "GET",
-                body,
             }),
             invalidatesTags: ["package"],
         }),

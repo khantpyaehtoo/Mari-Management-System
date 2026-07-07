@@ -113,7 +113,10 @@ const SubHeaderSection = ({
                 {setSearchText && (
                     <Input
                         placeholder={placeholderTitle}
-                        onChange={(e) => setSearchText(e.target.value)}
+                        onChange={(e) => {
+                            setSearchText(e.target.value);
+                            console.log(e.target.value);
+                        }}
                         className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
                         prefix={<SearchOutlined className="px-3" />}
                         size="large"

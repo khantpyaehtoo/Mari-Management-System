@@ -94,25 +94,34 @@ const Services = () => {
             />
 
             <Row gutter={[16, 16]} className="mt-10!">
-                {categories.map((item, index) => (
-                    <Col span={6} key={index}>
-                        <Link to={item.key}>
-                            <Card
-                                className={cn(
-                                    item.title.includes("Packages") ||
-                                        item.title.includes("All Services")
-                                        ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
-                                        : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
-                                    "pt-6! min-h-30! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
-                                )}
-                            >
-                                <h1 className="w-auto text-center text-base">
-                                    {item.title}
-                                </h1>
-                            </Card>
-                        </Link>
-                    </Col>
-                ))}
+                {categories.map((item, index) => {
+                    const isActiveState = item.title.includes("All Services");
+
+                    return (
+                        <Col span={6} key={index}>
+                            <Link to={item.key}>
+                                <Card
+                                    className={cn(
+                                        "relative pt-6! min-h-32! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
+                                        isActiveState
+                                            ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
+                                            : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
+                                    )}
+                                >
+                                    {!isActiveState ? (
+                                        <div className="absolute top-0 right-0 w-8 h-8 rounded-full bg-white shadow-inner z-10 hover:bg-primary" />
+                                    ) : (
+                                        <div className="absolute top-0 right-0 w-8 h-8 rounded-full bg-primary shadow-inner z-10 hover:bg-white hover:text-primary" />
+                                    )}
+
+                                    <h1 className="w-auto text-center text-base font-medium mt-2">
+                                        {item.title}
+                                    </h1>
+                                </Card>
+                            </Link>
+                        </Col>
+                    );
+                })}
             </Row>
         </>
     );

@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 // import ServiceHeader from "./ServiceHeader";
-import { Button, Card, Col, Modal, Row, Space, Typography } from "antd";
+import { Button, Card, Col, Modal, Row } from "antd";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Edit, Trash2 } from "lucide-react";
-import { CloseCircleOutlined } from "@ant-design/icons";
 // import {
 // useCreatePackageMutation,
 // useUpdatePackageMutation,
 // } from "../services/servicesApi";
 import PackageForm from "./PackageForm";
+import PackageDeleteModal from "./PackageDeleteModal";
+import { useGetPackageDataQuery } from "./packageApi";
 
 const mockPackages = [
     {
@@ -42,12 +43,29 @@ const Packages = () => {
     const [searchText, setSearchText] = useState("");
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-    // Track the entire object instead of just the ID to make it easy to display in modals
     const [selectedPackage, setSelectedPackage] = useState(null);
+
+    const [searchPackage, setSearchPackage] = useState(mockPackages);
 
     // const [createPackage] = useCreatePackageMutation();
     // const [editPackage] = useUpdatePackageMutation();
+    const { data: packagesData } = useGetPackageDataQuery();
+    const packages = packagesData;
+
+    useEffect(() => {
+        const sourceData = packages || mockPackages;
+
+        const filterPackages = sourceData?.filter((pack) => {
+            if (!pack || !pack.name) return false;
+
+            return pack.name
+                .toString()
+                .toLowerCase()
+                .includes(searchText.toLowerCase());
+        });
+
+        setSearchPackage(filterPackages || []);
+    }, [searchText, packages]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -80,7 +98,7 @@ const Packages = () => {
 
             {/* Main Cards Grid */}
             <Row gutter={[16, 16]} className="mt-10!">
-                {mockPackages.map((item) => (
+                {searchPackage.map((item) => (
                     <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
                         <Link
                             to={`/packages/${item.id}`}
@@ -129,30 +147,12 @@ const Packages = () => {
                 ))}
             </Row>
 
-            <Modal
-                open={deleteModalOpen}
-                title={selectedPackage?.name || "Delete Package"}
-                onCancel={() => setDeleteModalOpen(false)}
-                footer={null}
-            >
-                <Typography.Title level={4} className="mt-4!">
-                    Are you sure you want to delete this package?
-                </Typography.Title>
-                <Space className="my-4 w-full justify-end">
-                    <Button
-                        onClick={() => setDeleteModalOpen(false)}
-                        className="bg-gray-100!"
-                    >
-                        <CloseCircleOutlined size={14} /> Cancel
-                    </Button>
-                    <Button
-                        onClick={handleDeleteConfirm}
-                        className="bg-red-500! text-white! border-red-500!"
-                    >
-                        <Trash2 size={14} /> Delete
-                    </Button>
-                </Space>
-            </Modal>
+            <PackageDeleteModal
+                deleteModalOpen={deleteModalOpen}
+                selectedPackage={selectedPackage}
+                setDeleteModalOpen={setDeleteModalOpen}
+                handleDeleteConfirm={handleDeleteConfirm}
+            />
 
             <Modal
                 open={editModalOpen}
