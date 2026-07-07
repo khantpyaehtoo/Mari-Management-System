@@ -52,36 +52,43 @@ const Services = () => {
 
     const categories = [
         {
+            id: 1,
             key: "all-services",
             title: "All Services",
         },
         {
+            id: 2,
             key: "/basic-care",
             title: "Basic Care",
         },
         {
+            id: 3,
             key: "/gel-polish",
             title: "Gel Polish Services",
         },
         {
+            id: 4,
             key: "/nail-art",
             title: "Nail Art",
         },
         {
+            id: 5,
             key: "/extension",
             title: "Extensions",
         },
         {
+            id: 6,
             key: "/treatments",
             title: "Treatments and removal",
         },
     ];
+
     return (
         <>
             <SubHeaderSection
-                title="Services"
+                title="Category"
                 subTitle="Create, customize, and optimize your service catalog. Easily manage pricing, duration, and staff assignments in one place."
-                btnTitle="All Services"
+                btnTitle="Category"
                 placeholderTitle="Search the category name"
                 setSearchText={setSearchText}
                 searchText={searchText}
@@ -99,7 +106,7 @@ const Services = () => {
 
                     return (
                         <Col span={6} key={index}>
-                            <Link to={item.key}>
+                            <Link to={`/management/service/${item.id}`}>
                                 <Card
                                     className={cn(
                                         "relative pt-6! min-h-32! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
@@ -108,12 +115,6 @@ const Services = () => {
                                             : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
                                     )}
                                 >
-                                    {!isActiveState ? (
-                                        <div className="absolute top-0 right-0 w-8 h-8 rounded-full bg-white shadow-inner z-10 hover:bg-primary" />
-                                    ) : (
-                                        <div className="absolute top-0 right-0 w-8 h-8 rounded-full bg-primary shadow-inner z-10 hover:bg-white hover:text-primary" />
-                                    )}
-
                                     <h1 className="w-auto text-center text-base font-medium mt-2">
                                         {item.title}
                                     </h1>

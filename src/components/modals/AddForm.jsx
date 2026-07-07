@@ -7,6 +7,7 @@ import { FORM_CONFIG } from "../../lib/config/formConfig";
 
 const AddForm = ({
     title,
+    btnTitle,
     subFormTitle,
     initialValue,
     isEdit,
@@ -109,7 +110,7 @@ const AddForm = ({
                 icon={<PlusCircleOutlined />}
                 className="createFormBtn!"
             >
-                Create {title}
+                {!btnTitle ? `Create ${title}` : `Create ${btnTitle}`}
             </Button>
 
             <Modal
@@ -128,8 +129,8 @@ const AddForm = ({
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText={isEdit ? "Update" : "Create"}
-                destroyOnHidden
-                forceRender
+                destroyOnHidden={true}
+                forceRender={false}
             >
                 {ActiveComponent && <ActiveComponent form={form} />}
             </Modal>

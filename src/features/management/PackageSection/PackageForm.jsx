@@ -1,6 +1,6 @@
 import { Form, Input, Select, Space, Button } from "antd";
 
-const PackageForm = ({ form, isEditing }) => {
+const PackageForm = ({ form, isEditing, handleCancel }) => {
     return (
         <Form layout="vertical" form={form}>
             <Form.Item label="Service Name">
@@ -29,7 +29,7 @@ const PackageForm = ({ form, isEditing }) => {
                             Save
                         </Button>
                         <Button
-                            // onClick={handleCancelEdit}
+                            onClick={handleCancel}
                             className="p-5! rounded-lg!"
                         >
                             Cancel

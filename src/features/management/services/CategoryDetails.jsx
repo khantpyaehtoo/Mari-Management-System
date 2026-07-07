@@ -2,60 +2,71 @@ import { Button, Card, Col, Row } from "antd";
 import ServiceHeader from "./ServiceHeader";
 import { Edit, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { useGetServicesDataQuery } from "./servicesApi";
+import { Link, useParams } from "react-router-dom";
+// import { useGetServicesDataQuery } from "./servicesApi";
 import ServiceDeleteModal from "./ServiceDeleteModal";
 
 const mockPackages = [
     {
-        id: "pkg-1",
-        name: "Hello Service",
+        id: 1,
+        categoryId: "1", // 👈 Category 1 (ဥပမာ: Nail Art)
+        name: "Basic Nail Art",
         price: "5000 mmk",
         duration: "50 mins",
     },
     {
-        id: "pkg-2",
-        name: "Standard Service",
+        id: 2,
+        categoryId: "1", // 👈 ဒါလည်း Category 1 အောက်ကပဲ
+        name: "Premium Nail Art",
         price: "12000 mmk",
         duration: "90 mins",
     },
     {
-        id: "pkg-3",
-        name: "Premium Service",
+        id: 3,
+        categoryId: "2", // 👈 Category 2 (ဥပမာ: Hair Spa)
+        name: "Standard Hair Spa",
         price: "25000 mmk",
         duration: "120 mins",
     },
     {
-        id: "pkg-4",
-        name: "VIP Service",
+        id: 4,
+        categoryId: "2", // 👈 ဒါလည်း Category 2 အောက်ကပဲ
+        name: "VIP Hair Treatment",
         price: "40000 mmk",
         duration: "45 mins",
     },
 ];
 
-const AllServices = () => {
+const CategoryDetails = () => {
     const [searchText, setSearchText] = useState("");
     const [editModalOpen, setEditModalOpen] = useState(false);
+    const [createModalOpen, setCreateModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
 
-    const { data: servicesData } = useGetServicesDataQuery();
-    const service = servicesData;
+    const { id } = useParams();
+    // const { data: servicesData } = useGetServicesDataQuery();
+    // const service = servicesData;
 
     const searchService = useMemo(() => {
-        const sourceData = service || mockPackages;
+        const sourceData = mockPackages;
 
         return (
             sourceData?.filter((item) => {
                 if (!item || !item.name) return false;
 
-                return item.name
+                const matchesCategory =
+                    item.categoryId?.toString() === id?.toString();
+
+                const matchesSearch = item.name
                     .toString()
                     .toLowerCase()
                     .includes(searchText.toLowerCase());
+
+                return matchesCategory && matchesSearch;
             }) || []
         );
-    }, [searchText, service]);
+    }, [searchText, id]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -72,15 +83,26 @@ const AllServices = () => {
         console.log("Deleting package:", selectedService?.id);
         setDeleteModalOpen(false);
     };
+
+    const handleModalCancel = () => {
+        setEditModalOpen(false);
+        setCreateModalOpen(false);
+        setTimeout(() => {
+            setSelectedService(null);
+        }, 300);
+    };
+
     return (
         <>
             <ServiceHeader
                 title="Services"
-                selectedService={selectedService}
-                isEdit={editModalOpen}
-                setEditModalOpen={setEditModalOpen}
-                setSearchText={setSearchText}
                 searchText={searchText}
+                setSearchText={setSearchText}
+                isEdit={editModalOpen}
+                isOpen={editModalOpen || createModalOpen}
+                initialValue={editModalOpen ? selectedService : null}
+                onCancel={handleModalCancel}
+                triggerCreate={() => setCreateModalOpen(true)}
             />
 
             <Row gutter={[16, 16]} className="mt-10!">
@@ -143,4 +165,4 @@ const AllServices = () => {
     );
 };
 
-export default AllServices;
+export default CategoryDetails;

@@ -7,6 +7,7 @@ const SubHeaderSection = ({
     setSearchText,
     title,
     subTitle,
+    btnTitle,
     subFormTitle,
     isEdit,
     isOpen,
@@ -123,20 +124,17 @@ const SubHeaderSection = ({
                     />
                 )}
 
-                {title !== "Services" ? (
-                    <AddForm
-                        title={title}
-                        subFormTitle={subFormTitle}
-                        isEdit={isEdit}
-                        isOpen={isOpen}
-                        onCancel={onCancel}
-                        initialValue={initialValue}
-                        triggerCreate={triggerCreate}
-                        triggerEdit={triggerEdit}
-                    />
-                ) : (
-                    ""
-                )}
+                <AddForm
+                    title={title}
+                    btnTitle={btnTitle}
+                    subFormTitle={subFormTitle}
+                    isEdit={isEdit}
+                    isOpen={isOpen}
+                    onCancel={onCancel}
+                    initialValue={initialValue}
+                    triggerCreate={triggerCreate}
+                    triggerEdit={triggerEdit}
+                />
             </div>
 
             {/* {setCreateCategoryInput && (

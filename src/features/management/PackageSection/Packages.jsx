@@ -81,6 +81,10 @@ const Packages = () => {
         setDeleteModalOpen(false);
     };
 
+    const handleCancel = () => {
+        setEditModalOpen(false);
+    };
+
     return (
         <>
             <SubHeaderSection
@@ -158,10 +162,13 @@ const Packages = () => {
                         {selectedPackage ? "Edit Package" : "Create Package"}
                     </h1>
                 }
-                onCancel={() => setEditModalOpen(false)}
+                onCancel={handleCancel}
                 footer={null}
             >
-                <PackageForm isEditing={editModalOpen} />
+                <PackageForm
+                    isEditing={editModalOpen}
+                    handleCancel={handleCancel}
+                />
             </Modal>
         </>
     );
