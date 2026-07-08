@@ -1,30 +1,12 @@
-import {
-    BellOutlined,
-    InboxOutlined,
-    MenuOutlined,
-    SendOutlined,
-    ArrowLeftOutlined,
-} from "@ant-design/icons";
+import { BellOutlined, MenuOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
-import {
-    Badge,
-    Drawer,
-    Space,
-    Tabs,
-    Button,
-    Form,
-    Input,
-    Upload,
-    Radio,
-    Checkbox,
-} from "antd";
+import { Badge, Space } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FilteredTabContent } from "./FilteredTabContent";
-
-const { Dragger } = Upload;
+import IncomeNotiSection from "./IncomeNotiSection";
 
 const bookingData = [
     "For Booking Data",
@@ -46,22 +28,8 @@ const commentData = [
     "The End of Comment Data",
 ];
 
-const NotiSendOptions = [
-    { label: "Announcement", value: "announcement" },
-    { label: "Promotion", value: "promotion" },
-    { label: "Reminder", value: "reminder" },
-    { label: "Alert", value: "alert" },
-];
-
-const sendType = [
-    { label: "Staffs", value: "staffs" },
-    { label: "Customers", value: "customers" },
-];
-
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
-    const [drawerPage, setDrawerPage] = useState("list");
-    const [form] = Form.useForm();
 
     const dispatch = useDispatch();
 
@@ -86,19 +54,8 @@ const Navbar = () => {
         },
     ];
 
-    // const onChange = (checkedValues) => {
-    //     console.log("checked = ", checkedValues);
-    // };
-
     const onCloseDrawer = () => {
         setIsNotiOpen(false);
-        setDrawerPage("list");
-    };
-
-    const onFinish = (values) => {
-        console.log("Sent Notification Data:", values);
-        form.resetFields();
-        setDrawerPage("list");
     };
 
     return (
@@ -141,142 +98,11 @@ const Navbar = () => {
                     </Link>
                 </Space>
 
-                <Drawer
-                    title={
-                        drawerPage === "list"
-                            ? "Notifications"
-                            : "Send New Notification"
-                    }
-                    open={isNotiOpen}
-                    onClose={onCloseDrawer}
-                    mask={true}
-                    size={550}
-                    styles={{
-                        header: { background: "#A76D83", color: "white" },
-                        body: { padding: "0" },
-                    }}
-                >
-                    {drawerPage === "list" ? (
-                        <>
-                            <div className="flex justify-between items-center px-4 py-4 shadow-md border-b border-gray-100">
-                                <p className="text-gray-700 font-semibold m-0 flex items-center gap-2">
-                                    <BellOutlined className="text-primary" />{" "}
-                                    Inbox
-                                </p>
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        setDrawerPage("send");
-                                        console.log("send noti button hint");
-                                    }}
-                                    className="border-primary"
-                                >
-                                    <SendOutlined /> Send Noti
-                                </Button>
-                            </div>
-                            <Tabs
-                                defaultActiveKey="1"
-                                items={items}
-                                tabBarStyle={{ width: "100%" }}
-                                centered
-                                className="w-full"
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <div className="mb-6 py-5 shadow-md">
-                                <Button
-                                    type="text"
-                                    icon={<ArrowLeftOutlined />}
-                                    onClick={() => setDrawerPage("list")}
-                                    className=" hover:bg-transparent! text-gray-500 hover:text-gray-800"
-                                >
-                                    Back to Inbox
-                                </Button>
-                            </div>
-                            <div className="p-6">
-                                <Form
-                                    layout="vertical"
-                                    form={form}
-                                    onFinish={onFinish}
-                                >
-                                    <Form.Item label="Image" name="image">
-                                        <Dragger className="w-full">
-                                            <div className="p-5">
-                                                <p className="ant-upload-drag-icon text-primary">
-                                                    <InboxOutlined />
-                                                </p>
-                                                <p className="ant-upload-text text-sm">
-                                                    Click or drag file to this
-                                                    area to upload
-                                                </p>
-                                            </div>
-                                        </Dragger>
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Leave Type"
-                                        name="leave-type"
-                                        rules={[{ required: true }]}
-                                    >
-                                        <Radio.Group
-                                            block
-                                            options={NotiSendOptions}
-                                            optionType="button"
-                                            buttonStyle="solid"
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Title"
-                                        name="title"
-                                        rules={[{ required: true }]}
-                                    >
-                                        <Input className="input-styling! bg-white! h-10 rounded-lg" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Description"
-                                        name="description"
-                                    >
-                                        <Input.TextArea
-                                            rows={4}
-                                            className="input-styling! bg-white! rounded-lg"
-                                        />
-                                    </Form.Item>
-                                    <Form.Item label="Send to">
-                                        <Checkbox.Group className="flex gap-3 flex-wrap">
-                                            {sendType.map((type, idx) => (
-                                                <Checkbox
-                                                    key={idx}
-                                                    className="completely-custom-checkbox"
-                                                    value={type.value}
-                                                >
-                                                    {type.label}
-                                                </Checkbox>
-                                            ))}
-                                        </Checkbox.Group>
-                                    </Form.Item>
-                                    <Form.Item className="mt-8 flex justify-end gap-3">
-                                        <Space>
-                                            <Button
-                                                onClick={() =>
-                                                    setDrawerPage("list")
-                                                }
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                                className="bg-primary border-primary"
-                                            >
-                                                Send
-                                            </Button>
-                                        </Space>
-                                    </Form.Item>
-                                </Form>
-                            </div>
-                        </>
-                    )}
-                </Drawer>
+                <IncomeNotiSection
+                    isNotiOpen={isNotiOpen}
+                    onCloseDrawer={onCloseDrawer}
+                    items={items}
+                />
             </div>
         </div>
     );

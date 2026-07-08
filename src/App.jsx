@@ -16,7 +16,7 @@ import WalkIn from "./features/walkIn/WalkIn.jsx";
 import CategoryDetails from "./features/management/services/CategoryDetails.jsx";
 import ReportsPage from "./features/reports/ReportsPage.jsx";
 import Packages from "./features/management/PackageSection/Packages.jsx";
-import Notifications from "./features/notifications/Notifications.jsx";
+import Notifications from "./features/send-notifications/Notifications.jsx";
 // import IsAuth from "./components/Guards/IsAuth.jsx";
 // import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 

@@ -50,6 +50,11 @@ const SubHeaderSection = ({
         return label ? value : <span>No option match</span>;
     };
 
+    const titleIncludes =
+        title.includes("Staff Schedule and Calendar") ||
+        title.includes("Reports & Analystics") ||
+        title?.includes("Sent Notifications");
+
     return (
         <div
             className={cn(
@@ -71,8 +76,7 @@ const SubHeaderSection = ({
             {!!title && (
                 <div
                     className={cn(
-                        title.includes("Staff Schedule and Calendar") ||
-                            title.includes("Reports & Analystics")
+                        titleIncludes
                             ? "flex justify-between items-center"
                             : "",
                     )}
@@ -88,7 +92,34 @@ const SubHeaderSection = ({
                         <p className="text-gray-600">{subTitle}</p>
                     </div>
 
-                    {title.includes("Staff Schedule and Calendar") && (
+                    {title === "Sent Notifications" && (
+                        <div className="flex gap-3">
+                            <AddForm
+                                title={formType[0] || title}
+                                btnTitle={btnTitle}
+                                subFormTitle={subFormTitle}
+                                isEdit={isEdit}
+                                isOpen={isOpen}
+                                onCancel={onCancel}
+                                initialValue={initialValue}
+                                triggerCreate={triggerCreate}
+                                triggerEdit={triggerEdit}
+                            />
+                            <AddForm
+                                title={formType[1] || title}
+                                btnTitle={btnTitle}
+                                subFormTitle={subFormTitle}
+                                isEdit={isEdit}
+                                isOpen={isOpen}
+                                onCancel={onCancel}
+                                initialValue={initialValue}
+                                triggerCreate={triggerCreate}
+                                triggerEdit={triggerEdit}
+                            />
+                        </div>
+                    )}
+
+                    {title?.includes("Staff Schedule and Calendar") && (
                         <Space>
                             <DebounceSelect
                                 mode="multiple"
@@ -143,17 +174,19 @@ const SubHeaderSection = ({
                     />
                 )}
 
-                <AddForm
-                    title={formType || title}
-                    btnTitle={btnTitle}
-                    subFormTitle={subFormTitle}
-                    isEdit={isEdit}
-                    isOpen={isOpen}
-                    onCancel={onCancel}
-                    initialValue={initialValue}
-                    triggerCreate={triggerCreate}
-                    triggerEdit={triggerEdit}
-                />
+                {title !== "Sent Notifications" && (
+                    <AddForm
+                        title={formType || title}
+                        btnTitle={btnTitle}
+                        subFormTitle={subFormTitle}
+                        isEdit={isEdit}
+                        isOpen={isOpen}
+                        onCancel={onCancel}
+                        initialValue={initialValue}
+                        triggerCreate={triggerCreate}
+                        triggerEdit={triggerEdit}
+                    />
+                )}
             </div>
         </div>
     );
