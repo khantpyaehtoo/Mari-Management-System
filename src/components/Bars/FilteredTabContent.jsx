@@ -1,5 +1,6 @@
 import { DownCircleOutlined } from "@ant-design/icons";
-import { Flex, Select, Tabs, Typography } from "antd";
+import { Card, Flex, Select, Space, Tabs } from "antd";
+import { BellRing, PartyPopper, TriangleAlert } from "lucide-react";
 
 export const FilteredTabContent = ({ data }) => {
     const innerTabItems = [
@@ -9,13 +10,35 @@ export const FilteredTabContent = ({ data }) => {
             children: (
                 <Flex vertical gap="12px" className="mt-4">
                     {data.map((item, index) => (
-                        <Typography.Title
-                            level={5}
+                        <Card
                             key={index}
-                            className="bg-white p-4 rounded-xl shadow-sm border border-gray-100"
+                            className="border-gray-300! shadow-md! rounded-xl! hover:shadow-md!"
                         >
-                            {item} (Today)
-                        </Typography.Title>
+                            <Flex justify="space-between" align="start">
+                                <div className="bg-primary-sec me-5 rounded-2xl p-3">
+                                    <BellRing
+                                        size={30}
+                                        className=" text-primary"
+                                    />
+                                </div>
+                                <Space vertical>
+                                    <h1 className="text-primary font-semibold text-lg!">
+                                        {item} (Today)
+                                    </h1>
+                                    <Space vertical>
+                                        <p className="text-xs">
+                                            We would like to warmly welcome La
+                                            Min, who will be taking on the role
+                                            of Nail Artist at our shop starting
+                                            today.
+                                        </p>
+                                    </Space>
+                                    <small className="text-gray-400">
+                                        1 Month ago
+                                    </small>
+                                </Space>
+                            </Flex>
+                        </Card>
                     ))}
                 </Flex>
             ),
@@ -26,13 +49,35 @@ export const FilteredTabContent = ({ data }) => {
             children: (
                 <Flex vertical gap="12px" className="mt-4">
                     {data.map((item, index) => (
-                        <Typography.Title
-                            level={5}
+                        <Card
                             key={index}
-                            className="bg-white p-4 rounded-xl shadow-sm border border-gray-100"
+                            className="border-gray-300! shadow-md! rounded-xl! hover:shadow-md!"
                         >
-                            {item} (This Week)
-                        </Typography.Title>
+                            <Flex justify="space-between" align="start">
+                                <div className="bg-primary-sec me-5 rounded-2xl p-3">
+                                    <TriangleAlert
+                                        size={30}
+                                        className="text-unavailable"
+                                    />
+                                </div>
+                                <Space vertical>
+                                    <h1 className="text-primary font-semibold text-lg!">
+                                        {item} (This Week)
+                                    </h1>
+                                    <Space vertical>
+                                        <p className="text-xs">
+                                            We would like to warmly welcome La
+                                            Min, who will be taking on the role
+                                            of Nail Artist at our shop starting
+                                            today.
+                                        </p>
+                                    </Space>
+                                    <small className="text-gray-400">
+                                        1 Month ago
+                                    </small>
+                                </Space>
+                            </Flex>
+                        </Card>
                     ))}
                 </Flex>
             ),
@@ -43,13 +88,35 @@ export const FilteredTabContent = ({ data }) => {
             children: (
                 <Flex vertical gap="12px" className="mt-4">
                     {data.map((item, index) => (
-                        <Typography.Title
-                            level={5}
+                        <Card
                             key={index}
-                            className="bg-white p-4 rounded-xl shadow-sm border border-gray-100"
+                            className="border-gray-300! shadow-md! rounded-xl! hover:shadow-md!"
                         >
-                            {item} (This Month)
-                        </Typography.Title>
+                            <Flex justify="space-between" align="start">
+                                <div className="bg-primary-sec me-5 rounded-2xl p-3">
+                                    <PartyPopper
+                                        size={30}
+                                        className=" text-primary"
+                                    />
+                                </div>
+                                <Space vertical>
+                                    <h1 className="text-primary font-semibold text-lg!">
+                                        {item} (This Month)
+                                    </h1>
+                                    <Space vertical>
+                                        <p className="text-xs">
+                                            We would like to warmly welcome La
+                                            Min, who will be taking on the role
+                                            of Nail Artist at our shop starting
+                                            today.
+                                        </p>
+                                    </Space>
+                                    <small className="text-gray-400">
+                                        1 Month ago
+                                    </small>
+                                </Space>
+                            </Flex>
+                        </Card>
                     ))}
                 </Flex>
             ),

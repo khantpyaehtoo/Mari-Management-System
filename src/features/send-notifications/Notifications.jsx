@@ -149,7 +149,7 @@ const Notifications = () => {
 
                     <Card className="border-gray-300! shadow-md! p-1! rounded-xl! hover:shadow-md!">
                         <Flex justify="space-between" align="start">
-                            <div className="bg-[#FEE1EB] me-5 rounded-2xl p-3">
+                            <div className="bg-primary-sec me-5 rounded-2xl p-3">
                                 <PartyPopper
                                     size={30}
                                     className=" text-primary"
