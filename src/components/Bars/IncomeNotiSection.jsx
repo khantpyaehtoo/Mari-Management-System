@@ -22,7 +22,6 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer, items }) => {
                 body: { padding: "0" },
             }}
         >
-            {/* {drawerPage === "list" ? ( */}
             <>
                 <div className="flex justify-between items-center px-4 py-4 shadow-md border-b border-gray-100">
                     <p className="text-gray-700 font-semibold m-0 flex items-center gap-2">

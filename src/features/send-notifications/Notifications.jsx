@@ -14,7 +14,7 @@ const Notifications = () => {
 
             <div className="flex w-full h-[calc(100vh-150px)] mt-4 overflow-hidden">
                 <div className="w-1/2 h-full overflow-y-auto border-e border-e-gray-400 px-5 py-2 space-y-8!">
-                    <h1 className="font-semibold sticky top-0 bg-white py-5 px-4 rounded-2xl shadow-md w-full z-10">
+                    <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects">
                         Sent Notifications (Staffs)
                     </h1>
 
@@ -143,7 +143,7 @@ const Notifications = () => {
                 </div>
 
                 <div className="w-1/2 h-full overflow-y-auto px-5 py-2 space-y-8!">
-                    <h1 className="font-semibold sticky top-0 bg-white py-5 px-4 rounded-2xl shadow-md w-full z-10">
+                    <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects">
                         Sent Notifications (Customers)
                     </h1>
 

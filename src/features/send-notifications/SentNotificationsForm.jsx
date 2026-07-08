@@ -1,5 +1,5 @@
 import { InboxOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Radio, Space, Upload } from "antd";
+import { Form, Input, Radio, Upload } from "antd";
 
 const NotiSendOptions = [
     { label: "Announcement", value: "announcement" },
@@ -57,33 +57,6 @@ const SentNotificationsForm = () => {
                             rows={4}
                             className="input-styling! bg-white! rounded-lg"
                         />
-                    </Form.Item>
-                    <Form.Item label="Send to">
-                        <Checkbox.Group className="flex gap-3 flex-wrap">
-                            {sendType.map((type, idx) => (
-                                <Checkbox
-                                    key={idx}
-                                    className="completely-custom-checkbox"
-                                    value={type.value}
-                                >
-                                    {type.label}
-                                </Checkbox>
-                            ))}
-                        </Checkbox.Group>
-                    </Form.Item>
-                    <Form.Item className="mt-8 flex justify-end gap-3">
-                        <Space>
-                            <Button onClick={() => setDrawerPage("list")}>
-                                Cancel
-                            </Button>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                className="bg-primary border-primary"
-                            >
-                                Send
-                            </Button>
-                        </Space>
                     </Form.Item>
                 </Form>
             </div>

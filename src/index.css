@@ -269,6 +269,16 @@ body {
     user-select: none;
 }
 
+/* glass bg backdrop effects */
+.bg-backdrop-effects {
+    background: rgba(255, 255, 255, 0);
+    border-radius: 16px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.2px);
+    -webkit-backdrop-filter: blur(4.2px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
 /* Remove default Ant Design spacing on the text */
 .completely-custom-checkbox.ant-checkbox-wrapper > span:not(.ant-checkbox) {
     padding-inline-start: 0px !important;
