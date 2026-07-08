@@ -2,9 +2,9 @@ import { Card, Col, Flex, Radio, Row, Space, Table, Typography } from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
-    ApartmentOutlined,
+    DollarOutlined,
     IdcardOutlined,
-    UnorderedListOutlined,
+    SlidersOutlined,
     UserOutlined,
 } from "@ant-design/icons";
 import { YearlyLineChart } from "../components/dashboard/YearlyLineChart";
@@ -14,13 +14,13 @@ import BookingCard from "../components/dashboard/BookingCard";
 
 const dashboardCardItem = [
     {
-        icon: <UserOutlined />,
+        icon: <SlidersOutlined />,
         trending: "+20% last month",
         title: "Total Bookings This Month",
         value: "1.1K",
     },
     {
-        icon: <ApartmentOutlined />,
+        icon: <DollarOutlined />,
         trending: "+20% last month",
         title: "Total Revenue This Month",
         value: "467k",
@@ -32,7 +32,7 @@ const dashboardCardItem = [
         value: "20",
     },
     {
-        icon: <UnorderedListOutlined />,
+        icon: <UserOutlined />,
         trending: "+20% last month",
         title: "Total Customers",
         value: "2,000",
@@ -109,14 +109,8 @@ const Dashboard = () => {
             </section>
 
             <section className="mt-10 mb-10 px-10">
-                <div className="flex justify-start items-center! mb-6!">
+                <div className="flex justify-end items-center! mb-6!">
                     <Space size="large">
-                        <Typography.Title
-                            level={3}
-                            className="text-xl! font-medium!"
-                        >
-                            Weekly Bookings & Cancellations
-                        </Typography.Title>
                         <Radio.Group
                             options={radioBtnOptions}
                             optionType="button"

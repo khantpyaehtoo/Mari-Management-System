@@ -10,8 +10,6 @@ const DashboardCard = ({ title, value, icon, trending }) => {
                     <span className="me-4 text-2xl text-white bg-primary p-3 rounded-md">
                         {icon}
                     </span>
-                    {/* <Statistic title={title} value={value} /> */}
-                    {/* <TrendingDown /> */}
 
                     <Space
                         className={cn(

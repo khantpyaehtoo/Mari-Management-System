@@ -78,7 +78,7 @@ const serviceColumns = [
         key: "count",
     },
     {
-        title: "Share",
+        title: "% of Revenue",
         dataIndex: "share",
         key: "share",
         render: (share) => (
