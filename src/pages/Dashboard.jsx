@@ -15,22 +15,26 @@ import BookingCard from "../components/dashboard/BookingCard";
 const dashboardCardItem = [
     {
         icon: <UserOutlined />,
-        title: "Total Booking",
+        trending: "+20% last month",
+        title: "Total Bookings This Month",
         value: "1.1K",
     },
     {
         icon: <ApartmentOutlined />,
-        title: "Total Revenue",
+        trending: "+20% last month",
+        title: "Total Revenue This Month",
         value: "467k",
     },
     {
         icon: <IdcardOutlined />,
-        title: "Total Staff",
+        trending: "-20% last month",
+        title: "Today Active Staff",
         value: "20",
     },
     {
         icon: <UnorderedListOutlined />,
-        title: "Total Customer",
+        trending: "+20% last month",
+        title: "Total Customers",
         value: "2,000",
     },
 ];
@@ -86,20 +90,16 @@ const radioBtnOptions = [
 ];
 
 const Dashboard = () => {
-    const { Title } = Typography;
     const [viewType, setViewType] = useState("weekly");
 
     return (
         <Flex vertical>
-            <Title className="title-style" level={3}>
-                Dashboard
-            </Title>
-
             <section className="space-y-6 w-full px-10">
                 <div className="grid-items-4">
                     {dashboardCardItem.map((item, key) => (
                         <DashboardCard
                             key={key}
+                            trending={item.trending}
                             icon={item.icon}
                             title={item.title}
                             value={item.value}
