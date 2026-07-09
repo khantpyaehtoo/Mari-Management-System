@@ -8,10 +8,17 @@ import {
     Select,
     Space,
     Typography,
+    message,
 } from "antd";
+import { useEffect } from "react";
+import { useCreateCalendarDataMutation } from "./calendarApi";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
     const [form] = Form.useForm();
+
+    const [createCalendarData, { isLoading: isAssigning }] =
+        useCreateCalendarDataMutation();
+
     const {
         optionsStaff,
         setSelectedDates,
@@ -23,10 +30,57 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         leaveOptions,
     } = calendarAssignConfig;
 
+    useEffect(() => {
+        if (openCalForm && selectedDates) {
+            form.setFieldsValue({
+                "select-date": selectedDates,
+            });
+        }
+    }, [openCalForm, selectedDates, form]);
+
+    const handleFinish = async (values) => {
+        try {
+            let startDate = null;
+            let endDate = null;
+
+            if (calendarFilterType === "range" && values["select-date"]) {
+                startDate = values["select-date"][0].format("YYYY-MM-DD");
+                endDate = values["select-date"][1].format("YYYY-MM-DD");
+            } else if (values["select-date"]) {
+                startDate = values["select-date"].format("YYYY-MM-DD");
+                endDate = startDate;
+            }
+
+            const payload = {
+                staffIds: values["staff-member"],
+                leaveType: values["leave-type"],
+                startDate: startDate,
+                endDate: endDate,
+                note: values["note"] || "",
+            };
+
+            await createCalendarData(payload).unwrap();
+
+            message.success("Leave assigned successfully!");
+            setOpenCalForm(false);
+            form.resetFields();
+            setSelectedDates(null);
+        } catch (error) {
+            console.error("Failed to assign leave:", error);
+            message.error(
+                error?.data?.message ||
+                    "Failed to assign leave. Please try again.",
+            );
+        }
+    };
+
     return (
         <Modal
             open={openCalForm}
-            onCancel={() => setOpenCalForm(!openCalForm)}
+            onCancel={() => {
+                setOpenCalForm(false);
+                form.resetFields();
+            }}
             title={
                 <Typography.Title level={3} className="font-semibold!">
                     Assign Leave
@@ -41,18 +95,24 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
             <Form
                 layout="vertical"
                 form={form}
-                clearOnDestroy
                 autoComplete="off"
                 className="mt-8!"
+                onFinish={handleFinish}
             >
-                <Form.Item label="Staff Member" name="staff-member">
+                <Form.Item
+                    label="Staff Member"
+                    name="staff-member"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please select at least one staff member!",
+                        },
+                    ]}
+                >
                     <Select
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="Please select your staff."
-                        onChange={(value) => {
-                            console.log(`selected ${value}`);
-                        }}
                         options={optionsStaff}
                         optionRender={(option) => (
                             <Space>
@@ -65,7 +125,16 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                     />
                 </Form.Item>
 
-                <Form.Item label="Leave Type" name="leave-type">
+                <Form.Item
+                    label="Leave Type"
+                    name="leave-type"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please select leave type!",
+                        },
+                    ]}
+                >
                     <Radio.Group
                         block
                         options={leaveOptions}
@@ -75,13 +144,11 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 </Form.Item>
 
                 <Form.Item
+                    name="select-date"
+                    rules={[{ required: true, message: "Please select date!" }]}
                     label={
-                        <div
-                            style={{
-                                marginBottom: "5px",
-                            }}
-                        >
-                            <span className="me-10">
+                        <Space size="large">
+                            <span>
                                 {calendarFilterType === "date"
                                     ? "Single Date"
                                     : "Date Range"}
@@ -93,6 +160,9 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                                     setCalendarFilterType((prev) =>
                                         prev === "date" ? "range" : "date",
                                     );
+                                    form.setFieldsValue({
+                                        "select-date": null,
+                                    });
                                     setSelectedDates(null);
                                 }}
                                 className="rounded-2xl! p-3!"
@@ -101,43 +171,46 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                                     ? "Switch to Date Range"
                                     : "Switch to Single Date"}
                             </Button>
-                        </div>
+                        </Space>
                     }
-                    name="select-date"
                 >
                     {calendarFilterType === "range" ? (
                         <DatePicker.RangePicker
-                            value={selectedDates}
-                            onChange={(dates) => setSelectedDates(dates)}
                             autoFocus
                             className="w-full rounded-xl!"
                         />
                     ) : (
-                        <DatePicker
-                            value={selectedDates}
-                            onChange={(date) => setSelectedDates(date)}
-                            autoFocus
-                            className="w-full rounded-xl!"
-                        />
+                        <DatePicker autoFocus className="w-full rounded-xl!" />
                     )}
                 </Form.Item>
 
-                <Form.Item label="Note">
+                <Form.Item label="Note" name="note">
                     <Input.TextArea
                         rows={2}
                         className="border! border-gray-300! rounded-xl! p-3!"
                     />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item className="mb-0!">
                     <Space
-                        size="medium"
+                        size="middle"
                         className="flex! justify-end! items-center!"
                     >
-                        <Button onClick={() => setOpenCalForm(false)}>
+                        <Button
+                            onClick={() => {
+                                setOpenCalForm(false);
+                                form.resetFields();
+                            }}
+                        >
                             Cancel
                         </Button>
-                        <Button type="primary">Assgin Leave</Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isAssigning}
+                        >
+                            Assign Leave
+                        </Button>
                     </Space>
                 </Form.Item>
             </Form>
