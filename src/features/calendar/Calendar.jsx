@@ -270,6 +270,7 @@ const CalendarSection = () => {
                     <Space vertical style={{ width: "100%" }}>
                         <Calendar
                             cellRender={cellRender}
+                            className="custom-calendar"
                             styles={{
                                 root: {
                                     borderRadius: "20px",
