@@ -67,7 +67,7 @@ const EmployeeAttendance = ({ calendarData }) => {
 
     return (
         <Card
-            className="w-full rounded-2xl! border-2! border-primary! mt-5!"
+            className="w-full rounded-2xl! border-2! border-primary! mt-5! shadow-md!"
             styles={{ header: { padding: "10px" }, body: { padding: "3px" } }}
         >
             <div className="border-b border-b-black p-4">

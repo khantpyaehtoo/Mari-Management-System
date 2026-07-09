@@ -365,7 +365,8 @@ body {
 }
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date-value {
-    color: #fd3052 !important;              
+    color: black !important;    
+    background: white;          
 }
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-selected):hover .ant-picker-calendar-date-value {
@@ -400,12 +401,14 @@ body {
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date-value {
     /* background: #FBB1BD;  */
+    color: black !important;    
+    background: white;       
     width: 30px;
     height: 30px;
     text-align: center;
     border-radius: 50%;
     border: 2px dashed #fd3052;
-    color: #fd3052;
+    /* color: #fd3052; */
     padding: 2px;
 }
 
