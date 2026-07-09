@@ -18,12 +18,14 @@ const DashboardCard = ({ title, value, icon, trending }) => {
                                 : "text-unavailable",
                         )}
                     >
-                        {trending.includes("+") ? (
-                            <TrendingUp />
-                        ) : (
-                            <TrendingDown />
-                        )}
-                        {trending}
+                        <p>
+                            {trending.includes("+") ? (
+                                <TrendingUp />
+                            ) : (
+                                <TrendingDown />
+                            )}
+                            {trending}
+                        </p>
                     </Space>
                 </Space>
                 <Space vertical>
