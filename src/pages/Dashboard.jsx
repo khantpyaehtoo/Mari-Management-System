@@ -10,7 +10,6 @@ import {
     Typography,
 } from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
-import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
     DollarOutlined,
     IdcardOutlined,
@@ -25,6 +24,7 @@ import {
     useGetDashBoardCardStatsQuery,
     useGetStaffPerformQuery,
 } from "../components/dashboard/dashboardApi";
+import WeeklyBarChart from "../components/dashboard/WeeklyBarChart";
 
 const radioBtnOptions = [
     {

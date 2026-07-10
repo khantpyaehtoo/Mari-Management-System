@@ -16,10 +16,10 @@ export const dashboardApi = baseApi.injectEndpoints({
 
         getWeeklyChartData: builder.query({
             query: () => ({
-                url: `/api/admin/dashboard/${weeklyBarChartEndpoint}?period=weekly`,
+                url: `admin/dashboard/${weeklyBarChartEndpoint}?period=weekly`,
                 method: "GET",
             }),
-            providesTags: ["chart"],
+            providesTags: ["admin", "dashboard"],
         }),
 
         getStaffPerform: builder.query({
@@ -44,4 +44,5 @@ export const {
     useGetStaffPerformQuery,
     useGetDashBoardCardStatsQuery,
     useGetTodayBookingListQuery,
+    useGetWeeklyChartDataQuery,
 } = dashboardApi;
