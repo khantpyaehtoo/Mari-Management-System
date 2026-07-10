@@ -1,4 +1,14 @@
-import { Card, Col, Flex, Radio, Row, Space, Table, Typography } from "antd";
+import {
+    Avatar,
+    Card,
+    Col,
+    Flex,
+    Radio,
+    Row,
+    Space,
+    Table,
+    Typography,
+} from "antd";
 import DashboardCard from "../components/dashboard/DashboardCard";
 import { WeeklyBarChart } from "../components/dashboard/WeeklyBarChart";
 import {
@@ -11,72 +21,10 @@ import { YearlyLineChart } from "../components/dashboard/YearlyLineChart";
 import { useState } from "react";
 import ServicePieChart from "../components/dashboard/ServicePieChart";
 import BookingCard from "../components/dashboard/BookingCard";
-
-const dashboardCardItem = [
-    {
-        icon: <SlidersOutlined />,
-        trending: "+20% last month",
-        title: "Total Bookings This Month",
-        value: "1.1K",
-    },
-    {
-        icon: <DollarOutlined />,
-        trending: "+20% last month",
-        title: "Total Revenue This Month",
-        value: "467k",
-    },
-    {
-        icon: <IdcardOutlined />,
-        trending: "-20% last month",
-        title: "Today Active Staff",
-        value: "20",
-    },
-    {
-        icon: <UserOutlined />,
-        trending: "+20% last month",
-        title: "Total Customers",
-        value: "2,000",
-    },
-];
-
-const dummyData = [
-    {
-        key: "1",
-        employeeInfo: "ST-0042",
-        name: "Phyu Phyu",
-        count: "115",
-        rating: "4.5",
-        revenue: "200,000",
-        commission: "20000",
-    },
-];
-const column = [
-    {
-        title: "Employee Info",
-        dataIndex: "employeeInfo",
-        key: "employeeInfo",
-    },
-    {
-        title: "Services Completed",
-        dataIndex: "count",
-        key: "count",
-    },
-    {
-        title: "Client Rating",
-        dataIndex: "rating",
-        key: "rating",
-    },
-    {
-        title: "Revenue",
-        dataIndex: "revenue",
-        key: "revenue",
-    },
-    {
-        title: "Commission",
-        dataIndex: "commission",
-        key: "commission",
-    },
-];
+import {
+    useGetDashBoardCardStatsQuery,
+    useGetStaffPerformQuery,
+} from "../components/dashboard/dashboardApi";
 
 const radioBtnOptions = [
     {
@@ -91,6 +39,101 @@ const radioBtnOptions = [
 
 const Dashboard = () => {
     const [viewType, setViewType] = useState("weekly");
+
+    const { data: cardDatas } = useGetDashBoardCardStatsQuery();
+    const { data: staffPerformData = [] } = useGetStaffPerformQuery();
+
+    const dashboardCardItem = [
+        {
+            icon: <SlidersOutlined />,
+            trending:
+                cardDatas?.bookingsGrowthPercentage !== undefined
+                    ? `${cardDatas.bookingsGrowthPercentage >= 0 ? "+" : ""}${cardDatas.bookingsGrowthPercentage}% last month`
+                    : "Loading...",
+            title: "Total Bookings This Month",
+            value: cardDatas?.totalBookings?.toLocaleString() ?? "0",
+        },
+        {
+            icon: <DollarOutlined />,
+            trending:
+                cardDatas?.revenueGrowthPercentage !== undefined
+                    ? `${cardDatas.revenueGrowthPercentage >= 0 ? "+" : ""}${cardDatas.revenueGrowthPercentage}% last month`
+                    : "Loading...",
+            title: "Total Revenue This Month",
+            value:
+                cardDatas?.totalRevenue !== undefined
+                    ? `${cardDatas.totalRevenue.toLocaleString()} MMK`
+                    : "0 MMK",
+        },
+        {
+            icon: <IdcardOutlined />,
+            trending:
+                cardDatas?.staffGrowthPercentage !== undefined
+                    ? `${cardDatas.staffGrowthPercentage >= 0 ? "+" : ""}${cardDatas.staffGrowthPercentage}% last month`
+                    : "Loading...",
+            title: "Today Active Staff",
+            value: cardDatas?.todayActiveStaff?.toString() ?? "0",
+        },
+        {
+            icon: <UserOutlined />,
+            trending:
+                cardDatas?.customersGrowthPercentage !== undefined
+                    ? `${cardDatas.customersGrowthPercentage >= 0 ? "+" : ""}${cardDatas.customersGrowthPercentage}% last month`
+                    : "Loading...",
+            title: "Total Customers",
+            value: cardDatas?.totalCustomers?.toLocaleString() ?? "0",
+        },
+    ];
+
+    const column = [
+        {
+            title: "Employee Info",
+            dataIndex: "staffName",
+            key: "staffName",
+            render: (text, record) => (
+                <Space>
+                    <Avatar src={record?.profileImage} />
+                    <div>
+                        <div className="font-medium">{text}</div>
+                        <div className="text-xs text-gray-400">
+                            {record.staffCode}
+                        </div>
+                    </div>
+                </Space>
+            ),
+        },
+        {
+            title: "Services Completed",
+            dataIndex: "completedJobsCount",
+            key: "completedJobsCount",
+        },
+        {
+            title: "Client Rating",
+            dataIndex: "ratingAverage",
+            key: "ratingAverage",
+            render: (rating) => `⭐ ${rating}`,
+        },
+        {
+            title: "Revenue",
+            dataIndex: "totalRevenue",
+            key: "totalRevenue",
+            render: (val) => (
+                <>
+                    {val.toLocaleString()} <small>MMK</small>
+                </>
+            ),
+        },
+        {
+            title: "Commission",
+            dataIndex: "totalCommission",
+            key: "totalCommission",
+            render: (val) => (
+                <>
+                    {val.toLocaleString()} <small>MMK</small>
+                </>
+            ),
+        },
+    ];
 
     return (
         <Flex vertical>
@@ -143,7 +186,11 @@ const Dashboard = () => {
                     </Space>
                 </div>
                 <div className="table-wrapper">
-                    <Table columns={column} dataSource={dummyData} />
+                    <Table
+                        columns={column}
+                        dataSource={staffPerformData}
+                        rowKey="staffId"
+                    />
                 </div>
             </section>
 

@@ -81,11 +81,6 @@ const filteredLabels = labels.slice(0, currentDayIndex + 1);
 
 const data = {
     labels: filteredLabels,
-    // title: (
-    //     <Typography.Title level={3} className="text-xl! font-medium!">
-    //         Weekly Bookings & Cancellations
-    //     </Typography.Title>
-    // ),
     datasets: [
         {
             label: "Walkin Count",
