@@ -125,29 +125,31 @@ export const FilteredTabContent = ({ data }) => {
 
     return (
         <div className="px-4 py-2">
-            <div className="absolute right-4 top-2 z-10 w-32">
-                <Select
-                    defaultValue="all"
-                    className="w-full custom-filter-select"
-                    classNames={{
-                        popup: { root: "rounded-xl shadow-lg" },
-                    }}
-                    suffixIcon={
-                        <DownCircleOutlined className="text-gray-700 text-base" />
-                    }
-                    options={[
-                        { value: "all", label: "All" },
-                        { value: "staff", label: "Staff" },
-                        { value: "customer", label: "Customer" },
-                    ]}
-                    onChange={(value) => console.log("Selected filter:", value)}
-                />
-            </div>
             <Tabs
                 defaultActiveKey="today"
                 items={innerTabItems}
                 className="sub-pill-tabs"
                 animated={false}
+                tabBarExtraContent={
+                    <Select
+                        defaultValue="all"
+                        className="custom-filter-select w-32"
+                        classNames={{
+                            popup: { root: "rounded-xl shadow-lg" },
+                        }}
+                        suffixIcon={
+                            <DownCircleOutlined className="text-gray-700 text-base" />
+                        }
+                        options={[
+                            { value: "all", label: "All" },
+                            { value: "staff", label: "Staff" },
+                            { value: "customer", label: "Customer" },
+                        ]}
+                        onChange={(value) =>
+                            console.log("Selected filter:", value)
+                        }
+                    />
+                }
             />
         </div>
     );

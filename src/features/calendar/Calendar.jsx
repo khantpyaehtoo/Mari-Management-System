@@ -234,7 +234,6 @@ const CalendarSection = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [activePopoverDate, setActivePopoverDate] = useState(null);
     const [openCalForm, setOpenCalForm] = useState(false);
-    // const [calendarFilterType, setCalendarFilterType] = useState("");
 
     const dateCellRender = (calendarValue) => {
         const dateStr = calendarValue.format("YYYY-MM-DD");
@@ -306,8 +305,6 @@ const CalendarSection = () => {
         optionsStaff,
         setSelectedDates: setSelectedDate,
         selectedDates: selectedDate,
-        // calendarFilterType,
-        // setCalendarFilterType,
         setOpenCalForm,
         openCalForm,
         leaveOptions,

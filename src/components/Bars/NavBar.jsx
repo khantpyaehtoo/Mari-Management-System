@@ -18,41 +18,34 @@ const bookingData = [
     "The End of Booking Data",
 ];
 
-const commentData = [
-    "For Comment Data",
-    "Racing car sprays burning fuel into crowd.",
-    "Japanese princess to wed commoner.",
-    "Australian walks 100km after outback crash.",
-    "Man charged over missing wedding girl.",
-    "Los Angeles battles huge wildfires.",
-    "The End of Comment Data",
-];
-
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
 
     const dispatch = useDispatch();
 
-    const items = [
-        {
-            key: "1",
-            label: (
-                <span className="w-full text-center flex items-center justify-center px-4 font-medium">
-                    Incoming
-                </span>
-            ),
-            children: <FilteredTabContent data={bookingData} />,
-        },
-        {
-            key: "2",
-            label: (
-                <span className="w-full text-center flex items-center justify-center px-4 font-medium">
-                    Sent History
-                </span>
-            ),
-            children: <FilteredTabContent data={commentData} />,
-        },
-    ];
+    // for tab section
+    // const items = [
+    //     {
+    //         key: "1",
+    //         label: (
+    //             <span className="w-full text-center flex items-center justify-center px-4 font-medium">
+    //                 Incoming
+    //             </span>
+    //         ),
+    //         children: <FilteredTabContent data={bookingData} />,
+    //     },
+    //     {
+    //         key: "2",
+    //         label: (
+    //             <span className="w-full text-center flex items-center justify-center px-4 font-medium">
+    //                 Sent History
+    //             </span>
+    //         ),
+    //         children: <FilteredTabContent data={commentData} />,
+    //     },
+    // ];
+
+    const items = [<FilteredTabContent data={bookingData} />];
 
     const onCloseDrawer = () => {
         setIsNotiOpen(false);

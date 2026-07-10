@@ -14,8 +14,6 @@ import { useEffect } from "react";
 import { useCreateCalendarDataMutation } from "./calendarApi";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
-    // const [tempRange, setTempRange] = useState(null);
-    // const [isRangeMode, setIsRangeMode] = useState(false);
     const [form] = Form.useForm();
 
     const [createCalendarData, { isLoading: isAssigning }] =
@@ -29,20 +27,6 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         openCalForm,
         leaveOptions,
     } = calendarAssignConfig;
-
-    // useEffect(() => {
-    //     if (openCalForm && selectedDates) {
-    //         if (Array.isArray(selectedDates)) {
-    //             form.setFieldsValue({ "select-date": selectedDates });
-    //             setIsRangeMode(true);
-    //         } else {
-    //             form.setFieldsValue({ "select-date": selectedDates });
-    //             setIsRangeMode(false);
-    //         }
-    //     } else if (!openCalForm) {
-    //         setIsRangeMode(false);
-    //     }
-    // }, [openCalForm, selectedDates, form]);
 
     useEffect(() => {
         if (openCalForm && selectedDates) {
@@ -92,19 +76,6 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         }
     };
 
-    // const formatDateDisplay = (values) => {
-    //     if (!values || !values[0]) return "";
-
-    //     const startStr = values[0].format("YYYY-MM-DD");
-    //     const endStr = values[1] ? values[1].format("YYYY-MM-DD") : "";
-
-    //     if (!endStr || startStr === endStr) {
-    //         return startStr;
-    //     }
-
-    //     return `${startStr} ~ ${endStr}`;
-    // };
-
     return (
         <Modal
             open={openCalForm}
@@ -121,7 +92,7 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
             classNames={{
                 container: "bg-white-back!",
             }}
-            destroyOnHidden
+            destroyOnHidden={true}
         >
             <Form
                 layout="vertical"

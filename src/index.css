@@ -332,24 +332,24 @@ body {
 
 /* CUSTOM SELECT CALENDAR */
 .calendar-inputs\!.single-active-view .ant-picker-range-separator {
-  opacity: 0 !important;
-  width: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
 }
 
 .calendar-inputs\!.single-active-view .ant-picker-input:nth-child(3) {
-  opacity: 0 !important;
-  width: 0 !important;
-  max-width: 0 !important;
-  overflow: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    overflow: hidden !important;
 }
 
 .calendar-inputs\!.single-active-view .ant-picker-input:nth-child(1) {
-  width: 100% !important;
-  max-width: 100% !important;
-  flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
 }
 
 /* CUSTOM MAIN CALENDAR SECTION */
