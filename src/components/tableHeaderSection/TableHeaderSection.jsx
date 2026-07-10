@@ -2,6 +2,7 @@ import { Button, DatePicker, Select, Space } from "antd";
 import { cn } from "../../lib/utils";
 import { CloseOutlined } from "@ant-design/icons";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
+import dayjs from "dayjs";
 
 const TableHeaderSection = ({
     renderlists,
@@ -26,6 +27,13 @@ const TableHeaderSection = ({
         setSelectedDates,
         dateOptions,
     } = dateConfig || {};
+
+    const rangePresets = [
+        { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
+        { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
+        { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
+        { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
+    ];
 
     const handleCalendarChange = (value) => {
         setCalendarFilterType(value || null);
@@ -90,17 +98,23 @@ const TableHeaderSection = ({
                                 onChange={(dates) => setSelectedDates(dates)}
                                 autoFocus
                                 className="rounded-xl!"
+                                presets={[
+                                    {
+                                        label: (
+                                            <span aria-label="Current Time to End of Day">
+                                                Now ~ EOD
+                                            </span>
+                                        ),
+                                        value: () => [
+                                            dayjs(),
+                                            dayjs().endOf("day"),
+                                        ],
+                                    },
+                                    ...rangePresets,
+                                ]}
                             />
                         )}
-                        {calendarFilterType === "month" && (
-                            <DatePicker
-                                value={selectedDates}
-                                onChange={(date) => setSelectedDates(date)}
-                                picker="month"
-                                autoFocus
-                                className="rounded-xl!"
-                            />
-                        )}
+
                         {dateOptions && calendarFilterType && (
                             <Button
                                 type="text"

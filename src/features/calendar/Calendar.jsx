@@ -18,7 +18,7 @@ import CalendarDetailOverview from "./CalendarDetailOverview";
 import CalendarAssignModal from "./CalendarAssignModal";
 
 const leaveOptions = [
-    { label: "Holiday", value: "Holiday" },
+    { label: "DayOff", value: "DayOff" },
     { label: "Sick Leave", value: "Sick Leave" },
     { label: "Personal", value: "Personal" },
     { label: "Maternity", value: "Maternity" },
@@ -234,7 +234,7 @@ const CalendarSection = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [activePopoverDate, setActivePopoverDate] = useState(null);
     const [openCalForm, setOpenCalForm] = useState(false);
-    const [calendarFilterType, setCalendarFilterType] = useState("");
+    // const [calendarFilterType, setCalendarFilterType] = useState("");
 
     const dateCellRender = (calendarValue) => {
         const dateStr = calendarValue.format("YYYY-MM-DD");
@@ -259,10 +259,11 @@ const CalendarSection = () => {
                     <CalendarDetailOverview
                         details={currentDetails}
                         selectedDate={calendarValue}
+                        setActivePopoverDate={setActivePopoverDate}
                     />
                 }
                 placement="rightTop"
-                overlayClassName="calendar-popover"
+                classNames={{ root: "calendar-popover" }}
             >
                 <div
                     style={{ width: "100%", height: "100%", minHeight: "50px" }}
@@ -305,8 +306,8 @@ const CalendarSection = () => {
         optionsStaff,
         setSelectedDates: setSelectedDate,
         selectedDates: selectedDate,
-        calendarFilterType,
-        setCalendarFilterType,
+        // calendarFilterType,
+        // setCalendarFilterType,
         setOpenCalForm,
         openCalForm,
         leaveOptions,

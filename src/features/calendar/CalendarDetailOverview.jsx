@@ -1,7 +1,12 @@
 import { Avatar, Flex, Space, Typography, Tag } from "antd";
 import dayjs from "dayjs";
+import { X } from "lucide-react";
 
-const CalendarDetailOverview = ({ details, selectedDate }) => {
+const CalendarDetailOverview = ({
+    details,
+    selectedDate,
+    setActivePopoverDate,
+}) => {
     const formattedDate = selectedDate
         ? dayjs(selectedDate).format("dddd, DD MMMM")
         : "";
@@ -18,10 +23,19 @@ const CalendarDetailOverview = ({ details, selectedDate }) => {
             className="p-2"
             style={{ maxWidth: "320px", maxHeight: "400px", overflowY: "auto" }}
         >
-            <Flex justify="space-between" className="border-b pb-2 mb-3!">
+            <Flex
+                justify="space-between"
+                item="center"
+                className="border-b pb-2 mb-3!"
+            >
                 <Typography.Text className="font-semibold text-base text-gray-700">
                     {formattedDate} Staff Details
                 </Typography.Text>
+                <X
+                    size={16}
+                    onClick={() => setActivePopoverDate(null)}
+                    className="cursor-pointer"
+                />
             </Flex>
 
             <section className="space-y-3">

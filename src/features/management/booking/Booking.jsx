@@ -379,7 +379,6 @@ const Booking = () => {
     const dateOptions = [
         { label: "Select Date", value: "date" },
         { label: "Date Range", value: "range" },
-        { label: "Select Month", value: "month" },
     ];
 
     const dateConfig = {

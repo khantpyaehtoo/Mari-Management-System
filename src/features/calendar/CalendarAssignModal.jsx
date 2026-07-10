@@ -14,6 +14,8 @@ import { useEffect } from "react";
 import { useCreateCalendarDataMutation } from "./calendarApi";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
+    // const [tempRange, setTempRange] = useState(null);
+    // const [isRangeMode, setIsRangeMode] = useState(false);
     const [form] = Form.useForm();
 
     const [createCalendarData, { isLoading: isAssigning }] =
@@ -23,18 +25,32 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         optionsStaff,
         setSelectedDates,
         selectedDates,
-        calendarFilterType,
-        setCalendarFilterType,
         setOpenCalForm,
         openCalForm,
         leaveOptions,
     } = calendarAssignConfig;
 
+    // useEffect(() => {
+    //     if (openCalForm && selectedDates) {
+    //         if (Array.isArray(selectedDates)) {
+    //             form.setFieldsValue({ "select-date": selectedDates });
+    //             setIsRangeMode(true);
+    //         } else {
+    //             form.setFieldsValue({ "select-date": selectedDates });
+    //             setIsRangeMode(false);
+    //         }
+    //     } else if (!openCalForm) {
+    //         setIsRangeMode(false);
+    //     }
+    // }, [openCalForm, selectedDates, form]);
+
     useEffect(() => {
         if (openCalForm && selectedDates) {
-            form.setFieldsValue({
-                "select-date": selectedDates,
-            });
+            const formattedDate = Array.isArray(selectedDates)
+                ? selectedDates
+                : [selectedDates, selectedDates];
+
+            form.setFieldsValue({ "select-date": formattedDate });
         }
     }, [openCalForm, selectedDates, form]);
 
@@ -42,13 +58,15 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         try {
             let startDate = null;
             let endDate = null;
+            const selectDate = values["select-date"];
 
-            if (calendarFilterType === "range" && values["select-date"]) {
-                startDate = values["select-date"][0].format("YYYY-MM-DD");
-                endDate = values["select-date"][1].format("YYYY-MM-DD");
-            } else if (values["select-date"]) {
-                startDate = values["select-date"].format("YYYY-MM-DD");
-                endDate = startDate;
+            if (selectDate && Array.isArray(selectDate)) {
+                startDate = selectDate[0]
+                    ? selectDate[0].format("YYYY-MM-DD")
+                    : null;
+                endDate = selectDate[1]
+                    ? selectDate[1].format("YYYY-MM-DD")
+                    : startDate;
             }
 
             const payload = {
@@ -74,6 +92,19 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         }
     };
 
+    // const formatDateDisplay = (values) => {
+    //     if (!values || !values[0]) return "";
+
+    //     const startStr = values[0].format("YYYY-MM-DD");
+    //     const endStr = values[1] ? values[1].format("YYYY-MM-DD") : "";
+
+    //     if (!endStr || startStr === endStr) {
+    //         return startStr;
+    //     }
+
+    //     return `${startStr} ~ ${endStr}`;
+    // };
+
     return (
         <Modal
             open={openCalForm}
@@ -96,7 +127,7 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 layout="vertical"
                 form={form}
                 autoComplete="off"
-                className="mt-8!"
+                className="mt-8! space-y-10!"
                 onFinish={handleFinish}
             >
                 <Form.Item
@@ -113,6 +144,7 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="Please select your staff."
+                        className="calendar-inputs!"
                         options={optionsStaff}
                         optionRender={(option) => (
                             <Space>
@@ -146,49 +178,30 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 <Form.Item
                     name="select-date"
                     rules={[{ required: true, message: "Please select date!" }]}
-                    label={
-                        <Space size="large">
-                            <span>
-                                {calendarFilterType === "date"
-                                    ? "Single Date"
-                                    : "Date Range"}
-                            </span>
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={() => {
-                                    setCalendarFilterType((prev) =>
-                                        prev === "date" ? "range" : "date",
-                                    );
-                                    form.setFieldsValue({
-                                        "select-date": null,
-                                    });
-                                    setSelectedDates(null);
-                                }}
-                                className="rounded-2xl! p-3!"
-                            >
-                                {calendarFilterType === "date"
-                                    ? "Switch to Date Range"
-                                    : "Switch to Single Date"}
-                            </Button>
-                        </Space>
-                    }
+                    label="Date"
                 >
-                    {calendarFilterType === "range" ? (
-                        <DatePicker.RangePicker
-                            autoFocus
-                            className="w-full rounded-xl!"
-                        />
-                    ) : (
-                        <DatePicker autoFocus className="w-full rounded-xl!" />
-                    )}
+                    <DatePicker.RangePicker
+                        value={selectedDates}
+                        onChange={(dates) => setSelectedDates(dates)}
+                        autoFocus
+                        // className="w-full calendar-inputs!"
+
+                        className={`w-full calendar-inputs! ${
+                            selectedDates &&
+                            selectedDates[0] &&
+                            (!selectedDates[1] ||
+                                selectedDates[0].isSame(
+                                    selectedDates[1],
+                                    "day",
+                                ))
+                                ? "single-active-view"
+                                : ""
+                        }`}
+                    />
                 </Form.Item>
 
                 <Form.Item label="Note" name="note">
-                    <Input.TextArea
-                        rows={2}
-                        className="border! border-gray-300! rounded-xl! p-3!"
-                    />
+                    <Input.TextArea rows={2} className="calendar-inputs!" />
                 </Form.Item>
 
                 <Form.Item className="mb-0!">

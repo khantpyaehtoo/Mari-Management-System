@@ -41,42 +41,56 @@ body {
     @apply grid lg:grid-cols-2 gap-3 md:grid-cols-1;
 }
 
-/* Customer View Grid Wrapper Container */
+/* GRID WRAPPER */
 @utility customer-grid-wrapper {
     @apply bg-white-back p-5 rounded-xl border-gray-300 border-2;
 }
 
-/* Customer View Grid */
+/* GRID 2 */
 @utility grid-items-2 {
     @apply grid grid-cols-2 gap-5;
 }
 
-/* grid style cols 4*/
+/* GRID 4 */
 @utility grid-items-4 {
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
 }
 
-/* sidebar-mobile slide */
+/* SIDEBAR MOBILE SLIDE */
 @utility sidebar-mobile {
     @apply fixed inset-y-0 left-0 z-50 w-64 bg-primary transform transition-transform duration-300 cursor-pointer select-none;
 }
 
-/* label styling */
+/* LABEL STYLING */
 @utility label-styling {
     @apply font-medium;
 }
 
-/* modal form input design */
+/* MODAL FORM INPUT */
 @utility input-styling {
     @apply w-full px-4 py-3 bg-transparent font-semibold border-t-0 border-r-0 border-l-0 outline-none border-b-black hover:border-b-primary focus:border-b-primary focus-within:border-b-primary;
 }
 
-/* Login Form input  */
+/* LOGIN FORM INPUT  */
 @utility login-input {
     @apply border-black rounded-xl p-3 hover:shadow-md hover:border-primary focus-within:shadow-md focus-within:border-primary;
 }
 
-/* ant otp input section */
+/* CALENDAR FORM INPUT */
+@utility calendar-inputs {
+    @apply border-gray-300 rounded-xl p-3 hover:shadow-md hover:border-primary focus-within:shadow-md focus-within:border-primary;
+}
+
+/* CALENDAR FORM INPUT DATE RANGE STYLING */
+.single-range-view .ant-picker-input:nth-child(3),
+.single-range-view .ant-picker-range-separator {
+    display: none !important;
+}
+.single-range-view .ant-picker-input:nth-child(1) {
+    width: 100% !important;
+}
+
+/* ANTD OTP SECTION */
 .ant-otp-input {
     border: 1px solid rgba(0, 0, 0, 0.39);
 }
@@ -91,7 +105,7 @@ body {
     color: white !important;
 }
 
-/* dropdown custom styling */
+/* DROPDOWN CUSTOM STYLING */
 .my-custom-popup {
     background: transparent !important;
     box-shadow: none;
@@ -112,16 +126,13 @@ body {
     background: white !important;
 }
 
-/* .ant-layout-content {
-    padding-top: 0 !important;
-} */
-
+/* STICKY HEADER */
 .custom-header-stickys {
     width: 100% !important;
     box-shadow: 0 10px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* ant custom tabs and animation pill */
+/* ANTD CUSTOM TAB ANIMATION PILL */
 .custom-tabs-wrapper {
     position: relative;
     display: flex !important;
@@ -135,7 +146,7 @@ body {
     display: none !important;
 }
 
-/* Tab Navigation Bar Styling */
+/* TAB NAVIGATION STYLING */
 .custom-settings-tab .ant-tabs-nav {
     background: #fffaf6 !important;
     margin-bottom: 0rem !important;
@@ -149,7 +160,7 @@ body {
     border-bottom: none !important;
 }
 
-/* Tab Item Base Styling */
+/* TAB ITEM BASE */
 .custom-settings-tab .ant-tabs-tab {
     position: relative;
     padding: 12px 20px !important;
@@ -158,7 +169,7 @@ body {
     z-index: 40 !important;
 }
 
-/* Text Wrapper inside Tab */
+/* TEXT WRAPPER */
 .custom-settings-tab .ant-tabs-tab-btn {
     position: relative;
     z-index: 80 !important;
@@ -196,12 +207,12 @@ body {
         width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* table wrapper styling */
+/* TABLE WRAPPER */
 @utility table-wrapper {
     @apply bg-white-back border border-gray-200 rounded-2xl overflow-hidden shadow-sm mt-3;
 }
 
-/* table header styling */
+/* THEAD STYLING */
 @utility thead-styling {
     @apply px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest;
 }
@@ -214,7 +225,7 @@ body {
     @apply p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100;
 }
 
-/* create Button */
+/* CUSTOM CREATE FORM BTN */
 @utility createFormBtn {
     @apply bg-white text-black rounded-xl border-gray-200 shadow-md p-5 hover:bg-primary hover:text-white hover:border-primary w-47.5;
 }
@@ -267,7 +278,7 @@ body {
     user-select: none;
 }
 
-/* glass bg backdrop effects */
+/* BACKDROP EFFECT */
 .bg-backdrop-effects {
     background: rgba(255, 255, 255, 0);
     border-radius: 16px;
@@ -319,16 +330,40 @@ body {
     z-index: 10;
 } */
 
-/* Custom Calendar */
+/* CUSTOM SELECT CALENDAR */
+.calendar-inputs\!.single-active-view .ant-picker-range-separator {
+  opacity: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+.calendar-inputs\!.single-active-view .ant-picker-input:nth-child(3) {
+  opacity: 0 !important;
+  width: 0 !important;
+  max-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.calendar-inputs\!.single-active-view .ant-picker-input:nth-child(1) {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+}
+
+/* CUSTOM MAIN CALENDAR SECTION */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-panel .ant-picker-body th {
     font-size: 1rem;
     font-weight: 600;
     text-align: center;
 }
 
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-in-view) {
-    visibility: hidden; 
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-in-view) .ant-picker-calendar-date {
+    border: none;
+    border: 1px solid gainsboro;
 }
+
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date {
     height: 150px;
@@ -423,7 +458,7 @@ body {
 }
 
 
-/* Pretty tricky, Turns out Ant Design was gatekeeping our styles until we disabled its rules */
+/* => Pretty tricky, Turns out Ant Design was gatekeeping our styles until we disabled its rules */
 .ant-table-wrapper .ant-table,
 .ant-table-container,
 .ant-table-content {
