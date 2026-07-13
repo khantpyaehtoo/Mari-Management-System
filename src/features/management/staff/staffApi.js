@@ -37,6 +37,14 @@ const staffApi = baseApi.injectEndpoints({
             invalidatesTags: ["staffs"],
         }),
 
+        rehiredStaff: builder.mutation({
+            query: ({ staffId }) => ({
+                url: `${staffEndPoint}/${staffId}`,
+                method: "PUT",
+            }),
+            invalidatesTags: ["staffs"],
+        }),
+
         deleteStaff: builder.mutation({
             query: ({ staffId }) => ({
                 url: `${staffEndPoint}/${staffId}`,
@@ -52,5 +60,6 @@ export const {
     useCreateStaffMutation,
     useUpdateStaffMutation,
     useDeleteStaffMutation,
+    useRehiredStaffMutation,
     useTerminateStaffMutation,
 } = staffApi;

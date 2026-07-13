@@ -7,6 +7,7 @@ const StaffDetailModal = ({
     selectedStaff,
     onSave,
     onDelete,
+    reHired,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();
@@ -45,6 +46,13 @@ const StaffDetailModal = ({
         } catch (error) {
             console.error("Validation failed:", error);
         }
+    };
+
+    const handleRehired = async () => {
+        if (reHired) {
+            reHired(selectedStaff.staffId);
+        }
+        handleClose();
     };
 
     return (
@@ -159,7 +167,7 @@ const StaffDetailModal = ({
 
                     {/* Action Footer Buttons */}
                     <Space size="large">
-                        {isEditing ? (
+                        {(isEditing ?? (
                             <>
                                 <Button
                                     type="primary"
@@ -175,7 +183,7 @@ const StaffDetailModal = ({
                                     Cancel
                                 </Button>
                             </>
-                        ) : (
+                        )) ? (
                             <>
                                 <Button
                                     type="primary"
@@ -189,6 +197,21 @@ const StaffDetailModal = ({
                                     className="bg-red-500! p-5! rounded-lg! text-white! hover:bg-red-800!"
                                 >
                                     Delete
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    onClick={handleCancelEdit}
+                                    className="p-5! rounded-lg!"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={handleRehired}
+                                    className="bg-green-500! p-5! rounded-lg! text-white! hover:bg-green-800!"
+                                >
+                                    Rehired
                                 </Button>
                             </>
                         )}

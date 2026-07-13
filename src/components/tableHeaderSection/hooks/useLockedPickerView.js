@@ -6,7 +6,7 @@ export const useLockedPickerView = (selectedDates) => {
         () => [dayjs().subtract(1, "month"), dayjs()],
         [],
     );
-    const [datesView, setDatesView] = useState(lockedPanels);
+    const [datesView, setDatesView] = useState(() => lockedPanels);
 
     const handleCalendarChange = useCallback(
         (_, __, info) => {

@@ -5,6 +5,7 @@ import { cn } from "../../../lib/utils";
 import {
     useCreateStaffMutation,
     useDeleteStaffMutation,
+    useRehiredStaffMutation,
     useTerminateStaffMutation,
     useUpdateStaffMutation,
 } from "./staffApi";
@@ -76,6 +77,20 @@ const STATIC_DATA = [
         rating: "4.0",
         status: "Unavailable",
     },
+    {
+        key: "5",
+        staffId: "ST-0912",
+        profileUrl:
+            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
+        name: "Kyaw Kyaw",
+        phone: "09-254889900",
+        email: "kyawkyaw@gmail.com",
+        dob: "03/02/1992",
+        joined: "01/09/2021",
+        count: "310",
+        rating: "4.0",
+        status: "Terminate",
+    },
 ];
 
 const renderlists = [
@@ -124,6 +139,7 @@ const Staff = () => {
     const [editStaff] = useUpdateStaffMutation();
     const [deleteStaff] = useDeleteStaffMutation();
     const [terminateStaff] = useTerminateStaffMutation();
+    const [rehiredStaff] = useRehiredStaffMutation();
 
     // Optimized status calculation into a single pass
     const statusCounts = useMemo(() => {
@@ -139,6 +155,8 @@ const Staff = () => {
             Unavailable: dataList?.filter(
                 (item) => item.status === "Unavailable",
             ).length,
+            Terminate: dataList?.filter((item) => item.status === "Terminate")
+                .length,
         };
     }, [dataList]);
 
@@ -166,6 +184,33 @@ const Staff = () => {
                     error?.data?.message ||
                     error?.error ||
                     "Error while Terminate";
+
+                dispatch(
+                    setMessage({
+                        msgType: "error",
+                        msgContent: errorMessage,
+                    }),
+                );
+            }
+        }
+    };
+
+    const handleRehired = async (staffId) => {
+        if (window.confirm(`Are you sure to rehired this ${staffId}`)) {
+            try {
+                await rehiredStaff(staffId).unwrap();
+
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Re-Hired successfully.",
+                    }),
+                );
+            } catch (error) {
+                const errorMessage =
+                    error?.data?.message ||
+                    error?.error ||
+                    "Error while Re-Hiring";
 
                 dispatch(
                     setMessage({
@@ -321,7 +366,7 @@ const Staff = () => {
                             ),
                             key: "0",
                         },
-                        {
+                        record.status !== "Terminate" && {
                             label: (
                                 <Button
                                     type="text"
@@ -383,6 +428,7 @@ const Staff = () => {
                     handleSaveStaffDetail(updatedStaffFields)
                 }
                 onDelete={(staffId) => handleDeleteStaff(staffId)}
+                reHired={(staffId) => handleRehired(staffId)}
             />
 
             <TerminateStaffModal

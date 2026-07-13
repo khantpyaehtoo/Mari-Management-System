@@ -10,8 +10,9 @@ import {
     Typography,
     message,
 } from "antd";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useCreateCalendarDataMutation } from "./calendarApi";
+import { cn } from "../../lib/utils";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
     const [form] = Form.useForm();
@@ -75,6 +76,20 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
             );
         }
     };
+
+    const calendarClassName = useMemo(() => {
+        const hasStartDate = selectedDates && selectedDates[0];
+        const hasNoEndDate = !selectedDates || !selectedDates[1];
+        const isSameDay =
+            hasStartDate &&
+            selectedDates[1] &&
+            selectedDates[0].isSame(selectedDates[1], "day");
+
+        if (hasStartDate && (hasNoEndDate || isSameDay)) {
+            return "single-active-view";
+        }
+        return "";
+    }, [selectedDates]);
 
     return (
         <Modal
@@ -157,17 +172,11 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                         autoFocus
                         // className="w-full calendar-inputs!"
 
-                        className={`w-full calendar-inputs! ${
-                            selectedDates &&
-                            selectedDates[0] &&
-                            (!selectedDates[1] ||
-                                selectedDates[0].isSame(
-                                    selectedDates[1],
-                                    "day",
-                                ))
-                                ? "single-active-view"
-                                : ""
-                        }`}
+                        className={cn(
+                            "w-full calendar-inputs!",
+                            calendarClassName,
+                        )}
+                        classNames={{ popup: "my-custom-rangepicker" }}
                     />
                 </Form.Item>
 
