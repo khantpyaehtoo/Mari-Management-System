@@ -1,6 +1,5 @@
-import { Button, DatePicker, Select, Space } from "antd";
+import { DatePicker, Select, Space } from "antd";
 import { cn } from "../../lib/utils";
-import { CloseOutlined } from "@ant-design/icons";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import dayjs from "dayjs";
 import { useCallback, useMemo } from "react";
@@ -22,13 +21,7 @@ const TableHeaderSection = ({
         }
     };
 
-    const {
-        calendarFilterType,
-        setCalendarFilterType,
-        selectedDates,
-        setSelectedDates,
-        dateOptions,
-    } = dateConfig || {};
+    const { selectedDates, setSelectedDates } = dateConfig || {};
 
     const {
         datesView,
@@ -82,10 +75,6 @@ const TableHeaderSection = ({
         return current && current > dayjs().endOf("day");
     }, []);
 
-    const handleSelectFilterChange = (value) => {
-        setCalendarFilterType(value || null);
-    };
-
     // filter
     const statusClasses = useMemo(
         () => ({
@@ -122,59 +111,24 @@ const TableHeaderSection = ({
                 })}
             </ul>
             <Space>
-                {dateOptions && !calendarFilterType ? (
-                    <Select
-                        allowClear
-                        placeholder={<DateTimeFormatter />}
-                        style={{ width: 200, borderRadius: 10 }}
-                        value={calendarFilterType}
-                        onChange={handleSelectFilterChange}
-                        options={dateOptions}
-                        classNames={{
-                            popup: "my-custom-popup",
+                <Space size={4}>
+                    <DatePicker.RangePicker
+                        placeholder={[<DateTimeFormatter key="start" />, ""]}
+                        disabledDate={disableFutureDates}
+                        value={selectedDates}
+                        onChange={(dates) => setSelectedDates(dates)}
+                        className={cn("rounded-xl!", calendarClassName)}
+                        classNames={{ popup: "my-custom-rangepicker" }}
+                        presets={presets}
+                        pickerValue={datesView}
+                        onPanelChange={handlePanelChange}
+                        onOpenChange={handleOpenChange}
+                        onCalendarChange={(dates, strings, info) => {
+                            setSelectedDates(dates);
+                            handleCalendarChange(dates, strings, info);
                         }}
                     />
-                ) : (
-                    <Space size={4}>
-                        {calendarFilterType === "date" && (
-                            <DatePicker
-                                value={selectedDates}
-                                onChange={(date) => setSelectedDates(date)}
-                                autoFocus
-                                className="rounded-xl!"
-                            />
-                        )}
-                        {calendarFilterType === "range" && (
-                            <DatePicker.RangePicker
-                                disabledDate={disableFutureDates}
-                                value={selectedDates}
-                                onChange={(dates) => setSelectedDates(dates)}
-                                autoFocus
-                                className={cn("rounded-xl!", calendarClassName)}
-                                classNames={{ popup: "my-custom-rangepicker" }}
-                                presets={presets}
-                                pickerValue={datesView}
-                                onPanelChange={handlePanelChange}
-                                onOpenChange={handleOpenChange}
-                                onCalendarChange={(dates, strings, info) => {
-                                    setSelectedDates(dates);
-                                    handleCalendarChange(dates, strings, info);
-                                }}
-                            />
-                        )}
-
-                        {dateOptions && calendarFilterType && (
-                            <Button
-                                type="text"
-                                icon={<CloseOutlined />}
-                                onClick={() => {
-                                    setCalendarFilterType(null);
-                                    setSelectedDates(null);
-                                }}
-                            />
-                        )}
-                    </Space>
-                )}
+                </Space>
 
                 {!!options && (
                     <Select

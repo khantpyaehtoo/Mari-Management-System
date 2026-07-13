@@ -143,7 +143,7 @@ const Booking = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
 
     const [filterValue, setFilterValue] = useState(null);
-    const [calendarFilterType, setCalendarFilterType] = useState(null);
+    // const [calendarFilterType, setCalendarFilterType] = useState(null);
     const [selectedDates, setSelectedDates] = useState(null);
 
     const screens = useBreakpoint();
@@ -233,27 +233,22 @@ const Booking = () => {
 
             const itemDate = dayjs(item.date);
 
-            if (calendarFilterType === "date") {
-                return itemDate.isSame(selectedDates, "day");
-            } else if (calendarFilterType === "range") {
-                const [start, end] = selectedDates;
-                if (!start) return true;
-                if (!end)
-                    return (
-                        itemDate.isSame(start, "day") ||
-                        itemDate.isAfter(start, "day")
-                    );
-
+            // Date Range Filter
+            const [start, end] = selectedDates;
+            if (!start) return true;
+            if (!end)
                 return (
-                    (itemDate.isSame(start, "day") ||
-                        itemDate.isAfter(start, "day")) &&
-                    (itemDate.isSame(end, "day") ||
-                        itemDate.isBefore(end, "day"))
+                    itemDate.isSame(start, "day") ||
+                    itemDate.isAfter(start, "day")
                 );
-            }
-            return true;
+
+            return (
+                (itemDate.isSame(start, "day") ||
+                    itemDate.isAfter(start, "day")) &&
+                (itemDate.isSame(end, "day") || itemDate.isBefore(end, "day"))
+            );
         });
-    }, [dataList, filterValue, calendarFilterType, selectedDates]);
+    }, [dataList, filterValue, selectedDates]);
 
     const columns = useMemo(
         () => [
@@ -403,12 +398,6 @@ const Booking = () => {
     ];
 
     const dateConfig = {
-        dateOptions: dateOptions,
-        calendarFilterType: calendarFilterType,
-        setCalendarFilterType: (type) => {
-            setCalendarFilterType(type);
-            setSelectedDates(null);
-        },
         selectedDates: selectedDates,
         setSelectedDates: setSelectedDates,
     };

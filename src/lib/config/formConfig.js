@@ -17,6 +17,7 @@ export const FORM_CONFIG = {
     Category: {
         Component: CategoryForm,
     },
+    // notifications
     "To Staff": {
         Component: SentNotificationsForm,
     },

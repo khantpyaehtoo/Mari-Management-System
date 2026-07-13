@@ -6,17 +6,22 @@ export const useLockedPickerView = (selectedDates) => {
         () => [dayjs().subtract(1, "month"), dayjs()],
         [],
     );
-    const [datesView, setDatesView] = useState(() => lockedPanels);
+    const [datesView, setDatesView] = useState(lockedPanels);
 
     const handleCalendarChange = useCallback(
         (_, __, info) => {
             if (info?.range === "start") {
                 setDatesView([...lockedPanels]);
+                // } else if (info?.range === "end") {
+                //     setTimeout(() => {
+                //         setDatesView([...lockedPanels]);
+                //     }, 10);
             }
         },
         [lockedPanels],
     );
 
+    // Disable jump into next month
     const handlePanelChange = useCallback(
         (values) => {
             if (!values) {
