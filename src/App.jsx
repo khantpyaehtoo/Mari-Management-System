@@ -28,9 +28,9 @@ export default function App() {
                 <Route
                     path="/login"
                     element={
-                        <IsNotAuth>
-                            <LoginForm />
-                        </IsNotAuth>
+                        // <IsNotAuth>
+                        <LoginForm />
+                        // {/* </IsNotAuth> */}
                     }
                 />
                 <Route path="/reset" element={<ForgetPasswordForm />} />
@@ -39,9 +39,9 @@ export default function App() {
                 <Route
                     path="/"
                     element={
-                        <IsAuth>
-                            <MainLayout />
-                        </IsAuth>
+                        // <IsAuth>
+                        <MainLayout />
+                        // </IsAuth>
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />

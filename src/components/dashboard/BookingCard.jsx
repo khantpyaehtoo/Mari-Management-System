@@ -1,6 +1,7 @@
 import { Card, Flex, Space, Tag, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { useGetTodayBookingListQuery } from "./dashboardApi";
+import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 
 const BookingCard = () => {
     const { data: todayBooking = [] } = useGetTodayBookingListQuery();
@@ -20,12 +21,6 @@ const BookingCard = () => {
         }
     };
 
-    const formattedToday = new Date().toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    });
-
     return (
         <Card className="shadow-sm">
             <Flex justify="space-between" align="center">
@@ -36,7 +31,7 @@ const BookingCard = () => {
                     >
                         Today's Bookings
                     </Typography.Title>
-                    <p className="text-gray-600 m-0">{formattedToday}</p>
+                    <p className="text-gray-600 m-0">{<DateTimeFormatter />}</p>
                 </Space>
                 <Link to={"management/booking"} className="underline!">
                     View All

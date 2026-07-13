@@ -352,6 +352,51 @@ body {
     flex: 1 1 100% !important;
 }
 
+/* CUSTOM RANGEPICKER SECTION */
+.my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+  color: #fff !important;
+  background-color: var(--primary-pink) !important;
+  border-radius: 50% !important; 
+}
+
+/* hide the next month date */
+.my-custom-rangepicker .ant-picker-cell:not(.ant-picker-cell-in-view) {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-in-range::before {
+    background: #f5cbd2 !important;
+    color: #fff !important; 
+}
+
+.my-custom-rangepicker .ant-picker-presets ul li:hover {
+    color: #fff !important;
+    background-color: #ff8b9e !important;
+}
+
+.my-custom-rangepicker .ant-picker-cell-today .ant-picker-cell-inner::before {
+    border-radius: 50% !important;
+}
+
+
+
+.my-custom-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range .ant-picker-cell-inner,
+.my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-in-range .ant-picker-cell-inner {
+  color: #fff !important;
+}
+
+.my-custom-rangepicker :where(.ant-picker-cell-range-start, .ant-picker-cell-range-end) .ant-picker-cell-inner{
+    border-radius: 50% !important;
+    background-color: #ff8b9e !important;
+    border: hidden !important;
+}
+
+.my-custom-rangepicker :where(.ant-picker-cell-range-start, .ant-picker-cell-range-end).ant-picker-cell-in-view::before {
+    background-color: #eecdd3 !important;
+    color: #fff !important;
+}
+
 /* CUSTOM MAIN CALENDAR SECTION */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-panel .ant-picker-body th {
     font-size: 1rem;
@@ -363,7 +408,6 @@ body {
     border: none;
     border: 1px solid gainsboro;
 }
-
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date {
     height: 150px;

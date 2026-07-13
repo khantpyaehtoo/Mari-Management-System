@@ -1,4 +1,3 @@
-import CalendarForm from "../../features/calendar/CalendarForm";
 import PackageForm from "../../features/management/PackageSection/PackageForm";
 import CategoryForm from "../../features/management/services/CategoryForm";
 import ServiceForm from "../../features/management/services/ServiceForm";
@@ -8,9 +7,6 @@ import SentNotificationsForm from "../../features/send-notifications/SentNotific
 export const FORM_CONFIG = {
     Staff: {
         Component: StaffForm,
-    },
-    Calendar: {
-        Component: CalendarForm,
     },
     Packages: {
         Component: PackageForm,

@@ -13,6 +13,7 @@ import OverviewModal from "./OverviewModal";
 import CancelModal from "./CancelModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
+import dayjs from "dayjs";
 
 const randomNumber = Math.floor(Math.random() * 1000);
 const STATIC_DATA = [
@@ -121,7 +122,7 @@ const statusClasses = {
     Unavailable: "text-unavailable",
     Reject: "text-unavailable",
 };
-// select dropdown filter section
+
 const filterOptions = renderlists.map((status) => ({
     label: (
         <span className={statusClasses[status] || "text-gray-500"}>
@@ -141,7 +142,7 @@ const Booking = () => {
     const [searchText, setSearchText] = useState("");
     const [selectedBooking, setSelectedBooking] = useState(null);
 
-    const [filterValue, setFilterValue] = useState(null); // => Status
+    const [filterValue, setFilterValue] = useState(null);
     const [calendarFilterType, setCalendarFilterType] = useState(null);
     const [selectedDates, setSelectedDates] = useState(null);
 
@@ -153,7 +154,6 @@ const Booking = () => {
 
     const handleActionBtn = useCallback((action, record) => {
         setSelectedBooking(record);
-        console.log("clicked view", record.bookingId, record.serviceName);
         if (action === "view") {
             setIsViewModalOpen(true);
         } else if (action === "confirm") {
@@ -166,15 +166,13 @@ const Booking = () => {
     const handleConfirmBtn = async (bookingId) => {
         try {
             await updateBooking({ id: bookingId }).unwrap();
-
             setDataList((prev) =>
                 prev.map((item) =>
                     item.key === bookingId
-                        ? { ...item, status: "Confirmed" }
+                        ? { ...item, status: "Confirm" }
                         : item,
                 ),
             );
-
             dispatch(
                 setMessage({
                     msgType: "success",
@@ -186,27 +184,23 @@ const Booking = () => {
                 error?.data?.message ||
                 error?.error ||
                 "Error while confirming";
-
             dispatch(
-                setMessage({
-                    msgType: "error",
-                    msgContent: errorMessage,
-                }),
+                setMessage({ msgType: "error", msgContent: errorMessage }),
             );
         }
     };
 
     const handleBookingStatusChange = async (bookingId, reason, actionType) => {
         try {
-            console.log(
-                `Cancelling booking ${bookingId} for reason: ${reason}`,
-            );
+            await cancelBooking({ id: bookingId, reason, actionType }).unwrap();
 
-            await cancelBooking({
-                id: bookingId,
-                reason,
-                actionType,
-            }).unwrap();
+            setDataList((prev) =>
+                prev.map((item) =>
+                    item.key === bookingId
+                        ? { ...item, status: "Reject" }
+                        : item,
+                ),
+            );
 
             dispatch(
                 setMessage({
@@ -219,16 +213,47 @@ const Booking = () => {
                 error?.data?.message ||
                 error?.error ||
                 "Failed to cancel booking";
-
             dispatch(
-                setMessage({
-                    msgType: "error",
-                    msgContent: errorMessage,
-                }),
+                setMessage({ msgType: "error", msgContent: errorMessage }),
             );
             console.error("Failed to cancel booking:", error);
         }
     };
+
+    // FILTER FUNC
+    const filteredData = useMemo(() => {
+        return dataList.filter((item) => {
+            const matchesStatus =
+                !filterValue ||
+                filterValue === "All" ||
+                item.status === filterValue;
+            if (!matchesStatus) return false;
+
+            if (!selectedDates) return true;
+
+            const itemDate = dayjs(item.date);
+
+            if (calendarFilterType === "date") {
+                return itemDate.isSame(selectedDates, "day");
+            } else if (calendarFilterType === "range") {
+                const [start, end] = selectedDates;
+                if (!start) return true;
+                if (!end)
+                    return (
+                        itemDate.isSame(start, "day") ||
+                        itemDate.isAfter(start, "day")
+                    );
+
+                return (
+                    (itemDate.isSame(start, "day") ||
+                        itemDate.isAfter(start, "day")) &&
+                    (itemDate.isSame(end, "day") ||
+                        itemDate.isBefore(end, "day"))
+                );
+            }
+            return true;
+        });
+    }, [dataList, filterValue, calendarFilterType, selectedDates]);
 
     const columns = useMemo(
         () => [
@@ -294,8 +319,6 @@ const Booking = () => {
                 title: "Status",
                 dataIndex: "status",
                 key: "status",
-                filteredValue: filterValue ? [filterValue] : null,
-                onFilter: (value, record) => record.status === value,
                 render: (status) => {
                     const statusClasses = {
                         Pending: "text-pending",
@@ -320,7 +343,6 @@ const Booking = () => {
                 title: "Action",
                 key: "action",
                 render: (record) => {
-                    // console.log(record?.status);
                     return record?.status === "Pending" ? (
                         <Space size="medium">
                             <Button
@@ -351,10 +373,9 @@ const Booking = () => {
                 },
             },
         ],
-        [searchText, filterValue, handleActionBtn],
+        [searchText, handleActionBtn],
     );
 
-    // => show header list item length section
     const statusCounts = useMemo(() => {
         return {
             All: dataList?.length,
@@ -413,7 +434,7 @@ const Booking = () => {
             <div className="table-wrapper">
                 <Table
                     columns={columns}
-                    dataSource={dataList}
+                    dataSource={filteredData}
                     scroll={{ x: scrollX }}
                     bordered
                 />

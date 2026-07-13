@@ -3,6 +3,8 @@ import { cn } from "../../lib/utils";
 import { CloseOutlined } from "@ant-design/icons";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import dayjs from "dayjs";
+import { useCallback, useMemo } from "react";
+import { useLockedPickerView } from "./hooks/useLockedPickerView";
 
 const TableHeaderSection = ({
     renderlists,
@@ -28,31 +30,81 @@ const TableHeaderSection = ({
         dateOptions,
     } = dateConfig || {};
 
-    const rangePresets = [
-        { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
-        { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
-        { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
-        { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
-    ];
+    const {
+        datesView,
+        calendarClassName,
+        handleCalendarChange,
+        handlePanelChange,
+        handleOpenChange,
+    } = useLockedPickerView(selectedDates);
 
-    const handleCalendarChange = (value) => {
+    // side bar options
+    const rangePresets = useMemo(
+        () => [
+            {
+                label: "Last 7 Days",
+                value: [dayjs().subtract(7, "d"), dayjs()],
+            },
+            {
+                label: "Last 14 Days",
+                value: [dayjs().subtract(14, "d"), dayjs()],
+            },
+            {
+                label: "Last 30 Days",
+                value: [dayjs().subtract(30, "d"), dayjs()],
+            },
+            {
+                label: "Last 90 Days",
+                value: [dayjs().subtract(90, "d"), dayjs()],
+            },
+        ],
+        [],
+    );
+
+    // side bar present
+    const presets = useMemo(
+        () => [
+            {
+                label: (
+                    <span aria-label="Current Time to End of Day">
+                        Now ~ EOD
+                    </span>
+                ),
+                value: () => [dayjs(), dayjs().endOf("day")],
+            },
+            ...rangePresets,
+        ],
+        [rangePresets],
+    );
+
+    // disable future dates
+    const disableFutureDates = useCallback((current) => {
+        return current && current > dayjs().endOf("day");
+    }, []);
+
+    const handleSelectFilterChange = (value) => {
         setCalendarFilterType(value || null);
     };
+
+    // filter
+    const statusClasses = useMemo(
+        () => ({
+            "In Progress": "text-progress",
+            Pending: "text-pending",
+            Confirm: "text-confirm",
+            Completed: "text-completed",
+            Available: "text-available",
+            Unavailable: "text-unavailable",
+            Reject: "text-unavailable",
+        }),
+        [],
+    );
 
     return (
         <div className="flex justify-between items-center p-3">
             <ul className="flex gap-4">
                 {renderlists?.map((lists, index) => {
                     const counts = statusCounts?.[lists] || 0;
-                    const statusClasses = {
-                        "In Progress": "text-progress",
-                        Pending: "text-pending",
-                        Confirm: "text-confirm",
-                        Completed: "text-completed",
-                        Available: "text-available",
-                        Unavailable: "text-unavailable",
-                        Reject: "text-unavailable",
-                    };
 
                     return (
                         <li
@@ -76,7 +128,7 @@ const TableHeaderSection = ({
                         placeholder={<DateTimeFormatter />}
                         style={{ width: 200, borderRadius: 10 }}
                         value={calendarFilterType}
-                        onChange={handleCalendarChange}
+                        onChange={handleSelectFilterChange}
                         options={dateOptions}
                         classNames={{
                             popup: "my-custom-popup",
@@ -94,24 +146,20 @@ const TableHeaderSection = ({
                         )}
                         {calendarFilterType === "range" && (
                             <DatePicker.RangePicker
+                                disabledDate={disableFutureDates}
                                 value={selectedDates}
                                 onChange={(dates) => setSelectedDates(dates)}
                                 autoFocus
-                                className="rounded-xl!"
-                                presets={[
-                                    {
-                                        label: (
-                                            <span aria-label="Current Time to End of Day">
-                                                Now ~ EOD
-                                            </span>
-                                        ),
-                                        value: () => [
-                                            dayjs(),
-                                            dayjs().endOf("day"),
-                                        ],
-                                    },
-                                    ...rangePresets,
-                                ]}
+                                className={cn("rounded-xl!", calendarClassName)}
+                                classNames={{ popup: "my-custom-rangepicker" }}
+                                presets={presets}
+                                pickerValue={datesView}
+                                onPanelChange={handlePanelChange}
+                                onOpenChange={handleOpenChange}
+                                onCalendarChange={(dates, strings, info) => {
+                                    setSelectedDates(dates);
+                                    handleCalendarChange(dates, strings, info);
+                                }}
                             />
                         )}
 
