@@ -5,25 +5,27 @@ import {
 } from "@ant-design/icons";
 import { Col, Row } from "antd";
 import DashboardCard from "../../components/dashboard/DashboardCard";
+import { useGetDashBoardCardStatsQuery } from "../../components/dashboard/dashboardApi";
 
 const ReportCards = () => {
+    const { data: reportData, isLoading } = useGetDashBoardCardStatsQuery();
     const ReportSummaryCards = [
         {
             icon: <DollarOutlined />,
-            trending: "+20% last month",
-            value: "467k",
+            trending: reportData?.revenueTrending || "+0% last month",
+            value: reportData?.totalRevenue || "0k",
             title: "Total Revenue This Month (June,2026)",
         },
         {
             icon: <SlidersOutlined />,
-            trending: "-20% last month",
-            value: "100",
+            trending: reportData?.bookingsTrending || "-0% last month",
+            value: reportData?.totalBookings || "0",
             title: "Total Bookings This Month (June,2026)",
         },
         {
             icon: <UserOutlined />,
-            trending: "+20% last month",
-            value: "876",
+            trending: reportData?.customersTrending || "+0% last month",
+            value: reportData?.totalCustomers || "0",
             title: "Total Customers (May,2026)",
         },
     ];
@@ -37,6 +39,7 @@ const ReportCards = () => {
                         value={card.value}
                         icon={card.icon}
                         trending={card.trending}
+                        isLoading={isLoading}
                     />
                 </Col>
             ))}

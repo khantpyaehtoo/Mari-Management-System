@@ -353,16 +353,33 @@ body {
 }
 
 /* CUSTOM RANGEPICKER SECTION */
+.my-custom-rangepicker .ant-picker-presets {
+    background-color: #fffaf6;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+}
+.my-custom-rangepicker {
+    border-radius: 30px;
+}
+.my-custom-rangepicker .ant-picker-panels :where(.ant-picker-header, button) {
+    background-color: var(--primary-pink);
+    color: white !important;
+}
+.my-custom-rangepicker .ant-picker-panels :where(.ant-picker-header, button):hover {
+    background-color: var(--primary-pink);
+    color: #f8eee6 !important;
+}
+
+
 .my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
-  color: #fff !important;
-  background-color: var(--primary-pink) !important;
-  border-radius: 50% !important; 
+    color: #fff !important;
+    background-color: var(--primary-pink) !important;
+    border-radius: 50% !important; 
 }
 
 /* hide the next month date */
 .my-custom-rangepicker .ant-picker-cell:not(.ant-picker-cell-in-view) {
-  visibility: hidden !important;
-  pointer-events: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 .my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-in-range::before {
@@ -379,10 +396,32 @@ body {
     border-radius: 50% !important;
 }
 
+/* FOR SINGLE VIEW  */
+.single-active-view .ant-picker-range-separator {
+    opacity: 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+.single-active-view .ant-picker-input:nth-child(3) {
+    opacity: 0 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    overflow: hidden !important;
+}
+
+.single-active-view .ant-picker-input:nth-child(1) {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+}
+
 
 .my-custom-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range .ant-picker-cell-inner,
 .my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-in-range .ant-picker-cell-inner {
-  color: #fff !important;
+    color: #fff !important;
 }
 
 .my-custom-rangepicker :where(.ant-picker-cell-range-start, .ant-picker-cell-range-end) .ant-picker-cell-inner{

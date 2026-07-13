@@ -40,7 +40,7 @@ const radioBtnOptions = [
 const Dashboard = () => {
     const [viewType, setViewType] = useState("weekly");
 
-    const { data: cardDatas } = useGetDashBoardCardStatsQuery();
+    const { data: cardDatas, isLoading } = useGetDashBoardCardStatsQuery();
     const { data: staffPerformData = [] } = useGetStaffPerformQuery();
 
     const dashboardCardItem = [
@@ -146,6 +146,7 @@ const Dashboard = () => {
                             icon={item.icon}
                             title={item.title}
                             value={item.value}
+                            isLoading={isLoading}
                         />
                     ))}
                 </div>

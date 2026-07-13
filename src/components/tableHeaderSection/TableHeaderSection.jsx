@@ -1,7 +1,8 @@
 import { DatePicker, Select, Space } from "antd";
 import { cn } from "../../lib/utils";
 import dayjs from "dayjs";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { ChevronsRight } from "lucide-react";
 
 const TableHeaderSection = ({
     renderlists,
@@ -20,29 +21,7 @@ const TableHeaderSection = ({
     };
 
     const { selectedDates, setSelectedDates } = dateConfig || {};
-    const lockedPanels = useMemo(
-        () => [dayjs().subtract(1, "month"), dayjs()],
-        [],
-    );
-    const [datesView, setDatesView] = useState(lockedPanels);
-
-    // // Disable jump into next month
-    const handlePanelChange = useCallback(
-        (values) => {
-            if (!values) {
-                setDatesView([...lockedPanels]);
-                return;
-            }
-            const isMovingToFutureMonth = values[1].isAfter(dayjs(), "month");
-            setDatesView(isMovingToFutureMonth ? [...lockedPanels] : values);
-        },
-        [lockedPanels],
-    );
-
-    // // => for reset close & handle open
-    // const handleOpenChange = (open) => {
-    //     if (open) setDatesView([...lockedPanels]);
-    // };
+    const [pValue, setPValue] = useState(dayjs().subtract(1, "month"));
 
     // side bar options
     const rangePresets = useMemo(
@@ -84,9 +63,9 @@ const TableHeaderSection = ({
     );
 
     // disable future dates
-    const disableFutureDates = useCallback((current) => {
+    const disableFutureDates = (current) => {
         return current && current > dayjs().endOf("day");
-    }, []);
+    };
 
     // filter
     const statusClasses = useMemo(
@@ -104,8 +83,8 @@ const TableHeaderSection = ({
 
     // for single selected date
     const calendarClassName = useMemo(() => {
-        const hasStartDate = selectedDates && selectedDates[0];
-        const hasNoEndDate = !selectedDates || !selectedDates[1];
+        const hasStartDate = selectedDates?.[0];
+        const hasNoEndDate = !selectedDates?.[1];
         const isSameDay =
             hasStartDate &&
             selectedDates[1] &&
@@ -116,10 +95,6 @@ const TableHeaderSection = ({
         }
         return "";
     }, [selectedDates]);
-
-    const [pValue, setPValue] = useState(dayjs().subtract(1, "month"));
-
-    // const lockedPanels = [dayjs().subtract(1, "month")];
 
     return (
         <div className="flex justify-between items-center p-3">
@@ -146,11 +121,13 @@ const TableHeaderSection = ({
                 <Space size={4}>
                     <DatePicker.RangePicker
                         // placeholder={[<DateTimeFormatter />]}
+                        separator={<ChevronsRight size={16} />}
+                        maxDate={dayjs()}
                         disabledDate={disableFutureDates}
                         value={selectedDates}
                         onChange={(dates) => setSelectedDates(dates)}
                         className={cn(
-                            "rounded-xl! border border-gray-300!",
+                            "rounded-lg! border border-gray-300!",
                             calendarClassName,
                         )}
                         classNames={{ popup: "my-custom-rangepicker" }}
