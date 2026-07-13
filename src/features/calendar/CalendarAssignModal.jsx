@@ -169,9 +169,7 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                     <DatePicker.RangePicker
                         value={selectedDates}
                         onChange={(dates) => setSelectedDates(dates)}
-                        autoFocus
-                        // className="w-full calendar-inputs!"
-
+                        autoFocus={false}
                         className={cn(
                             "w-full calendar-inputs!",
                             calendarClassName,

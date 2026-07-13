@@ -1,9 +1,7 @@
 import { DatePicker, Select, Space } from "antd";
 import { cn } from "../../lib/utils";
-import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import dayjs from "dayjs";
-import { useCallback, useMemo } from "react";
-import { useLockedPickerView } from "./hooks/useLockedPickerView";
+import { useCallback, useMemo, useState } from "react";
 
 const TableHeaderSection = ({
     renderlists,
@@ -22,14 +20,29 @@ const TableHeaderSection = ({
     };
 
     const { selectedDates, setSelectedDates } = dateConfig || {};
+    const lockedPanels = useMemo(
+        () => [dayjs().subtract(1, "month"), dayjs()],
+        [],
+    );
+    const [datesView, setDatesView] = useState(lockedPanels);
 
-    const {
-        datesView,
-        calendarClassName,
-        handleCalendarChange,
-        handlePanelChange,
-        handleOpenChange,
-    } = useLockedPickerView(selectedDates);
+    // // Disable jump into next month
+    const handlePanelChange = useCallback(
+        (values) => {
+            if (!values) {
+                setDatesView([...lockedPanels]);
+                return;
+            }
+            const isMovingToFutureMonth = values[1].isAfter(dayjs(), "month");
+            setDatesView(isMovingToFutureMonth ? [...lockedPanels] : values);
+        },
+        [lockedPanels],
+    );
+
+    // // => for reset close & handle open
+    // const handleOpenChange = (open) => {
+    //     if (open) setDatesView([...lockedPanels]);
+    // };
 
     // side bar options
     const rangePresets = useMemo(
@@ -89,6 +102,25 @@ const TableHeaderSection = ({
         [],
     );
 
+    // for single selected date
+    const calendarClassName = useMemo(() => {
+        const hasStartDate = selectedDates && selectedDates[0];
+        const hasNoEndDate = !selectedDates || !selectedDates[1];
+        const isSameDay =
+            hasStartDate &&
+            selectedDates[1] &&
+            selectedDates[0].isSame(selectedDates[1], "day");
+
+        if (hasStartDate && (hasNoEndDate || isSameDay)) {
+            return "single-active-view";
+        }
+        return "";
+    }, [selectedDates]);
+
+    const [pValue, setPValue] = useState(dayjs().subtract(1, "month"));
+
+    // const lockedPanels = [dayjs().subtract(1, "month")];
+
     return (
         <div className="flex justify-between items-center p-3">
             <ul className="flex gap-4">
@@ -113,20 +145,30 @@ const TableHeaderSection = ({
             <Space>
                 <Space size={4}>
                     <DatePicker.RangePicker
-                        placeholder={[<DateTimeFormatter key="start" />, ""]}
+                        // placeholder={[<DateTimeFormatter />]}
                         disabledDate={disableFutureDates}
                         value={selectedDates}
                         onChange={(dates) => setSelectedDates(dates)}
-                        className={cn("rounded-xl!", calendarClassName)}
+                        className={cn(
+                            "rounded-xl! border border-gray-300!",
+                            calendarClassName,
+                        )}
                         classNames={{ popup: "my-custom-rangepicker" }}
                         presets={presets}
-                        pickerValue={datesView}
-                        onPanelChange={handlePanelChange}
-                        onOpenChange={handleOpenChange}
-                        onCalendarChange={(dates, strings, info) => {
-                            setSelectedDates(dates);
-                            handleCalendarChange(dates, strings, info);
+                        defaultPickerValue={pValue}
+                        onPickerValueChange={(_, info) => {
+                            if (!selectedDates?.length) return;
+
+                            switch (info.range) {
+                                case "start":
+                                    setPValue(selectedDates[0]);
+                                    break;
+                                case "end":
+                                    setPValue(selectedDates[1]);
+                            }
                         }}
+                        // onPanelChange={handlePanelChange}
+                        // onOpenChange={handleOpenChange}
                     />
                 </Space>
 
