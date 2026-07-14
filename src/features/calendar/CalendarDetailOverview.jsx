@@ -12,9 +12,9 @@ const CalendarDetailOverview = ({
         : "";
 
     const getTypeTag = (type, leaveType) => {
-        if (type === "day_off") return <Tag color="warning">Day OFF</Tag>;
+        if (type === "DAY_OFF") return <Tag color="warning">Day OFF</Tag>;
         if (type === "leave")
-            return <Tag color="error">Leave ({leaveType || "Personal"})</Tag>;
+            return <Tag color="error">Leave ({leaveType || "PERSONAL"})</Tag>;
         return <Tag color="success">Active</Tag>;
     };
 

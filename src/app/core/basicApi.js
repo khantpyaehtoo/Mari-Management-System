@@ -24,7 +24,7 @@ export const baseApi = createApi({
         "stats",
         "services",
         "users",
-        "booking",
+        "booking-management",
         "staffs",
         "calendar",
     ],

@@ -4,165 +4,19 @@ import { useMemo, useState } from "react";
 import TableHeaderSection from "../../components/tableHeaderSection/TableHeaderSection";
 import { EyeOutlined } from "@ant-design/icons";
 import WalkInDetailModal from "./WalkInDetailModal";
+import { useGetWalkinDataQuery } from "./walkInApi";
 
 const { useBreakpoint } = Grid;
 
 const renderLists = ["All"];
-
-const WalkInDummyData = [
-    {
-        key: "1",
-        walkInId: "CUST-001",
-        staffName: "Sarah Jenkins",
-        date: "2026-06-25",
-        startedTime: "10:00 AM",
-        services: [
-            {
-                name: "Deep Tissue Massage",
-                duration: 60,
-                baseAmount: 85.0,
-                extraCharges: 0,
-            },
-            {
-                name: "Hydrating Facial",
-                duration: 45,
-                baseAmount: 50.0,
-                extraCharges: 15.0,
-                note: "Premium Charcoal Mask upgrade",
-            },
-        ],
-    },
-    {
-        key: "2",
-        walkInId: "CUST-084",
-        staffName: "Marcus Vance",
-        date: "2026-06-25",
-        startedTime: "11:30 AM",
-        services: [
-            {
-                name: "Hydrating Facial",
-                duration: 45,
-                baseAmount: 50.0,
-                extraCharges: 0,
-            },
-        ],
-    },
-    {
-        key: "3",
-        walkInId: "CUST-112",
-        staffName: "Elena Rostova",
-        date: "2026-06-26",
-        startedTime: "01:00 PM",
-        services: [
-            {
-                name: "Gel Manicure",
-                duration: 45,
-                baseAmount: 35.0,
-                extraCharges: 0,
-            },
-            {
-                name: "Gel Pedicure",
-                duration: 45,
-                baseAmount: 40.0,
-                extraCharges: 0,
-            },
-        ],
-    },
-    {
-        key: "4",
-        walkInId: "CUST-023",
-        staffName: "Sarah Jenkins",
-        date: "2026-06-26",
-        startedTime: "03:00 PM",
-        services: [
-            {
-                name: "Hydrating Facial Treatment",
-                duration: 75,
-                baseAmount: 110.0,
-                extraCharges: 5.0,
-                note: "Premium Charcoal Mask upgrade",
-            },
-        ],
-    },
-    {
-        key: "5",
-        walkInId: "CUST-057",
-        staffName: "Marcus Vance",
-        date: "2026-06-27",
-        startedTime: "09:15 AM",
-        services: [
-            {
-                name: "Beard Trim & Hot Towel Shave",
-                duration: 30,
-                baseAmount: 103.0,
-                extraCharges: 10.0,
-            },
-        ],
-    },
-    {
-        key: "6",
-        walkInId: "CUST-144",
-        staffName: "Elena Rostova",
-        date: "2026-06-27",
-        startedTime: "11:00 AM",
-        services: [
-            {
-                name: "Hair Coloring (Balayage)",
-                duration: 120,
-                baseAmount: 150.0,
-                extraCharges: 25.0,
-            },
-            {
-                name: "Premium Haircut & Styling",
-                duration: 45,
-                baseAmount: 50.0,
-                extraCharges: 0,
-            },
-        ],
-    },
-    {
-        key: "7",
-        walkInId: "CUST-201",
-        staffName: "Sarah Jenkins",
-        date: "2026-06-28",
-        startedTime: "02:30 PM",
-        services: [
-            {
-                name: "Aromatherapy Body Scrub",
-                duration: 60,
-                baseAmount: 95.0,
-                extraCharges: 0,
-            },
-        ],
-    },
-    {
-        key: "8",
-        walkInId: "CUST-099",
-        staffName: "Marcus Vance",
-        date: "2026-06-28",
-        startedTime: "04:00 PM",
-        services: [
-            {
-                name: "Express Facial",
-                duration: 30,
-                baseAmount: 40.0,
-                extraCharges: 5.0,
-            },
-            {
-                name: "Eyebrow Threading & Wax",
-                duration: 15,
-                baseAmount: 20.0,
-                extraCharges: 0,
-            },
-        ],
-    },
-];
 
 const WalkIn = () => {
     const [searchText, setSearchText] = useState("");
     const [selectedWalkin, setSelectedWalkin] = useState(null);
     const [isDetailFormOpen, setIsDetailFormOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const { data: walkInData = [] } = useGetWalkinDataQuery();
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
@@ -175,9 +29,9 @@ const WalkIn = () => {
 
     const statusCounts = useMemo(() => {
         return {
-            All: WalkInDummyData?.length,
+            All: walkInData?.length,
         };
-    }, []);
+    }, [walkInData]);
 
     const column = useMemo(
         () => [
@@ -306,7 +160,7 @@ const WalkIn = () => {
             <div className="table-wrapper">
                 <Table
                     columns={column}
-                    dataSource={WalkInDummyData}
+                    dataSource={walkInData?.content || []}
                     bordered
                     scroll={{ x: scrollX }}
                     pagination={{

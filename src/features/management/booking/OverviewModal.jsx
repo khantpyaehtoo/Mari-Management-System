@@ -11,10 +11,13 @@ const OverviewModal = ({
 }) => {
     const [isCancelling, setIsCancelling] = useState(false);
     const [cancelReason, setCancelReason] = useState("");
+
     const { data: bookingDetails, isLoading } = useBookingDetailsQuery(
         selectedBooking?.id,
         { skip: !isViewModalOpen },
     );
+
+    console.log(bookingDetails);
 
     const handleClose = () => {
         setIsCancelling(false);
@@ -25,7 +28,7 @@ const OverviewModal = ({
     const handleConfirmSubmit = () => {
         if (onConfirmCancel) {
             onConfirmCancel(
-                selectedBooking?.id || selectedBooking?.bookingId,
+                bookingDetails?.id || selectedBooking?.id,
                 cancelReason,
             );
         }

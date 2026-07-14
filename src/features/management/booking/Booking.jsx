@@ -51,10 +51,15 @@ const Booking = () => {
     const [filterValue, setFilterValue] = useState("All");
     const [selectedDates, setSelectedDates] = useState(null);
     const [selectedBooking, setSelectedBooking] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewConfirmModal, setViewConfirmModal] = useState(false);
     const [viewCancelModal, setViewCancelModal] = useState(false);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     // Dynamic Parameters for RTK Query
     const startDate = selectedDates?.[0]
@@ -290,6 +295,12 @@ const Booking = () => {
                     loading={isLoading}
                     rowKey="bookingId"
                     bordered
+                    pagination={{
+                        current: currentPage,
+                        onChange: handlePageChange,
+                        size: "large",
+                        pageSize: 10,
+                    }}
                 />
             </div>
 

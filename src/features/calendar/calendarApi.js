@@ -1,15 +1,24 @@
 import { baseApi } from "../../app/core/basicApi";
 const calendarEndPoint = "calendar";
+const dailyStatus = "daily-status";
 
 export const calendarApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getCalendarData: builder.query({
             query: (params) => ({
-                url: `${calendarEndPoint}`,
+                url: `admin/staffs/${calendarEndPoint}`,
                 method: "GET",
                 params: params, // ?month=07&year=2026
             }),
             providesTags: ["calendar"],
+        }),
+
+        getDailyStaff: builder.query({
+            query: () => ({
+                url: `admin/staffs/${dailyStatus}`,
+                method: "GET",
+            }),
+            providesTags: ["daily-status"],
         }),
 
         createCalendarData: builder.mutation({
@@ -43,8 +52,9 @@ export const calendarApi = baseApi.injectEndpoints({
 });
 
 export const {
-    useCreateCalendarDataMutation,
+    useGetDailyStaffQuery,
     useGetCalendarDataQuery,
+    useCreateCalendarDataMutation,
     useUpdateCalendarDataMutation,
     useDeleteCalendarDataMutation,
 } = calendarApi;

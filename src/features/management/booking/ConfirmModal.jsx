@@ -1,4 +1,5 @@
 import { Modal, Typography, Space, Button } from "antd";
+import { useBookingDetailsQuery } from "./bookingApi";
 
 const ConfirmModal = ({
     viewConfirmModal,
@@ -6,12 +7,16 @@ const ConfirmModal = ({
     handleConfirmBtn,
     selectedBooking,
 }) => {
+    const { data: bookingDetails } = useBookingDetailsQuery(
+        selectedBooking?.id || selectedBooking?.bookingId,
+    );
+
     const handleClose = () => {
         setViewConfirmModal(false);
     };
     const handleConfirm = () => {
         if (handleConfirmBtn) {
-            handleConfirmBtn(selectedBooking?.id || selectedBooking?.bookingId);
+            handleConfirmBtn(bookingDetails?.id);
         }
         handleClose();
     };

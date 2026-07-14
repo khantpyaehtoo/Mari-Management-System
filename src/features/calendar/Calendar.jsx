@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import EmployeeAttendance from "./EmployeeAttendance";
 import CalendarDetailOverview from "./CalendarDetailOverview";
 import CalendarAssignModal from "./CalendarAssignModal";
+import { useGetCalendarDataQuery, useGetDailyStaffQuery } from "./calendarApi";
 
 const leaveOptions = [
     { label: "DayOff", value: "DayOff" },
@@ -30,99 +31,6 @@ const optionsStaff = [
     { label: "Angry", value: "angry", emoji: "😡", desc: "Furious" },
     { label: "Cool", value: "cool", emoji: "😎", desc: "Chilling" },
     { label: "Sleepy", value: "sleepy", emoji: "😴", desc: "Need Sleep" },
-];
-
-const calendarData = [
-    {
-        date: "2026-07-08",
-        day_off_count: 2,
-        active_count: 8,
-        leave_count: 0,
-        details: [
-            {
-                staff_id: 1,
-                name: "Myo Myo",
-                type: "day_off",
-                role: "Nail Artist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-        ],
-    },
-    {
-        date: "2026-07-09",
-        day_off_count: 1,
-        active_count: 3,
-        leave_count: 2,
-        details: [
-            {
-                staff_id: 101,
-                name: "Thaw Thaw",
-                type: "active",
-                role: "Senior Stylist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-            {
-                staff_id: 102,
-                name: "Aung Aung",
-                type: "active",
-                role: "Nail Artist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-            {
-                staff_id: 103,
-                name: "Su Su",
-                type: "active",
-                role: "Makeup Artist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-            {
-                staff_id: 104,
-                name: "Myo Myo",
-                type: "day_off",
-                role: "Nail Artist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-            {
-                staff_id: 105,
-                name: "Hla Hla",
-                type: "leave",
-                leave_type: "Sick Leave",
-                role: "Hair Specialist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-            {
-                staff_id: 106,
-                name: "Kyaw Kyaw",
-                type: "leave",
-                leave_type: "Personal Leave",
-                role: "Massager",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-        ],
-    },
-    {
-        date: "2026-07-10",
-        day_off_count: 2,
-        active_count: 7,
-        leave_count: 1,
-        details: [
-            {
-                staff_id: 1,
-                name: "Myo Myo",
-                type: "day_off",
-                role: "Nail Artist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-            {
-                staff_id: 2,
-                name: "Hsu Hsu",
-                type: "leave",
-                leave_type: "Sick Leave",
-                role: "Hair Specialist",
-                avatar: "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-            },
-        ],
-    },
 ];
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
@@ -234,6 +142,9 @@ const CalendarSection = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [activePopoverDate, setActivePopoverDate] = useState(null);
     const [openCalForm, setOpenCalForm] = useState(false);
+
+    const { data: dailyStaff } = useGetDailyStaffQuery();
+    const { data: calendarData = [] } = useGetCalendarDataQuery();
 
     const dateCellRender = (calendarValue) => {
         const dateStr = calendarValue.format("YYYY-MM-DD");

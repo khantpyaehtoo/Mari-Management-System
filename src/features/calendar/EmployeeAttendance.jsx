@@ -1,29 +1,27 @@
 import { Avatar, Card, Flex, Space, Typography, Spin } from "antd";
 import dayjs from "dayjs";
-// import { useGetCalendarDataQuery } from "./calendarApi";
+import { useGetCalendarDataQuery } from "./calendarApi";
 
-const EmployeeAttendance = ({ calendarData }) => {
+const EmployeeAttendance = () => {
     const todayStr = dayjs().format("YYYY-MM-DD");
     const todayLabel = dayjs().format("MMMM DD");
 
-    // const { data: calendarData = [], isLoading } = useGetCalendarDataQuery({
-    //     date: todayStr,
-    // });
+    const { data: calendarData = [], isLoading } = useGetCalendarDataQuery({
+        date: todayStr,
+    });
 
-    const todayData = calendarData.find((item) => item.date === todayStr);
+    if (isLoading) {
+        return (
+            <Card
+                className="w-full rounded-2xl! border-2! border-primary! mt-5! flex justify-center items-center"
+                style={{ minHeight: "300px" }}
+            >
+                <Spin tip="Loading today's schedule..." />
+            </Card>
+        );
+    }
 
-    // if (isLoading) {
-    //     return (
-    //         <Card
-    //             className="w-full rounded-2xl! border-2! border-primary! mt-5! flex justify-center items-center"
-    //             style={{ minHeight: "300px" }}
-    //         >
-    //             <Spin tip="Loading today's schedule..." />
-    //         </Card>
-    //     );
-    // }
-
-    const staffDetails = todayData?.details || [];
+    const staffDetails = calendarData?.details || [];
 
     const activeStaffs = staffDetails.filter(
         (staff) => staff.type === "active",

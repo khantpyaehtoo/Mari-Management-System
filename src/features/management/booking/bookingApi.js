@@ -37,12 +37,11 @@ export const bookingApi = baseApi.injectEndpoints({
 
         updateBooking: builder.mutation({
             query: ({ id, reason, actionType }) => {
-                // Prepare the payload dynamically based on actionType
                 const bodyPayload =
                     actionType !== "confirm" ? { reason } : undefined;
 
                 return {
-                    url: `booking/${id}/${actionType}`,
+                    url: `bookings/${id}/${actionType}`,
                     method: "PUT",
                     body: bodyPayload,
                 };
