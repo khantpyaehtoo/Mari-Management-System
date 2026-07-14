@@ -198,20 +198,18 @@ const Dashboard = () => {
             <section className="mt-10 mx-10">
                 <Row gutter={24}>
                     <Col md={12} lg={12}>
-                        <section>
-                            <Card>
-                                <Space vertical size="small">
-                                    <Typography.Title
-                                        level={3}
-                                        className="text-xl! font-medium!"
-                                    >
-                                        Revenue by Services
-                                    </Typography.Title>
-                                    <p className="text-gray-600">This month</p>
-                                </Space>
-                                <ServicePieChart />
-                            </Card>
-                        </section>
+                        <Card className="shadow-md">
+                            <Space vertical size="small">
+                                <Typography.Title
+                                    level={3}
+                                    className="text-xl! font-medium!"
+                                >
+                                    Revenue by Services
+                                </Typography.Title>
+                                <p className="text-gray-600">This month</p>
+                            </Space>
+                            <ServicePieChart />
+                        </Card>
                     </Col>
                     <Col md={12} lg={12}>
                         <BookingCard />
