@@ -11,7 +11,7 @@ const ConfirmModal = ({
     };
     const handleConfirm = () => {
         if (handleConfirmBtn) {
-            handleConfirmBtn(selectedBooking?.bookingId);
+            handleConfirmBtn(selectedBooking?.id || selectedBooking?.bookingId);
         }
         handleClose();
     };

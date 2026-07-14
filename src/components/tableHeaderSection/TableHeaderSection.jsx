@@ -23,7 +23,7 @@ const TableHeaderSection = ({
     const { selectedDates, setSelectedDates } = dateConfig || {};
     const [pValue, setPValue] = useState(dayjs().subtract(1, "month"));
 
-    // side bar options
+    // Side Bar Options
     const rangePresets = useMemo(
         () => [
             {
@@ -45,8 +45,6 @@ const TableHeaderSection = ({
         ],
         [],
     );
-
-    // side bar present
     const presets = useMemo(
         () => [
             {
@@ -62,12 +60,12 @@ const TableHeaderSection = ({
         [rangePresets],
     );
 
-    // disable future dates
+    // Disable Future Dates
     const disableFutureDates = (current) => {
         return current && current > dayjs().endOf("day");
     };
 
-    // filter
+    // Filter
     const statusClasses = useMemo(
         () => ({
             "In Progress": "text-progress",
@@ -81,7 +79,7 @@ const TableHeaderSection = ({
         [],
     );
 
-    // for single selected date
+    // Single Selected Date
     const calendarClassName = useMemo(() => {
         const hasStartDate = selectedDates?.[0];
         const hasNoEndDate = !selectedDates?.[1];

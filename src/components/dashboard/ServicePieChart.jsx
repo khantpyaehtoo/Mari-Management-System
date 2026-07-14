@@ -1,6 +1,7 @@
-import { Flex } from "antd";
+import { Flex, Spin } from "antd"; // Added Spin for a loading state
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { useGetServicePieChartQuery } from "./dashboardApi";
 
 ChartJS.register(ArcElement, Tooltip);
 
@@ -13,35 +14,44 @@ const options = {
     },
 };
 
+// Static colors array to apply to dynamic data items
+const BACKGROUND_COLORS = [
+    "#C2185B",
+    "#F94763",
+    "#FBA4C4",
+    "#D189A3",
+    "#FBB1BD",
+    "#E87EA1",
+    "#F06292",
+];
+
 export const ServicePieChart = () => {
+    const { data: chartDatas = [], isLoading } = useGetServicePieChartQuery();
+
+    if (isLoading) {
+        return (
+            <Flex justify="center" align="center" className="w-full h-40">
+                <Spin size="large" />
+            </Flex>
+        );
+    }
+
+    // Transform API data into the format Chart.js expects
     const data = {
-        labels: [
-            "Manicure Cleansing",
-            "Pedicure Cleansing",
-            "SNS Extension(per Nail)",
-            "Gel One Color",
-            "Cat Eye",
-        ],
+        labels: chartDatas.map((item) => item.serviceName),
         datasets: [
             {
                 label: "#",
-                data: [12, 19, 3, 8, 2],
-                backgroundColor: [
-                    "#C2185B",
-                    "#F94763",
-                    "#FBA4C4",
-                    "#D189A3",
-                    "#FBB1BD",
-                ],
+                data: chartDatas.map((item) => item.count),
+                backgroundColor: chartDatas.map(
+                    (_, index) =>
+                        BACKGROUND_COLORS[index % BACKGROUND_COLORS.length],
+                ),
                 borderColor: ["white"],
                 borderWidth: 2,
             },
         ],
     };
-
-    // Calculate the total sum of the values
-    const datasetValues = data.datasets[0].data;
-    const total = datasetValues.reduce((sum, value) => sum + value, 0);
 
     return (
         <Flex vertical gap="middle" align="center" className="w-full!">
@@ -50,10 +60,12 @@ export const ServicePieChart = () => {
             </div>
 
             <Flex vertical gap="small" className="w-full max-w-180 pl-3">
-                {data.labels.map((label, index) => {
-                    const value = datasetValues[index];
-                    const percentage =
-                        total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                {chartDatas.map((item, index) => {
+                    // Use your live data directly here
+                    const label = item.serviceName;
+                    const value = item.count;
+                    // Format percentage to 1 decimal place if it comes as a raw floating number
+                    const percentage = Number(item.percentage).toFixed(1);
 
                     return (
                         <Flex

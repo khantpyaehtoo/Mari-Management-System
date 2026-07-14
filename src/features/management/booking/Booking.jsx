@@ -3,10 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { cn } from "../../../lib/utils";
 import { CheckOutlined, CloseOutlined, EyeOutlined } from "@ant-design/icons";
-import {
-    useCancelBookingMutation,
-    useUpdateBookingMutation,
-} from "./bookingApi";
+import { useGetAllBookingQuery, useUpdateBookingMutation } from "./bookingApi";
 import TableHeaderSection from "../../../components/tableHeaderSection/TableHeaderSection";
 import ConfirmModal from "./ConfirmModal";
 import OverviewModal from "./OverviewModal";
@@ -14,94 +11,6 @@ import CancelModal from "./CancelModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
 import dayjs from "dayjs";
-
-const randomNumber = Math.floor(Math.random() * 1000);
-const STATIC_DATA = [
-    {
-        key: 1,
-        bookingId: `BK-${String(randomNumber * 5).padStart(4, "0")}`,
-        serviceName: "Manicure Cleansing",
-        customerName: "Thiri Shwe Sin",
-        price: "35,000 MMK",
-        bookedTime: "10:30 AM",
-        date: "2026/06/20",
-        duringTime: "1 hr 30 mins",
-        staffName: "Phyu Phyu",
-        status: "In Progress",
-    },
-    {
-        key: 2,
-        bookingId: `BK-${String(randomNumber * 2).padStart(4, "0")}`,
-        serviceName: "Pedicure Cleansing",
-        customerName: "May Phoo Ngone",
-        price: "18,000 MMK",
-        bookedTime: "01:00 PM",
-        date: "2026/06/20",
-        duringTime: "45 mins",
-        staffName: "Su Su",
-        status: "Completed",
-    },
-    {
-        key: 3,
-        bookingId: `BK-${String(randomNumber * 4).padStart(4, "0")}`,
-        serviceName: "SNS Extension",
-        customerName: "Hnin Thazin",
-        price: "12,000 MMK",
-        bookedTime: "03:15 PM",
-        date: "2026/06/22",
-        duringTime: "1 hr",
-        staffName: "Aung Aung",
-        status: "Reject",
-    },
-    {
-        key: 4,
-        bookingId: `BK-${String(randomNumber * 3).padStart(4, "0")}`,
-        serviceName: "Cat Eye",
-        customerName: "Ingyin Phyu",
-        price: "25,000 MMK",
-        bookedTime: "05:00 PM",
-        date: "2026/06/28",
-        duringTime: "1 hr 15 mins",
-        staffName: "Kyaw Kyaw",
-        status: "Pending",
-    },
-    {
-        key: 5,
-        bookingId: `BK-${String(randomNumber * 3).padStart(4, "0")}`,
-        serviceName: "Cat Eye",
-        customerName: "Ingyin Phyu",
-        price: "25,000 MMK",
-        bookedTime: "05:00 PM",
-        date: "2026/06/28",
-        duringTime: "1 hr 15 mins",
-        staffName: "Kyaw Kyaw",
-        status: "Pending",
-    },
-    {
-        key: 6,
-        bookingId: `BK-${String(randomNumber * 2).padStart(4, "0")}`,
-        serviceName: "Pedicure Cleansing",
-        customerName: "May Phoo Ngone",
-        price: "18,000 MMK",
-        bookedTime: "01:00 PM",
-        date: "2026/06/20",
-        duringTime: "45 mins",
-        staffName: "Su Su",
-        status: "Confirm",
-    },
-    {
-        key: 7,
-        bookingId: `BK-${String(randomNumber * 4).padStart(4, "0")}`,
-        serviceName: "SNS Extension",
-        customerName: "Hnin Thazin",
-        price: "12,000 MMK",
-        bookedTime: "03:15 PM",
-        date: "2026/06/22",
-        duringTime: "1 hr",
-        staffName: "Aung Aung",
-        status: "Confirm",
-    },
-];
 
 const { useBreakpoint } = Grid;
 
@@ -133,25 +42,42 @@ const filterOptions = renderlists.map((status) => ({
 }));
 
 const Booking = () => {
-    const [dataList, setDataList] = useState(STATIC_DATA);
+    const dispatch = useDispatch();
+    const screens = useBreakpoint();
+    const scrollX = screens.xs ? undefined : "1500";
+
+    // State Handlers
+    const [searchText, setSearchText] = useState("");
+    const [filterValue, setFilterValue] = useState("All");
+    const [selectedDates, setSelectedDates] = useState(null);
+    const [selectedBooking, setSelectedBooking] = useState(null);
+
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewConfirmModal, setViewConfirmModal] = useState(false);
     const [viewCancelModal, setViewCancelModal] = useState(false);
 
-    const dispatch = useDispatch();
-    const [searchText, setSearchText] = useState("");
-    const [selectedBooking, setSelectedBooking] = useState(null);
+    // Dynamic Parameters for RTK Query
+    const startDate = selectedDates?.[0]
+        ? dayjs(selectedDates[0]).format("YYYY-MM-DD")
+        : undefined;
+    const endDate = selectedDates?.[1]
+        ? dayjs(selectedDates[1]).format("YYYY-MM-DD")
+        : undefined;
+    const statusParam =
+        !filterValue || filterValue === "All"
+            ? undefined
+            : String(filterValue).toLowerCase();
 
-    const [filterValue, setFilterValue] = useState(null);
-    // const [calendarFilterType, setCalendarFilterType] = useState(null);
-    const [selectedDates, setSelectedDates] = useState(null);
-
-    const screens = useBreakpoint();
-    const scrollX = screens.xs ? undefined : "1500";
-
+    // Fetch Data
+    const { data: apiResponse, isLoading } = useGetAllBookingQuery({
+        status: statusParam,
+        startDate,
+        endDate,
+    });
+    const bookingsdata = apiResponse?.bookings;
     const [updateBooking] = useUpdateBookingMutation();
-    const [cancelBooking] = useCancelBookingMutation();
 
+    // Action Handlers
     const handleActionBtn = useCallback((action, record) => {
         setSelectedBooking(record);
         if (action === "view") {
@@ -163,93 +89,70 @@ const Booking = () => {
         }
     }, []);
 
-    const handleConfirmBtn = async (bookingId) => {
+    const handleBookingStatusChange = async (id, reason, actionType) => {
+        console.log(id);
         try {
-            await updateBooking({ id: bookingId }).unwrap();
-            setDataList((prev) =>
-                prev.map((item) =>
-                    item.key === bookingId
-                        ? { ...item, status: "Confirm" }
-                        : item,
-                ),
-            );
+            await updateBooking({ id, reason, actionType }).unwrap();
             dispatch(
                 setMessage({
                     msgType: "success",
-                    msgContent: "Booking assigned successfully.",
+                    msgContent: "Booking updated successfully!",
                 }),
             );
         } catch (error) {
             const errorMessage =
                 error?.data?.message ||
                 error?.error ||
-                "Error while confirming";
+                "Failed to update booking";
             dispatch(
                 setMessage({ msgType: "error", msgContent: errorMessage }),
             );
+            console.error("Failed to update booking:", error);
         }
     };
 
-    const handleBookingStatusChange = async (bookingId, reason, actionType) => {
-        try {
-            await cancelBooking({ id: bookingId, reason, actionType }).unwrap();
+    // Local Search Text Filter
+    const finalTableData = useMemo(() => {
+        // Guard clause: Always ensure bookings is an array before filtering
+        const safeBookings = Array.isArray(bookingsdata) ? bookingsdata : [];
 
-            setDataList((prev) =>
-                prev.map((item) =>
-                    item.key === bookingId
-                        ? { ...item, status: "Reject" }
-                        : item,
-                ),
-            );
+        if (!searchText) return safeBookings;
 
-            dispatch(
-                setMessage({
-                    msgType: "success",
-                    msgContent: "Booking successfully cancelled!",
-                }),
-            );
-        } catch (error) {
-            const errorMessage =
-                error?.data?.message ||
-                error?.error ||
-                "Failed to cancel booking";
-            dispatch(
-                setMessage({ msgType: "error", msgContent: errorMessage }),
-            );
-            console.error("Failed to cancel booking:", error);
-        }
-    };
-
-    // FILTER FUNC
-    const filteredData = useMemo(() => {
-        return dataList.filter((item) => {
-            const matchesStatus =
-                !filterValue ||
-                filterValue === "All" ||
-                item.status === filterValue;
-            if (!matchesStatus) return false;
-
-            if (!selectedDates) return true;
-
-            const itemDate = dayjs(item.date);
-
-            // Date Range Filter
-            const [start, end] = selectedDates;
-            if (!start) return true;
-            if (!end)
-                return (
-                    itemDate.isSame(start, "day") ||
-                    itemDate.isAfter(start, "day")
-                );
-
+        return safeBookings.filter((item) => {
             return (
-                (itemDate.isSame(start, "day") ||
-                    itemDate.isAfter(start, "day")) &&
-                (itemDate.isSame(end, "day") || itemDate.isBefore(end, "day"))
+                String(item?.customerName || "")
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase()) ||
+                String(item?.serviceName || "")
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase()) ||
+                String(item?.bookingId || "")
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase())
             );
         });
-    }, [dataList, filterValue, selectedDates]);
+    }, [bookingsdata, searchText]);
 
+    // Status Counting Pills
+    const statusCounts = useMemo(() => {
+        const AllTotal =
+            (apiResponse?.pendingCount || 0) +
+            (apiResponse?.inProgressCount || 0) +
+            (apiResponse?.confirmCount || 0) +
+            (apiResponse?.completedCount || 0) +
+            (apiResponse?.rejectedCount || 0);
+
+        return {
+            All: AllTotal,
+            Pending: apiResponse?.pendingCount || 0,
+            "In Progress": apiResponse?.inProgressCount || 0,
+            Completed: apiResponse?.completedCount || 0,
+            Confirm: apiResponse?.confirmCount || 0,
+            Reject: apiResponse?.rejectedCount || 0,
+        };
+    }, [apiResponse]);
+
+    // Table Column Configuration
     const columns = useMemo(
         () => [
             {
@@ -270,20 +173,6 @@ const Booking = () => {
                 title: "Customer Name",
                 dataIndex: "customerName",
                 key: "customerName",
-                filteredValue: searchText ? [searchText] : null,
-                onFilter: (value, record) => {
-                    return (
-                        String(record.customerName)
-                            .toLowerCase()
-                            .includes(value.toLowerCase()) ||
-                        String(record.serviceName)
-                            .toLowerCase()
-                            .includes(value.toLowerCase()) ||
-                        String(record.bookingId)
-                            .toLowerCase()
-                            .includes(value.toLowerCase())
-                    );
-                },
             },
             {
                 title: "Price",
@@ -292,8 +181,8 @@ const Booking = () => {
             },
             {
                 title: "Booked Time",
-                dataIndex: "bookedTime",
-                key: "bookedTime",
+                dataIndex: "bookTime",
+                key: "bookTime",
             },
             {
                 title: "Date",
@@ -368,34 +257,8 @@ const Booking = () => {
                 },
             },
         ],
-        [searchText, handleActionBtn],
+        [handleActionBtn],
     );
-
-    const statusCounts = useMemo(() => {
-        return {
-            All: dataList?.length,
-            Pending:
-                dataList?.filter((item) => item.status === "Pending").length ||
-                0,
-            "In Progress":
-                dataList?.filter((item) => item.status === "In Progress")
-                    .length || 0,
-            Completed:
-                dataList?.filter((item) => item.status === "Completed")
-                    .length || 0,
-            Confirm:
-                dataList?.filter((item) => item.status === "Confirm").length ||
-                0,
-            Reject:
-                dataList?.filter((item) => item.status === "Reject").length ||
-                0,
-        };
-    }, [dataList]);
-
-    const dateOptions = [
-        { label: "Select Date", value: "date" },
-        { label: "Date Range", value: "range" },
-    ];
 
     const dateConfig = {
         selectedDates: selectedDates,
@@ -410,21 +273,22 @@ const Booking = () => {
                 subTitle={
                     "Manage, track, and update all salon customer appointments."
                 }
-                placeholderTitle="Search the all customer’s booking ..."
+                placeholderTitle="Search all customer bookings..."
             />
             <TableHeaderSection
                 renderlists={renderlists}
                 options={filterOptions}
                 statusCounts={statusCounts}
                 setFilterValue={setFilterValue}
-                dateOptions={dateOptions}
                 dateConfig={dateConfig}
             />
             <div className="table-wrapper">
                 <Table
                     columns={columns}
-                    dataSource={filteredData}
+                    dataSource={finalTableData}
                     scroll={{ x: scrollX }}
+                    loading={isLoading}
+                    rowKey="bookingId"
                     bordered
                 />
             </div>
@@ -435,14 +299,16 @@ const Booking = () => {
                         isViewModalOpen={isViewModalOpen}
                         setIsViewModalOpen={setIsViewModalOpen}
                         selectedBooking={selectedBooking}
-                        onConfirmCancel={(id) =>
-                            handleBookingStatusChange(id, "CANCEL")
+                        onConfirmCancel={(id, reason) =>
+                            handleBookingStatusChange(id, reason, "cancel")
                         }
                     />
                     <ConfirmModal
                         viewConfirmModal={viewConfirmModal}
                         setViewConfirmModal={setViewConfirmModal}
-                        handleConfirmBtn={handleConfirmBtn}
+                        handleConfirmBtn={(id) =>
+                            handleBookingStatusChange(id, "", "confirm")
+                        }
                         selectedBooking={selectedBooking}
                     />
                     <CancelModal
@@ -450,7 +316,7 @@ const Booking = () => {
                         viewCancelModal={viewCancelModal}
                         setViewCancelModal={setViewCancelModal}
                         onConfirmReject={(id, reason) =>
-                            handleBookingStatusChange(id, reason, "REJECT")
+                            handleBookingStatusChange(id, reason, "reject")
                         }
                     />
                 </>

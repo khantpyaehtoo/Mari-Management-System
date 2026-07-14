@@ -16,7 +16,10 @@ const CancelModal = ({
 
     const handleConfirmReject = () => {
         if (onConfirmReject) {
-            onConfirmReject(selectedBooking?.bookingId, cancelReason);
+            onConfirmReject(
+                selectedBooking?.id || selectedBooking?.bookingId,
+                cancelReason,
+            );
         }
         handleClose();
     };
