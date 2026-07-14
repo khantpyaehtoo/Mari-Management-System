@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Modal, Space, Avatar, Button, Form, Input } from "antd";
+import { Modal, Space, Avatar, Form, Input } from "antd";
+import RenderStaffFooterButtons from "./RenderStaffFooterBtn";
 
 const StaffDetailModal = ({
     isDetailOpen,
@@ -70,7 +71,7 @@ const StaffDetailModal = ({
                     form={form}
                     layout="horizontal"
                     component="form"
-                    className="w-full"
+                    className="w-full p-5!"
                 >
                     <Space size="large" className="border-b w-full py-4">
                         <Avatar
@@ -82,6 +83,7 @@ const StaffDetailModal = ({
                             {isEditing ? (
                                 <Form.Item name="name" className="mb-0!">
                                     <Input
+                                        placeholder={selectedStaff.name}
                                         className="font-semibold! text-xl! border! border-b-gray-300!"
                                         style={{ width: 200 }}
                                     />
@@ -102,7 +104,7 @@ const StaffDetailModal = ({
                         className="border-b w-full py-3"
                         size="middle"
                     >
-                        <div className="flex items-center gap-2 h-8">
+                        <div className="flex justify-between items-center gap-2 h-8">
                             <span className="font-medium min-w-25">Phone:</span>
                             {isEditing ? (
                                 <Form.Item
@@ -110,14 +112,17 @@ const StaffDetailModal = ({
                                     className="mb-0! flex-1!"
                                     rules={[{ required: true, message: "" }]}
                                 >
-                                    <Input className="font-montserrat! border! border-b-gray-300!" />
+                                    <Input
+                                        placeholder={selectedStaff.phone}
+                                        className="font-montserrat! border! border-b-gray-300!"
+                                    />
                                 </Form.Item>
                             ) : (
                                 <span>{selectedStaff.phone}</span>
                             )}
                         </div>
 
-                        <div className="flex items-center gap-2 h-8">
+                        <div className="flex justify-between items-center gap-2 h-8">
                             <span className="font-medium min-w-25">Email:</span>
                             {isEditing ? (
                                 <Form.Item
@@ -131,14 +136,17 @@ const StaffDetailModal = ({
                                         },
                                     ]}
                                 >
-                                    <Input className="font-montserrat! border! border-b-gray-300!" />
+                                    <Input
+                                        placeholder={selectedStaff.email}
+                                        className="font-montserrat! border! border-b-gray-300!"
+                                    />
                                 </Form.Item>
                             ) : (
                                 <span>{selectedStaff.email}</span>
                             )}
                         </div>
 
-                        <div className="flex items-center gap-2 h-8">
+                        <div className="flex justify-between items-center gap-2 h-8">
                             <span className="font-medium min-w-25">
                                 DATE OF BIRTH:
                             </span>
@@ -151,71 +159,43 @@ const StaffDetailModal = ({
                         className="border-b w-full py-3 mb-10"
                         size="middle"
                     >
-                        <p>
+                        <p className="flex justify-between items-center">
                             <span className="font-medium min-w-25 inline-block">
                                 Customer Count:
                             </span>{" "}
                             {selectedStaff.count}
                         </p>
-                        <p>
+                        <p className="flex justify-between items-center">
                             <span className="font-medium min-w-25 inline-block">
                                 Rating:
                             </span>{" "}
                             {selectedStaff.rating}
                         </p>
+                        <p className="flex justify-between items-center">
+                            <span className="font-medium min-w-25 inline-block">
+                                Revenue:
+                            </span>{" "}
+                            {selectedStaff.revenue}
+                        </p>
+                        <p className="flex justify-between items-center">
+                            <span className="font-medium min-w-25 inline-block">
+                                Commission:
+                            </span>{" "}
+                            {selectedStaff.commission}
+                        </p>
                     </Space>
 
                     {/* Action Footer Buttons */}
-                    <Space size="large">
-                        {(isEditing ?? (
-                            <>
-                                <Button
-                                    type="primary"
-                                    onClick={handleSave}
-                                    className="p-5! rounded-lg! text-white!"
-                                >
-                                    Save
-                                </Button>
-                                <Button
-                                    onClick={handleCancelEdit}
-                                    className="p-5! rounded-lg!"
-                                >
-                                    Cancel
-                                </Button>
-                            </>
-                        )) ? (
-                            <>
-                                <Button
-                                    type="primary"
-                                    onClick={() => setIsEditing(true)}
-                                    className="p-5! rounded-lg! text-white!"
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    onClick={handleDelete}
-                                    className="bg-red-500! p-5! rounded-lg! text-white! hover:bg-red-800!"
-                                >
-                                    Delete
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    onClick={handleCancelEdit}
-                                    className="p-5! rounded-lg!"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    onClick={handleRehired}
-                                    className="bg-green-500! p-5! rounded-lg! text-white! hover:bg-green-800!"
-                                >
-                                    Rehired
-                                </Button>
-                            </>
-                        )}
-                    </Space>
+                    <RenderStaffFooterButtons
+                        handleClose={handleClose}
+                        selectedStaff={selectedStaff}
+                        handleDelete={handleDelete}
+                        handleRehired={handleRehired}
+                        handleSave={handleSave}
+                        handleCancelEdit={handleCancelEdit}
+                        isEditing={isEditing}
+                        setIsEditing={() => setIsEditing(true)}
+                    />
                 </Form>
             )}
         </Modal>

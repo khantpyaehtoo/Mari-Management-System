@@ -112,7 +112,9 @@ const TableHeaderSection = ({
                             )}
                             onClick={() => handleChange(lists)}
                         >
-                            {lists} <span>{counts}</span>
+                            <span className="md:text-xs">
+                                {lists} <span>{counts}</span>
+                            </span>
                         </li>
                     );
                 })}
@@ -120,14 +122,13 @@ const TableHeaderSection = ({
             <Space>
                 <Space size={4}>
                     <DatePicker.RangePicker
-                        // placeholder={[<DateTimeFormatter />]}
                         separator={<ChevronsRight size={16} />}
                         maxDate={dayjs()}
                         disabledDate={disableFutureDates}
                         value={selectedDates}
                         onChange={(dates) => setSelectedDates(dates)}
                         className={cn(
-                            "rounded-lg! border border-gray-300! lg:w-80 md:w-64 sm:w-40",
+                            "rounded-lg! border border-gray-300! lg:w-100 md:w-40",
                             calendarClassName,
                         )}
                         classNames={{ popup: "my-custom-rangepicker" }}
@@ -144,8 +145,6 @@ const TableHeaderSection = ({
                                     setPValue(selectedDates[1]);
                             }
                         }}
-                        // onPanelChange={handlePanelChange}
-                        // onOpenChange={handleOpenChange}
                     />
                 </Space>
 

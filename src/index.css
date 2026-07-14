@@ -360,6 +360,9 @@ body {
 .my-custom-rangepicker {
     border-radius: 30px;
 }
+
+
+
 .my-custom-rangepicker .ant-picker-panels :where(.ant-picker-header, button) {
     background-color: var(--primary-pink);
     color: white !important;
@@ -417,7 +420,6 @@ body {
     max-width: 100% !important;
     flex: 1 1 100% !important;
 }
-
 
 .my-custom-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range .ant-picker-cell-inner,
 .my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-in-range .ant-picker-cell-inner {
