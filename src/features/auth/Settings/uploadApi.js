@@ -50,7 +50,7 @@ export const uploadApi = baseApi.injectEndpoints({
 
         deleteTrendingDesign: builder.mutation({
             query: (id) => ({
-                url: `designs/${trendingEndPoint}/${id}`,
+                url: `designs/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["trending"],

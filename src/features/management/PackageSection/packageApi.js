@@ -1,49 +1,39 @@
 import { baseApi } from "../../../app/core/baseApi";
 
-const packageEndPoint = "package";
+const packageEndPoint = "packages";
 
 export const packageApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getPackageData: builder.query({
-            query: () => ({
-                url: `${packageEndPoint}`,
-                method: "GET",
-            }),
-            invalidatesTags: ["package"],
-        }),
-
         createPackage: builder.mutation({
             query: (body) => ({
                 url: `${packageEndPoint}`,
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["package"],
+            invalidatesTags: ["categories", "packages"],
         }),
 
         updatePackage: builder.mutation({
-            query: ({ id, body, token }) => ({
+            query: ({ id, body }) => ({
                 url: `${packageEndPoint}/${id}`,
                 method: "PUT",
                 body,
-                headers: { Authorization: `Bearer ${token}` },
             }),
-            invalidatesTags: ["package"],
+            invalidatesTags: ["categories", "packages"],
         }),
 
-        deleteService: builder.mutation({
-            query: ({ id, token }) => ({
+        deletePackage: builder.mutation({
+            query: ({ id }) => ({
                 url: `${packageEndPoint}/${id}`,
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
             }),
-            invalidatesTags: ["package"],
+            invalidatesTags: ["categories", "packages"],
         }),
     }),
 });
 
 export const {
-    useGetPackageDataQuery,
     useCreatePackageMutation,
     useUpdatePackageMutation,
+    useDeletePackageMutation,
 } = packageApi;

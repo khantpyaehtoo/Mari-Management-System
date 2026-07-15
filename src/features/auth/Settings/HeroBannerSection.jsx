@@ -65,13 +65,12 @@ const HeroBannerSection = ({
                             `Banner ID ${item.id} path:`,
                             item?.bannerImage,
                         );
-                        const imgPath =
-                            item?.bannerImage || item?.url || item?.bannerImage;
+                        const imgPath = item?.bannerImage || item?.url;
                         const fullImgUrl = `${IMAGE_BASE_URL}${imgPath}`;
                         return (
                             <div
                                 key={item.id}
-                                className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300 aspect-video"
+                                className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden relative group focus-within:bg-amber-300 aspect-video"
                             >
                                 <Image
                                     src={fullImgUrl}

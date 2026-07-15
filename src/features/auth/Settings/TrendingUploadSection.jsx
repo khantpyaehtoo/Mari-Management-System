@@ -147,6 +147,7 @@ const TrendingUploadSection = ({
                             onChange={handleUploadChange}
                             beforeUpload={() => false}
                             listType="picture"
+                            multiple={true}
                             maxCount={6}
                             onPreview={handlePreview}
                             className="h-125! w-full max-w-100!"

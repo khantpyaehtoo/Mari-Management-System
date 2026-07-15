@@ -1,41 +1,13 @@
-import { Button, Card, Col, Row } from "antd";
+import { Button, Card, Col, Row, Skeleton } from "antd";
 import { Edit, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { useGetServicesDataQuery } from "./servicesApi";
+import {
+    useGetAllServiceDataQuery,
+    useGetCategoryDataQuery,
+} from "./servicesApi";
 import ServiceDeleteModal from "./ServiceDeleteModal";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
-
-const mockPackages = [
-    {
-        id: 1,
-        categoryId: "1",
-        name: "Basic Nail Art",
-        price: "5000 mmk",
-        duration: "50 mins",
-    },
-    {
-        id: 2,
-        categoryId: "1",
-        name: "Premium Nail Art",
-        price: "12000 mmk",
-        duration: "90 mins",
-    },
-    {
-        id: 3,
-        categoryId: "2",
-        name: "Standard Hair Spa",
-        price: "25000 mmk",
-        duration: "120 mins",
-    },
-    {
-        id: 4,
-        categoryId: "2",
-        name: "VIP Hair Treatment",
-        price: "40000 mmk",
-        duration: "45 mins",
-    },
-];
 
 const CategoryDetails = () => {
     const [searchText, setSearchText] = useState("");
@@ -45,28 +17,36 @@ const CategoryDetails = () => {
     const [selectedService, setSelectedService] = useState(null);
 
     const { id } = useParams();
-    // const { data: servicesData } = useGetServicesDataQuery();
-    // const service = servicesData;
+
+    const { data: getAllCategory = [], isLoading: isCategoryLoading } =
+        useGetCategoryDataQuery();
+
+    const { data: allServices = [], isLoading: isServicesLoading } =
+        useGetAllServiceDataQuery();
+
+    const currentCategory = useMemo(() => {
+        return getAllCategory?.find(
+            (cate) => cate?.id?.toString() === id?.toString(),
+        );
+    }, [getAllCategory, id]);
 
     const searchService = useMemo(() => {
-        const sourceData = mockPackages;
-
         return (
-            sourceData?.filter((item) => {
-                if (!item || !item.name) return false;
+            allServices?.filter((item) => {
+                if (!item) return false;
 
                 const matchesCategory =
                     item.categoryId?.toString() === id?.toString();
-
+                const isNotPackage = item.package === false;
                 const matchesSearch = item.name
-                    .toString()
+                    ?.toString()
                     .toLowerCase()
                     .includes(searchText.toLowerCase());
 
-                return matchesCategory && matchesSearch;
+                return matchesCategory && isNotPackage && matchesSearch;
             }) || []
         );
-    }, [searchText, id]);
+    }, [allServices, id, searchText]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -92,10 +72,16 @@ const CategoryDetails = () => {
         }, 300);
     };
 
+    const isLoading = isCategoryLoading || isServicesLoading;
+
     return (
         <>
             <SubHeaderSection
-                title={searchService.map((item) => item.name)}
+                title={
+                    isCategoryLoading
+                        ? "Loading..."
+                        : currentCategory?.name || "Category Details"
+                }
                 subTitle="Manage all services under this category"
                 formType="Services"
                 btnTitle="Services"
@@ -111,47 +97,81 @@ const CategoryDetails = () => {
             />
 
             <Row gutter={[16, 16]} className="mt-10!">
-                {searchService.map((item) => (
-                    <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
-                        <Card className="border! border-gray-300! rounded-xl! hover:shadow-md transition-shadow">
-                            <h1 className="text-xl mb-5 font-semibold">
-                                {item.name}
-                            </h1>
-                            <div className="grid-items-2 mb-5 flex justify-between">
-                                <div>
-                                    <p className="text-gray-500">
-                                        Service price:{" "}
-                                    </p>
-                                    <p className="my-2 text-gray-500">
-                                        Duration:{" "}
-                                    </p>
-                                </div>
-                                <div className="text-right font-medium">
-                                    <p>{item.price}</p>
-                                    <p className="my-2">{item.duration}</p>
-                                </div>
-                            </div>
-                            <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-4">
-                                <Button
-                                    onClick={(e) =>
-                                        handleActionClick("edit", item, e)
-                                    }
-                                    className="bg-primary! text-white flex-1 min-w-17.5 flex items-center justify-center"
-                                >
-                                    <Edit size={14} className="mr-1" /> Edit
-                                </Button>
-                                <Button
-                                    onClick={(e) =>
-                                        handleActionClick("delete", item, e)
-                                    }
-                                    className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
-                                >
-                                    <Trash2 size={14} className="mr-1" /> Delete
-                                </Button>
-                            </div>
-                        </Card>
+                {isLoading ? (
+                    Array.from({ length: 4 }).map((_, index) => (
+                        <Col
+                            key={`skeleton-${index}`}
+                            xs={24}
+                            sm={12}
+                            xl={6}
+                            className="flex"
+                        >
+                            <Card className="w-full border! border-gray-200! rounded-xl!">
+                                <Skeleton
+                                    active
+                                    paragraph={{ rows: 3 }}
+                                    title={{ width: "80%" }}
+                                />
+                            </Card>
+                        </Col>
+                    ))
+                ) : searchService.length === 0 ? (
+                    <Col span={24} className="text-center text-gray-400 mt-10">
+                        No services found in this category.
                     </Col>
-                ))}
+                ) : (
+                    searchService.map((item) => (
+                        <Col
+                            key={item.id}
+                            xs={24}
+                            sm={12}
+                            xl={6}
+                            className="flex"
+                        >
+                            <Card className="w-full border! border-gray-300! rounded-xl! hover:shadow-md transition-shadow">
+                                <h1 className="text-xl mb-5 font-semibold">
+                                    {item.name}
+                                </h1>
+                                <div className="grid-items-2 mb-5 flex justify-between">
+                                    <div>
+                                        <p className="text-gray-500">
+                                            Service price:
+                                        </p>
+                                        <p className="my-2 text-gray-500">
+                                            Duration:
+                                        </p>
+                                    </div>
+                                    <div className="text-right font-medium">
+                                        {/* API ကလာတဲ့ key name တွေနဲ့ ချိတ်ဆက်ပြသခြင်း */}
+                                        <p>{item.price} MMK</p>
+                                        <p className="my-2">
+                                            {item.durationInMinutes} mins
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-4">
+                                    <Button
+                                        onClick={(e) =>
+                                            handleActionClick("edit", item, e)
+                                        }
+                                        className="bg-primary! text-white flex-1 min-w-17.5 flex items-center justify-center"
+                                    >
+                                        <Edit size={14} className="mr-1" /> Edit
+                                    </Button>
+                                    <Button
+                                        onClick={(e) =>
+                                            handleActionClick("delete", item, e)
+                                        }
+                                        className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
+                                    >
+                                        <Trash2 size={14} className="mr-1" />{" "}
+                                        Delete
+                                    </Button>
+                                </div>
+                            </Card>
+                        </Col>
+                    ))
+                )}
             </Row>
 
             <ServiceDeleteModal

@@ -1,12 +1,15 @@
 import { baseApi } from "../../../app/core/baseApi";
 const serviceEndpoint = "services";
-const categoryEndpoint = "category";
+const categoryEndpoint = "categories";
 
 export const servicesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getServicesByCategory: builder.query({
-            query: (categoryId) =>
-                `/${serviceEndpoint}?categoryId=${categoryId}`,
+        getCategorybyId: builder.query({
+            query: (id) => ({
+                url: `${serviceEndpoint}/${id}`,
+                method: "GET",
+            }),
+            providesTags: ["categories"],
         }),
 
         getCategoryData: builder.query({
@@ -14,7 +17,7 @@ export const servicesApi = baseApi.injectEndpoints({
                 url: `${categoryEndpoint}`,
                 method: "GET",
             }),
-            providesTags: ["category"],
+            providesTags: ["categories"],
         }),
 
         createCategory: builder.mutation({
@@ -23,7 +26,15 @@ export const servicesApi = baseApi.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            providesTags: ["category"],
+            invalidatesTags: ["categories"],
+        }),
+
+        getAllServiceData: builder.query({
+            query: () => ({
+                url: `${serviceEndpoint}`,
+                method: "GET",
+            }),
+            providesTags: ["services"],
         }),
 
         createService: builder.mutation({
@@ -57,7 +68,7 @@ export const servicesApi = baseApi.injectEndpoints({
 });
 
 export const {
-    useGetServicesDataQuery,
+    useGetAllServiceDataQuery,
     useCreateServiceMutation,
     useDeleteServiceMutation,
     useUpdateServiceMutation,

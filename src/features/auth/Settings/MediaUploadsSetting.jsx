@@ -111,7 +111,7 @@ const MediaUploadsSetting = () => {
         }
 
         const formData = new FormData();
-        formData.append("bannerImage", heroFileList[0].originFileObj);
+        formData.append("bannerFile", heroFileList[0].originFileObj);
 
         try {
             await vendorUpload(formData).unwrap();
