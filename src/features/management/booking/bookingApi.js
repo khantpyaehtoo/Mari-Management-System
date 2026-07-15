@@ -10,12 +10,16 @@ export const bookingApi = baseApi.injectEndpoints({
                 startDate,
                 endDate,
                 page = 0,
-                size = 10,
+                size,
+                search,
             } = {}) => {
                 const params = new URLSearchParams();
+
                 if (status) params.append("status", status);
                 if (startDate) params.append("startDate", startDate);
                 if (endDate) params.append("endDate", endDate);
+                if (search) params.append("search", search);
+
                 params.append("page", page.toString());
                 params.append("size", size.toString());
 
@@ -36,17 +40,18 @@ export const bookingApi = baseApi.injectEndpoints({
         }),
 
         updateBooking: builder.mutation({
-            query: ({ id, reason, actionType }) => {
+            query: ({ id, reason, actionType, token }) => {
                 const bodyPayload =
                     actionType !== "confirm" ? { reason } : undefined;
 
                 return {
                     url: `bookings/${id}/${actionType}`,
                     method: "PUT",
+                    headers: { authorization: `Bearer ${token}` },
                     body: bodyPayload,
                 };
             },
-            invalidatesTags: ["bookings"],
+            invalidatesTags: ["booking-management", "bookings"],
         }),
     }),
 });

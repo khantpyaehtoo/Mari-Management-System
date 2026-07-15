@@ -10,7 +10,14 @@ export const walkinApi = baseApi.injectEndpoints({
             }),
             providesTags: ["walkin"],
         }),
+
+        getWalkinById: builder.query({
+            query: (id) => ({
+                url: `admin/customers/${walkinEndpoint}/${id}`,
+            }),
+            invalidatesTags: ["walkin"],
+        }),
     }),
 });
 
-export const { useGetWalkinDataQuery } = walkinApi;
+export const { useGetWalkinDataQuery, useGetWalkinByIdQuery } = walkinApi;

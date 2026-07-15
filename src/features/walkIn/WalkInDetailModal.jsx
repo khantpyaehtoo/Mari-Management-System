@@ -1,27 +1,29 @@
-import { Modal, Typography, Flex, Space } from "antd";
+import { Modal, Typography, Flex, Space, Spin } from "antd";
+import { useGetWalkinByIdQuery } from "./walkInApi";
 
 const WalkInDetailModal = ({ selectedWalkin, isOpen, onClose }) => {
-    const totalTime = selectedWalkin?.services.reduce(
-        (sum, s) => sum + s.duration,
-        0,
+    // Only trigger the query if the modal is open and we have an ID
+    const { data: walkinDetails, isLoading } = useGetWalkinByIdQuery(
+        selectedWalkin?.id,
+        { skip: !isOpen || !selectedWalkin?.id },
     );
-    const totalAmount = selectedWalkin?.services.reduce(
-        (sum, s) => sum + s.baseAmount + (s.extraCharges || 0),
-        0,
-    );
-    const totalBaseAmount = selectedWalkin?.services.reduce(
-        (sum, s) => sum + s.baseAmount,
-        0,
-    );
-    const totalExtraAmount = selectedWalkin?.services.reduce(
-        (sum, s) => sum + (s.extraCharges || 0),
-        0,
-    );
-
-    const extraServicesWithNotes =
-        selectedWalkin?.services?.filter((s) => s.note) || [];
 
     if (!selectedWalkin) return null;
+
+    // Safely parse values with optional chaining to prevent crashes during loading
+    const serviceName = walkinDetails?.serviceName;
+    const startTime = walkinDetails?.startTime;
+    const durationDisplay = walkinDetails?.duration;
+
+    const totalAmount =
+        walkinDetails?.totalCharges ||
+        (walkinDetails?.totalCharges
+            ? `${walkinDetails.totalCharges} MMK`
+            : "");
+    const extraAmount = walkinDetails?.extraAmount || 0;
+    const baseAmount = walkinDetails
+        ? walkinDetails.totalCharges - extraAmount
+        : 0;
 
     return (
         <Modal
@@ -29,98 +31,102 @@ const WalkInDetailModal = ({ selectedWalkin, isOpen, onClose }) => {
             open={isOpen}
             onCancel={onClose}
             footer={null}
+            destroyOnHidden
         >
-            <div className="w-full">
-                <Space vertical className="w-full py-4">
-                    <p>
-                        <span className="font-semibold me-4">WalkIn ID :</span>{" "}
-                        {selectedWalkin.walkInId}
-                    </p>
-                    <p>
-                        <span className="font-semibold me-4">Date :</span>{" "}
-                        {selectedWalkin.date}
-                    </p>
-                    <p>
-                        <span className="font-semibold me-4">Staff Name :</span>{" "}
-                        {selectedWalkin.staffName}
-                    </p>
-                </Space>
+            {isLoading ? (
+                <div className="flex justify-center items-center py-12 w-full">
+                    <Spin size="large" />
+                </div>
+            ) : walkinDetails ? (
+                <div className="w-full">
+                    <Space vertical className="w-full py-4">
+                        <p>
+                            <span className="font-semibold me-4">
+                                WalkIn ID :
+                            </span>{" "}
+                            {walkinDetails.walkInId}
+                        </p>
+                        <p>
+                            <span className="font-semibold me-4">Date :</span>{" "}
+                            {walkinDetails.date}
+                        </p>
+                        <p>
+                            <span className="font-semibold me-4">
+                                Staff Name :
+                            </span>{" "}
+                            {walkinDetails.staffName}
+                        </p>
+                    </Space>
 
-                <div className="w-full border-gray-400 border p-4 rounded-xl bg-white-back">
-                    <Typography.Title
-                        level={3}
-                        className="font-montserrat! font-medium! text-primary!"
-                    >
-                        Details
-                    </Typography.Title>
-                    <ul className="border-b border-b-gray-400 px-7 pb-4  list-disc marker:text-primary marker:text-2xl">
-                        <Space vertical>
-                            <li>
-                                <span className="font-semibold">
-                                    Started Time :
-                                </span>{" "}
-                                {selectedWalkin.startedTime}
-                            </li>
-                            <li>
-                                <span className="font-semibold">
-                                    Service Name :{" "}
-                                </span>
-                                {selectedWalkin?.services.map((svc, i) => (
-                                    <span key={i}>
-                                        {svc.name}
-                                        {i < selectedWalkin?.services.length - 1
-                                            ? ", "
-                                            : ""}
-                                    </span>
-                                ))}
-                            </li>
-                            <li>
-                                <span className="font-semibold">
-                                    Duration :{" "}
-                                </span>
-                                {totalTime} mins
-                            </li>
-                            <li>
-                                <span className="font-semibold">
-                                    Base Amount :{" "}
-                                </span>
-                                {totalBaseAmount} mmk
-                            </li>
-
-                            {totalExtraAmount ? (
+                    <div className="w-full border-gray-400 border p-4 rounded-xl bg-white-back">
+                        <Typography.Title
+                            level={3}
+                            className="font-montserrat! font-medium! text-primary!"
+                        >
+                            Details
+                        </Typography.Title>
+                        <ul className="border-b border-b-gray-400 px-7 pb-4 list-disc marker:text-primary marker:text-2xl">
+                            <Space vertical className="w-full">
                                 <li>
                                     <span className="font-semibold">
-                                        Extra Amount :{" "}
-                                    </span>
-                                    {totalExtraAmount} mmk
+                                        Started Time :
+                                    </span>{" "}
+                                    {startTime}
                                 </li>
-                            ) : (
-                                ""
-                            )}
-                        </Space>
-                    </ul>
-                    <Flex
-                        justify="space-between"
-                        className="p-3! font-semibold!"
-                    >
-                        <h3>Total Amount</h3>
-                        <h3>{totalAmount} mmk</h3>
-                    </Flex>
-                </div>
+                                <li>
+                                    <span className="font-semibold">
+                                        Service Name :{" "}
+                                    </span>
+                                    <span>{serviceName}</span>
+                                </li>
+                                <li>
+                                    <span className="font-semibold">
+                                        Duration :{" "}
+                                    </span>
+                                    {durationDisplay}
+                                </li>
+                                <li>
+                                    <span className="font-semibold">
+                                        Base Amount :{" "}
+                                    </span>
+                                    {baseAmount} MMK
+                                </li>
 
-                {extraServicesWithNotes.length > 0 && (
-                    <div className="border-gray-400 border p-4 rounded-xl bg-white-back my-4">
-                        <h1 className="text-primary font-medium text-base mb-2">
-                            Extra Charges Note
-                        </h1>
-                        {extraServicesWithNotes.map((svc, i) => (
-                            <p key={i} className="text-sm text-gray-700 mb-1">
-                                {svc.note}
-                            </p>
-                        ))}
+                                {extraAmount > 0 && (
+                                    <li>
+                                        <span className="font-semibold">
+                                            Extra Amount :{" "}
+                                        </span>
+                                        {extraAmount} MMK
+                                    </li>
+                                )}
+                            </Space>
+                        </ul>
+                        <Flex
+                            justify="space-between"
+                            className="p-3! font-semibold!"
+                        >
+                            <h3>Total Amount</h3>
+                            <h3>{totalAmount} MMK</h3>
+                        </Flex>
                     </div>
-                )}
-            </div>
+
+                    {walkinDetails.note && (
+                        <div className="border-gray-400 border p-4 rounded-xl bg-white-back my-4">
+                            <h1 className="text-primary font-medium text-base mb-2">
+                                Extra Charges Note
+                            </h1>
+                            <p className="text-sm text-gray-700 mb-1">
+                                {walkinDetails.note}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className="text-center py-8 text-gray-500">
+                    No details found.
+                </div>
+            )}
         </Modal>
     );
 };

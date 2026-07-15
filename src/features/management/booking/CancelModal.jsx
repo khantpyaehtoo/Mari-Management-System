@@ -1,5 +1,6 @@
 import { Modal, Typography, Space, Button, Input } from "antd";
 import { useState } from "react";
+import { useBookingDetailsQuery } from "./bookingApi";
 
 const CancelModal = ({
     selectedBooking,
@@ -8,6 +9,10 @@ const CancelModal = ({
     onConfirmReject,
 }) => {
     const [cancelReason, setCancelReason] = useState("");
+    const { data: bookingDetails } = useBookingDetailsQuery(
+        selectedBooking?.id,
+        { skip: !viewCancelModal },
+    );
 
     const handleClose = () => {
         setViewCancelModal(false);
@@ -17,7 +22,7 @@ const CancelModal = ({
     const handleConfirmReject = () => {
         if (onConfirmReject) {
             onConfirmReject(
-                selectedBooking?.id || selectedBooking?.bookingId,
+                bookingDetails?.id || selectedBooking?.id,
                 cancelReason,
             );
         }

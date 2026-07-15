@@ -108,7 +108,9 @@ const TableHeaderSection = ({
                                 statusClasses[lists] || "text-gray-500",
                                 "hover:underline",
                             )}
-                            onClick={() => handleChange(lists)}
+                            onClick={() =>
+                                !!setFilterValue && handleChange(lists)
+                            }
                         >
                             <span className="md:text-xs">
                                 {lists} <span>{counts}</span>
@@ -118,33 +120,35 @@ const TableHeaderSection = ({
                 })}
             </ul>
             <Space>
-                <Space size={4}>
-                    <DatePicker.RangePicker
-                        separator={<ChevronsRight size={16} />}
-                        maxDate={dayjs()}
-                        disabledDate={disableFutureDates}
-                        value={selectedDates}
-                        onChange={(dates) => setSelectedDates(dates)}
-                        className={cn(
-                            "rounded-lg! border border-gray-300! lg:w-100 md:w-40",
-                            calendarClassName,
-                        )}
-                        classNames={{ popup: "my-custom-rangepicker" }}
-                        presets={presets}
-                        defaultPickerValue={pValue}
-                        onPickerValueChange={(_, info) => {
-                            if (!selectedDates?.length) return;
+                {!!setSelectedDates && (
+                    <Space size={4}>
+                        <DatePicker.RangePicker
+                            separator={<ChevronsRight size={16} />}
+                            maxDate={dayjs()}
+                            disabledDate={disableFutureDates}
+                            value={selectedDates}
+                            onChange={(dates) => setSelectedDates(dates)}
+                            className={cn(
+                                "rounded-lg! border border-gray-300! lg:w-100 md:w-40",
+                                calendarClassName,
+                            )}
+                            classNames={{ popup: "my-custom-rangepicker" }}
+                            presets={presets}
+                            defaultPickerValue={pValue}
+                            onPickerValueChange={(_, info) => {
+                                if (!selectedDates?.length) return;
 
-                            switch (info.range) {
-                                case "start":
-                                    setPValue(selectedDates[0]);
-                                    break;
-                                case "end":
-                                    setPValue(selectedDates[1]);
-                            }
-                        }}
-                    />
-                </Space>
+                                switch (info.range) {
+                                    case "start":
+                                        setPValue(selectedDates[0]);
+                                        break;
+                                    case "end":
+                                        setPValue(selectedDates[1]);
+                                }
+                            }}
+                        />
+                    </Space>
+                )}
 
                 {!!options && (
                     <Select

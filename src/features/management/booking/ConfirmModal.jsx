@@ -8,7 +8,8 @@ const ConfirmModal = ({
     selectedBooking,
 }) => {
     const { data: bookingDetails } = useBookingDetailsQuery(
-        selectedBooking?.id || selectedBooking?.bookingId,
+        selectedBooking?.id,
+        { skip: !viewConfirmModal },
     );
 
     const handleClose = () => {
@@ -16,7 +17,7 @@ const ConfirmModal = ({
     };
     const handleConfirm = () => {
         if (handleConfirmBtn) {
-            handleConfirmBtn(bookingDetails?.id);
+            handleConfirmBtn(bookingDetails?.id || selectedBooking?.id);
         }
         handleClose();
     };

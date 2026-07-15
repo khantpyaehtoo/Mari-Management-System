@@ -11,6 +11,7 @@ import CancelModal from "./CancelModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
 import dayjs from "dayjs";
+import { useDebounce } from "../../../lib/hooks/useDebounce";
 
 const { useBreakpoint } = Grid;
 
@@ -57,8 +58,21 @@ const Booking = () => {
     const [viewConfirmModal, setViewConfirmModal] = useState(false);
     const [viewCancelModal, setViewCancelModal] = useState(false);
 
+    const debouncedSearchText = useDebounce(searchText, 300);
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
+    };
+
+    // jump into page 1
+    const handleFilterChange = (value) => {
+        setFilterValue(value);
+        setCurrentPage(1);
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchText(value);
+        setCurrentPage(1);
     };
 
     // Dynamic Parameters for RTK Query
@@ -78,6 +92,9 @@ const Booking = () => {
         status: statusParam,
         startDate,
         endDate,
+        page: currentPage - 1,
+        size: 10,
+        search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
     });
     const bookingsdata = apiResponse?.bookings;
     const [updateBooking] = useUpdateBookingMutation();
@@ -94,10 +111,9 @@ const Booking = () => {
         }
     }, []);
 
-    const handleBookingStatusChange = async (id, reason, actionType) => {
-        console.log(id);
+    const handleBookingStatusChange = async (id, reason, actionType, token) => {
         try {
-            await updateBooking({ id, reason, actionType }).unwrap();
+            await updateBooking({ id, reason, actionType, token }).unwrap();
             dispatch(
                 setMessage({
                     msgType: "success",
@@ -116,27 +132,18 @@ const Booking = () => {
         }
     };
 
-    // Local Search Text Filter
-    const finalTableData = useMemo(() => {
-        // Guard clause: Always ensure bookings is an array before filtering
-        const safeBookings = Array.isArray(bookingsdata) ? bookingsdata : [];
+    const sortedData = useMemo(() => {
+        const rawData = Array.isArray(bookingsdata) ? bookingsdata : [];
 
-        if (!searchText) return safeBookings;
+        return [...rawData].sort((a, b) => {
+            const dateTimeA = new Date(`${a.date} ${a.startTime}`);
+            const dateTimeB = new Date(`${b.date} ${b.startTime}`);
 
-        return safeBookings.filter((item) => {
-            return (
-                String(item?.customerName || "")
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()) ||
-                String(item?.serviceName || "")
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase()) ||
-                String(item?.bookingId || "")
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase())
-            );
+            return dateTimeB - dateTimeA;
         });
-    }, [bookingsdata, searchText]);
+    }, [bookingsdata]);
+
+    // Local Search Text Filter
 
     // Status Counting Pills
     const statusCounts = useMemo(() => {
@@ -162,7 +169,9 @@ const Booking = () => {
         () => [
             {
                 title: "No.",
-                render: (_, __, index) => <p>{index + 1}</p>,
+                render: (_, __, index) => (
+                    <p>{(currentPage - 1) * 10 + index + 1}</p>
+                ),
             },
             {
                 title: "Booking Id",
@@ -262,7 +271,7 @@ const Booking = () => {
                 },
             },
         ],
-        [handleActionBtn],
+        [handleActionBtn, currentPage],
     );
 
     const dateConfig = {
@@ -273,7 +282,7 @@ const Booking = () => {
     return (
         <>
             <SubHeaderSection
-                setSearchText={setSearchText}
+                setSearchText={handleSearchChange}
                 title={"Customer Bookings"}
                 subTitle={
                     "Manage, track, and update all salon customer appointments."
@@ -284,22 +293,24 @@ const Booking = () => {
                 renderlists={renderlists}
                 options={filterOptions}
                 statusCounts={statusCounts}
-                setFilterValue={setFilterValue}
+                setFilterValue={handleFilterChange}
                 dateConfig={dateConfig}
             />
             <div className="table-wrapper">
                 <Table
                     columns={columns}
-                    dataSource={finalTableData}
+                    dataSource={sortedData}
                     scroll={{ x: scrollX }}
                     loading={isLoading}
-                    rowKey="bookingId"
+                    rowKey="id"
                     bordered
                     pagination={{
                         current: currentPage,
                         onChange: handlePageChange,
                         size: "large",
+                        total: statusCounts[filterValue] || 0,
                         pageSize: 10,
+                        showSizeChanger: false,
                     }}
                 />
             </div>
@@ -310,8 +321,13 @@ const Booking = () => {
                         isViewModalOpen={isViewModalOpen}
                         setIsViewModalOpen={setIsViewModalOpen}
                         selectedBooking={selectedBooking}
-                        onConfirmCancel={(id, reason) =>
-                            handleBookingStatusChange(id, reason, "cancel")
+                        onConfirmCancel={(id, reason, token) =>
+                            handleBookingStatusChange(
+                                id,
+                                reason,
+                                "cancel",
+                                token,
+                            )
                         }
                     />
                     <ConfirmModal

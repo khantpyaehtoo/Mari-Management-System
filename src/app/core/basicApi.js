@@ -5,7 +5,7 @@ export const baseApi = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         // http:// 192.168.0.182:8080/api/
-        baseUrl: "http://192.168.0.182:8080/api/",
+        baseUrl: "http://192.168.0.183:8080/api/",
         prepareHeaders: (headers) => {
             const token = CookieJS.get("lmsToken");
             if (token) {

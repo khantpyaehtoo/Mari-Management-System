@@ -1,7 +1,7 @@
-import { Tabs, Form, Typography, App } from "antd";
+import { Tabs, Form, Typography, App, Skeleton } from "antd";
 import { UserOutlined, LockOutlined, SoundOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
     useChangePasswordMutation,
     useUpdateAdminDataMutation,
@@ -15,14 +15,13 @@ import MediaUploadsSetting from "./Settings/MediaUploadsSetting";
 const { Title, Text } = Typography;
 
 const Settings = () => {
-    const { token } = useSelector((state) => state?.auth);
     const dispatch = useDispatch();
 
-    const { data: adminData } = useGetSettingsQuery(token);
-    const [changePassword, { isLoading: isChangingPassword }] =
-        useChangePasswordMutation();
+    const { data: adminData, isLoading } = useGetSettingsQuery();
     const [updateAdminData, { isLoading: isUpdatingAdmin }] =
         useUpdateAdminDataMutation();
+    const [changePassword, { isLoading: isChangingPassword }] =
+        useChangePasswordMutation();
 
     const containerRef = useRef(null);
     const [pillStyles, setPillStyles] = useState({ width: 0, left: 0 });
@@ -47,7 +46,6 @@ const Settings = () => {
 
     useEffect(() => {
         updatePillPosition(activeKey);
-
         const handleResize = () => updatePillPosition(activeKey);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -56,7 +54,7 @@ const Settings = () => {
     useEffect(() => {
         if (adminData) {
             form.setFieldsValue({
-                username: adminData.username || "Admin",
+                fullName: adminData.fullName || "Admin",
                 email: adminData.email || "admin@gmail.com",
                 phone: adminData.phone || "(+95) 9 956 145 223",
             });
@@ -66,7 +64,7 @@ const Settings = () => {
     const onFinishAccount = useCallback(
         async (values) => {
             try {
-                await updateAdminData({ adminData: values, token }).unwrap();
+                await updateAdminData({ adminData: values }).unwrap();
                 message.success("Account settings updated successfully!");
             } catch (error) {
                 message.error(
@@ -74,7 +72,7 @@ const Settings = () => {
                 );
             }
         },
-        [updateAdminData, token, message],
+        [updateAdminData, message],
     );
 
     const onFinishPassword = useCallback(
@@ -85,7 +83,6 @@ const Settings = () => {
                         oldPassword: values.currentPassword,
                         newPassword: values.newPassword,
                     },
-                    token,
                 }).unwrap();
                 message.success("Password changed successfully!");
                 passwordForm.resetFields();
@@ -95,7 +92,7 @@ const Settings = () => {
                 );
             }
         },
-        [changePassword, token, message, passwordForm],
+        [changePassword, message, passwordForm],
     );
 
     const uploadProps = useMemo(
@@ -125,6 +122,49 @@ const Settings = () => {
         [dispatch],
     );
 
+    const renderSkeleton = () => (
+        <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col lg:flex-row gap-8">
+            <div className="flex flex-col items-center lg:w-1/4 pt-4">
+                <Skeleton.Avatar active size={140} shape="circle" />
+                <Skeleton.Button active size="small" className="mt-4 w-32" />
+            </div>
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Skeleton.Button
+                        active
+                        size="small"
+                        className="mb-2 w-20"
+                    />
+                    <Skeleton.Input active block size="large" />
+                </div>
+                <div>
+                    <Skeleton.Button
+                        active
+                        size="small"
+                        className="mb-2 w-28"
+                    />
+                    <Skeleton.Input active block size="large" />
+                </div>
+                <div>
+                    <Skeleton.Button
+                        active
+                        size="small"
+                        className="mb-2 w-24"
+                    />
+                    <Skeleton.Input active block size="large" />
+                </div>
+                <div>
+                    <Skeleton.Button
+                        active
+                        size="small"
+                        className="mb-2 w-16"
+                    />
+                    <Skeleton.Input active block size="large" />
+                </div>
+            </div>
+        </div>
+    );
+
     const items = useMemo(
         () => [
             {
@@ -135,7 +175,9 @@ const Settings = () => {
                         Account
                     </span>
                 ),
-                children: (
+                children: isLoading ? (
+                    renderSkeleton()
+                ) : (
                     <AccountSettings
                         adminData={adminData}
                         form={form}
@@ -152,7 +194,9 @@ const Settings = () => {
                         Media & Uploads
                     </span>
                 ),
-                children: (
+                children: isLoading ? (
+                    renderSkeleton()
+                ) : (
                     <MediaUploadsSetting
                         uploadProps={uploadProps}
                         isUpdatingAdmin={isUpdatingAdmin}
@@ -167,7 +211,9 @@ const Settings = () => {
                         Security
                     </span>
                 ),
-                children: (
+                children: isLoading ? (
+                    renderSkeleton()
+                ) : (
                     <SecuritySettings
                         isChangingPassword={isChangingPassword}
                         onFinishPassword={onFinishPassword}
@@ -177,6 +223,7 @@ const Settings = () => {
             },
         ],
         [
+            isLoading,
             adminData,
             isUpdatingAdmin,
             form,

@@ -1,5 +1,7 @@
 import {
     InfoCircleOutlined,
+    MailOutlined,
+    PhoneOutlined,
     SaveOutlined,
     UploadOutlined,
     UserOutlined,
@@ -12,6 +14,11 @@ const AccountSettings = ({
     onFinishAccount,
     adminData,
 }) => {
+    const imageBaseUrl = "https://your-api-domain.com/uploads/";
+    const profilePicUrl = adminData?.profilePicture
+        ? `${imageBaseUrl}${adminData.profilePicture}`
+        : "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg";
+
     return (
         <Card
             title="Account Information"
@@ -38,7 +45,7 @@ const AccountSettings = ({
                             >
                                 <Avatar
                                     size={140}
-                                    src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
+                                    src={profilePicUrl}
                                     icon={<UserOutlined />}
                                     className="border-3! border-primary!"
                                 />
@@ -58,24 +65,34 @@ const AccountSettings = ({
                         form={form}
                         layout="vertical"
                         onFinish={onFinishAccount}
-                        initialValues={{
-                            username: adminData?.username || "Admin",
-                            email: adminData?.email || "admin@gmail.com",
-                            phone: adminData?.phone || "(+95) 9 xxx xxx xxx",
-                        }}
                     >
                         <Row gutter={[24, 0]}>
                             <Col xs={24} md={12}>
-                                <Form.Item label="Username" name="username">
+                                <Form.Item label="Full Name" name="fullName">
                                     <Input
-                                        prefix={<UserOutlined />}
+                                        prefix={
+                                            <UserOutlined className="me-2!" />
+                                        }
                                         className="input-styling!"
+                                        placeholder={
+                                            adminData?.fullName ||
+                                            "Enter full name"
+                                        }
                                     />
                                 </Form.Item>
                             </Col>
                             <Col xs={24} md={12}>
                                 <Form.Item label="Phone Number" name="phone">
-                                    <Input className="input-styling!" />
+                                    <Input
+                                        prefix={
+                                            <PhoneOutlined className="me-2!" />
+                                        }
+                                        className="input-styling!"
+                                        placeholder={
+                                            adminData?.phone ||
+                                            "Enter phone number"
+                                        }
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col xs={24} md={12}>
@@ -90,11 +107,20 @@ const AccountSettings = ({
                                         },
                                     ]}
                                 >
-                                    <Input className="input-styling!" />
+                                    <Input
+                                        prefix={
+                                            <MailOutlined className="me-2!" />
+                                        }
+                                        className="input-styling!"
+                                        placeholder={
+                                            adminData?.email ||
+                                            "Enter email address"
+                                        }
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col xs={24} md={12}>
-                                <Form.Item label="Role" name="role">
+                                <Form.Item label="Role">
                                     <div className="border-b pb-3">
                                         <Tag
                                             style={{
@@ -104,10 +130,11 @@ const AccountSettings = ({
                                                 padding: "5px 18px",
                                                 marginTop: "2px",
                                                 borderRadius: "10px",
+                                                textTransform: "uppercase",
                                             }}
                                             variant="filled"
                                         >
-                                            admin
+                                            {adminData?.role || "USER"}
                                         </Tag>
                                     </div>
                                 </Form.Item>

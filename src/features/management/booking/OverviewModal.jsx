@@ -2,6 +2,7 @@ import { Modal, Typography, Space, Button, Flex, Input, Skeleton } from "antd";
 import { useState } from "react";
 import { useBookingDetailsQuery } from "./bookingApi";
 import { cn } from "../../../lib/utils";
+import { useSelector } from "react-redux";
 
 const OverviewModal = ({
     isViewModalOpen,
@@ -11,13 +12,12 @@ const OverviewModal = ({
 }) => {
     const [isCancelling, setIsCancelling] = useState(false);
     const [cancelReason, setCancelReason] = useState("");
+    const token = useSelector((state) => state?.authSlice?.token);
 
     const { data: bookingDetails, isLoading } = useBookingDetailsQuery(
-        selectedBooking?.id,
-        { skip: !isViewModalOpen },
+        selectedBooking?.id, // First argument is ( Query Parameter )
+        { skip: !isViewModalOpen }, // Second argument is ( RTK query Option)
     );
-
-    console.log(bookingDetails);
 
     const handleClose = () => {
         setIsCancelling(false);
@@ -30,6 +30,7 @@ const OverviewModal = ({
             onConfirmCancel(
                 bookingDetails?.id || selectedBooking?.id,
                 cancelReason,
+                token,
             );
         }
         handleClose();

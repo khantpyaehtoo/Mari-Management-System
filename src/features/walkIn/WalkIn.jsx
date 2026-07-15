@@ -5,6 +5,7 @@ import TableHeaderSection from "../../components/tableHeaderSection/TableHeaderS
 import { EyeOutlined } from "@ant-design/icons";
 import WalkInDetailModal from "./WalkInDetailModal";
 import { useGetWalkinDataQuery } from "./walkInApi";
+import { useDebounce } from "../../lib/hooks/useDebounce";
 
 const { useBreakpoint } = Grid;
 
@@ -16,20 +17,33 @@ const WalkIn = () => {
     const [isDetailFormOpen, setIsDetailFormOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: walkInData = [] } = useGetWalkinDataQuery();
+    const debouncedSearchText = useDebounce(searchText, 500);
+    const { data: walkInData = [], isLoading } = useGetWalkinDataQuery({
+        page: currentPage - 1,
+        size: 10,
+        search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
+    });
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
 
     const handleViewDetail = (record) => {
-        console.log(record);
         setSelectedWalkin(record);
         setIsDetailFormOpen(true);
     };
 
+    const sortedWalkInData = useMemo(() => {
+        const rawData = walkInData?.content || walkInData || [];
+        return [...rawData].sort((a, b) => {
+            const dateTimeA = new Date(`${a.date} ${a.startTime}`);
+            const dateTimeB = new Date(`${b.date} ${b.startTime}`);
+            return dateTimeB - dateTimeA;
+        });
+    }, [walkInData]);
+
     const statusCounts = useMemo(() => {
         return {
-            All: walkInData?.length,
+            All: walkInData?.numberOfElements,
         };
     }, [walkInData]);
 
@@ -37,7 +51,9 @@ const WalkIn = () => {
         () => [
             {
                 title: "No.",
-                render: (_, __, index) => <p>{index + 1}</p>,
+                render: (_, __, index) => (
+                    <p>{(currentPage - 1) * 5 + index + 1}</p>
+                ),
             },
             {
                 title: "WalkIn Id",
@@ -46,29 +62,8 @@ const WalkIn = () => {
             },
             {
                 title: "Service Name",
-                dataIndex: "services",
+                dataIndex: "serviceName",
                 key: "serviceName",
-                render: (services) => (
-                    <section className="max-w-100 overflow-x-auto whitespace-nowrap p-3">
-                        {services.map((svc, i) => (
-                            <span key={i}>
-                                {svc.name}
-                                {i < services.length - 1 ? ", " : ""}
-                            </span>
-                        ))}
-                    </section>
-                ),
-                filteredValue: searchText ? [searchText] : null,
-                onFilter: (value, record) =>
-                    String(record.staffName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.serviceName)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    String(record.startedTime)
-                        .toLowerCase()
-                        .includes(value.toLowerCase()),
             },
             {
                 title: "Staff Name",
@@ -82,41 +77,29 @@ const WalkIn = () => {
             },
             {
                 title: "Started Time",
-                dataIndex: "startedTime",
-                key: "startedTime",
+                dataIndex: "startTime",
+                key: "startTime",
             },
             {
                 title: "Total Time",
-                dataIndex: "services",
+                dataIndex: "totalTime",
                 key: "totalTime",
-                render: (services) => {
-                    const totalTime = services.reduce(
-                        (sum, s) => sum + s.duration,
-                        0,
-                    );
-                    return <span>{totalTime}</span>;
-                },
             },
             {
                 title: "Total Amount",
-                dataIndex: "services",
                 key: "totalAmount",
-                render: (services) => {
-                    const totalAmount = services.reduce(
-                        (sum, s) => sum + s.baseAmount + (s.extraCharges || 0),
-                        0,
-                    );
-                    const totalExtraAmount = services.reduce(
-                        (sum, s) => sum + (s.extraCharges || 0),
-                        0,
-                    );
+                render: (_, record) => {
+                    const totalAmount =
+                        record.totalAmountDisplay ||
+                        `${record.totalAmount} MMK`;
+                    const extraAmount = record.extraAmount || 0;
 
                     return (
                         <Space>
                             <span>{totalAmount}</span>
-                            {totalExtraAmount > 0 && (
+                            {extraAmount > 0 && (
                                 <Tag color="green" variant="filled">
-                                    +{totalExtraAmount} Extra
+                                    +{extraAmount} MMK Extra
                                 </Tag>
                             )}
                         </Space>
@@ -136,11 +119,16 @@ const WalkIn = () => {
                 ),
             },
         ],
-        [searchText],
+        [currentPage],
     );
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchText(value);
+        setCurrentPage(1);
     };
 
     return (
@@ -148,7 +136,7 @@ const WalkIn = () => {
             <SubHeaderSection
                 title="Walk In"
                 subTitle="View and manage customers who visited without a booking."
-                setSearchText={setSearchText}
+                setSearchText={handleSearchChange}
                 placeholderTitle="Search ..."
             />
 
@@ -160,14 +148,16 @@ const WalkIn = () => {
             <div className="table-wrapper">
                 <Table
                     columns={column}
-                    dataSource={walkInData?.content || []}
+                    dataSource={sortedWalkInData}
+                    loading={isLoading}
+                    rowKey="id"
                     bordered
                     scroll={{ x: scrollX }}
                     pagination={{
                         current: currentPage,
                         onChange: handlePageChange,
                         size: "large",
-                        pageSize: 3,
+                        pageSize: 5,
                     }}
                 />
             </div>
