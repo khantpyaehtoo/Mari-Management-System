@@ -1,4 +1,4 @@
-import { baseApi } from "../../app/core/basicApi";
+import { baseApi } from "../../app/core/baseApi";
 const walkinEndpoint = "walkin";
 
 export const walkinApi = baseApi.injectEndpoints({

@@ -1,14 +1,16 @@
-import {
-    InboxOutlined,
-    PlusCircleOutlined,
-    UploadOutlined,
-} from "@ant-design/icons";
-import { Button, Modal, Space, Typography, Upload } from "antd";
-import heroBanner1 from "../../../../public/asset/mediaHero1.jpg";
-import trendingDesign from "../../../../public/asset/trending.jpg";
+import { message } from "antd";
 import { useState } from "react";
 
-const { Dragger } = Upload;
+import HeroBannerSection from "./HeroBannerSection";
+import TrendingUploadSection from "./TrendingUploadSection";
+import {
+    useDeleteHeroDesignMutation,
+    useDeleteTrendingDesignMutation,
+    useGetAllTrendingDesignQuery,
+    useGetAllVendorDesignQuery,
+    useTrendingUploadMutation,
+    useVendorUploadMutation,
+} from "./uploadApi";
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -17,13 +19,34 @@ const getBase64 = (file) =>
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
-const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
+
+const MediaUploadsSetting = () => {
+    // Modal States
     const [isHeroBannerFormOpen, setHeroBannerFormOpen] = useState(false);
     const [isTrendingFormOpen, setIsTrendingFormOpen] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
-    // const [fileList, setFileList] = useState([]);
 
+    const [fileList, setFileList] = useState([]); // for trending designs
+    const [heroFileList, setHeroFileList] = useState([]); // for hero banners
+
+    const { data: trendingDesignsData, isLoading: isFetchingDesigns } =
+        useGetAllTrendingDesignQuery();
+
+    const [trendingUpload, { isLoading: isUploadingTrending }] =
+        useTrendingUploadMutation();
+
+    const [deleteTrendingDesign] = useDeleteTrendingDesignMutation();
+
+    const { data: vendorDesignData, isLoading: isVendorDesignLoading } =
+        useGetAllVendorDesignQuery();
+
+    const [vendorUpload, { isLoading: isUploadingHero }] =
+        useVendorUploadMutation();
+
+    const [deleteHeroDesign] = useDeleteHeroDesignMutation();
+
+    // Image Preview Handling
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
@@ -32,243 +55,127 @@ const MediaUploadsSetting = ({ isUpdatingAdmin, uploadProps }) => {
         setPreviewOpen(true);
     };
 
+    // Handle File Change for Trending Upload
+    const handleUploadChange = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+    };
+
+    // Handle File Change for Hero Upload
+    const handleHeroUploadChange = ({ fileList: newFileList }) => {
+        setHeroFileList(newFileList);
+    };
+
+    // Handle Delete logic for Trending
+    const handleTrendingDeleteBtn = async (id) => {
+        try {
+            await deleteTrendingDesign(id).unwrap();
+            message.success("Deleted successfully!");
+        } catch (error) {
+            message.error(
+                error?.data?.message || "Failed to delete the design.",
+            );
+            console.error("Delete Error:", error);
+        }
+    };
+
+    // Handle Submit for Trending Upload
+    const handleTrendingSubmit = async () => {
+        if (fileList.length === 0) {
+            message.warning("Choose the picture first.");
+            return;
+        }
+
+        const formData = new FormData();
+        fileList.forEach((file) => {
+            formData.append("designImage", file.originFileObj);
+        });
+
+        try {
+            await trendingUpload(formData).unwrap();
+            message.success("Trending design uploaded successfully!");
+            setFileList([]); // reset file list
+            setIsTrendingFormOpen(false); // close modal
+        } catch (error) {
+            message.error(
+                error?.data?.message || "Something went wrong during upload.",
+            );
+            console.error(error);
+        }
+    };
+
+    // Handle Submit for Hero Banner Upload
+    const handleHeroSubmit = async () => {
+        if (heroFileList.length === 0) {
+            message.warning("Choose the picture first.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("bannerImage", heroFileList[0].originFileObj);
+
+        try {
+            await vendorUpload(formData).unwrap();
+            message.success("Hero banner uploaded successfully!");
+            setHeroFileList([]); // reset hero file list
+            setHeroBannerFormOpen(false); // close modal
+        } catch (error) {
+            message.error(
+                error?.data?.message ||
+                    "Something went wrong during hero upload.",
+            );
+            console.error(error);
+        }
+    };
+
+    // Handle Delete logic for Announcement Section
+    const handleAnnouncementDeleteBtn = async (id) => {
+        try {
+            await deleteHeroDesign(id).unwrap();
+            message.success("Deleted successfully!");
+        } catch (error) {
+            message.error(
+                error?.data?.message || "Failed to delete the design.",
+            );
+            console.error("Delete Error:", error);
+        }
+    };
+
     return (
         <div className="space-y-10">
             <div className="mb-20!">
-                <div className="flex justify-between items-center mb-10 mx-3 px-5">
-                    <Typography.Title level={3} className="font-medium!">
-                        Hero Banner & Promo Banner
-                    </Typography.Title>
-                    <Button
-                        variant="solid"
-                        icon={<PlusCircleOutlined />}
-                        className="createFormBtn!"
-                        onClick={() => setHeroBannerFormOpen(true)}
-                    >
-                        Add Banner
-                    </Button>
-                </div>
-                <article className="grid-items-4 mx-5">
-                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img
-                            src={heroBanner1}
-                            className="w-full h-auto object-cover"
-                        />
-                    </div>
-                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img
-                            src={heroBanner1}
-                            className="w-full h-auto object-cover"
-                        />
-                    </div>
-                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img
-                            src={heroBanner1}
-                            className="w-full h-auto object-cover"
-                        />
-                    </div>
-                    <div className="w-full border border-primary rounded-2xl cursor-pointer overflow-hidden focus-within:bg-amber-300">
-                        <img
-                            src={heroBanner1}
-                            className="w-full h-auto object-cover"
-                        />
-                    </div>
-                </article>
-                <Modal
-                    open={isHeroBannerFormOpen}
-                    onCancel={() => setHeroBannerFormOpen(false)}
-                    className="w-[80%]!"
-                    footer={null}
-                >
-                    <section className="flex gap-4 justify-between items-center mb-5 border-b border-gray-400 mt-5 pt-5 pb-5">
-                        <Space vertical>
-                            <h1 className="font-bold text-2xl">
-                                Home Screen Banner
-                            </h1>
-                        </Space>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon={<UploadOutlined />}
-                            loading={isUpdatingAdmin}
-                        >
-                            Upload
-                        </Button>
-                    </section>
-                    <section className="flex justify-between items-center mb-5 pb-5">
-                        <Space vertical>
-                            <h1 className="font-bold text-xl">Hero Banner</h1>
-                            <p className="w-[80%] text-xs">
-                                Shown full-width on the client booking home
-                                screen. Use a high-quality lifestyle image of
-                                your salon or nail work.
-                            </p>
-                        </Space>
-                        <div className="border border-gray-300 px-3 py-2 rounded-md">
-                            16:5 — 1600 × 500px
-                        </div>
-                    </section>
-                    <Dragger
-                        {...uploadProps}
-                        className="h-125! w-full max-w-100!"
-                    >
-                        <div className="p-5 md:p-15">
-                            <p className="ant-upload-drag-icon">
-                                <InboxOutlined />
-                            </p>
-                            <p className="ant-upload-text">
-                                Click or drag file to this area to upload
-                            </p>
-                        </div>
-                    </Dragger>
-                </Modal>
+                {/* Hero Banner Component */}
+                <HeroBannerSection
+                    isHeroBannerFormOpen={isHeroBannerFormOpen}
+                    setHeroBannerFormOpen={setHeroBannerFormOpen}
+                    isVendorDesignLoading={isVendorDesignLoading}
+                    vendorDesignData={vendorDesignData}
+                    heroFileList={heroFileList}
+                    handleHeroUploadChange={handleHeroUploadChange}
+                    handlePreview={handlePreview}
+                    isUploadingHero={isUploadingHero}
+                    handleHeroBannerSubmit={handleHeroSubmit}
+                    onDelete={handleAnnouncementDeleteBtn}
+                />
             </div>
 
-            <div className="flex justify-between items-center mx-3 px-5">
-                <Typography.Title level={3} className="font-medium!">
-                    Trending Designs
-                </Typography.Title>
-                <Button
-                    variant="solid"
-                    icon={<PlusCircleOutlined />}
-                    className="createFormBtn!"
-                    onClick={() => setIsTrendingFormOpen(true)}
-                >
-                    Add Banner
-                </Button>
-            </div>
-            <article className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 ms-6">
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                <div className="w-full border border-primary rounded-2xl overflow-hidden">
-                    <img
-                        src={trendingDesign}
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-            </article>
-
-            <Modal
-                open={isTrendingFormOpen}
-                onCancel={() => setIsTrendingFormOpen(false)}
-                footer={null}
-                className="w-[70%]!"
-                listType="picture-card"
-                onPreview={handlePreview}
-            >
-                <section className="rounded-2xl! mb-10!">
-                    <section className="gap-4 flex justify-between items-center mt-4 mb-10! border-b border-gray-400 pt-5 pb-5">
-                        <Space vertical>
-                            <h1 className="font-bold text-xl">
-                                Trending Nail Designs
-                            </h1>
-                            <p className="w-[80%]">
-                                Upload photos that appear in the 'Trending this
-                                season' carousel on your booking page
-                            </p>
-                        </Space>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon={<UploadOutlined />}
-                            loading={isUpdatingAdmin}
-                        >
-                            Upload
-                        </Button>
-                    </section>
-
-                    <Dragger
-                        {...uploadProps}
-                        className="h-125! w-full max-w-100!"
-                    >
-                        <div className="p-5 md:p-15">
-                            <p className="ant-upload-drag-icon">
-                                <InboxOutlined />
-                            </p>
-                            <p className="ant-upload-text">
-                                Click or drag file to this area to upload
-                            </p>
-                        </div>
-                    </Dragger>
-                    {previewImage && (
-                        <Image
-                            styles={{ root: { display: "none" } }}
-                            preview={{
-                                open: previewOpen,
-                                onOpenChange: (visible) =>
-                                    setPreviewOpen(visible),
-                                afterOpenChange: (visible) =>
-                                    !visible && setPreviewImage(""),
-                            }}
-                            src={previewImage}
-                        />
-                    )}
-                </section>
-            </Modal>
+            {/* Trending Design Component */}
+            <TrendingUploadSection
+                isFetchingDesigns={isFetchingDesigns}
+                setIsTrendingFormOpen={setIsTrendingFormOpen}
+                trendingDesignsData={trendingDesignsData}
+                isTrendingFormOpen={isTrendingFormOpen}
+                fileList={fileList}
+                setFileList={setFileList}
+                isUploadingTrending={isUploadingTrending}
+                handleTrendingSubmit={handleTrendingSubmit}
+                handleUploadChange={handleUploadChange}
+                handlePreview={handlePreview}
+                previewImage={previewImage}
+                setPreviewOpen={setPreviewOpen}
+                previewOpen={previewOpen}
+                setPreviewImage={setPreviewImage}
+                onDelete={handleTrendingDeleteBtn}
+            />
         </div>
     );
 };

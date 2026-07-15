@@ -1,4 +1,4 @@
-import { baseApi } from "../../app/core/basicApi";
+import { baseApi } from "../../app/core/baseApi";
 const authEndPoint = "/auth";
 const settingEndPoint = "profile";
 

@@ -1,4 +1,4 @@
-import { baseApi } from "../../app/core/basicApi";
+import { baseApi } from "../../app/core/baseApi";
 const staffPerformanceEndpoint = "staff-performance";
 const dashboardStatsEndpoint = "stats";
 const todayBookingListEndpoint = "today-bookings";

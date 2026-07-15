@@ -194,14 +194,7 @@ const Settings = () => {
                         Media & Uploads
                     </span>
                 ),
-                children: isLoading ? (
-                    renderSkeleton()
-                ) : (
-                    <MediaUploadsSetting
-                        uploadProps={uploadProps}
-                        isUpdatingAdmin={isUpdatingAdmin}
-                    />
-                ),
+                children: <MediaUploadsSetting uploadProps={uploadProps} />,
             },
             {
                 key: "4",
@@ -211,9 +204,7 @@ const Settings = () => {
                         Security
                     </span>
                 ),
-                children: isLoading ? (
-                    renderSkeleton()
-                ) : (
+                children: (
                     <SecuritySettings
                         isChangingPassword={isChangingPassword}
                         onFinishPassword={onFinishPassword}
