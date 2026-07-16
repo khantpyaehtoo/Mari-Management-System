@@ -1,51 +1,12 @@
-import { Card, Progress, Space, Table, Typography } from "antd";
+import { Card, Progress, Space, Spin, Table, Typography } from "antd";
 import ReportCards from "./ReportCards";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import ReportBarChart from "./ReportBarChart";
+import dayjs from "dayjs";
+import { useState } from "react";
+import { useGetReportChartDataQuery } from "./reportApi";
 
 // service
-const serviceDataSource = [
-    {
-        key: "1",
-        services: "Haircut & Styling",
-        appointment: 45,
-        walk: 15,
-        price: "$50",
-        revenue: "$3,000",
-        count: 60,
-        share: 40,
-    },
-    {
-        key: "2",
-        services: "Beard Trim & Shave",
-        appointment: 20,
-        walk: 25,
-        price: "$30",
-        revenue: "$1,350",
-        count: 45,
-        share: 30,
-    },
-    {
-        key: "3",
-        services: "Hair Coloring",
-        appointment: 12,
-        walk: 3,
-        price: "$120",
-        revenue: "$1,800",
-        count: 15,
-        share: 20,
-    },
-    {
-        key: "4",
-        services: "Facial & Skincare",
-        appointment: 8,
-        walk: 2,
-        price: "$75",
-        revenue: "$750",
-        count: 10,
-        share: 10,
-    },
-];
 const serviceColumns = [
     {
         title: "Services",
@@ -137,76 +98,8 @@ const bookingColumn = [
         key: "new-clients",
     },
 ];
-const bookingDataSource = [
-    {
-        key: "1",
-        date: "2026-07-01",
-        "total-bookings": 42,
-        cancelled: 3,
-        "walk-in": 12,
-        "active-staff": 5,
-        "total-revenue": "$2,450",
-        "top-service": "Haircut & Styling",
-        "new-clients": 8,
-    },
-    {
-        key: "2",
-        date: "2026-07-02",
-        "total-bookings": 38,
-        cancelled: 1,
-        "walk-in": 15,
-        "active-staff": 4,
-        "total-revenue": "$1,980",
-        "top-service": "Beard Trim & Shave",
-        "new-clients": 5,
-    },
-    {
-        key: "3",
-        date: "2026-07-03",
-        "total-bookings": 55,
-        cancelled: 4,
-        "walk-in": 22,
-        "active-staff": 6,
-        "total-revenue": "$3,620",
-        "top-service": "Hair Coloring",
-        "new-clients": 14,
-    },
-    {
-        key: "4",
-        date: "2026-07-04",
-        "total-bookings": 48,
-        cancelled: 2,
-        "walk-in": 9,
-        "active-staff": 5,
-        "total-revenue": "$2,890",
-        "top-service": "Haircut & Styling",
-        "new-clients": 7,
-    },
-    {
-        key: "5",
-        date: "2026-07-05",
-        "total-bookings": 30,
-        cancelled: 5,
-        "walk-in": 8,
-        "active-staff": 3,
-        "total-revenue": "$1,420",
-        "top-service": "Facial & Skincare",
-        "new-clients": 3,
-    },
-];
 
-// Employee Performance
-const dummyData = [
-    {
-        key: "1",
-        employeeInfo: "ST-0042",
-        name: "Phyu Phyu",
-        count: "115",
-        rating: "4.5",
-        revenue: "200,000",
-        commission: "20000",
-    },
-];
+// Staff Performance
 const column = [
     {
         title: "Staff Info",
@@ -236,11 +129,41 @@ const column = [
 ];
 
 const ReportsPage = () => {
+    const [selectedDate, setSelectedDate] = useState(dayjs());
+
+    const queryParams = {
+        period: "monthly",
+        month: selectedDate.format("MM"), // e.g., "07"
+        year: selectedDate.format("YYYY"), // e.g., "2026"
+    };
+
+    const {
+        data: reportResponse,
+        isFetching,
+        error,
+    } = useGetReportChartDataQuery(queryParams);
+
+    const chartData = reportResponse?.chartData || [];
+
+    const handleDateChange = (type, value) => {
+        if (type === "month") {
+            setSelectedDate(selectedDate.month(value));
+        } else if (type === "year") {
+            setSelectedDate(selectedDate.year(value));
+        }
+    };
+
+    const reportConfig = {
+        selectedDate: selectedDate,
+        onDateChange: handleDateChange,
+    };
+
     return (
         <>
             <SubHeaderSection
                 title="Reports & Analystics"
                 subTitle="View detailed reports and insights about bookings, revenue, and customer activity."
+                reportConfig={reportConfig}
             />
 
             <section className="mb-12">
@@ -248,11 +171,11 @@ const ReportsPage = () => {
                     level={2}
                     className="text-xl! font-medium! px-3 mt-5! mb-5!"
                 >
-                    Report Summary (May, 2026)
+                    Report Summary ({selectedDate.format("MMMM, YYYY")})
                 </Typography.Title>
 
                 <div className="mx-auto">
-                    <ReportCards />
+                    <ReportCards selectedDate={selectedDate} />
                 </div>
             </section>
 
@@ -261,13 +184,23 @@ const ReportsPage = () => {
                     level={2}
                     className="text-xl! font-medium! px-3 mb-5!"
                 >
-                    Daily Appointment and Monthly Revenue (June,2026)
+                    Daily Appointment and Monthly Revenue
                 </Typography.Title>
-
                 <div className="mx-auto">
                     <Card className="w-full shadow-sm p-4">
-                        <div className="relative w-full h-105!">
-                            <ReportBarChart />
+                        <div className="relative w-full h-105! flex items-center justify-center">
+                            {isFetching ? (
+                                <Spin
+                                    size="large"
+                                    description="Loading Chart Data..."
+                                />
+                            ) : error ? (
+                                <p className="text-red-500">
+                                    Failed to load chart data.
+                                </p>
+                            ) : (
+                                <ReportBarChart chartData={chartData} />
+                            )}
                         </div>
                     </Card>
                 </div>
@@ -284,7 +217,7 @@ const ReportsPage = () => {
                 <div className="table-wrapper">
                     <Table
                         columns={serviceColumns}
-                        dataSource={serviceDataSource}
+                        // dataSource={serviceDataSource}
                     />
                 </div>
             </section>
@@ -300,7 +233,7 @@ const ReportsPage = () => {
                 <div className="table-wrapper">
                     <Table
                         columns={bookingColumn}
-                        dataSource={bookingDataSource}
+                        // dataSource={bookingDataSource}
                     />
                 </div>
             </section>
@@ -319,7 +252,7 @@ const ReportsPage = () => {
                     </p>
                 </Space>
                 <div className="table-wrapper">
-                    <Table columns={column} dataSource={dummyData} />
+                    <Table columns={column} />
                 </div>
             </section>
         </>

@@ -5,6 +5,10 @@ import PackageForm from "./PackageForm";
 import PackageDeleteModal from "./PackageDeleteModal";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useGetAllServiceDataQuery } from "../services/servicesApi";
+import {
+    useCreatePackageMutation,
+    useUpdatePackageMutation,
+} from "./packageApi";
 
 const Packages = () => {
     const [searchText, setSearchText] = useState("");
@@ -13,6 +17,9 @@ const Packages = () => {
     const [selectedPackage, setSelectedPackage] = useState(null);
 
     const { data: servicesData = [], isLoading } = useGetAllServiceDataQuery();
+
+    const [createPackage] = useCreatePackageMutation();
+    const [updatePackage] = useUpdatePackageMutation();
 
     const searchPackages = useMemo(() => {
         return (
@@ -59,6 +66,8 @@ const Packages = () => {
                 placeholderTitle="Search package name..."
                 setSearchText={setSearchText}
                 searchText={searchText}
+                triggerCreate={createPackage}
+                triggerEdit={updatePackage}
             />
 
             <Row gutter={[16, 16]} className="mt-10!">

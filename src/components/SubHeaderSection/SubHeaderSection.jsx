@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { cn } from "../../lib/utils";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const SubHeaderSection = ({
     setSearchText,
@@ -23,6 +24,7 @@ const SubHeaderSection = ({
     triggerEdit,
     placeholderTitle,
     CalendarConfig,
+    reportConfig,
     formType,
     showBackButton = false,
 }) => {
@@ -38,22 +40,22 @@ const SubHeaderSection = ({
         setOpenCalForm,
     } = CalendarConfig || {};
 
-    const options = [
-        { label: "gold", value: "gold" },
-        { label: "lime", value: "lime" },
-        { label: "green", value: "green" },
-        { label: "cyan", value: "cyan" },
-    ];
-
-    const labelRender = (props) => {
-        const { label, value } = props;
-        return label ? value : <span>No option match</span>;
-    };
+    const { selectedDate, onDateChange } = reportConfig || {};
 
     const titleIncludes =
         title.includes("Staff Schedule and Calendar") ||
         title.includes("Reports & Analystics") ||
         title?.includes("Sent Notifications");
+
+    const currentYear = dayjs().year();
+    const years = Array.from(
+        { length: currentYear - 2020 + 1 },
+        (_, i) => currentYear - i,
+    );
+    const months = Array.from({ length: 12 }, (_, i) => ({
+        value: i,
+        label: dayjs().month(i).format("MMMM"),
+    }));
 
     return (
         <div
@@ -146,16 +148,19 @@ const SubHeaderSection = ({
                     {title.includes("Reports & Analystics") && (
                         <Space>
                             <Select
-                                labelRender={labelRender}
-                                defaultValue="1"
-                                style={{ width: "100%" }}
-                                options={options}
+                                value={selectedDate.month()} // returns 0-11 index natively
+                                style={{ width: 150 }}
+                                onChange={(val) => onDateChange("month", val)}
+                                options={months}
                             />
                             <Select
-                                labelRender={labelRender}
-                                defaultValue="1"
-                                style={{ width: "100%" }}
-                                options={options}
+                                value={selectedDate.year()} // returns full integer year
+                                style={{ width: 120 }}
+                                onChange={(val) => onDateChange("year", val)}
+                                options={years.map((y) => ({
+                                    value: y,
+                                    label: String(y),
+                                }))}
                             />
                         </Space>
                     )}

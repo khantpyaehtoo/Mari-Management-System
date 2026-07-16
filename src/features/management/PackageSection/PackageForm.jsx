@@ -15,8 +15,27 @@ const PackageForm = ({ form, isEditing, handleCancel, onSubmit }) => {
         label: service.name,
     }));
 
+    const handleValuesChange = (changedValues) => {
+        if (changedValues.serviceId) {
+            const selectedIds = changedValues.serviceId;
+
+            const totalPrice = allService
+                ?.filter((service) => selectedIds.includes(service.id))
+                ?.reduce((sum, service) => sum + Number(service.price || 0), 0);
+
+            form.setFieldsValue({
+                packagePrice: totalPrice > 0 ? totalPrice : undefined,
+            });
+        }
+    };
+
     return (
-        <Form layout="vertical" form={form} onFinish={onFinish}>
+        <Form
+            layout="vertical"
+            form={form}
+            onFinish={onFinish}
+            onValuesChange={handleValuesChange}
+        >
             <Form.Item
                 label="Service Name"
                 name="serviceId"
