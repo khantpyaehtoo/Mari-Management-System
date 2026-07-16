@@ -3,7 +3,6 @@ const bookingEndPoint = "booking-management";
 
 export const bookingApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        // Pass params as an object argument
         getAllBooking: builder.query({
             query: ({
                 status,
@@ -12,22 +11,18 @@ export const bookingApi = baseApi.injectEndpoints({
                 page = 0,
                 size,
                 search,
-            } = {}) => {
-                const params = new URLSearchParams();
-
-                if (status) params.append("status", status);
-                if (startDate) params.append("startDate", startDate);
-                if (endDate) params.append("endDate", endDate);
-                if (search) params.append("search", search);
-
-                params.append("page", page.toString());
-                params.append("size", size.toString());
-
-                return {
-                    url: `admin/${bookingEndPoint}/overview?${params.toString()}`,
-                    method: "GET",
-                };
-            },
+            } = {}) => ({
+                url: `admin/${bookingEndPoint}/overview`,
+                method: "GET",
+                params: {
+                    page,
+                    size,
+                    ...(status && { status }),
+                    ...(startDate && { startDate }),
+                    ...(endDate && { endDate }),
+                    ...(search && { search }),
+                },
+            }),
             providesTags: ["booking-management"],
         }),
 

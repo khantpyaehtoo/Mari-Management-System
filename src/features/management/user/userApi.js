@@ -1,15 +1,21 @@
 import { baseApi } from "../../../app/core/baseApi";
-const userEndpoint = "customer";
+const userEndpoint = "customers";
 
 // admin/staffs
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getUserData: builder.query({
-            query: () => ({
+        getAllUserData: builder.query({
+            query: ({ status, page = 0, size, search } = {}) => ({
                 url: `admin/${userEndpoint}`,
                 method: "GET",
+                params: {
+                    page,
+                    size,
+                    ...(status && { status }),
+                    ...(search && { search }),
+                },
             }),
-            providesTags: ["staffs"],
+            providesTags: ["customers"],
         }),
 
         getBlockUserData: builder.query({
@@ -31,7 +37,7 @@ export const userApi = baseApi.injectEndpoints({
 });
 
 export const {
+    useGetAllUserDataQuery,
     useBlockUserMutation,
-    useGetUserDataQuery,
     useGetBlockUserDataQuery,
 } = userApi;

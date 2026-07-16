@@ -4,117 +4,16 @@ import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSect
 import UserDetailModal from "./UserDetailModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
-import { useBlockUserMutation, useGetBlockUserDataQuery } from "./userApi";
+import {
+    useBlockUserMutation,
+    useGetAllUserDataQuery,
+    useGetBlockUserDataQuery,
+} from "./userApi";
 import CustomerSummaryCard from "./CustomerSummaryCard";
+import { useDebounce } from "../../../lib/hooks/useDebounce";
 
 const { useBreakpoint } = Grid;
-const dummyData = [
-    {
-        key: "1",
-        customerId: "CUST-001",
-        fullName: "John Doe",
-        username: "johndoe99",
-        customerName: "John Doe",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-        contact: {
-            phone: "+1 (555) 019-2834",
-            email: "john.doe@gmail.com",
-        },
-        gender: "Male",
-        joinedDate: "2024-01-15",
-        count: 12,
-    },
-    {
-        key: "2",
-        customerId: "CUST-002",
-        fullName: "Jane Smith",
-        username: "janesmith_dev",
-        customerName: "Jane Smith",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
-        contact: {
-            phone: "+1 (555) 014-4921",
-            email: "janesmith.dev@gmail.com",
-        },
-        gender: "Female",
-        joinedDate: "2024-02-20",
-        count: 5,
-    },
-    {
-        key: "3",
-        customerId: "CUST-003",
-        fullName: "Alex Rivera",
-        username: "arivera",
-        customerName: "Alex Rivera",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-        contact: {
-            phone: "+1 (555) 017-8833",
-            email: "alex.rivera94@gmail.com",
-        },
-        gender: "Non-binary",
-        joinedDate: "2023-11-05",
-        count: 24,
-    },
-    {
-        key: "4",
-        customerId: "CUST-002",
-        fullName: "Jane Smith",
-        username: "janesmith_dev",
-        customerName: "Jane Smith",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
-        contact: {
-            phone: "+1 (555) 014-4921",
-            email: "janesmith.dev@gmail.com",
-        },
-        gender: "Female",
-        joinedDate: "2024-02-20",
-        count: 5,
-    },
-    {
-        key: "5",
-        customerId: "CUST-002",
-        fullName: "Jane Smith",
-        username: "janesmith_dev",
-        customerName: "Jane Smith",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
-        contact: {
-            phone: "+1 (555) 014-4921",
-            email: "janesmith.dev@gmail.com",
-        },
-        gender: "Female",
-        joinedDate: "2024-02-20",
-        count: 5,
-    },
-    {
-        key: "6",
-        customerId: "CUST-002",
-        fullName: "Jane Smith",
-        username: "janesmith_dev",
-        customerName: "Jane Smith",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
-        contact: {
-            phone: "+1 (555) 014-4921",
-            email: "janesmith.dev@gmail.com",
-        },
-        gender: "Female",
-        joinedDate: "2024-02-20",
-        count: 5,
-    },
-    {
-        key: "7",
-        customerId: "CUST-002",
-        fullName: "Jane Smith",
-        username: "janesmith_dev",
-        customerName: "Jane Smith",
-        profileUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
-        contact: {
-            phone: "+1 (555) 014-4921",
-            email: "janesmith.dev@gmail.com",
-        },
-        gender: "Female",
-        joinedDate: "2024-02-20",
-        count: 5,
-    },
-];
+
 const User = () => {
     const dispatch = useDispatch();
 
@@ -123,7 +22,7 @@ const User = () => {
 
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
-    // const [filteredValue, setFilteredValue] = useState("All");
+    const [filteredValue, setFilteredValue] = useState("All");
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
@@ -131,9 +30,19 @@ const User = () => {
     const [blockCustomer] = useBlockUserMutation();
     const { data: getBlockUserData } = useGetBlockUserDataQuery();
 
-    // const filterBtn = () => {
-    //     setFilteredValue(getBlockUserData);
-    // };
+    const statusParam =
+        !filteredValue || filteredValue === "All"
+            ? undefined
+            : String(filteredValue).toLowerCase();
+
+    const debouncedSearchText = useDebounce(searchText, 300);
+
+    const { data: getAllUser, isLoading } = useGetAllUserDataQuery({
+        page: currentPage - 1,
+        size: 10,
+        status: statusParam,
+        search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
+    });
 
     const handleViewDetail = useCallback((record) => {
         console.log(record);
@@ -176,26 +85,14 @@ const User = () => {
         () => [
             {
                 title: "No.",
-                render: (_, __, index) => <p>{index + 1}</p>,
+                render: (_, __, index) => (
+                    <p>{(currentPage - 1) * 10 + index + 1}</p>
+                ),
             },
             {
                 title: "Customer Id",
                 dataIndex: "customerId",
                 key: "customerId",
-                filteredValue: searchText ? [searchText] : null,
-                onFilter: (value, record) => {
-                    return (
-                        String(record.customerId)
-                            .toLowerCase()
-                            .includes(value.toLowerCase()) ||
-                        String(record.fullName)
-                            .toLowerCase()
-                            .includes(value.toLowerCase()) ||
-                        String(record.username)
-                            .toLowerCase()
-                            .includes(value.toLowerCase())
-                    );
-                },
             },
             {
                 title: "Customer Name",
@@ -204,18 +101,17 @@ const User = () => {
             },
             {
                 title: "Profile",
-                dataIndex: "profileUrl",
-                key: "profileUrl",
-                render: (profileUrl) => <Avatar src={profileUrl} />,
+                dataIndex: "profilePicture",
+                key: "profilePicture",
+                render: (profilePicture) => <Avatar src={profilePicture} />,
             },
             {
                 title: "Contact",
-                dataIndex: "contact",
                 key: "contact",
-                render: (contact) => (
+                render: (_, record) => (
                     <div>
                         <p style={{ margin: 0, fontWeight: 500 }}>
-                            {contact.phone}
+                            {record.phoneNumber}
                         </p>
                         <p
                             style={{
@@ -224,7 +120,7 @@ const User = () => {
                                 color: "#8c8c8c",
                             }}
                         >
-                            {contact.email}
+                            {record.email}
                         </p>
                     </div>
                 ),
@@ -236,13 +132,13 @@ const User = () => {
             },
             {
                 title: "Joined Date",
-                dataIndex: "joinedDate",
-                key: "joinedDate",
+                dataIndex: "joinDate",
+                key: "joinDate",
             },
             {
                 title: "Booking Count",
-                dataIndex: "count",
-                key: "count",
+                dataIndex: "bookingCount",
+                key: "bookingCount",
             },
             {
                 title: "Action",
@@ -257,10 +153,9 @@ const User = () => {
                 ),
             },
         ],
-        [searchText, handleViewDetail],
+        [currentPage, handleViewDetail],
     );
 
-    // console.log(currentPage);
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
@@ -275,26 +170,28 @@ const User = () => {
             />
 
             <CustomerSummaryCard
-                dummyData={dummyData}
-                data={getBlockUserData}
+                getAllUserData={getAllUser}
+                getBlockUserData={getBlockUserData}
+                setFilteredValue={setFilteredValue}
+                filteredValue={filteredValue}
             />
 
             <div className="table-wrapper">
                 <Table
+                    loading={isLoading}
                     columns={columns}
-                    dataSource={dummyData}
+                    dataSource={getAllUser?.content || []}
+                    rowKey="id"
                     scroll={{ x: scrollX }}
                     pagination={{
                         current: currentPage,
                         onChange: handlePageChange,
                         size: "large",
-                        pageSize: 5,
-                        // placement: ["topEnd"],
+                        pageSize: 10,
                     }}
                     bordered
                 />
             </div>
-
             {selectedCustomer && (
                 <UserDetailModal
                     viewModalOpen={viewModalOpen}
