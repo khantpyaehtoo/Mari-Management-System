@@ -25,15 +25,15 @@ const TerminateStaffModal = ({
                 <>
                     <Space size="large" className="w-full py-4">
                         <Avatar
-                            src={selectedStaff.profileUrl}
+                            src={selectedStaff.profileImage}
                             size="large"
                             className="w-15! h-15!"
                         />
                         <Space vertical>
                             <h1 className="text-xl font-semibold">
-                                {selectedStaff.name}
+                                {selectedStaff.staffName}
                             </h1>
-                            <p>{selectedStaff.staffId}</p>
+                            <p>{selectedStaff.staffCode}</p>
                         </Space>
                     </Space>
                     <p className="text-xl py-3 mb-5">

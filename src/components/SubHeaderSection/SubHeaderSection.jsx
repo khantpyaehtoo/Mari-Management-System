@@ -8,6 +8,7 @@ import {
 import { cn } from "../../lib/utils";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { useMemo } from "react";
 
 const SubHeaderSection = ({
     setSearchText,
@@ -44,7 +45,7 @@ const SubHeaderSection = ({
 
     const titleIncludes =
         title.includes("Staff Schedule and Calendar") ||
-        title.includes("Reports & Analystics") ||
+        title.includes("Reports & Analytics") ||
         title?.includes("Sent Notifications");
 
     const currentYear = dayjs().year();
@@ -53,10 +54,18 @@ const SubHeaderSection = ({
         (_, i) => currentYear - i,
     );
 
-    const months = Array.from({ length: 12 }, (_, i) => ({
-        value: i,
-        label: dayjs().month(i).format("MMMM"),
-    }));
+    const months = useMemo(() => {
+        const selectedYear = selectedDate ? selectedDate.year() : currentYear;
+        const currentMonthIndex = dayjs().month();
+
+        const totalMonthsToShow =
+            selectedYear === currentYear ? currentMonthIndex + 1 : 12;
+
+        return Array.from({ length: totalMonthsToShow }, (_, i) => ({
+            value: i,
+            label: dayjs().month(i).format("MMMM"),
+        }));
+    }, [selectedDate, currentYear]);
 
     return (
         <div
@@ -146,7 +155,7 @@ const SubHeaderSection = ({
                         </Space>
                     )}
 
-                    {title.includes("Reports & Analystics") && (
+                    {title.includes("Reports & Analytics") && (
                         <Space>
                             <Select
                                 value={selectedDate.month()} // returns 0-11 index natively

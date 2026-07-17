@@ -21,6 +21,7 @@ import TerminateStaffModal from "./TerminateStaffModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
+import dayjs from "dayjs";
 
 const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
@@ -270,11 +271,17 @@ const Staff = () => {
                 title: "Date Of Birth",
                 dataIndex: "dateOfBirth",
                 key: "dateOfBirth",
+                render: (dob) => {
+                    return dob && <p>{dayjs(dob).format("DD . MM . YYYY")}</p>;
+                },
             },
             {
                 title: "Joined Date",
                 dataIndex: "joinedDate",
                 key: "joinedDate",
+                render: (jd) => {
+                    return jd && <p>{dayjs(jd).format("DD . MM . YYYY")}</p>;
+                },
             },
             {
                 title: "Count",
@@ -285,6 +292,13 @@ const Staff = () => {
                 title: "Rating",
                 dataIndex: "ratingAverage",
                 key: "ratingAverage",
+                render: (rating) => {
+                    return rating !== undefined && rating !== null ? (
+                        <p>⭐ {Number(rating).toFixed(1)}</p>
+                    ) : (
+                        <p>-</p>
+                    );
+                },
             },
             {
                 title: "Status",

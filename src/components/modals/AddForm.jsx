@@ -133,10 +133,16 @@ const AddForm = ({
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText={isEdit ? "Update" : "Create"}
-                destroyOnHidden={true}
-                forceRender={false}
+                destroyOnHidden
+                forceRender
             >
-                {ActiveComponent && <ActiveComponent form={form} />}
+                {ActiveComponent && (
+                    <ActiveComponent
+                        form={form}
+                        isEdit={isEdit}
+                        initialValue={initialValue}
+                    />
+                )}
             </Modal>
         </>
     );

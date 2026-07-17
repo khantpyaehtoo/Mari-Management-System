@@ -221,7 +221,7 @@ const Packages = () => {
                             xl={6}
                             className="flex"
                         >
-                            <Card className="w-full border border-gray-200! rounded-xl shadow-xs hover:shadow-md transition-all duration-300 bg-white">
+                            <Card className="w-full border border-gray-200! rounded-xl shadow-xs hover:shadow-md transition-all duration-300 bg-white flex flex-col h-full justify-between">
                                 {/* Header Section */}
                                 <h1 className="text-lg font-bold text-gray-800 mb-4 line-clamp-1">
                                     {item.name}

@@ -7,9 +7,14 @@ const ServiceForm = ({ form, isEdit, initialValue }) => {
     useEffect(() => {
         if (isEdit && initialValue) {
             form.setFieldsValue({
-                name: initialValue.name,
-                price: initialValue.price?.toString().replace(/[^0-8]/g, ""),
-                durationInMinutes: initialValue.durationInMinutes,
+                name: initialValue?.name,
+                price: initialValue.price
+                    ? String(initialValue.price).replace(/[^0-9]/g, "")
+                    : "",
+                durationInMinutes:
+                    initialValue.durationInMinutes ||
+                    initialValue.duration ||
+                    "",
             });
         } else {
             form.resetFields();
@@ -33,20 +38,15 @@ const ServiceForm = ({ form, isEdit, initialValue }) => {
                     },
                 ]}
             >
-                <Input
-                    placeholder={
-                        isEdit && initialValue?.name
-                            ? initialValue.name
-                            : "Service name"
-                    }
-                    className="input-styling!"
-                />
+                <Input placeholder="Service name" className="input-styling!" />
             </Item>
 
             <Space className="w-full flex" size="large">
                 <Item
                     label={
-                        <label className="label-styling">Service Price</label>
+                        <label className="label-styling">
+                            Service Price (MMK)
+                        </label>
                     }
                     name="price"
                     rules={[
@@ -57,18 +57,17 @@ const ServiceForm = ({ form, isEdit, initialValue }) => {
                     ]}
                 >
                     <Input
-                        placeholder={
-                            isEdit && initialValue?.price
-                                ? `${initialValue.price} MMK`
-                                : "Enter the Service price"
-                        }
+                        type="number"
+                        placeholder="Enter the Service price"
                         className="input-styling!"
                     />
                 </Item>
 
                 <Item
                     label={
-                        <label className="label-styling">Time Duration</label>
+                        <label className="label-styling">
+                            Time Duration (mins)
+                        </label>
                     }
                     name="durationInMinutes"
                     rules={[
@@ -79,13 +78,8 @@ const ServiceForm = ({ form, isEdit, initialValue }) => {
                     ]}
                 >
                     <Input
-                        placeholder={
-                            isEdit &&
-                            (initialValue?.durationInMinutes ||
-                                initialValue?.duration)
-                                ? `${initialValue.durationInMinutes} mins`
-                                : "Time Duration (e.g. 50 mins)"
-                        }
+                        type="number"
+                        placeholder="Time Duration (e.g. 50)"
                         className="input-styling!"
                     />
                 </Item>

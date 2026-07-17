@@ -18,6 +18,14 @@ export const userApi = baseApi.injectEndpoints({
             providesTags: ["customers"],
         }),
 
+        getDetailUser: builder.query({
+            query: (id) => ({
+                url: `admin/${userEndpoint}/${id}/detail`,
+                method: "GET",
+            }),
+            providesTags: ["customers"],
+        }),
+
         getBlockUserData: builder.query({
             query: () => ({
                 url: `admin/${userEndpoint}/block`,
@@ -27,17 +35,18 @@ export const userApi = baseApi.injectEndpoints({
         }),
 
         blockUser: builder.mutation({
-            query: (customerId) => ({
-                url: `admin/${userEndpoint}/${customerId}/block`,
+            query: (id) => ({
+                url: `admin/${userEndpoint}/${id}/block`,
                 method: "POST",
             }),
-            invalidatesTags: ["staffs"],
+            invalidatesTags: ["customers", "block"],
         }),
     }),
 });
 
 export const {
     useGetAllUserDataQuery,
+    useGetDetailUserQuery,
     useBlockUserMutation,
     useGetBlockUserDataQuery,
 } = userApi;

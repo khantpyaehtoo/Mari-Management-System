@@ -100,7 +100,7 @@ const StaffDetailModal = ({
                     </Space>
 
                     <Space
-                        direction="vertical"
+                        vertical
                         className="border-b w-full py-3"
                         size="middle"
                     >

@@ -4,14 +4,6 @@ const categoryEndpoint = "categories";
 
 export const servicesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getCategorybyId: builder.query({
-            query: (id) => ({
-                url: `${serviceEndpoint}/${id}`,
-                method: "GET",
-            }),
-            providesTags: ["categories"],
-        }),
-
         getCategoryData: builder.query({
             query: () => ({
                 url: `${categoryEndpoint}`,

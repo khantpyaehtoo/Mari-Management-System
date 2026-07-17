@@ -8,9 +8,14 @@ const serviceTrendingPieChart = "service-trending";
 export const dashboardApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getDashBoardCardStats: builder.query({
-            query: () => ({
+            query: ({ period, month, year } = {}) => ({
                 url: `admin/dashboard/${dashboardStatsEndpoint}`,
                 method: "GET",
+                params: {
+                    ...(period && { period }),
+                    ...(month && { month }),
+                    ...(year && { year }),
+                },
             }),
             providesTags: ["stats"],
         }),
@@ -23,18 +28,29 @@ export const dashboardApi = baseApi.injectEndpoints({
             providesTags: ["chart"],
         }),
 
+        // period month year is for reports page
         getStaffPerform: builder.query({
-            query: () => ({
+            query: ({ period, month, year } = {}) => ({
                 url: `admin/dashboard/${staffPerformanceEndpoint}`,
                 method: "GET",
+                params: {
+                    ...(period && { period }),
+                    ...(month && { month }),
+                    ...(year && { year }),
+                },
             }),
             providesTags: ["staff-performance"],
         }),
 
         getServicePieChart: builder.query({
-            query: () => ({
+            query: ({ period, month, year } = {}) => ({
                 url: `admin/dashboard/${serviceTrendingPieChart}`,
                 method: "GET",
+                params: {
+                    ...(period && { period }),
+                    ...(month && { month }),
+                    ...(year && { year }),
+                },
             }),
             providesTags: ["service-trending"],
         }),

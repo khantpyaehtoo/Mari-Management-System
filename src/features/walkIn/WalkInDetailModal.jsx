@@ -2,7 +2,6 @@ import { Modal, Typography, Flex, Space, Spin } from "antd";
 import { useGetWalkinByIdQuery } from "./walkInApi";
 
 const WalkInDetailModal = ({ selectedWalkin, isOpen, onClose }) => {
-    // Only trigger the query if the modal is open and we have an ID
     const { data: walkinDetails, isLoading } = useGetWalkinByIdQuery(
         selectedWalkin?.id,
         { skip: !isOpen || !selectedWalkin?.id },

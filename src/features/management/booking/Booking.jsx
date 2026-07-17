@@ -136,10 +136,13 @@ const Booking = () => {
         const rawData = Array.isArray(bookingsdata) ? bookingsdata : [];
 
         return [...rawData].sort((a, b) => {
-            const dateTimeA = new Date(`${a.date} ${a.startTime}`);
-            const dateTimeB = new Date(`${b.date} ${b.startTime}`);
+            const timeA = a.bookTime || a.startTime || "";
+            const timeB = b.bookTime || b.startTime || "";
 
-            return dateTimeB - dateTimeA;
+            const dateTimeA = dayjs(`${a.date} ${timeA}`);
+            const dateTimeB = dayjs(`${b.date} ${timeB}`);
+
+            return dateTimeB.valueOf() - dateTimeA.valueOf();
         });
     }, [bookingsdata]);
 
@@ -202,6 +205,11 @@ const Booking = () => {
                 title: "Date",
                 dataIndex: "date",
                 key: "date",
+                render: (date) => {
+                    return (
+                        date && <p>{dayjs(date).format("DD . MMM . YYYY")}</p>
+                    );
+                },
             },
             {
                 title: "During Time",

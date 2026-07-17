@@ -113,7 +113,13 @@ const Dashboard = () => {
             title: "Client Rating",
             dataIndex: "ratingAverage",
             key: "ratingAverage",
-            render: (rating) => `⭐ ${rating}`,
+            render: (rating) => {
+                return rating !== undefined && rating !== null ? (
+                    <p>⭐ {Number(rating).toFixed(1)}</p>
+                ) : (
+                    <p>-</p>
+                );
+            },
         },
         {
             title: "Revenue",
@@ -180,7 +186,7 @@ const Dashboard = () => {
                             level={3}
                             className="text-xl! font-medium!"
                         >
-                            Nail Artist’s Performance (Monthly)
+                            Staff’s Performance (Monthly)
                         </Typography.Title>
                         <p className="text-gray-600">
                             Track completed bookings, customer ratings, and

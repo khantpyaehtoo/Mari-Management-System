@@ -28,21 +28,42 @@ const User = () => {
     const scrollX = screens.xs ? undefined : "1500";
 
     const [blockCustomer] = useBlockUserMutation();
-    const { data: getBlockUserData } = useGetBlockUserDataQuery();
+
+    // Fetch blocked users data
+    const { data: getBlockUserData, isLoading: isBlockedLoading } =
+        useGetBlockUserDataQuery(undefined, {
+            skip: filteredValue !== "Blocked",
+        });
 
     const statusParam =
-        !filteredValue || filteredValue === "All"
+        !filteredValue || filteredValue === "All" || filteredValue === "Blocked"
             ? undefined
             : String(filteredValue).toLowerCase();
 
     const debouncedSearchText = useDebounce(searchText, 300);
 
-    const { data: getAllUser, isLoading } = useGetAllUserDataQuery({
-        page: currentPage - 1,
-        size: 10,
-        status: statusParam,
-        search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
-    });
+    // Fetch all/paginated customer data
+    const { data: getAllUser, isLoading: isAllLoading } =
+        useGetAllUserDataQuery(
+            {
+                page: currentPage - 1,
+                size: 10,
+                status: statusParam,
+                search: debouncedSearchText
+                    ? debouncedSearchText.trim()
+                    : undefined,
+            },
+            { skip: filteredValue === "Blocked" },
+        );
+
+    // Dynamically switch DataSource and Loading states based on Card selection
+    const isBlockedView = filteredValue === "Blocked";
+
+    const currentTableData = isBlockedView
+        ? getBlockUserData?.content || getBlockUserData || []
+        : getAllUser?.content || [];
+
+    const isTableLoading = isBlockedView ? isBlockedLoading : isAllLoading;
 
     const handleViewDetail = useCallback((record) => {
         console.log(record);
@@ -178,17 +199,24 @@ const User = () => {
 
             <div className="table-wrapper">
                 <Table
-                    loading={isLoading}
+                    loading={isTableLoading}
                     columns={columns}
-                    dataSource={getAllUser?.content || []}
+                    dataSource={currentTableData}
                     rowKey="id"
                     scroll={{ x: scrollX }}
-                    pagination={{
-                        current: currentPage,
-                        onChange: handlePageChange,
-                        size: "large",
-                        pageSize: 10,
-                    }}
+                    pagination={
+                        isBlockedView
+                            ? false
+                            : {
+                                  current: currentPage,
+                                  onChange: handlePageChange,
+                                  size: "large",
+                                  pageSize: 10,
+                                  total:
+                                      getAllUser?.totalElements ||
+                                      currentTableData.length,
+                              }
+                    }
                     bordered
                 />
             </div>

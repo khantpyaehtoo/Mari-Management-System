@@ -75,6 +75,7 @@ const CategoryDetails = () => {
                 }),
             );
 
+            // console.log("click", selectedService.id);
             setDeleteModalOpen(false);
         } catch (error) {
             console.error("Delete failed:", error);
@@ -133,6 +134,8 @@ const CategoryDetails = () => {
     };
 
     const isLoading = isCategoryLoading || isServicesLoading;
+
+    // console.log(selectedService);
 
     return (
         <>
@@ -224,7 +227,7 @@ const CategoryDetails = () => {
                                         }
                                         className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
                                     >
-                                        <Trash2 size={14} className="mr-1" />{" "}
+                                        <Trash2 size={14} />
                                         Delete
                                     </Button>
                                 </div>
