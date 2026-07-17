@@ -1,14 +1,14 @@
 import { baseApi } from "../../../app/core/baseApi";
-const staffEndPoint = "staffs";
+const staffEndPoint = "staff-performance";
 
 const staffApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getStaffData: builder.query({
             query: () => ({
-                url: `${staffEndPoint}`,
+                url: `admin/dashboard/${staffEndPoint}`,
                 method: "GET",
             }),
-            providesTags: ["staffs"],
+            providesTags: ["staff-performance"],
         }),
 
         createStaff: builder.mutation({

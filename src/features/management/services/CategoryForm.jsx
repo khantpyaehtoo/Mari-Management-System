@@ -1,7 +1,6 @@
 import { Form, Input } from "antd";
 
-const CategoryForm = () => {
-    const [form] = Form.useForm();
+const CategoryForm = ({ form }) => {
     const { Item } = Form;
     return (
         <Form
@@ -12,7 +11,7 @@ const CategoryForm = () => {
         >
             <Item
                 label={<label className="label-styling">Category Name</label>}
-                name="service-name"
+                name="name"
                 rules={[
                     {
                         required: true,

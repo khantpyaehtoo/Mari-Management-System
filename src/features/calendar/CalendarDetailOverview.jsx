@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { X } from "lucide-react";
 
 const CalendarDetailOverview = ({
-    details,
+    details, // CalendarSection ကနေ dayData.events ကို လှမ်းပေးလိုက်တဲ့ Array ဖြစ်ပါတယ်
     selectedDate,
     setActivePopoverDate,
 }) => {
@@ -11,11 +11,12 @@ const CalendarDetailOverview = ({
         ? dayjs(selectedDate).format("dddd, DD MMMM")
         : "";
 
-    const getTypeTag = (type, leaveType) => {
-        if (type === "DAY_OFF") return <Tag color="warning">Day OFF</Tag>;
-        if (type === "leave")
-            return <Tag color="error">Leave ({leaveType || "PERSONAL"})</Tag>;
-        return <Tag color="success">Active</Tag>;
+    // API Doc အရ leaveType ပေါ်မူတည်ပြီး Tag အရောင် ခွဲထုတ်ပါမယ်
+    const getTypeTag = (leaveType) => {
+        if (leaveType === "DAYOFF") {
+            return <Tag color="warning">Day OFF</Tag>;
+        }
+        return <Tag color="error">Leave ({leaveType || "PERSONAL"})</Tag>;
     };
 
     return (
@@ -25,7 +26,7 @@ const CalendarDetailOverview = ({
         >
             <Flex
                 justify="space-between"
-                item="center"
+                align="center"
                 className="border-b pb-2 mb-3!"
             >
                 <Typography.Text className="font-semibold text-base text-gray-700">
@@ -47,17 +48,20 @@ const CalendarDetailOverview = ({
                         >
                             <Flex align="center" justify="space-between">
                                 <Space size="middle">
-                                    <Avatar src={staff.avatar} size={36} />
+                                    <Avatar
+                                        src={staff.profileImage}
+                                        size={36}
+                                    />
                                     <div>
                                         <h4 className="font-semibold text-sm m-0 text-gray-800">
-                                            {staff.name}
+                                            {staff.staffName || "Unknown Staff"}
                                         </h4>
                                         <p className="text-xs text-gray-400 m-0">
-                                            {staff.role}
+                                            {staff.role || "STAFF"}
                                         </p>
                                     </div>
                                 </Space>
-                                {getTypeTag(staff.type, staff.leave_type)}
+                                {getTypeTag(staff.leaveType)}
                             </Flex>
                         </div>
                     ))

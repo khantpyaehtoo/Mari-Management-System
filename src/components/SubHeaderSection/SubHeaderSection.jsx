@@ -52,6 +52,7 @@ const SubHeaderSection = ({
         { length: currentYear - 2020 + 1 },
         (_, i) => currentYear - i,
     );
+
     const months = Array.from({ length: 12 }, (_, i) => ({
         value: i,
         label: dayjs().month(i).format("MMMM"),

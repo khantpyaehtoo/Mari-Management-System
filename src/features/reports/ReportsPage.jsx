@@ -133,8 +133,8 @@ const ReportsPage = () => {
 
     const queryParams = {
         period: "monthly",
-        month: selectedDate.format("MM"), // e.g., "07"
-        year: selectedDate.format("YYYY"), // e.g., "2026"
+        month: selectedDate.format("MM"),
+        year: selectedDate.format("YYYY"),
     };
 
     const {
@@ -184,7 +184,8 @@ const ReportsPage = () => {
                     level={2}
                     className="text-xl! font-medium! px-3 mb-5!"
                 >
-                    Daily Appointment and Monthly Revenue
+                    Daily Appointment and Monthly Revenue (
+                    {selectedDate.format("MMMM, YYYY")})
                 </Typography.Title>
                 <div className="mx-auto">
                     <Card className="w-full shadow-sm p-4">
@@ -211,7 +212,7 @@ const ReportsPage = () => {
                     level={2}
                     className="text-xl! font-medium! px-3 mb-5!"
                 >
-                    Revenue by Service (June, 2026)
+                    Revenue by Service ({selectedDate.format("MMMM, YYYY")})
                 </Typography.Title>
 
                 <div className="table-wrapper">
@@ -227,7 +228,7 @@ const ReportsPage = () => {
                     level={2}
                     className="text-xl! font-medium! px-3 mb-5!"
                 >
-                    June, 2026 Overview
+                    Booking Overview ({selectedDate.format("MMMM, YYYY")})
                 </Typography.Title>
 
                 <div className="table-wrapper">
@@ -244,7 +245,8 @@ const ReportsPage = () => {
                         level={2}
                         className="text-xl! font-medium! px-3"
                     >
-                        Nail Artist’s Performance (Monthly)
+                        Staff's Performance ({selectedDate.format("MMMM, YYYY")}
+                        )
                     </Typography.Title>
                     <p className="text-gray-600 px-3">
                         Track completed bookings, customer ratings, and overall

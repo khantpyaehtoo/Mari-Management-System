@@ -3,11 +3,16 @@ import { Edit, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+    useCreateServiceMutation,
+    useDeleteServiceMutation,
     useGetAllServiceDataQuery,
     useGetCategoryDataQuery,
+    useUpdateServiceMutation,
 } from "./servicesApi";
 import ServiceDeleteModal from "./ServiceDeleteModal";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
+import { useDispatch, useSelector } from "react-redux";
+import { setMessage } from "../../../app/core/notiSlice";
 
 const CategoryDetails = () => {
     const [searchText, setSearchText] = useState("");
@@ -16,6 +21,8 @@ const CategoryDetails = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
 
+    const token = useSelector((state) => state?.authSlice?.token);
+    const dispatch = useDispatch();
     const { id } = useParams();
 
     const { data: getAllCategory = [], isLoading: isCategoryLoading } =
@@ -23,6 +30,64 @@ const CategoryDetails = () => {
 
     const { data: allServices = [], isLoading: isServicesLoading } =
         useGetAllServiceDataQuery();
+
+    const [createServiceTrigger] = useCreateServiceMutation();
+    const [editServiceTrigger] = useUpdateServiceMutation();
+    const [deleteService] = useDeleteServiceMutation();
+
+    // Intercept and format for Creating a Service
+    const handleCreateService = async (formValues) => {
+        const formattedPayload = {
+            name: formValues.name,
+            price: Number(formValues.price),
+            durationInMinutes: formValues.durationInMinutes,
+            categoryId: Number(id),
+        };
+        // setCreateModalOpen();
+        return await createServiceTrigger(formattedPayload).unwrap();
+    };
+
+    // Intercept and format for Updating a Service
+    const handleEditService = async ({ id: serviceId, body, token }) => {
+        const formattedPayload = {
+            id: serviceId,
+            token,
+            body: {
+                name: body.name,
+                price: Number(body.price),
+                durationInMinutes: body.durationInMinutes,
+                categoryId: Number(id),
+            },
+        };
+        return await editServiceTrigger(formattedPayload).unwrap();
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!selectedService?.id) return;
+
+        try {
+            await deleteService({ id: selectedService.id, token }).unwrap();
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Deleted successfully",
+                }),
+            );
+
+            setDeleteModalOpen(false);
+        } catch (error) {
+            console.error("Delete failed:", error);
+
+            let errorMessage = error?.data?.message || "Delete failed occurred";
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
+        }
+    };
 
     const currentCategory = useMemo(() => {
         return getAllCategory?.find(
@@ -59,11 +124,6 @@ const CategoryDetails = () => {
         }
     };
 
-    const handleDeleteConfirm = () => {
-        console.log("Deleting package:", selectedService?.id);
-        setDeleteModalOpen(false);
-    };
-
     const handleModalCancel = () => {
         setEditModalOpen(false);
         setCreateModalOpen(false);
@@ -93,7 +153,8 @@ const CategoryDetails = () => {
                 isOpen={editModalOpen || createModalOpen}
                 initialValue={editModalOpen ? selectedService : null}
                 onCancel={handleModalCancel}
-                triggerCreate={() => setCreateModalOpen(true)}
+                triggerCreate={handleCreateService}
+                triggerEdit={handleEditService}
             />
 
             <Row gutter={[16, 16]} className="mt-10!">
@@ -142,7 +203,6 @@ const CategoryDetails = () => {
                                         </p>
                                     </div>
                                     <div className="text-right font-medium">
-                                        {/* API ကလာတဲ့ key name တွေနဲ့ ချိတ်ဆက်ပြသခြင်း */}
                                         <p>{item.price} MMK</p>
                                         <p className="my-2">
                                             {item.durationInMinutes} mins

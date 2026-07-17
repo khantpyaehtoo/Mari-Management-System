@@ -1,5 +1,5 @@
 import { BellOutlined, SendOutlined } from "@ant-design/icons";
-import { Button, Drawer } from "antd";
+import { Button, Drawer, Tabs } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer, items }) => {
@@ -35,14 +35,14 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer, items }) => {
                         <SendOutlined /> Send Noti
                     </Button>
                 </div>
-                <section className="block">{items}</section>
-                {/* <Tabs
+                {/* <section className="block">{items}</section> */}
+                <Tabs
                     defaultActiveKey="1"
                     items={items}
                     tabBarStyle={{ width: "100%" }}
                     centered
                     className="w-full"
-                /> */}
+                />
             </>
         </Drawer>
     );

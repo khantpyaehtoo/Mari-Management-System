@@ -24,28 +24,30 @@ const Navbar = () => {
     const dispatch = useDispatch();
 
     // for tab section
-    // const items = [
-    //     {
-    //         key: "1",
-    //         label: (
-    //             <span className="w-full text-center flex items-center justify-center px-4 font-medium">
-    //                 Incoming
-    //             </span>
-    //         ),
-    //         children: <FilteredTabContent data={bookingData} />,
-    //     },
-    //     {
-    //         key: "2",
-    //         label: (
-    //             <span className="w-full text-center flex items-center justify-center px-4 font-medium">
-    //                 Sent History
-    //             </span>
-    //         ),
-    //         children: <FilteredTabContent data={commentData} />,
-    //     },
-    // ];
+    const items = [
+        {
+            key: "1",
+            label: (
+                <span className="w-full text-center flex items-center justify-center px-4 font-medium">
+                    Incoming Customer
+                </span>
+            ),
+            children: (
+                <FilteredTabContent data={bookingData} type="customers" />
+            ),
+        },
+        {
+            key: "2",
+            label: (
+                <span className="w-full text-center flex items-center justify-center px-4 font-medium">
+                    Incoming Staff
+                </span>
+            ),
+            children: <FilteredTabContent data={bookingData} type="staffs" />,
+        },
+    ];
 
-    const items = [<FilteredTabContent data={bookingData} />];
+    // const items = [<FilteredTabContent data={bookingData} />];
 
     const onCloseDrawer = () => {
         setIsNotiOpen(false);

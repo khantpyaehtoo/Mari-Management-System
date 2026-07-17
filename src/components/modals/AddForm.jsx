@@ -60,7 +60,11 @@ const AddForm = ({
                 ? { id: initialValue.id, body: values, token }
                 : values;
 
-            const data = await triggerMutation(payload).unwrap();
+            const result = triggerMutation(payload);
+            const data =
+                typeof result.unwrap === "function"
+                    ? await result.unwrap()
+                    : await result;
 
             if (data) {
                 dispatch(

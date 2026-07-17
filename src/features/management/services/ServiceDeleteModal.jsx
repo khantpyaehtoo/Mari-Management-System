@@ -7,6 +7,7 @@ const ServiceDeleteModal = ({
     selectedService,
     setDeleteModalOpen,
     handleDeleteConfirm,
+    isLoading,
 }) => {
     return (
         <Modal
@@ -23,12 +24,14 @@ const ServiceDeleteModal = ({
                 <Button
                     onClick={() => setDeleteModalOpen(false)}
                     className="bg-gray-100!"
+                    disabled={isLoading}
                 >
                     <CloseCircleOutlined size={14} /> Cancel
                 </Button>
                 <Button
                     onClick={handleDeleteConfirm}
                     className="bg-red-500! text-white! border-red-500!"
+                    loading={isLoading}
                 >
                     <Trash2 size={14} /> Delete
                 </Button>

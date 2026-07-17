@@ -3,16 +3,14 @@ import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSect
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-    useCreateServiceMutation,
+    useCreateCategoryMutation,
     useGetCategoryDataQuery,
-    useUpdateServiceMutation,
 } from "./servicesApi";
 import { cn } from "../../../lib/utils";
 
 const Services = () => {
     const [searchText, setSearchText] = useState("");
-    const [createService] = useCreateServiceMutation();
-    const [editService] = useUpdateServiceMutation();
+    const [createCategory] = useCreateCategoryMutation();
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -47,8 +45,7 @@ const Services = () => {
                 isEdit={isEdit}
                 initialValue={selectedService}
                 onCancel={onCancel}
-                triggerCreate={createService}
-                triggerEdit={editService}
+                triggerCreate={createCategory}
             />
 
             <Row gutter={[16, 16]} className="mt-10!">

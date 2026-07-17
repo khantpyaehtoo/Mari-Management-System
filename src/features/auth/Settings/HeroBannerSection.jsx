@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { Trash2 } from "lucide-react";
 
-const IMAGE_BASE_URL = "http://192.168.0.183:8080";
+const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
 const HeroBannerSection = ({
     isHeroBannerFormOpen,
@@ -55,7 +55,7 @@ const HeroBannerSection = ({
                         >
                             <Skeleton.Node
                                 active
-                                style={{ width: 400, height: 200 }}
+                                style={{ width: 400, height: 400 }}
                             />
                         </div>
                     ))

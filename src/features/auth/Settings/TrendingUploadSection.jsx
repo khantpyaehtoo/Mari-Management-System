@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { Trash2 } from "lucide-react";
 
-const IMAGE_BASE_URL = "http://192.168.0.183:8080";
+const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
 const TrendingUploadSection = ({
     isFetchingDesigns,
@@ -62,7 +62,7 @@ const TrendingUploadSection = ({
                         >
                             <Skeleton.Node
                                 active
-                                style={{ width: 200, height: 400 }}
+                                style={{ width: 400, height: 600 }}
                             />
                         </div>
                     ))

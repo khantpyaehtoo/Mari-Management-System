@@ -16,10 +16,9 @@ const StaffDetailModal = ({
     useEffect(() => {
         if (selectedStaff) {
             form.setFieldsValue({
-                name: selectedStaff.name,
-                phone: selectedStaff.phone,
+                staffName: selectedStaff.staffName,
+                phoneNumber: selectedStaff.phoneNumber,
                 email: selectedStaff.email,
-                dob: selectedStaff.dob,
             });
         }
     }, [selectedStaff, isDetailOpen, form]);
@@ -75,32 +74,33 @@ const StaffDetailModal = ({
                 >
                     <Space size="large" className="border-b w-full py-4">
                         <Avatar
-                            src={selectedStaff.profileUrl}
+                            src={selectedStaff.profileImage}
                             size="large"
                             className="w-15! h-15!"
                         />
                         <Space vertical size={0}>
                             {isEditing ? (
-                                <Form.Item name="name" className="mb-0!">
+                                <Form.Item name="staffName" className="mb-0!">
+                                    {" "}
                                     <Input
-                                        placeholder={selectedStaff.name}
+                                        placeholder={selectedStaff.staffName}
                                         className="font-semibold! text-xl! border! border-b-gray-300!"
                                         style={{ width: 200 }}
                                     />
                                 </Form.Item>
                             ) : (
                                 <h1 className="text-xl font-semibold">
-                                    {selectedStaff.name}
+                                    {selectedStaff.staffName}{" "}
                                 </h1>
                             )}
                             <p className="text-gray-400 text-sm">
-                                {selectedStaff.staffId}
+                                {selectedStaff.staffCode}
                             </p>
                         </Space>
                     </Space>
 
                     <Space
-                        vertical
+                        direction="vertical"
                         className="border-b w-full py-3"
                         size="middle"
                     >
@@ -108,17 +108,17 @@ const StaffDetailModal = ({
                             <span className="font-medium min-w-25">Phone:</span>
                             {isEditing ? (
                                 <Form.Item
-                                    name="phone"
+                                    name="phoneNumber"
                                     className="mb-0! flex-1!"
                                     rules={[{ required: true, message: "" }]}
                                 >
                                     <Input
-                                        placeholder={selectedStaff.phone}
+                                        placeholder={selectedStaff.phoneNumber}
                                         className="font-montserrat! border! border-b-gray-300!"
                                     />
                                 </Form.Item>
                             ) : (
-                                <span>{selectedStaff.phone}</span>
+                                <span>{selectedStaff.phoneNumber}</span>
                             )}
                         </div>
 
@@ -150,7 +150,7 @@ const StaffDetailModal = ({
                             <span className="font-medium min-w-25">
                                 DATE OF BIRTH:
                             </span>
-                            <span>{selectedStaff.dob}</span>
+                            <span>{selectedStaff.dateOfBirth}</span>{" "}
                         </div>
                     </Space>
 
@@ -163,25 +163,25 @@ const StaffDetailModal = ({
                             <span className="font-medium min-w-25 inline-block">
                                 Customer Count:
                             </span>{" "}
-                            {selectedStaff.count}
+                            {selectedStaff.completedJobsCount}{" "}
                         </p>
                         <p className="flex justify-between items-center">
                             <span className="font-medium min-w-25 inline-block">
                                 Rating:
                             </span>{" "}
-                            {selectedStaff.rating}
+                            {selectedStaff.ratingAverage}{" "}
                         </p>
                         <p className="flex justify-between items-center">
                             <span className="font-medium min-w-25 inline-block">
                                 Revenue:
                             </span>{" "}
-                            {selectedStaff.revenue}
+                            {selectedStaff.totalRevenue}{" "}
                         </p>
                         <p className="flex justify-between items-center">
                             <span className="font-medium min-w-25 inline-block">
                                 Commission:
                             </span>{" "}
-                            {selectedStaff.commission}
+                            {selectedStaff.totalCommission}{" "}
                         </p>
                     </Space>
 

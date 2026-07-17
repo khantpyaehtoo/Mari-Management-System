@@ -37,6 +37,8 @@ const radioBtnOptions = [
     },
 ];
 
+const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
+
 const Dashboard = () => {
     const [viewType, setViewType] = useState("weekly");
 
@@ -92,7 +94,7 @@ const Dashboard = () => {
             key: "staffName",
             render: (text, record) => (
                 <Space>
-                    <Avatar src={record?.profileImage} />
+                    <Avatar src={`${IMAGE_BASE_URL}/${record?.profileImage}`} />
                     <div>
                         <div className="font-medium">{text}</div>
                         <div className="text-xs text-gray-400">

@@ -2,7 +2,7 @@ import { DownCircleOutlined } from "@ant-design/icons";
 import { Card, Flex, Select, Space, Tabs } from "antd";
 import { BellRing, PartyPopper, TriangleAlert } from "lucide-react";
 
-export const FilteredTabContent = ({ data }) => {
+export const FilteredTabContent = ({ data, type }) => {
     const innerTabItems = [
         {
             key: "today",
@@ -123,6 +123,20 @@ export const FilteredTabContent = ({ data }) => {
         },
     ];
 
+    const selectOptions = [
+        { value: "all", label: "All" },
+        ...(type === "customers"
+            ? [
+                  { value: "ordered", label: "Ordered" },
+                  { value: "cancel", label: "Cancel" },
+                  { value: "review", label: "Review" },
+              ]
+            : [
+                  { value: "started", label: "Started" },
+                  { value: "completed", label: "Completed" },
+              ]),
+    ];
+
     return (
         <div className="px-4 py-2">
             <Tabs
@@ -140,11 +154,7 @@ export const FilteredTabContent = ({ data }) => {
                         suffixIcon={
                             <DownCircleOutlined className="text-gray-700 text-base" />
                         }
-                        options={[
-                            { value: "all", label: "All" },
-                            { value: "staff", label: "Staff" },
-                            { value: "customer", label: "Customer" },
-                        ]}
+                        options={selectOptions}
                         onChange={(value) =>
                             console.log("Selected filter:", value)
                         }

@@ -1,52 +1,48 @@
 import { baseApi } from "../../app/core/baseApi";
-const calendarEndPoint = "calendar";
-const dailyStatus = "daily-status";
+const calendarData = "calendar";
+const dailyStaff = "daily-status";
+const dayLeave = "selected-day-leaves";
+const assign = "assign";
 
 export const calendarApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getCalendarData: builder.query({
             query: (params) => ({
-                url: `admin/staffs/${calendarEndPoint}`,
+                url: `admin/staffs/${calendarData}`,
                 method: "GET",
-                params: params, // ?month=07&year=2026
+                params: params,
             }),
             providesTags: ["calendar"],
         }),
 
         getDailyStaff: builder.query({
             query: () => ({
-                url: `admin/staffs/${dailyStatus}`,
+                url: `admin/staffs/${dailyStaff}`,
                 method: "GET",
             }),
             providesTags: ["daily-status"],
         }),
 
+        getSelectedDayLeaves: builder.query({
+            query: (targetDate) => ({
+                url: `admin/staffs/${dayLeave}`,
+                method: "GET",
+                params: { targetDate },
+            }),
+            providesTags: ["selected-day-leaves"],
+        }),
+
         createCalendarData: builder.mutation({
             query: (body) => ({
-                url: `${calendarEndPoint}`,
+                url: `admin/staffs/${assign}`,
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["calendar"],
-        }),
-
-        updateCalendarData: builder.mutation({
-            query: ({ id, body, token }) => ({
-                url: `${calendarEndPoint}/${id}`,
-                method: "PUT",
-                body,
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-            invalidatesTags: ["calendar"],
-        }),
-
-        deleteCalendarData: builder.mutation({
-            query: ({ id, token }) => ({
-                url: `${calendarEndPoint}/${id}`,
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
-            }),
-            invalidatesTags: ["calendar"],
+            invalidatesTags: [
+                "calendar",
+                "daily-status",
+                "selected-day-leaves",
+            ],
         }),
     }),
 });
@@ -54,6 +50,7 @@ export const calendarApi = baseApi.injectEndpoints({
 export const {
     useGetDailyStaffQuery,
     useGetCalendarDataQuery,
+    useGetSelectedDayLeavesQuery,
     useCreateCalendarDataMutation,
     useUpdateCalendarDataMutation,
     useDeleteCalendarDataMutation,

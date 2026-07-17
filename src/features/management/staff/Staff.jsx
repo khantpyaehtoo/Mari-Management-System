@@ -5,6 +5,7 @@ import { cn } from "../../../lib/utils";
 import {
     useCreateStaffMutation,
     useDeleteStaffMutation,
+    useGetStaffDataQuery,
     useRehiredStaffMutation,
     useTerminateStaffMutation,
     useUpdateStaffMutation,
@@ -19,79 +20,9 @@ import StaffDetailModal from "./StaffDetailsModal";
 import TerminateStaffModal from "./TerminateStaffModal";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
+import { useDebounce } from "../../../lib/hooks/useDebounce";
 
-const STATIC_DATA = [
-    {
-        key: "1",
-        staffId: "ST-0042",
-        profileUrl:
-            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-        name: "Phyu Phyu",
-        phone: "09-459112233",
-        email: "phyuphyu@gmail.com",
-        dob: "19/09/1999",
-        joined: "02/12/2022",
-        count: "115",
-        rating: "4.5",
-        status: "In Progress",
-    },
-    {
-        key: "2",
-        staffId: "ST-0182",
-        profileUrl:
-            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-        name: "Aung Aung",
-        phone: "09-450123456",
-        email: "aungaung@gmail.com",
-        dob: "12/05/1995",
-        joined: "15/01/2023",
-        count: "142",
-        rating: "4.8",
-        status: "Completed",
-    },
-    {
-        key: "3",
-        staffId: "ST-0934",
-        profileUrl:
-            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-        name: "Su Su",
-        phone: "09-798654321",
-        email: "susu@gmail.com",
-        dob: "24/11/1998",
-        joined: "10/06/2024",
-        count: "95",
-        rating: "4.2",
-        status: "Available",
-    },
-    {
-        key: "4",
-        staffId: "ST-0512",
-        profileUrl:
-            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-        name: "Kyaw Kyaw",
-        phone: "09-254889900",
-        email: "kyawkyaw@gmail.com",
-        dob: "03/02/1992",
-        joined: "01/09/2021",
-        count: "310",
-        rating: "4.0",
-        status: "Unavailable",
-    },
-    {
-        key: "5",
-        staffId: "ST-0912",
-        profileUrl:
-            "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg",
-        name: "Kyaw Kyaw",
-        phone: "09-254889900",
-        email: "kyawkyaw@gmail.com",
-        dob: "03/02/1992",
-        joined: "01/09/2021",
-        count: "310",
-        rating: "4.0",
-        status: "Terminate",
-    },
-];
+const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
 const renderlists = [
     "All",
@@ -123,17 +54,63 @@ const { useBreakpoint } = Grid;
 
 const Staff = () => {
     const dispatch = useDispatch();
+    const screens = useBreakpoint();
+    const scrollX = screens.xs ? undefined : "1500";
 
-    const [dataList, setDataList] = useState(STATIC_DATA);
+    const [searchText, setSearchText] = useState("");
+    const [filterValue, setFilterValue] = useState("All");
+    const [currentPage, setCurrentPage] = useState(1);
+
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [isTerminateOpen, setIsTerminateOpen] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState(null);
 
-    const [searchText, setSearchText] = useState("");
-    const [filterValue, setFilterValue] = useState(null);
+    const debouncedSearchText = useDebounce(searchText, 300);
 
-    const screens = useBreakpoint();
-    const scrollX = screens.xs ? undefined : "1500";
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleFilterChange = (value) => {
+        setFilterValue(value);
+        setCurrentPage(1); // Reset page on filter change
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchText(value);
+        setCurrentPage(1); // Reset page on search change
+    };
+
+    // Format query status parameter
+    const statusParam =
+        !filterValue || filterValue === "All" ? undefined : filterValue;
+
+    const { data: apiResponse, isLoading } = useGetStaffDataQuery({
+        status: statusParam,
+        search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
+        page: currentPage - 1,
+        size: 10,
+    });
+
+    const dataList = useMemo(() => {
+        const rawStaff = Array.isArray(apiResponse)
+            ? apiResponse
+            : apiResponse?.staff || [];
+
+        return rawStaff.map((staff) => {
+            let fullImageUrl = staff.profileImage;
+
+            if (staff?.profileImage && !staff.profileImage.startsWith("http")) {
+                const separator = staff.profileImage.startsWith("/") ? "" : "/";
+                fullImageUrl = `${IMAGE_BASE_URL}${separator}${staff.profileImage}`;
+            }
+
+            return {
+                ...staff,
+                profileImage: fullImageUrl,
+            };
+        });
+    }, [apiResponse]);
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();
@@ -141,24 +118,23 @@ const Staff = () => {
     const [terminateStaff] = useTerminateStaffMutation();
     const [rehiredStaff] = useRehiredStaffMutation();
 
-    // Optimized status calculation into a single pass
     const statusCounts = useMemo(() => {
+        const AllTotal =
+            (apiResponse?.inProgressCount || 0) +
+            (apiResponse?.completedCount || 0) +
+            (apiResponse?.availableCount || 0) +
+            (apiResponse?.unavailableCount || 0) +
+            (apiResponse?.terminateCount || 0);
+
         return {
-            All: dataList?.length,
-            "In Progress": dataList?.filter(
-                (item) => item.status === "In Progress",
-            ).length,
-            Completed: dataList?.filter((item) => item.status === "Completed")
-                .length,
-            Available: dataList?.filter((item) => item.status === "Available")
-                .length,
-            Unavailable: dataList?.filter(
-                (item) => item.status === "Unavailable",
-            ).length,
-            Terminate: dataList?.filter((item) => item.status === "Terminate")
-                .length,
+            All: AllTotal || dataList?.length || 0,
+            "In Progress": apiResponse?.inProgressCount || 0,
+            Completed: apiResponse?.completedCount || 0,
+            Available: apiResponse?.availableCount || 0,
+            Unavailable: apiResponse?.unavailableCount || 0,
+            Terminate: apiResponse?.terminateCount || 0,
         };
-    }, [dataList]);
+    }, [apiResponse, dataList]);
 
     const handleActionClick = useCallback((actionType, record) => {
         setSelectedStaff(record);
@@ -176,7 +152,7 @@ const Staff = () => {
                 dispatch(
                     setMessage({
                         msgType: "success",
-                        msgContent: "Deleted successfully.",
+                        msgContent: "Terminated successfully.",
                     }),
                 );
             } catch (error) {
@@ -184,12 +160,8 @@ const Staff = () => {
                     error?.data?.message ||
                     error?.error ||
                     "Error while Terminate";
-
                 dispatch(
-                    setMessage({
-                        msgType: "error",
-                        msgContent: errorMessage,
-                    }),
+                    setMessage({ msgType: "error", msgContent: errorMessage }),
                 );
             }
         }
@@ -199,7 +171,6 @@ const Staff = () => {
         if (window.confirm(`Are you sure to rehired this ${staffId}`)) {
             try {
                 await rehiredStaff(staffId).unwrap();
-
                 dispatch(
                     setMessage({
                         msgType: "success",
@@ -211,12 +182,8 @@ const Staff = () => {
                     error?.data?.message ||
                     error?.error ||
                     "Error while Re-Hiring";
-
                 dispatch(
-                    setMessage({
-                        msgType: "error",
-                        msgContent: errorMessage,
-                    }),
+                    setMessage({ msgType: "error", msgContent: errorMessage }),
                 );
             }
         }
@@ -226,7 +193,6 @@ const Staff = () => {
         if (window.confirm(`Are you sure to delete this ${staffId}`)) {
             try {
                 await deleteStaff(staffId).unwrap();
-
                 dispatch(
                     setMessage({
                         msgType: "success",
@@ -237,13 +203,9 @@ const Staff = () => {
                 const errorMessage =
                     error?.data?.message ||
                     error?.error ||
-                    "Error while deleteing";
-
+                    "Error while deleting";
                 dispatch(
-                    setMessage({
-                        msgType: "error",
-                        msgContent: errorMessage,
-                    }),
+                    setMessage({ msgType: "error", msgContent: errorMessage }),
                 );
             }
         }
@@ -253,17 +215,7 @@ const Staff = () => {
         try {
             const staffId = updatedStaffFields.staffId;
             await editStaff(staffId, updatedStaffFields).unwrap();
-
-            setDataList((prevList) =>
-                prevList.map((item) =>
-                    item.key === updatedStaffFields.key
-                        ? { ...item, ...updatedStaffFields }
-                        : item,
-                ),
-            );
-
             setSelectedStaff(updatedStaffFields);
-            console.log("Saved successfully!", staffId, updatedStaffFields);
         } catch (error) {
             console.error(
                 "Failed to save changes onto backend database:",
@@ -276,55 +228,68 @@ const Staff = () => {
         () => [
             {
                 title: "No.",
-                render: (_, __, index) => <p>{index + 1}</p>,
+                render: (_, __, index) => (
+                    <p>{(currentPage - 1) * 10 + index + 1}</p>
+                ),
             },
             {
                 title: "Staff ID",
-                dataIndex: "staffId",
-                key: "staffId",
+                dataIndex: "staffCode",
+                key: "staffCode",
             },
             {
                 title: "Profile",
-                dataIndex: "profileUrl",
+                dataIndex: "profileImage",
                 key: "profile",
                 render: (url) => (
                     <Image
                         src={url}
                         width={40}
                         alt="profile"
+                        fallback="https://placehold.co/40x40?text=Staff"
                         className="rounded-md! shadow-sm!"
                     />
                 ),
             },
             {
                 title: "Name",
-                dataIndex: "name",
-                key: "name",
-                filteredValue: searchText ? [searchText] : null,
-                onFilter: (value, record) =>
-                    record.name.toLowerCase().includes(value.toLowerCase()) ||
-                    record.staffId.toLowerCase().includes(value.toLowerCase()),
+                dataIndex: "staffName",
+                key: "staffName",
             },
             {
                 title: "Contact",
                 key: "contact",
                 render: (_, record) => (
                     <Space vertical size="small">
-                        <p className="font-medium">{record.phone}</p>
+                        <p className="font-medium">{record.phoneNumber}</p>
                         <p className="text-gray-500">{record.email}</p>
                     </Space>
                 ),
             },
-            { title: "Date Of Birth", dataIndex: "dob", key: "dob" },
-            { title: "Joined Date", dataIndex: "joined", key: "joined" },
-            { title: "Count", dataIndex: "count", key: "count" },
-            { title: "Rating", dataIndex: "rating", key: "rating" },
+            {
+                title: "Date Of Birth",
+                dataIndex: "dateOfBirth",
+                key: "dateOfBirth",
+            },
+            {
+                title: "Joined Date",
+                dataIndex: "joinedDate",
+                key: "joinedDate",
+            },
+            {
+                title: "Count",
+                dataIndex: "completedJobsCount",
+                key: "completedJobsCount",
+            },
+            {
+                title: "Rating",
+                dataIndex: "ratingAverage",
+                key: "ratingAverage",
+            },
             {
                 title: "Status",
                 dataIndex: "status",
                 key: "status",
-                filteredValue: filterValue ? [filterValue] : null,
-                onFilter: (value, record) => record.status === value,
                 render: (status) => {
                     const statusClasses = {
                         "In Progress": "text-progress",
@@ -382,7 +347,7 @@ const Staff = () => {
                             ),
                             key: "1",
                         },
-                    ];
+                    ].filter(Boolean);
                     return (
                         <Dropdown menu={{ items }} placement="bottom">
                             <MoreOutlined className="text-3xl cursor-pointer" />
@@ -391,24 +356,24 @@ const Staff = () => {
                 },
             },
         ],
-        [searchText, filterValue, handleActionClick],
+        [currentPage, handleActionClick],
     );
 
     return (
         <div>
             <SubHeaderSection
-                setSearchText={setSearchText}
+                setSearchText={handleSearchChange} // Triggers input state resetting and search pagination
                 title="Staff"
                 subTitle="Manage your elite staff to unlock peak operational efficiency."
                 subFormTitle="Create your elite staff to unlock peak operational efficiency."
-                placeholderTitle="Search the all staff ..."
+                placeholderTitle="Search all staff..."
                 triggerCreate={createStaff}
                 triggerEdit={editStaff}
             />
             <TableHeaderSection
                 renderlists={renderlists}
                 options={options}
-                setFilterValue={setFilterValue}
+                setFilterValue={handleFilterChange} // Triggers status update & pagination reset
                 statusCounts={statusCounts}
             />
             <div className="table-wrapper">
@@ -416,7 +381,17 @@ const Staff = () => {
                     dataSource={dataList}
                     columns={columns}
                     scroll={{ x: scrollX }}
+                    loading={isLoading}
+                    rowKey="staffId"
                     bordered
+                    pagination={{
+                        current: currentPage,
+                        onChange: handlePageChange,
+                        size: "large",
+                        total: statusCounts[filterValue] || 0,
+                        pageSize: 10,
+                        showSizeChanger: false,
+                    }}
                 />
             </div>
 

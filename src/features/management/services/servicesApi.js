@@ -21,7 +21,7 @@ export const servicesApi = baseApi.injectEndpoints({
         }),
 
         createCategory: builder.mutation({
-            query: ({ body }) => ({
+            query: (body) => ({
                 url: `${categoryEndpoint}`,
                 method: "POST",
                 body,
@@ -75,8 +75,4 @@ export const {
 
     useGetCategoryDataQuery,
     useCreateCategoryMutation,
-
-    useGetPackageDataQuery,
-    useCreatePackageMutation,
-    useUpdatePackageMutation,
 } = servicesApi;
