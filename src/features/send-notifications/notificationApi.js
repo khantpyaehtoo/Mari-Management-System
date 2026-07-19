@@ -3,12 +3,29 @@ const notifications = "notifications";
 
 export const notiApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getAllNotiHistory: builder.query({
+        getStaffNotifications: builder.query({
             query: () => ({
-                url: `${notifications}`,
+                url: `${notifications}/admin/staff`,
                 method: "GET",
             }),
             providesTags: ["notifications"],
+        }),
+
+        getCustomerNotifications: builder.query({
+            query: () => ({
+                url: `${notifications}/admin/customer`,
+                method: "GET",
+            }),
+            providesTags: ["notifications"],
+        }),
+
+        createNotification: builder.mutation({
+            query: (formData) => ({
+                url: `${notifications}`,
+                method: "POST",
+                body: formData,
+            }),
+            invalidatesTags: ["notifications"],
         }),
 
         deleteNotiHistory: builder.mutation({
@@ -21,5 +38,9 @@ export const notiApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetAllNotiHistoryQuery, useDeleteNotiHistoryMutation } =
-    notiApi;
+export const {
+    useGetStaffNotificationsQuery,
+    useGetCustomerNotificationsQuery,
+    useCreateNotificationMutation,
+    useDeleteNotiHistoryMutation,
+} = notiApi;

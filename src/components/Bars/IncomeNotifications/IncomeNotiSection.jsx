@@ -1,0 +1,91 @@
+import { BellOutlined, SendOutlined } from "@ant-design/icons";
+import { Button, Drawer, Tabs } from "antd";
+import { useNavigate } from "react-router-dom";
+import {
+    useGetIncomingCustomerNotisQuery,
+    useGetIncomingStaffNotisQuery,
+} from "../../services/notiApi"; // 💡 မိမိဖိုင်လမ်းကြောင်းအတိုင်း ပြောင်းလဲပါ
+import { FilteredTabContent } from "./FilteredTabContent"; // 💡 ဖိုင်လမ်းကြောင်း စစ်ဆေးရန်
+
+const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
+    const nav = useNavigate();
+
+    // 💡 API Hooks ခေါ်ယူခြင်း (Drawer ပွင့်မှသာ Data လှမ်းဆွဲပါမည်)
+    const { data: customerData, isLoading: isCustomerLoading } =
+        useGetIncomingCustomerNotisQuery(undefined, { skip: !isNotiOpen });
+    const { data: staffData, isLoading: isStaffLoading } =
+        useGetIncomingStaffNotisQuery(undefined, { skip: !isNotiOpen });
+
+    const customerNotis = customerData?.content || [];
+    const staffNotis = staffData?.content || [];
+
+    const navigateSentNoti = () => {
+        nav("/send-notifications", { replace: true });
+        onCloseDrawer();
+    };
+
+    // 💡 Parent Tabs Items (Customer နှင့် Staff ခွဲခြားရန်)
+    const parentTabItems = [
+        {
+            key: "1",
+            label: "Incoming Customer",
+            children: (
+                <FilteredTabContent
+                    data={customerNotis}
+                    type="customers"
+                    isLoading={isCustomerLoading}
+                />
+            ),
+        },
+        {
+            key: "2",
+            label: "Incoming Staff",
+            children: (
+                <FilteredTabContent
+                    data={staffNotis}
+                    type="staffs"
+                    isLoading={isStaffLoading}
+                />
+            ),
+        },
+    ];
+
+    return (
+        <Drawer
+            title={"Notifications"}
+            open={isNotiOpen}
+            onClose={onCloseDrawer}
+            mask={true}
+            size={550}
+            styles={{
+                header: { background: "#A76D83", color: "white" },
+                body: { padding: "0" },
+            }}
+        >
+            <>
+                <div className="flex justify-between items-center px-4 py-4 shadow-md border-b border-gray-100">
+                    <p className="text-gray-700 font-semibold m-0 flex items-center gap-2">
+                        <BellOutlined className="text-primary" /> Inbox
+                    </p>
+                    <Button
+                        type="primary"
+                        onClick={navigateSentNoti}
+                        className="border-primary"
+                    >
+                        <SendOutlined /> Send Noti
+                    </Button>
+                </div>
+
+                <Tabs
+                    defaultActiveKey="1"
+                    items={parentTabItems}
+                    tabBarStyle={{ width: "100%" }}
+                    centered
+                    className="w-full"
+                />
+            </>
+        </Drawer>
+    );
+};
+
+export default IncomeNotiSection;

@@ -5,8 +5,8 @@ import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
 import { Badge, Space } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FilteredTabContent } from "./FilteredTabContent";
-import IncomeNotiSection from "./IncomeNotiSection";
+import { FilteredTabContent } from "./IncomeNotifications/FilteredTabContent";
+import IncomeNotiSection from "./IncomeNotifications/IncomeNotiSection";
 
 const bookingData = [
     "For Booking Data",
@@ -46,8 +46,6 @@ const Navbar = () => {
             children: <FilteredTabContent data={bookingData} type="staffs" />,
         },
     ];
-
-    // const items = [<FilteredTabContent data={bookingData} />];
 
     const onCloseDrawer = () => {
         setIsNotiOpen(false);
