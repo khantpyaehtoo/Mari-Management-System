@@ -1,14 +1,25 @@
 import { baseApi } from "../../app/core/baseApi";
-const notifications = "";
+const notifications = "notifications";
 
 export const notiApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllNotiHistory: builder.query({
             query: () => ({
-                url: ``,
+                url: `${notifications}`,
                 method: "GET",
             }),
-            providesTags: [""],
+            providesTags: ["notifications"],
+        }),
+
+        deleteNotiHistory: builder.mutation({
+            query: (id) => ({
+                url: `${notifications}/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["notifications"],
         }),
     }),
 });
+
+export const { useGetAllNotiHistoryQuery, useDeleteNotiHistoryMutation } =
+    notiApi;

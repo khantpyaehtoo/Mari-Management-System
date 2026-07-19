@@ -4,13 +4,18 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
     useCreateCategoryMutation,
+    useDeleteCategoryMutation,
     useGetCategoryDataQuery,
 } from "./servicesApi";
 import { cn } from "../../../lib/utils";
+import { X } from "lucide-react";
+import { setMessage } from "../../../app/core/notiSlice";
+import { useDispatch } from "react-redux";
 
-const Services = () => {
+const CategorySection = () => {
     const [searchText, setSearchText] = useState("");
     const [createCategory] = useCreateCategoryMutation();
+    const dispatch = useDispatch();
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -23,6 +28,36 @@ const Services = () => {
     };
 
     const { data: getAllCategory = [], isLoading } = useGetCategoryDataQuery();
+
+    const [deleteCategory] = useDeleteCategoryMutation();
+
+    const handleDelete = async () => {
+        if (!selectedService?.id) return;
+
+        try {
+            await deleteCategory({ id: selectedService?.id }).unwrap();
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Deleted successfully",
+                }),
+            );
+
+            // console.log("click", selectedService.id);
+        } catch (error) {
+            console.error("Delete failed:", error);
+
+            const errorMessage =
+                error?.data?.message || "Delete failed occurred";
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
+        }
+    };
 
     const categories = getAllCategory
         ?.map((cate) => ({
@@ -80,6 +115,7 @@ const Services = () => {
                                                   : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
                                           )}
                                       >
+                                          <X size={12} onClick={handleDelete} />
                                           <h1 className="w-auto text-center text-base font-medium mt-2">
                                               {item?.title}
                                           </h1>
@@ -93,4 +129,4 @@ const Services = () => {
     );
 };
 
-export default Services;
+export default CategorySection;

@@ -108,6 +108,7 @@ const SubHeaderSection = ({
                         <div className="flex gap-3">
                             <AddForm
                                 title={formType[0] || title}
+                                formType={formType[0]}
                                 btnTitle={btnTitle}
                                 subFormTitle={subFormTitle}
                                 isEdit={isEdit}
@@ -119,6 +120,7 @@ const SubHeaderSection = ({
                             />
                             <AddForm
                                 title={formType[1] || title}
+                                formType={formType[1]}
                                 btnTitle={btnTitle}
                                 subFormTitle={subFormTitle}
                                 isEdit={isEdit}

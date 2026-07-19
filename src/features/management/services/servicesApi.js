@@ -21,6 +21,14 @@ export const servicesApi = baseApi.injectEndpoints({
             invalidatesTags: ["categories"],
         }),
 
+        deleteCategory: builder.mutation({
+            query: (id) => ({
+                url: `${categoryEndpoint}/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["categories"],
+        }),
+
         getAllServiceData: builder.query({
             query: () => ({
                 url: `${serviceEndpoint}`,
@@ -67,4 +75,5 @@ export const {
 
     useGetCategoryDataQuery,
     useCreateCategoryMutation,
+    useDeleteCategoryMutation,
 } = servicesApi;

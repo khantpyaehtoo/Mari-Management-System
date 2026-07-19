@@ -27,6 +27,7 @@ export const baseApi = createApi({
         "booking-management",
         "staffs",
         "calendar",
+        "notifications",
     ],
     endpoints: () => ({}),
 });

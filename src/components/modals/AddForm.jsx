@@ -15,6 +15,7 @@ const AddForm = ({
     onCancel,
     triggerEdit,
     triggerCreate,
+    formType,
 }) => {
     const [isLocalModalOpen, setIsLocalModalOpen] = useState(false);
     const [form] = Form.useForm();
@@ -141,6 +142,7 @@ const AddForm = ({
                         form={form}
                         isEdit={isEdit}
                         initialValue={initialValue}
+                        formType={formType}
                     />
                 )}
             </Modal>

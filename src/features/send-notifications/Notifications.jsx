@@ -1,9 +1,54 @@
-import { Avatar, Button, Card, Flex, Space } from "antd";
+import { Avatar, Button, Card, Flex, Space, Modal } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { DeleteOutlined } from "@ant-design/icons";
 import { BellRing, PartyPopper, TriangleAlert } from "lucide-react";
+// import { useDeleteNotiHistoryMutation } from "./notificationApi";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../app/core/notiSlice";
+// import { useParams } from "react-router-dom";
 
 const Notifications = () => {
+    // const [deleteNoti] = useDeleteNotiHistoryMutation();
+    // const { id } = useParams();
+
+    const dispatch = useDispatch();
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [selectedNotiId, setSelectedNotiId] = useState(null);
+
+    const showDeleteModal = (id) => {
+        setSelectedNotiId(id);
+        setDeleteModalOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!selectedNotiId) return;
+
+        try {
+            // await deleteNoti(selectedNotiId).unwrap();
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Deleted successfully",
+                }),
+            );
+
+            console.log("Deleted notification ID:", selectedNotiId);
+            setDeleteModalOpen(false);
+            setSelectedNotiId(null);
+        } catch (error) {
+            console.error("Delete failed:", error);
+
+            let errorMessage = error?.data?.message || "Delete failed occurred";
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
+        }
+    };
     return (
         <>
             <SubHeaderSection
@@ -47,7 +92,10 @@ const Notifications = () => {
                                     1 day ago
                                 </small>
                             </Space>
-                            <Button className="border-0! text-primary! hover:text-red-500!">
+                            <Button
+                                onClick={() => showDeleteModal("staff-1")}
+                                className="border-0! text-primary! hover:text-red-500!"
+                            >
                                 <DeleteOutlined className="text-xl" />
                             </Button>
                         </Flex>
@@ -80,7 +128,10 @@ const Notifications = () => {
                                     1 day ago
                                 </small>
                             </Space>
-                            <Button className="border-0! text-primary! hover:text-red-500!">
+                            <Button
+                                onClick={() => showDeleteModal("staff-2")}
+                                className="border-0! text-primary! hover:text-red-500!"
+                            >
                                 <DeleteOutlined className="text-xl" />
                             </Button>
                         </Flex>
@@ -106,7 +157,10 @@ const Notifications = () => {
                                     1 Month ago
                                 </small>
                             </Space>
-                            <Button className="border-0! text-primary! hover:text-red-500!">
+                            <Button
+                                onClick={() => showDeleteModal("staff-3")}
+                                className="border-0! text-primary! hover:text-red-500!"
+                            >
                                 <DeleteOutlined className="text-xl" />
                             </Button>
                         </Flex>
@@ -135,7 +189,10 @@ const Notifications = () => {
                                     1 Month ago
                                 </small>
                             </Space>
-                            <Button className="border-0! text-primary! hover:text-red-500!">
+                            <Button
+                                onClick={() => showDeleteModal("staff-4")}
+                                className="border-0! text-primary! hover:text-red-500!"
+                            >
                                 <DeleteOutlined className="text-xl" />
                             </Button>
                         </Flex>
@@ -171,7 +228,12 @@ const Notifications = () => {
                                     />
                                 </Space>
                             </Space>
-                            <Button className="border-0! text-primary! hover:text-red-500!">
+                            <Button
+                                onClick={() =>
+                                    showDeleteModal("customer-promo")
+                                }
+                                className="border-0! text-primary! hover:text-red-500!"
+                            >
                                 <DeleteOutlined className="text-xl" />
                             </Button>
                         </Flex>
@@ -186,7 +248,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-1")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -210,7 +277,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-2")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -234,7 +306,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-3")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -258,7 +335,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-4")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -282,7 +364,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-5")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -306,7 +393,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-6")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -330,7 +422,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-7")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -354,7 +451,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-8")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -378,7 +480,12 @@ const Notifications = () => {
                                     <h1 className="text-primary text-lg!">
                                         New Staff Announcement!
                                     </h1>
-                                    <Button className="border-0! text-primary! hover:text-red-500!">
+                                    <Button
+                                        onClick={() =>
+                                            showDeleteModal("customer-9")
+                                        }
+                                        className="border-0! text-primary! hover:text-red-500!"
+                                    >
                                         <DeleteOutlined className="text-xl" />
                                     </Button>
                                 </Flex>
@@ -394,6 +501,20 @@ const Notifications = () => {
                     </Card>
                 </div>
             </div>
+
+            <Modal
+                title="Confirm Delete"
+                open={deleteModalOpen}
+                onOk={handleDeleteConfirm}
+                onCancel={() => {
+                    setDeleteModalOpen(false);
+                    setSelectedNotiId(null);
+                }}
+                okText="Delete"
+                cancelText="Cancel"
+            >
+                <p>Are you sure you want to delete this notification?</p>
+            </Modal>
         </>
     );
 };

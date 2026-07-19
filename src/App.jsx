@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import NotificationHandler from "./components/NotificationHandler";
 import User from "./features/management/user/User.jsx";
-import Services from "./features/management/services/Services.jsx";
+import CategorySection from "./features/management/services/CategorySection.jsx";
 import Booking from "./features/management/booking/Booking.jsx";
 import Staff from "./features/management/staff/Staff.jsx";
 import CalendarSection from "./features/calendar/Calendar.jsx";
@@ -18,8 +18,8 @@ import ReportsPage from "./features/reports/ReportsPage.jsx";
 import Packages from "./features/management/PackageSection/Packages.jsx";
 import Notifications from "./features/send-notifications/Notifications.jsx";
 
-import IsAuth from "./components/Guards/IsAuth.jsx";
-import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
+// import IsAuth from "./components/Guards/IsAuth.jsx";
+// import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
 export default function App() {
     return (
@@ -29,9 +29,9 @@ export default function App() {
                 <Route
                     path="/login"
                     element={
-                        <IsNotAuth>
-                            <LoginForm />
-                        </IsNotAuth>
+                        // <IsNotAuth>
+                        <LoginForm />
+                        // </IsNotAuth>
                     }
                 />
                 <Route path="/reset" element={<ForgetPasswordForm />} />
@@ -40,9 +40,9 @@ export default function App() {
                 <Route
                     path="/"
                     element={
-                        <IsAuth>
-                            <MainLayout />
-                        </IsAuth>
+                        // <IsAuth>
+                        <MainLayout />
+                        // </IsAuth>
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />
@@ -50,7 +50,7 @@ export default function App() {
                     <Route path="/management">
                         <Route path="user" element={<User />} />
                         <Route path="service">
-                            <Route index element={<Services />} />
+                            <Route index element={<CategorySection />} />
                             <Route path=":id" element={<CategoryDetails />} />
                         </Route>
                         <Route path="packages" element={<Packages />} />
