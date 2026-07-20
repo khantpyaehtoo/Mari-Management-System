@@ -11,7 +11,6 @@ import {
 } from "../../components/dashboard/dashboardApi";
 
 // service columns
-
 const serviceColumns = [
     {
         title: "Services",
@@ -34,7 +33,7 @@ const serviceColumns = [
         key: "price",
         render: (val) => (
             <>
-                {val.toLocaleString()} <small>MMK</small>
+                {val?.toLocaleString() || 0} <small>MMK</small>
             </>
         ),
     },
@@ -44,7 +43,7 @@ const serviceColumns = [
         key: "revenue",
         render: (val) => (
             <>
-                {val.toLocaleString()} <small>MMK</small>
+                {val?.toLocaleString() || 0} <small>MMK</small>
             </>
         ),
     },
@@ -126,7 +125,7 @@ const staffColumns = [
         key: "totalRevenue",
         render: (val) => (
             <>
-                {val.toLocaleString()} <small>MMK</small>
+                {val?.toLocaleString() || 0} <small>MMK</small>
             </>
         ),
     },
@@ -136,7 +135,7 @@ const staffColumns = [
         key: "totalCommission",
         render: (val) => (
             <>
-                {val.toLocaleString()} <small>MMK</small>
+                {val?.toLocaleString() || 0} <small>MMK</small>
             </>
         ),
     },
@@ -145,18 +144,36 @@ const staffColumns = [
 const ReportsPage = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
 
-    // Filter Query Parameters
+    const isCurrentMonth = selectedDate.isSame(dayjs(), "month");
+
+    // Selected Month အတွက် Dynamic Query Parameters
     const queryParams = {
-        period: "monthly",
+        period: isCurrentMonth ? "weekly" : "yearly",
         month: selectedDate.format("MM"),
         year: selectedDate.format("YYYY"),
     };
 
-    // API Calls using isFetching for better UX during filters
-    const { data: revenueService, isFetching: isServiceFetching } =
-        useGetServicePieChartQuery(queryParams);
-    const { data: staffPerform, isFetching: isStaffFetching } =
-        useGetStaffPerformQuery(queryParams);
+    // 💡 July (Current Month) ရဲ့ Revenue Data ကို အမြဲရနေအောင် သီးသန့် Query ခေါ်ထားပါမည်
+    const currentMonthParams = {
+        period: "weekly",
+        month: dayjs().format("MM"),
+        year: dayjs().format("YYYY"),
+    };
+
+    const { data: currentMonthReportResponse } =
+        useGetReportChartDataQuery(currentMonthParams);
+
+    // Current Month (July) ရဲ့ Total Revenue ကို Sum တွက်ယူခြင်း
+    const julyChartData = currentMonthReportResponse?.chartData || [];
+    const julyTotalRevenue = julyChartData.reduce((sum, item) => {
+        const rev =
+            item.revenueBlock?.totalRevenue ??
+            item.totalRevenue ??
+            item.revenue ??
+            0;
+        return sum + Number(rev);
+    }, 0);
+
     const {
         data: reportResponse,
         isFetching: isChartFetching,
@@ -164,6 +181,11 @@ const ReportsPage = () => {
     } = useGetReportChartDataQuery(queryParams);
 
     const chartData = reportResponse?.chartData || [];
+
+    const { data: revenueService, isFetching: isServiceFetching } =
+        useGetServicePieChartQuery(queryParams);
+    const { data: staffPerform, isFetching: isStaffFetching } =
+        useGetStaffPerformQuery(queryParams);
 
     // Date Filter Handler
     const handleDateChange = (type, value) => {
@@ -214,8 +236,8 @@ const ReportsPage = () => {
                     Daily Appointment and Monthly Revenue ({formattedDate})
                 </Typography.Title>
                 <div className="mx-auto">
-                    <Card className="w-full shadow-sm p-4">
-                        <div className="relative w-full h-180!">
+                    <Card className="w-full shadow-sm p-4 h-180">
+                        <div className="relative w-full min-h-100">
                             {isChartFetching ? (
                                 <Spin
                                     size="large"
@@ -227,14 +249,18 @@ const ReportsPage = () => {
                                     Failed to load chart data.
                                 </Typography.Text>
                             ) : (
-                                <ReportBarChart chartData={chartData} />
+                                <ReportBarChart
+                                    chartData={chartData}
+                                    selectedMonth={selectedDate.format("MMMM")}
+                                    julyRevenue={julyTotalRevenue}
+                                />
                             )}
                         </div>
                     </Card>
                 </div>
             </section>
 
-            {/*  Revenue by Service */}
+            {/* Revenue by Service */}
             <section className="mb-12">
                 <Typography.Title
                     level={2}
@@ -247,7 +273,7 @@ const ReportsPage = () => {
                         columns={serviceColumns}
                         dataSource={revenueService}
                         loading={isServiceFetching}
-                        rowKey={(record) => record.id || record.services}
+                        rowKey={(record) => record.id || record.serviceName}
                     />
                 </div>
             </section>
@@ -288,7 +314,7 @@ const ReportsPage = () => {
                         columns={staffColumns}
                         dataSource={staffPerform}
                         loading={isStaffFetching}
-                        rowKey={(record) => record.id || record.employeeInfo}
+                        rowKey={(record) => record.id || record.staffCode}
                     />
                 </div>
             </section>
