@@ -20,8 +20,8 @@ dayjs.extend(relativeTime);
 const Notifications = () => {
     const dispatch = useDispatch();
 
-    const { data: staffNotis = [], isLoading: isStaffLoading } =
-        useGetStaffNotificationsQuery();
+    const { isLoading: isStaffLoading } = useGetStaffNotificationsQuery();
+
     const { data: customerData, isLoading: isCustomerLoading } =
         useGetCustomerNotificationsQuery();
 
@@ -106,7 +106,6 @@ const Notifications = () => {
                 <div className="flex w-full h-[calc(100vh-150px)] mt-4 overflow-hidden">
                     {/* LEFT COLUMN: STAFFS */}
                     <StaffNotiHistorySections
-                        staffNotis={staffNotis}
                         getNotificationIcon={getNotificationIcon}
                         showDeleteModal={showDeleteModal}
                     />

@@ -13,7 +13,6 @@ import {
 import {
     useCreatePackageMutation,
     useUpdatePackageMutation,
-    useDeletePackageMutation,
 } from "./packageApi";
 
 const Packages = () => {
@@ -28,9 +27,8 @@ const Packages = () => {
     const { data: servicesData = [], isLoading } = useGetAllServiceDataQuery();
 
     const [createPackage] = useCreatePackageMutation();
-    const [updatePackage] = useUpdatePackageMutation();
-    const [deletePackage, { isLoading: isDeleting }] =
-        useDeletePackageMutation();
+    const [updatePackage, { isLoading: isUpdating }] =
+        useUpdatePackageMutation();
 
     const { data: categoriesData = [] } = useGetCategoryDataQuery();
 
@@ -38,12 +36,16 @@ const Packages = () => {
         return (
             servicesData?.filter((item) => {
                 if (!item) return false;
+
                 const isPackage = item.package === true;
+                const isEnabled = item.enabled !== false;
+
                 const matchesSearch = item.name
                     ?.toString()
                     .toLowerCase()
                     .includes(searchText.toLowerCase());
-                return isPackage && matchesSearch;
+
+                return isPackage && isEnabled && matchesSearch;
             }) || []
         );
     }, [searchText, servicesData]);
@@ -63,20 +65,31 @@ const Packages = () => {
     const handleDeleteConfirm = async () => {
         if (!selectedPackage?.id) return;
         try {
-            await deletePackage({ id: selectedPackage.id }).unwrap();
+            // Soft delete
+            await updatePackage({
+                id: selectedPackage.id,
+                body: {
+                    name: selectedPackage.name,
+                    price: Number(selectedPackage.price),
+                    categoryId: selectedPackage.categoryId || 6,
+                    serviceIds: selectedPackage.serviceIds || [],
+                    enabled: false,
+                },
+            }).unwrap();
+
             dispatch(
                 setMessage({
                     msgType: "success",
-                    msgContent: "Package deleted successfully",
+                    msgContent: "Package disabled successfully",
                 }),
             );
             setDeleteModalOpen(false);
         } catch (error) {
-            console.error("Delete package failed:", error);
+            console.error("Disable package failed:", error);
             dispatch(
                 setMessage({
                     msgType: "error",
-                    msgContent: error?.data?.message || "Delete failed",
+                    msgContent: error?.data?.message || "Disable failed",
                 }),
             );
         }
@@ -108,6 +121,7 @@ const Packages = () => {
                 price: Number(formValues.packagePrice),
                 categoryId: targetCategoryId,
                 serviceIds: selectedServiceIds,
+                enabled: true,
             };
 
             console.log("Sending Payload to Backend:", formattedPayload);
@@ -176,6 +190,7 @@ const Packages = () => {
                 }),
             );
         }
+        // isLoading = { isUpdating };
     };
 
     return (
@@ -312,8 +327,8 @@ const Packages = () => {
                 deleteModalOpen={deleteModalOpen}
                 selectedPackage={selectedPackage}
                 setDeleteModalOpen={setDeleteModalOpen}
-                handleDeleteConfirm={handleDeleteConfirm}
-                isLoading={isDeleting}
+                handleDisableConfirm={handleDeleteConfirm}
+                isLoading={isUpdating}
             />
 
             {/* CREATE PACKAGE MODAL */}

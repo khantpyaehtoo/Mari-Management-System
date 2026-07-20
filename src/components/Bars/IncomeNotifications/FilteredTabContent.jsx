@@ -1,7 +1,7 @@
 import { DownCircleOutlined } from "@ant-design/icons";
 import { Card, Flex, Select, Tabs, Spin, Empty } from "antd";
 import { BellRing, PartyPopper, TriangleAlert } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import isToday from "dayjs/plugin/isToday";
@@ -14,87 +14,99 @@ dayjs.extend(isBetween);
 export const FilteredTabContent = ({ data = [], type, isLoading }) => {
     const [selectedType, setSelectedType] = useState("all");
 
-    // Dynamice icon and style
+    // Dynamic icon and style generator
     const getNotificationIcon = (notiType, metadata) => {
         const bookingStatus = metadata?.bookingStatus?.toUpperCase();
 
         if (notiType?.toUpperCase() === "PROMOTION") {
             return {
-                icon: <PartyPopper size={30} className="text-primary" />,
+                icon: <PartyPopper size={24} className="text-primary" />,
                 bg: "bg-primary-sec",
             };
         }
         if (bookingStatus === "CANCELLED" || bookingStatus === "REJECTED") {
             return {
-                icon: <TriangleAlert size={30} className="text-unavailable" />,
+                icon: <TriangleAlert size={24} className="text-red-500" />,
                 bg: "bg-red-50",
             };
         }
         return {
-            icon: <BellRing size={30} className="text-primary" />,
+            icon: <BellRing size={24} className="text-primary" />,
             bg: "bg-primary-sec",
         };
     };
 
-    // (Today, Week, Month) Filter and Dropdown Type
-    const getFilteredData = (timeScope) => {
-        return data.filter((item) => {
-            const notiDate = dayjs(item.createdAt);
+    // Filter Logic Memoized for Performance
+    const filteredDataByScope = useMemo(() => {
+        const filterItem = (timeScope) => {
+            return data.filter((item) => {
+                const notiDate = dayjs(item.createdAt);
 
-            // Time Filter
-            let matchTime = true;
-            if (timeScope === "today") matchTime = notiDate.isToday();
-            if (timeScope === "week")
-                matchTime = notiDate.isBetween(
-                    dayjs().startOf("week"),
-                    dayjs().endOf("week"),
-                );
-            if (timeScope === "month")
-                matchTime = notiDate.isBetween(
-                    dayjs().startOf("month"),
-                    dayjs().endOf("month"),
-                );
+                // Time Filter
+                let matchTime = true;
+                if (timeScope === "today") matchTime = notiDate.isToday();
+                if (timeScope === "week")
+                    matchTime = notiDate.isBetween(
+                        dayjs().startOf("week"),
+                        dayjs().endOf("week"),
+                        null,
+                        "[]",
+                    );
+                if (timeScope === "month")
+                    matchTime = notiDate.isBetween(
+                        dayjs().startOf("month"),
+                        dayjs().endOf("month"),
+                        null,
+                        "[]",
+                    );
 
-            // Dropdown Type Filter
-            let matchType = true;
-            if (selectedType !== "all") {
-                const bookingStatus =
-                    item?.metadata?.bookingStatus?.toUpperCase();
-                const isReview =
-                    item?.title?.toUpperCase()?.includes("REVIEW") ||
-                    item?.type?.toUpperCase() === "REVIEW";
+                // Dropdown Type Filter
+                let matchType = true;
+                if (selectedType !== "all") {
+                    const bookingStatus =
+                        item?.metadata?.bookingStatus?.toUpperCase();
+                    const isReview =
+                        item?.title?.toUpperCase()?.includes("REVIEW") ||
+                        item?.type?.toUpperCase() === "REVIEW";
 
-                if (selectedType === "cancel")
-                    matchType =
-                        bookingStatus === "CANCELLED" ||
-                        bookingStatus === "REJECTED";
-                else if (
-                    selectedType === "ordered" ||
-                    selectedType === "started"
-                )
-                    matchType =
-                        bookingStatus === "CONFIRMED" ||
-                        bookingStatus === "CONFIRM" ||
-                        item?.type?.toUpperCase() === "BOOKING";
-                else if (selectedType === "completed")
-                    matchType = bookingStatus === "COMPLETED";
-                else if (selectedType === "review") matchType = isReview;
-            }
+                    if (selectedType === "cancel")
+                        matchType =
+                            bookingStatus === "CANCELLED" ||
+                            bookingStatus === "REJECTED";
+                    else if (
+                        selectedType === "ordered" ||
+                        selectedType === "started"
+                    )
+                        matchType =
+                            bookingStatus === "CONFIRMED" ||
+                            bookingStatus === "CONFIRM" ||
+                            item?.type?.toUpperCase() === "BOOKING";
+                    else if (selectedType === "completed")
+                        matchType = bookingStatus === "COMPLETED";
+                    else if (selectedType === "review") matchType = isReview;
+                }
 
-            return matchTime && matchType;
-        });
-    };
+                return matchTime && matchType;
+            });
+        };
 
-    const renderCards = (timeScope) => {
-        if (isLoading)
+        return {
+            today: filterItem("today"),
+            week: filterItem("week"),
+            month: filterItem("month"),
+        };
+    }, [data, selectedType]);
+
+    const renderCardList = (list) => {
+        if (isLoading) {
             return (
                 <div className="py-10 text-center">
                     <Spin />
                 </div>
             );
+        }
 
-        const list = getFilteredData(timeScope);
-        if (list.length === 0)
+        if (list.length === 0) {
             return (
                 <Empty
                     description="No notifications"
@@ -102,6 +114,7 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
                     className="pt-6"
                 />
             );
+        }
 
         return (
             <Flex
@@ -117,30 +130,32 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
                     return (
                         <Card
                             key={item.id}
-                            className={`border-gray-300! shadow-sm! rounded-xl! hover:shadow-md! transition-shadow ${!item.read ? "bg-pink-50/5" : ""}`}
+                            className={`border-gray-200! shadow-sm! rounded-xl! hover:shadow-md! transition-shadow ${
+                                !item.read ? "bg-pink-50/20" : ""
+                            }`}
                         >
                             <Flex justify="space-between" align="start">
                                 <div
-                                    className={`${uiStyle.bg} me-4 rounded-2xl p-3 shrink-0`}
+                                    className={`${uiStyle.bg} me-3 rounded-2xl p-3 shrink-0 flex items-center justify-center`}
                                 >
                                     {uiStyle.icon}
                                 </div>
                                 <div className="grow">
-                                    <h1 className="text-primary font-semibold text-base mb-1">
+                                    <h4 className="text-primary font-semibold text-sm mb-1">
                                         {item.title}
-                                    </h1>
-                                    <p className="text-xs text-gray-600 leading-relaxed">
+                                    </h4>
+                                    <p className="text-xs text-gray-600 leading-relaxed mb-1">
                                         {item.message}
                                     </p>
                                     {item.metadata?.customerName && (
-                                        <p className="text-[11px] font-medium text-gray-500 mt-1">
+                                        <p className="text-[11px] font-medium text-gray-500">
                                             By: {item.metadata.customerName}
                                         </p>
                                     )}
-                                    <small className="text-gray-400 block mt-2">
+                                    <small className="text-gray-400 block mt-2 text-[10px]">
                                         {item.createdAt
                                             ? dayjs(item.createdAt).fromNow()
-                                            : "1 Month ago"}
+                                            : "N/A"}
                                     </small>
                                 </div>
                             </Flex>
@@ -152,12 +167,23 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
     };
 
     const innerTabItems = [
-        { key: "today", label: "Today", children: renderCards("today") },
-        { key: "week", label: "This Week", children: renderCards("week") },
-        { key: "month", label: "This Month", children: renderCards("month") },
+        {
+            key: "today",
+            label: "Today",
+            children: renderCardList(filteredDataByScope.today),
+        },
+        {
+            key: "week",
+            label: "This Week",
+            children: renderCardList(filteredDataByScope.week),
+        },
+        {
+            key: "month",
+            label: "This Month",
+            children: renderCardList(filteredDataByScope.month),
+        },
     ];
 
-    // Select Dropdown Configurations
     const selectOptions = [
         { value: "all", label: "All" },
         ...(type === "customers"
@@ -181,7 +207,7 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
                 animated={false}
                 tabBarExtraContent={
                     <Select
-                        defaultValue="all"
+                        value={selectedType}
                         className="custom-filter-select w-32"
                         classNames={{ popup: { root: "rounded-xl shadow-lg" } }}
                         suffixIcon={

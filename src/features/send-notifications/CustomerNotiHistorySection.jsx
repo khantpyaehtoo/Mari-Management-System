@@ -1,11 +1,15 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Avatar, Button, Card, Empty, Flex } from "antd";
+import { useGetCustomerNotificationsQuery } from "./notificationApi";
 
 const CustomerNotiHistorySection = ({
-    customerNotis,
     showDeleteModal,
     getNotificationIcon,
 }) => {
+    const { data: customerData } = useGetCustomerNotificationsQuery();
+
+    const customerNotis = customerData?.content || [];
+
     return (
         <div className="w-1/2 h-full overflow-y-auto px-5 py-2 space-y-4">
             <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects mb-4">

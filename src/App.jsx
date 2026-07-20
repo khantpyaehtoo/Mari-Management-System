@@ -18,8 +18,8 @@ import ReportsPage from "./features/reports/ReportsPage.jsx";
 import Packages from "./features/management/PackageSection/Packages.jsx";
 import Notifications from "./features/send-notifications/Notifications.jsx";
 
-// import IsAuth from "./components/Guards/IsAuth.jsx";
-// import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
+import IsAuth from "./components/Guards/IsAuth.jsx";
+import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 
 export default function App() {
     return (
@@ -29,9 +29,9 @@ export default function App() {
                 <Route
                     path="/login"
                     element={
-                        // <IsNotAuth>
-                        <LoginForm />
-                        // </IsNotAuth>
+                        <IsNotAuth>
+                            <LoginForm />
+                        </IsNotAuth>
                     }
                 />
                 <Route path="/reset" element={<ForgetPasswordForm />} />
@@ -40,9 +40,9 @@ export default function App() {
                 <Route
                     path="/"
                     element={
-                        // <IsAuth>
-                        <MainLayout />
-                        // </IsAuth>
+                        <IsAuth>
+                            <MainLayout />
+                        </IsAuth>
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />

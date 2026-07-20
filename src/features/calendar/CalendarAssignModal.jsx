@@ -8,14 +8,16 @@ import {
     Select,
     Space,
     Typography,
-    message,
 } from "antd";
 import { useEffect, useMemo } from "react";
 import { useCreateCalendarDataMutation } from "./calendarApi";
 import { cn } from "../../lib/utils";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../app/core/notiSlice";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
     const [form] = Form.useForm();
+    const dispatch = useDispatch();
 
     const [createCalendarData, { isLoading: isAssigning }] =
         useCreateCalendarDataMutation();
@@ -41,46 +43,59 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
 
     const handleFinish = async (values) => {
         try {
-            let startDateISO = null;
-            let endDateISO = null;
+            let startDateFormatted = null;
+            let endDateFormatted = null;
             const selectDate = values["select-date"];
 
+            // if (selectDate && Array.isArray(selectDate)) {
+            //     //  toISOString()
+            //     startDateFormatted = selectDate[0]
+            //         ? selectDate[0].startOf("day").toISOString()
+            //         : null;
+
+            //     if (selectDate[1]) {
+            //         endDateFormatted = selectDate[1].endOf("day").toISOString();
+            //     }
+            // }
+
             if (selectDate && Array.isArray(selectDate)) {
-                // API Doc အတိုင်း ISO 8601 String Format (Z timezone ပါဝင်အောင်) ပြောင်းလဲပေးပါမယ်
-                startDateISO = selectDate[0]
-                    ? selectDate[0].startOf("day").toISOString()
+                startDateFormatted = selectDate[0]
+                    ? selectDate[0].format("YYYY-MM-DDT00:00:00.000[Z]")
                     : null;
 
-                // တကယ်လို့ start date နဲ့ end date မတူမှသာ (ရက်ရှည်ခွင့်ဖြစ်မှသာ) endDate ကို ထည့်ပေးပါမယ်
-                if (
-                    selectDate[1] &&
-                    !selectDate[0].isSame(selectDate[1], "day")
-                ) {
-                    endDateISO = selectDate[1].endOf("day").toISOString();
+                if (selectDate[1]) {
+                    endDateFormatted = selectDate[1].format(
+                        "YYYY-MM-DDT23:59:59.000[Z]",
+                    );
                 }
             }
 
-            // API Specification အတိုင်း Payload တည်ဆောက်ခြင်း
             const payload = {
-                staffProfileId: Number(values["staff-member"]), // Multiple မဟုတ်တော့ဘဲ Single Integer ဖြစ်သွားပါသည်
-                leaveType: values["leave-type"], // ဥပမာ- "PERSONAL" သို့မဟုတ် "DAYOFF"
-                startDate: startDateISO,
-                ...(endDateISO && { endDate: endDateISO }), // ရက်ရှည်မှသာ endDate ထည့်ပို့မည်
+                staffProfileId: Number(values["staff-member"]),
+                leaveType: values["leave-type"],
+                startDate: startDateFormatted,
+                ...(endDateFormatted && { endDate: endDateFormatted }),
                 note: values["note"] || "",
             };
 
             await createCalendarData(payload).unwrap();
 
-            message.success("Leave assigned successfully!");
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Leave assigned successfully!",
+                }),
+            );
             setOpenCalForm(false);
             form.resetFields();
             setSelectedDates(null);
         } catch (error) {
             console.error("Failed to assign leave:", error);
-            // Backend က ပေးလိုက်တဲ့ error message ("Leave assignment denied!...") ကို ဖတ်ပြီး UI မှာ တန်းပြပေးပါမယ်
-            message.error(
-                error?.data?.message ||
-                    "Failed to assign leave. Please try again.",
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: "Failed to assign leave. Please try again.",
+                }),
             );
         }
     };
@@ -134,7 +149,6 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                         },
                     ]}
                 >
-                    {/* API Doc အရ တစ်ကြိမ်လျှင် Staff တစ်ဦးတည်းကိုသာ Assign ပေးနိုင်သဖြင့် mode="multiple" ကို ဖြုတ်လိုက်ပါသည် */}
                     <Select
                         style={{ width: "100%" }}
                         placeholder="Please select a staff."

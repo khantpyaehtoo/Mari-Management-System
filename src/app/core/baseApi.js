@@ -28,7 +28,7 @@ export const baseApi = createApi({
         "staffs",
         "calendar",
         "notifications",
-        "incoming-notifications",
+        "report-chart",
     ],
     endpoints: () => ({}),
 });

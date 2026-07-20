@@ -1,16 +1,15 @@
 import { BellOutlined, SendOutlined } from "@ant-design/icons";
 import { Button, Drawer, Tabs } from "antd";
 import { useNavigate } from "react-router-dom";
+import { FilteredTabContent } from "./FilteredTabContent";
 import {
     useGetIncomingCustomerNotisQuery,
     useGetIncomingStaffNotisQuery,
-} from "../../services/notiApi"; // 💡 မိမိဖိုင်လမ်းကြောင်းအတိုင်း ပြောင်းလဲပါ
-import { FilteredTabContent } from "./FilteredTabContent"; // 💡 ဖိုင်လမ်းကြောင်း စစ်ဆေးရန်
+} from "./incomeNotiApi";
 
 const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
     const nav = useNavigate();
 
-    // 💡 API Hooks ခေါ်ယူခြင်း (Drawer ပွင့်မှသာ Data လှမ်းဆွဲပါမည်)
     const { data: customerData, isLoading: isCustomerLoading } =
         useGetIncomingCustomerNotisQuery(undefined, { skip: !isNotiOpen });
     const { data: staffData, isLoading: isStaffLoading } =
@@ -24,7 +23,6 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
         onCloseDrawer();
     };
 
-    // 💡 Parent Tabs Items (Customer နှင့် Staff ခွဲခြားရန်)
     const parentTabItems = [
         {
             key: "1",
@@ -52,7 +50,7 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
 
     return (
         <Drawer
-            title={"Notifications"}
+            title="Notifications"
             open={isNotiOpen}
             onClose={onCloseDrawer}
             mask={true}
@@ -62,28 +60,26 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
                 body: { padding: "0" },
             }}
         >
-            <>
-                <div className="flex justify-between items-center px-4 py-4 shadow-md border-b border-gray-100">
-                    <p className="text-gray-700 font-semibold m-0 flex items-center gap-2">
-                        <BellOutlined className="text-primary" /> Inbox
-                    </p>
-                    <Button
-                        type="primary"
-                        onClick={navigateSentNoti}
-                        className="border-primary"
-                    >
-                        <SendOutlined /> Send Noti
-                    </Button>
-                </div>
+            <div className="flex justify-between items-center px-4 py-4 shadow-md border-b border-gray-100">
+                <p className="text-gray-700 font-semibold m-0 flex items-center gap-2">
+                    <BellOutlined className="text-primary" /> Inbox
+                </p>
+                <Button
+                    type="primary"
+                    onClick={navigateSentNoti}
+                    className="border-primary"
+                >
+                    <SendOutlined /> Send Noti
+                </Button>
+            </div>
 
-                <Tabs
-                    defaultActiveKey="1"
-                    items={parentTabItems}
-                    tabBarStyle={{ width: "100%" }}
-                    centered
-                    className="w-full"
-                />
-            </>
+            <Tabs
+                defaultActiveKey="1"
+                items={parentTabItems}
+                tabBarStyle={{ width: "100%" }}
+                centered
+                className="w-full"
+            />
         </Drawer>
     );
 };

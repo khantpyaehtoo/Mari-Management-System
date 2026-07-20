@@ -32,14 +32,8 @@ const SubHeaderSection = ({
     const { Title } = Typography;
     const nav = useNavigate();
 
-    const {
-        DebounceSelect,
-        fetchUserList,
-        value,
-        setValue,
-        openCalForm,
-        setOpenCalForm,
-    } = CalendarConfig || {};
+    const { DebounceSelect, fetchUserList, value, setValue, setOpenCalForm } =
+        CalendarConfig || {};
 
     const { selectedDate, onDateChange } = reportConfig || {};
 
@@ -136,18 +130,27 @@ const SubHeaderSection = ({
                     {title?.includes("Staff Schedule and Calendar") && (
                         <Space>
                             <DebounceSelect
-                                mode="multiple"
                                 value={value}
-                                placeholder="Select users"
+                                placeholder="Select user"
                                 fetchOptions={fetchUserList}
-                                style={{ width: "400px" }}
+                                style={{ width: "300px" }}
                                 onChange={(newValue) => {
-                                    if (Array.isArray(newValue))
-                                        setValue(newValue);
+                                    setValue(newValue || null);
+
+                                    if (CalendarConfig?.onChange) {
+                                        CalendarConfig.onChange(
+                                            newValue || null,
+                                        );
+                                    }
+                                }}
+                                onClear={() => {
+                                    setValue(null);
+                                    if (CalendarConfig?.onChange) {
+                                        CalendarConfig.onChange(null);
+                                    }
                                 }}
                             />
                             <Button
-                                value={openCalForm}
                                 type="primary"
                                 icon={<PlusCircleOutlined />}
                                 onClick={() => setOpenCalForm(true)}

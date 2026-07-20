@@ -1,7 +1,6 @@
 import { Badge, Calendar, Col, Popover, Row, Space } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
 import { useMemo, useState } from "react";
-// import DebounceSelect from "../../components/DebounceSelect";
 import dayjs from "dayjs";
 import EmployeeAttendance from "./EmployeeAttendance";
 import CalendarDetailOverview from "./CalendarDetailOverview";
@@ -10,30 +9,50 @@ import { useGetCalendarDataQuery, useGetDailyStaffQuery } from "./calendarApi";
 import DebounceSelect from "./DebounceSelect";
 
 const leaveOptions = [
-    { label: "DayOff", value: "DAYOFF" },
-    { label: "Sick Leave", value: "SICK" },
+    { label: "DayOff", value: "DAY_OFF" },
+    { label: "Sick Leave", value: "SICK_LEAVE" },
     { label: "Personal", value: "PERSONAL" },
     { label: "Maternity", value: "MATERNITY" },
 ];
 
 const CalendarSection = () => {
     const [currentMonth, setCurrentMonth] = useState(dayjs().format("M"));
-    const [selectedUserFilter, setSelectedUserFilter] = useState(null); // { value: id, label: name }
+    const [selectedUserFilter, setSelectedUserFilter] = useState(null);
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [activePopoverDate, setActivePopoverDate] = useState(null);
     const [openCalForm, setOpenCalForm] = useState(false);
 
-    // ၁။ Daily Staff List ကို API ကနေ ယူမယ်
     const { data: dailyStaff } = useGetDailyStaffQuery();
 
-    // ၂။ Dropdown မှာ Staff ID ရှိရင် API Parameter ထဲ ထည့်ပို့မယ်
     const staffIdParam = selectedUserFilter?.value || undefined;
     const { data: calendarData = [] } = useGetCalendarDataQuery({
         month: currentMonth,
         staffId: staffIdParam,
     });
 
-    // ၃။ ဒေသတွင်း Debounce Select မှာ ပြပေးဖို့ function
+    console.log("Daily Staff API Response:", dailyStaff);
+
+    const todayStr = dayjs().format("YYYY-MM-DD");
+
+    const todayEvents = useMemo(() => {
+        const todayData = calendarData.find((item) =>
+            item.date.startsWith(todayStr),
+        );
+        return todayData?.events || [];
+    }, [calendarData, todayStr]);
+
+    const unavailableStaffIds = useMemo(() => {
+        return todayEvents.map((e) => e.staffProfileId || e.staffId || e.id);
+    }, [todayEvents]);
+
+    // Active Staff
+    const actualActiveStaff = useMemo(() => {
+        if (!dailyStaff?.activeStaff) return [];
+        return dailyStaff.activeStaff.filter(
+            (staff) => !unavailableStaffIds.includes(staff.id),
+        );
+    }, [dailyStaff, unavailableStaffIds]);
+
     const handleFetchUserList = async (searchText) => {
         if (!dailyStaff?.activeStaff) return [];
         const list = dailyStaff.activeStaff;
@@ -51,26 +70,34 @@ const CalendarSection = () => {
         }));
     };
 
-    // ၄။ Assign Modal ထဲက Select Dropdown မှာ ပြဖို့ တကယ့် API Staff Data ကို Map လုပ်ခြင်း
     const dynamicOptionsStaff = useMemo(() => {
         if (!dailyStaff?.activeStaff) return [];
         return dailyStaff.activeStaff.map((user) => ({
             label: user.name,
-            value: user.id, // တကယ့် database staff profile id ဖြစ်သွားပါပြီ
-            emoji: "👤",
+            value: user.id,
             desc: user.role || "STAFF",
             avatar: user.profileImage,
         }));
     }, [dailyStaff]);
 
-    // ၅။ Cell တစ်ခုချင်းစီမှာ ပြမယ့် Data Logic
+    const handleFilterChange = (val) => {
+        if (!val) {
+            setSelectedUserFilter(null);
+        } else {
+            setSelectedUserFilter(val);
+        }
+    };
+
+    // Calendar Cell Render Logic
     const dateCellRender = (calendarValue) => {
         const dateStr = calendarValue.format("YYYY-MM-DD");
         const dayData = calendarData.find((item) =>
             item.date.startsWith(dateStr),
         );
 
-        // ဝန်ထမ်း တစ်ယောက်တည်းကို ရွေးထားတဲ့ အခြေအနေ (Individual Mode)
+        const totalStaffCount = dailyStaff?.activeStaff?.length || 0;
+
+        // (Individual Mode)
         if (selectedUserFilter) {
             const hasEvents =
                 dayData && dayData.events && dayData.events.length > 0;
@@ -94,7 +121,7 @@ const CalendarSection = () => {
                             }}
                         >
                             <span className="text-xs font-bold text-red-600 block truncate">
-                                🛑 {selectedUserFilter.label}
+                                {selectedUserFilter.label}
                             </span>
                             <span className="text-2xs text-gray-500 block">
                                 {dayData.events[0]?.leaveType || "Day Off"}
@@ -106,12 +133,21 @@ const CalendarSection = () => {
         }
 
         // All Staff Mode
-        if (!dayData) return null;
+        const events = dayData?.events || [];
 
-        const dayOffCount =
-            dayData.events?.filter((e) => e.leaveType === "DAYOFF").length || 0;
-        const leaveCount =
-            dayData.events?.filter((e) => e.leaveType !== "DAYOFF").length || 0;
+        const dayOffCount = events.filter(
+            (e) => e.leaveType === "DAY_OFF" || e.leaveType === "DAYOFF",
+        ).length;
+
+        const leaveCount = events.filter(
+            (e) => e.leaveType !== "DAY_OFF" && e.leaveType !== "DAYOFF",
+        ).length;
+
+        // Active Staff = total Staff - (DayOff + Leave)
+        const activeCount = Math.max(
+            0,
+            totalStaffCount - (dayOffCount + leaveCount),
+        );
 
         return (
             <Popover
@@ -127,7 +163,7 @@ const CalendarSection = () => {
                 }}
                 content={
                     <CalendarDetailOverview
-                        details={dayData.events}
+                        details={events}
                         selectedDate={calendarValue}
                         setActivePopoverDate={setActivePopoverDate}
                     />
@@ -137,25 +173,45 @@ const CalendarSection = () => {
                 <div
                     style={{ width: "100%", height: "100%", minHeight: "50px" }}
                 >
-                    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                    <ul
+                        style={{ listStyle: "none", padding: 0, margin: 0 }}
+                        className="space-y-0.5"
+                    >
+                        {/* Active Staff Count */}
+                        {totalStaffCount > 0 && (
+                            <li>
+                                <Badge
+                                    status="success"
+                                    text={
+                                        <span className="text-xs font-medium text-green-500">
+                                            Active: {activeCount}
+                                        </span>
+                                    }
+                                />
+                            </li>
+                        )}
+
+                        {/* Day Off Count */}
                         {dayOffCount > 0 && (
                             <li>
                                 <Badge
                                     status="warning"
                                     text={
-                                        <span className="text-xs">
+                                        <span className="text-xs font-medium text-progress">
                                             Day Off: {dayOffCount}
                                         </span>
                                     }
                                 />
                             </li>
                         )}
+
+                        {/* Leave Count */}
                         {leaveCount > 0 && (
                             <li>
                                 <Badge
                                     status="error"
                                     text={
-                                        <span className="text-xs">
+                                        <span className="text-xs font-medium text-red-600">
                                             Leave: {leaveCount}
                                         </span>
                                     }
@@ -173,12 +229,14 @@ const CalendarSection = () => {
         fetchUserList: handleFetchUserList,
         value: selectedUserFilter,
         setValue: setSelectedUserFilter,
+        onChange: handleFilterChange,
         setOpenCalForm,
         openCalForm,
+        options: dynamicOptionsStaff,
     };
 
     const calendarAssignConfig = {
-        optionsStaff: dynamicOptionsStaff, // Mock optionsStaff အစား တကယ့် Dynamic Data ကို ပြောင်းထည့်လိုက်ပါသည်
+        optionsStaff: dynamicOptionsStaff,
         setSelectedDates: setSelectedDate,
         selectedDates: selectedDate,
         setOpenCalForm,
@@ -196,16 +254,13 @@ const CalendarSection = () => {
 
             <Row gutter={[20, 20]}>
                 <Col xs={24} md={8} lg={6}>
-                    {/* EmployeeAttendance ထဲမှာ ကိုယ်ပိုင် API ခေါ်ထားပြီးဖြစ်၍ calendarData prop ပို့ထားခြင်းကို ဖြုတ်လိုက်ပါသည် */}
-                    <EmployeeAttendance />
+                    <EmployeeAttendance
+                        activeStaff={actualActiveStaff}
+                        todayEvents={todayEvents}
+                    />
                 </Col>
                 <Col xs={24} md={16} lg={18}>
-                    {/* အရင်က vertical ဟုပဲ ရှိနေသောနေရာတွင် direction="vertical" ဟု မှန်ကန်အောင် ပြင်ဆင်ထားပါသည် */}
-                    <Space
-                        direction="vertical"
-                        style={{ width: "100%" }}
-                        size="middle"
-                    >
+                    <Space vertical style={{ width: "100%" }} size="middle">
                         <Calendar
                             cellRender={dateCellRender}
                             className="custom-calendar"

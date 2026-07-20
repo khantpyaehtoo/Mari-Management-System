@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import { baseApi } from "../../app/core/baseApi";
+
 const calendarData = "calendar";
 const dailyStaff = "daily-status";
 const dayLeave = "selected-day-leaves";
@@ -16,19 +18,37 @@ export const calendarApi = baseApi.injectEndpoints({
         }),
 
         getDailyStaff: builder.query({
-            query: () => ({
-                url: `admin/staffs/${dailyStaff}`,
-                method: "GET",
-            }),
+            query: (targetDate) => {
+                const formattedDate = targetDate
+                    ? dayjs.isDayjs(targetDate)
+                        ? targetDate.format("YYYY-MM-DD")
+                        : targetDate
+                    : dayjs().format("YYYY-MM-DD");
+
+                return {
+                    url: `admin/staffs/${dailyStaff}`,
+                    method: "GET",
+                    params: { targetDate: formattedDate },
+                };
+            },
             providesTags: ["daily-status"],
         }),
 
         getSelectedDayLeaves: builder.query({
-            query: (targetDate) => ({
-                url: `admin/staffs/${dayLeave}`,
-                method: "GET",
-                params: { targetDate },
-            }),
+            query: (targetDate) => {
+                // Instant Format (ISO String)
+                const formattedDate = targetDate
+                    ? dayjs.isDayjs(targetDate)
+                        ? targetDate.startOf("day").toISOString()
+                        : new Date(targetDate).toISOString()
+                    : dayjs().startOf("day").toISOString();
+
+                return {
+                    url: `admin/staffs/${dayLeave}`,
+                    method: "GET",
+                    params: { targetDate: formattedDate },
+                };
+            },
             providesTags: ["selected-day-leaves"],
         }),
 

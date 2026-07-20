@@ -215,11 +215,12 @@ const ReportsPage = () => {
                 </Typography.Title>
                 <div className="mx-auto">
                     <Card className="w-full shadow-sm p-4">
-                        <div className="relative w-full h-105! flex items-center justify-center">
+                        <div className="relative w-full h-180!">
                             {isChartFetching ? (
                                 <Spin
                                     size="large"
                                     description="Loading Chart Data..."
+                                    className="flex! justify-center! items-center! min-h-100"
                                 />
                             ) : chartError ? (
                                 <Typography.Text type="danger">

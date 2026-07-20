@@ -1,4 +1,5 @@
 import { baseApi } from "../../app/core/baseApi";
+
 const reportEndPoint = "report-chart";
 
 const reportApi = baseApi.injectEndpoints({

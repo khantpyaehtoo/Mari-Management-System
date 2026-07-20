@@ -1,5 +1,5 @@
 import { Avatar, Select, Spin } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebounceCallback } from "../../lib/hooks/useDebounceCallback";
 
 export default function DebounceSelect({
@@ -19,23 +19,41 @@ export default function DebounceSelect({
         };
     }, []);
 
-    const debouncedSearch = useDebounceCallback((value) => {
-        fetchRef.current += 1;
-        const fetchId = fetchRef.current;
-        setOptions([]);
-        setFetching(true);
+    // Fetch Function
+    const loadOptions = useCallback(
+        (searchValue = "") => {
+            fetchRef.current += 1;
+            const fetchId = fetchRef.current;
+            setFetching(true);
 
-        fetchOptions(value)
-            .then((newOptions) => {
-                // Condition
-                if (!isMounted.current || fetchId !== fetchRef.current) return;
-                setOptions(newOptions);
-                setFetching(false);
-            })
-            .catch(() => {
-                if (isMounted.current) setFetching(false);
-            });
+            fetchOptions(searchValue)
+                .then((newOptions) => {
+                    if (!isMounted.current || fetchId !== fetchRef.current)
+                        return;
+                    setOptions(newOptions || []);
+                    setFetching(false);
+                })
+                .catch(() => {
+                    if (isMounted.current) setFetching(false);
+                });
+        },
+        [fetchOptions],
+    );
+
+    // Debouncing Search
+    const debouncedSearch = useDebounceCallback((value) => {
+        loadOptions(value);
     }, debounceTimeout);
+
+    // Dropdown Initial List Handler
+    const handleDropdownVisibleChange = (open) => {
+        if (open) {
+            loadOptions("");
+        }
+        if (props.onDropdownVisibleChange) {
+            props.onDropdownVisibleChange(open);
+        }
+    };
 
     return (
         <Select
@@ -43,10 +61,17 @@ export default function DebounceSelect({
             showSearch
             filterOption={false}
             onSearch={debouncedSearch}
+            onDropdownVisibleChange={handleDropdownVisibleChange}
             placeholder="Select staff"
             allowClear
             notFoundContent={
-                fetching ? <Spin size="small" /> : "No results found"
+                fetching ? (
+                    <div style={{ textAlign: "center", padding: "8px 0" }}>
+                        <Spin size="small" />
+                    </div>
+                ) : (
+                    "No results found"
+                )
             }
             {...props}
             options={options}
@@ -56,6 +81,7 @@ export default function DebounceSelect({
                         <Avatar
                             src={option.data.avatar}
                             style={{ marginInlineEnd: 8 }}
+                            size="small"
                         />
                     )}
                     {option.label}

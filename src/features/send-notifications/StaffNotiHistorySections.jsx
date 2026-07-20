@@ -1,12 +1,13 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Card, Empty, Flex } from "antd";
 import dayjs from "dayjs";
+import { useGetStaffNotificationsQuery } from "./notificationApi";
 
-const StaffNotiHistorySections = ({
-    staffNotis,
-    getNotificationIcon,
-    showDeleteModal,
-}) => {
+const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
+    const { data } = useGetStaffNotificationsQuery();
+
+    const staffNotis = Array.isArray(data) ? data : data?.data || [];
+
     return (
         <div className="w-1/2 h-full overflow-y-auto border-e border-e-gray-400 px-5 py-2 space-y-4">
             <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects mb-4">

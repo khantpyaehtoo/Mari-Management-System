@@ -1,5 +1,6 @@
 import { Avatar, Card, Flex, Space, Typography, Spin } from "antd";
 import dayjs from "dayjs";
+import { useMemo } from "react";
 import {
     useGetDailyStaffQuery,
     useGetSelectedDayLeavesQuery,
@@ -7,16 +8,36 @@ import {
 
 const EmployeeAttendance = () => {
     const todayLabel = dayjs().format("MMMM DD");
-    // API က တောင်းတဲ့ ISO Format (ဥပမာ- 2026-07-16T00:00:00Z) ပုံစံအတိုင်း ယနေ့ရက်စွဲကို ပြောင်းပါမယ်
-    const todayISOStr = dayjs().startOf("day").toISOString();
 
-    // ၁။ နေ့စဉ် Staff Status API ကို ခေါ်ယူခြင်း (Today's Staffs အတွက်)
+    const todayFormattedDate = dayjs().format("YYYY-MM-DD");
+
     const { data: dailyStaffData, isLoading: isDailyLoading } =
         useGetDailyStaffQuery();
 
-    // ၂။ ယနေ့ ခွင့်ယူထားသော ဝန်ထမ်းများစာရင်း API ကို ခေါ်ယူခြင်း (Leave Staff အတွက်)
-    const { data: leaveStaffs = [], isLoading: isLeaveLoading } =
-        useGetSelectedDayLeavesQuery(todayISOStr);
+    //  .format("YYYY-MM-DDTHH:mm:ssZ")
+    const { data: leaveStaffsData = [], isLoading: isLeaveLoading } =
+        useGetSelectedDayLeavesQuery(todayFormattedDate);
+
+    const dayOffStaffs = useMemo(() => {
+        return leaveStaffsData.filter((item) => item.leaveType === "DAY_OFF");
+    }, [leaveStaffsData]);
+
+    const actualLeaveStaffs = useMemo(() => {
+        return leaveStaffsData.filter((item) => item.leaveType !== "DAY_OFF");
+    }, [leaveStaffsData]);
+
+    const unavailableStaffIds = useMemo(() => {
+        return leaveStaffsData.map(
+            (item) => item.staffProfileId || item.staffId || item.id,
+        );
+    }, [leaveStaffsData]);
+
+    const activeStaffs = useMemo(() => {
+        const rawActive = dailyStaffData?.activeStaff || [];
+        return rawActive.filter(
+            (staff) => !unavailableStaffIds.includes(staff.id),
+        );
+    }, [dailyStaffData, unavailableStaffIds]);
 
     if (isDailyLoading || isLeaveLoading) {
         return (
@@ -24,24 +45,16 @@ const EmployeeAttendance = () => {
                 className="w-full rounded-2xl! border-2! border-primary! mt-5! flex justify-center items-center"
                 style={{ minHeight: "300px" }}
             >
-                <Spin tip="Loading today's schedule..." />
+                <Spin description="Loading today's schedule..." />
             </Card>
         );
     }
 
-    // Backend Response ထဲက activeStaff ကို ယူမယ်
-    const activeStaffs = dailyStaffData?.activeStaff || [];
-
-    // Note: လက်ရှိ API response အရ Day Off စာရင်း သီးသန့် မပါသေးတဲ့အတွက်
-    // လုပ်ငန်းခွင်ထဲမှာ မရှိသေးတဲ့ ဝန်ထမ်းတွေရှိရင် Logic နဲ့ တွက်ထုတ်ဖို့ လိုနိုင်ပါတယ် (လက်ရှိ empty array ထားပါသည်)
-    const dayOffStaffs = [];
-
     const renderStaffItem = (staff, isLeave = false, dotColorClass = "") => {
-        // Leave API ကလာတဲ့ Key နဲ့ Daily Staff API ကလာတဲ့ Key ကွာခြားမှုကို ညှိပါမယ်
-        const id = isLeave ? staff.staffProfileId : staff.id;
-        const name = isLeave ? staff.staffName : staff.name;
+        const id = isLeave ? staff.staffProfileId || staff.id : staff.id;
+        const name = isLeave ? staff.staffName || staff.name : staff.name;
         const role = staff.role || "STAFF";
-        const avatarUrl = isLeave ? staff.profileImage : staff.profileImage;
+        const avatarUrl = staff.profileImage;
 
         return (
             <div
@@ -81,14 +94,14 @@ const EmployeeAttendance = () => {
             className="w-full rounded-2xl! border-2! border-primary! mt-5! shadow-md!"
             styles={{ header: { padding: "10px" }, body: { padding: "3px" } }}
         >
-            {/* ၁။ Today's Staffs Section */}
+            {/* Today's Staffs Section */}
             <div className="border-b border-b-black p-4">
                 <div>
                     <Typography.Title
                         level={4}
                         className="text-center! font-medium! m-0!"
                     >
-                        Today's Staffs ({todayLabel})
+                        Today's Staffs ({todayLabel}) - {activeStaffs.length}
                     </Typography.Title>
                 </div>
                 <section className="space-y-2">
@@ -108,14 +121,14 @@ const EmployeeAttendance = () => {
                 </section>
             </div>
 
-            {/* ၂။ Day Off Section */}
+            {/* Day Off Section */}
             <div className="border-b border-b-black p-4">
                 <div>
                     <Typography.Title
                         level={4}
                         className="text-center font-medium! m-0!"
                     >
-                        Day Off ({todayLabel})
+                        Day Off ({todayLabel}) - {dayOffStaffs.length}
                     </Typography.Title>
                 </div>
                 <section className="space-y-2">
@@ -123,7 +136,7 @@ const EmployeeAttendance = () => {
                         dayOffStaffs.map((staff) =>
                             renderStaffItem(
                                 staff,
-                                false,
+                                true,
                                 "bg-yellow-300 border-yellow-500",
                             ),
                         )
@@ -135,19 +148,19 @@ const EmployeeAttendance = () => {
                 </section>
             </div>
 
-            {/* ၃။ Leave Staff Section */}
+            {/* Leave Staff Section */}
             <div className="p-4">
                 <div>
                     <Typography.Title
                         level={4}
                         className="text-center font-medium! m-0!"
                     >
-                        Leave Staff ({todayLabel})
+                        Leave Staff ({todayLabel}) - {actualLeaveStaffs.length}
                     </Typography.Title>
                 </div>
                 <section className="space-y-2">
-                    {leaveStaffs.length > 0 ? (
-                        leaveStaffs.map((staff) =>
+                    {actualLeaveStaffs.length > 0 ? (
+                        actualLeaveStaffs.map((staff) =>
                             renderStaffItem(
                                 staff,
                                 true,
