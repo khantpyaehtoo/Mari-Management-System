@@ -1,7 +1,7 @@
 import { DownCircleOutlined } from "@ant-design/icons";
 import { Card, Flex, Select, Tabs, Spin, Empty } from "antd";
 import { BellRing, PartyPopper, TriangleAlert } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import isToday from "dayjs/plugin/isToday";
@@ -11,10 +11,14 @@ dayjs.extend(relativeTime);
 dayjs.extend(isToday);
 dayjs.extend(isBetween);
 
-export const FilteredTabContent = ({ data = [], type, isLoading }) => {
-    const [selectedType, setSelectedType] = useState("all");
-
-    // Dynamic icon and style generator
+export const FilteredTabContent = ({
+    data = [],
+    type,
+    isLoading,
+    selectedType = "all",
+    onTabChange,
+}) => {
+    // Dynamic icon and style
     const getNotificationIcon = (notiType, metadata) => {
         const bookingStatus = metadata?.bookingStatus?.toUpperCase();
 
@@ -36,57 +40,31 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
         };
     };
 
-    // Filter Logic Memoized for Performance
+    // Filter Logic by Time Scope (Today, Week, Month)
     const filteredDataByScope = useMemo(() => {
+        const rawData = Array.isArray(data) ? data : data?.content || [];
+
         const filterItem = (timeScope) => {
-            return data.filter((item) => {
+            return rawData.filter((item) => {
                 const notiDate = dayjs(item.createdAt);
 
-                // Time Filter
-                let matchTime = true;
-                if (timeScope === "today") matchTime = notiDate.isToday();
+                if (timeScope === "today") return notiDate.isToday();
                 if (timeScope === "week")
-                    matchTime = notiDate.isBetween(
+                    return notiDate.isBetween(
                         dayjs().startOf("week"),
                         dayjs().endOf("week"),
                         null,
                         "[]",
                     );
                 if (timeScope === "month")
-                    matchTime = notiDate.isBetween(
+                    return notiDate.isBetween(
                         dayjs().startOf("month"),
                         dayjs().endOf("month"),
                         null,
                         "[]",
                     );
 
-                // Dropdown Type Filter
-                let matchType = true;
-                if (selectedType !== "all") {
-                    const bookingStatus =
-                        item?.metadata?.bookingStatus?.toUpperCase();
-                    const isReview =
-                        item?.title?.toUpperCase()?.includes("REVIEW") ||
-                        item?.type?.toUpperCase() === "REVIEW";
-
-                    if (selectedType === "cancel")
-                        matchType =
-                            bookingStatus === "CANCELLED" ||
-                            bookingStatus === "REJECTED";
-                    else if (
-                        selectedType === "ordered" ||
-                        selectedType === "started"
-                    )
-                        matchType =
-                            bookingStatus === "CONFIRMED" ||
-                            bookingStatus === "CONFIRM" ||
-                            item?.type?.toUpperCase() === "BOOKING";
-                    else if (selectedType === "completed")
-                        matchType = bookingStatus === "COMPLETED";
-                    else if (selectedType === "review") matchType = isReview;
-                }
-
-                return matchTime && matchType;
+                return true;
             });
         };
 
@@ -95,7 +73,7 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
             week: filterItem("week"),
             month: filterItem("month"),
         };
-    }, [data, selectedType]);
+    }, [data]);
 
     const renderCardList = (list) => {
         if (isLoading) {
@@ -209,12 +187,11 @@ export const FilteredTabContent = ({ data = [], type, isLoading }) => {
                     <Select
                         value={selectedType}
                         className="custom-filter-select w-32"
-                        classNames={{ popup: { root: "rounded-xl shadow-lg" } }}
                         suffixIcon={
                             <DownCircleOutlined className="text-gray-700 text-base" />
                         }
                         options={selectOptions}
-                        onChange={(value) => setSelectedType(value)}
+                        onChange={(value) => onTabChange?.(value)}
                     />
                 }
             />

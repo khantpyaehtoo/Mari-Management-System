@@ -1,6 +1,7 @@
 import { baseApi } from "../../app/core/baseApi";
 
 const reportEndPoint = "report-chart";
+const dailyEndPoint = "daily-overview";
 
 const reportApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -16,7 +17,20 @@ const reportApi = baseApi.injectEndpoints({
             }),
             providesTags: ["report-chart"],
         }),
+
+        getReportBookingOverView: builder.query({
+            query: ({ period, month, year }) => ({
+                url: `admin/dashboard/${dailyEndPoint}`,
+                method: "GET",
+                params: {
+                    ...(period && { period }),
+                    ...(month && { month }),
+                    ...(year && { year }),
+                },
+            }),
+        }),
     }),
 });
 
-export const { useGetReportChartDataQuery } = reportApi;
+export const { useGetReportChartDataQuery, useGetReportBookingOverViewQuery } =
+    reportApi;

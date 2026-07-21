@@ -1,5 +1,6 @@
 import { BellOutlined, SendOutlined } from "@ant-design/icons";
 import { Button, Drawer, Tabs } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilteredTabContent } from "./FilteredTabContent";
 import {
@@ -10,10 +11,19 @@ import {
 const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
     const nav = useNavigate();
 
+    // State for selected filter options
+    const [customerTab, setCustomerTab] = useState("all");
+    const [staffTab, setStaffTab] = useState("all");
+
+    // Pass the selected tab to RTK Query
     const { data: customerData, isLoading: isCustomerLoading } =
-        useGetIncomingCustomerNotisQuery(undefined, { skip: !isNotiOpen });
+        useGetIncomingCustomerNotisQuery(
+            { tab: customerTab },
+            { skip: !isNotiOpen },
+        );
+
     const { data: staffData, isLoading: isStaffLoading } =
-        useGetIncomingStaffNotisQuery(undefined, { skip: !isNotiOpen });
+        useGetIncomingStaffNotisQuery({ tab: staffTab }, { skip: !isNotiOpen });
 
     const customerNotis = customerData?.content || [];
     const staffNotis = staffData?.content || [];
@@ -32,6 +42,8 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
                     data={customerNotis}
                     type="customers"
                     isLoading={isCustomerLoading}
+                    selectedType={customerTab}
+                    onTabChange={(value) => setCustomerTab(value)}
                 />
             ),
         },
@@ -43,6 +55,8 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
                     data={staffNotis}
                     type="staffs"
                     isLoading={isStaffLoading}
+                    selectedType={staffTab}
+                    onTabChange={(value) => setStaffTab(value)}
                 />
             ),
         },

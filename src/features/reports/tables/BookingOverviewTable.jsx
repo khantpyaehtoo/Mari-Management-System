@@ -1,25 +1,45 @@
 import { Table, Typography } from "antd";
+import { useState } from "react";
 
-const bookingColumn = [
-    { title: "Date", dataIndex: "date", key: "date" },
-    {
-        title: "Total Bookings",
-        dataIndex: "total-bookings",
-        key: "total-bookings",
-    },
-    { title: "Cancelled Bookings", dataIndex: "cancelled", key: "cancelled" },
-    { title: "Walk-in Customers", dataIndex: "walk-in", key: "walk-in" },
-    { title: "Active Staff", dataIndex: "active-staff", key: "active-staff" },
-    {
-        title: "Total Revenue",
-        dataIndex: "total-revenue",
-        key: "total-revenue",
-    },
-    { title: "Top Service", dataIndex: "top-service", key: "top-service" },
-    { title: "New Clients", dataIndex: "new-clients", key: "new-clients" },
-];
+const BookingOverviewTable = ({
+    formattedDate,
+    bookingReport,
+    isBookingFetching,
+}) => {
+    const [currentPage, setCurrentPage] = useState(1);
 
-const BookingOverviewTable = ({ formattedDate }) => {
+    const bookingColumn = [
+        {
+            title: "No.",
+            render: (_, __, index) => (
+                <p className="m-0">{(currentPage - 1) * 5 + index + 1}</p>
+            ),
+        },
+        { title: "Date", dataIndex: "date", key: "date" },
+        {
+            title: "Total Bookings",
+            dataIndex: "totalBookings",
+            key: "totalBookings",
+        },
+        {
+            title: "Cancelled Bookings",
+            dataIndex: "cancelledBookings",
+            key: "cancelledBookings",
+        },
+        {
+            title: "Walk-in Customers",
+            dataIndex: "walkInCustomers",
+            key: "walkInCustomers",
+        },
+        { title: "Active Staff", dataIndex: "activeStaff", key: "activeStaff" },
+        {
+            title: "Total Revenue",
+            dataIndex: "totalRevenue",
+            key: "totalRevenue",
+        },
+        { title: "Top Service", dataIndex: "topService", key: "topService" },
+    ];
+
     return (
         <section className="mb-12">
             <Typography.Title
@@ -31,8 +51,14 @@ const BookingOverviewTable = ({ formattedDate }) => {
             <div className="table-wrapper">
                 <Table
                     columns={bookingColumn}
-                    dataSource={[]}
-                    rowKey={(record) => record.id || record.date}
+                    dataSource={bookingReport}
+                    loading={isBookingFetching}
+                    rowKey={(record, idx) => record.id || record.date || idx}
+                    pagination={{
+                        pageSize: 5,
+                        current: currentPage,
+                        onChange: (page) => setCurrentPage(page),
+                    }}
                 />
             </div>
         </section>

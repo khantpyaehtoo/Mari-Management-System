@@ -85,6 +85,18 @@ const htmlFooterPlugin = {
     },
 };
 
+// Testing Custom Plugin
+const legendMarginPlugin = {
+    id: "legendMargin",
+    beforeInit(chart) {
+        const fitValue = chart.legend.fit;
+        chart.legend.fit = function fit() {
+            fitValue.bind(chart.legend)();
+            this.height += 20;
+        };
+    },
+};
+
 const ReportBarChart = ({
     chartData = [],
     selectedMonth = "July",
@@ -176,29 +188,22 @@ const ReportBarChart = ({
                     ? allMonths.slice(0, currentMonthIndex + 1)
                     : allMonths;
 
-                const calculatedTotalRevenue = chartData.reduce((sum, item) => {
-                    const rev =
-                        item.revenueBlock?.totalRevenue ??
-                        item.totalRevenue ??
-                        item.revenue ??
-                        0;
-                    return sum + Number(rev);
-                }, 0);
-
-                const targetMonthKey = selectedMonth.toLowerCase().slice(0, 3); // e.g. "jun"
+                const revenueByMonthMap = {};
+                chartData.forEach((item) => {
+                    if (item?.label) {
+                        revenueByMonthMap[item.label.toLowerCase()] =
+                            item?.revenueBlock?.totalRevenue || 0;
+                    }
+                });
 
                 const totalRevList = visibleMonths.map((m) => {
                     const monthKey = m.toLowerCase();
 
-                    if (targetMonthKey) {
-                        return calculatedTotalRevenue;
+                    if (revenueByMonthMap[monthKey] !== undefined) {
+                        return revenueByMonthMap[monthKey];
                     }
 
-                    if (monthlyCache[monthKey] !== undefined) {
-                        return monthlyCache[monthKey];
-                    }
-
-                    return 0;
+                    return monthlyCache[monthKey] ?? 0;
                 });
 
                 return {
@@ -212,7 +217,6 @@ const ReportBarChart = ({
             chartData,
             isCurrentMonth,
             currentMonthIndex,
-            selectedMonth,
             selectedYear,
             monthlyCache,
         ]);
@@ -276,7 +280,7 @@ const ReportBarChart = ({
                     pointStyle: "circle",
                     boxWidth: 12,
                     boxHeight: 12,
-                    padding: 15,
+                    // paddingBottom: 30,
                     color: "#64748B",
                     font: {
                         size: 13,
@@ -337,7 +341,7 @@ const ReportBarChart = ({
             <Bar
                 options={options}
                 data={chartDataConfig}
-                plugins={[htmlFooterPlugin]}
+                plugins={[htmlFooterPlugin, legendMarginPlugin]}
             />
         </div>
     );

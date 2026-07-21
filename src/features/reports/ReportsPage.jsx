@@ -4,7 +4,10 @@ import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection
 import ReportBarChart from "./ReportBarChart";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { useGetReportChartDataQuery } from "./reportApi";
+import {
+    useGetReportBookingOverViewQuery,
+    useGetReportChartDataQuery,
+} from "./reportApi";
 import {
     useGetServicePieChartQuery,
     useGetStaffPerformQuery,
@@ -53,6 +56,11 @@ const ReportsPage = () => {
     } = useGetReportChartDataQuery(queryParams);
 
     const chartData = reportResponse?.chartData || [];
+
+    const { data: bookingReport, isFetching: isBookingFetching } =
+        useGetReportBookingOverViewQuery(queryParams);
+    const bookingoverview = bookingReport?.content || [];
+    // console.log("booking: ", bookingoverview)
 
     const { data: revenueService, isFetching: isServiceFetching } =
         useGetServicePieChartQuery(queryParams);
@@ -138,7 +146,11 @@ const ReportsPage = () => {
                 isServiceFetching={isServiceFetching}
             />
 
-            <BookingOverviewTable formattedDate={formattedDate} />
+            <BookingOverviewTable
+                formattedDate={formattedDate}
+                bookingReport={bookingoverview}
+                isBookingFetching={isBookingFetching}
+            />
 
             <StaffPerformanceTable
                 formattedDate={formattedDate}

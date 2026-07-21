@@ -46,13 +46,13 @@ const datasetsConfig = [
         label: "Walkin Count",
         color: "#A0656F",
         hoverColor: "#FA9FB0",
-        apiKey: "walkInBookingCount",
+        apiKey: "walkInCount",
     },
     {
         label: "Booking Count",
         color: "#DD586D",
         hoverColor: "#FA9FB0",
-        apiKey: "customerBookingCount",
+        apiKey: "bookingCount",
     },
     {
         label: "Cancel Booking",
@@ -68,12 +68,14 @@ const formatDayLabel = (dayStr) => {
 };
 
 export default function WeeklyBarChart() {
-    const { data: chartData = [] } = useGetWeeklyChartDataQuery();
+    const { data: chartData } = useGetWeeklyChartDataQuery();
+
+    console.log(chartData);
 
     const labels = chartData.map((item) => formatDayLabel(item.label));
 
     const chartRenderData = {
-        labels: labels,
+        labels,
         datasets: datasetsConfig.map((config) => ({
             label: config.label,
             data: chartData.map((item) => item[config?.apiKey] ?? 0),

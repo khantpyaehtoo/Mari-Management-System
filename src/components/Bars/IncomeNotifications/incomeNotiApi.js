@@ -1,21 +1,32 @@
 import { baseApi } from "../../../app/core/baseApi";
-const notifications = "notifications";
+
+const NOTIFICATIONS = "notifications";
 
 export const incomeNotiApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getIncomingCustomerNotis: builder.query({
-            query: () => ({
-                url: `${notifications}/admin/customer`,
-                method: "GET",
-            }),
+            query: (params = {}) => {
+                const { tab = "all" } = params;
+                const queryParams = tab && tab !== "all" ? { tab } : {};
+
+                return {
+                    url: `${NOTIFICATIONS}/admin/inbox/customer`,
+                    method: "GET",
+                    params: queryParams,
+                };
+            },
             providesTags: ["notifications", "customer"],
         }),
 
         getIncomingStaffNotis: builder.query({
-            query: () => ({
-                url: `${notifications}/admin/staff`,
-                method: "GET",
-            }),
+            query: (params = {}) => {
+                const tab = params.tab;
+                return {
+                    url: `${NOTIFICATIONS}/admin/inbox/staff`,
+                    method: "GET",
+                    params: { tab },
+                };
+            },
             providesTags: ["notifications", "staff"],
         }),
     }),
