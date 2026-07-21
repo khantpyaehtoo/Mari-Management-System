@@ -67,8 +67,8 @@ const Packages = () => {
                 body: {
                     name: selectedPackage.name,
                     price: Number(selectedPackage.price),
-                    categoryId: selectedPackage.categoryId || 6,
-                    serviceIds: selectedPackage.serviceIds || [],
+                    categoryId: selectedPackage.categoryId,
+                    serviceIds: selectedPackage.serviceIds,
                     enabled: false,
                 },
             }).unwrap();
@@ -195,13 +195,15 @@ const Packages = () => {
                         No packages found.
                     </Col>
                 ) : (
-                    searchPackages.map((item) => (
-                        <PackageCard
-                            key={item.id}
-                            item={item}
-                            handleActionClick={handleActionClick}
-                        />
-                    ))
+                    searchPackages
+                        ?.filter((item) => item.enabled)
+                        ?.map((item) => (
+                            <PackageCard
+                                key={item.id}
+                                item={item}
+                                handleActionClick={handleActionClick}
+                            />
+                        ))
                 )}
             </Row>
 

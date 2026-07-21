@@ -13,6 +13,7 @@ import ServiceDeleteModal from "./ServiceDeleteModal";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../../app/core/notiSlice";
+import CategoryCard from "./CategoryCard";
 
 const CategoryDetails = () => {
     const [searchText, setSearchText] = useState("");
@@ -24,6 +25,8 @@ const CategoryDetails = () => {
     const token = useSelector((state) => state?.authSlice?.token);
     const dispatch = useDispatch();
     const { id } = useParams();
+
+    const isAllMode = id === "all";
 
     const { data: getAllCategory = [], isLoading: isCategoryLoading } =
         useGetCategoryDataQuery();
@@ -41,9 +44,8 @@ const CategoryDetails = () => {
             name: formValues.name,
             price: Number(formValues.price),
             durationInMinutes: formValues.durationInMinutes,
-            categoryId: Number(id),
+            categoryId: isAllMode ? Number(formValues.categoryId) : Number(id),
         };
-        // setCreateModalOpen();
         return await createServiceTrigger(formattedPayload).unwrap();
     };
 
@@ -56,7 +58,9 @@ const CategoryDetails = () => {
                 name: body.name,
                 price: Number(body.price),
                 durationInMinutes: body.durationInMinutes,
-                categoryId: Number(id),
+                categoryId: body.categoryId
+                    ? Number(body.categoryId)
+                    : Number(selectedService?.categoryId),
             },
         };
         return await editServiceTrigger(formattedPayload).unwrap();
@@ -75,7 +79,6 @@ const CategoryDetails = () => {
                 }),
             );
 
-            // console.log("click", selectedService.id);
             setDeleteModalOpen(false);
         } catch (error) {
             console.error("Delete failed:", error);
@@ -91,10 +94,11 @@ const CategoryDetails = () => {
     };
 
     const currentCategory = useMemo(() => {
+        if (isAllMode) return { name: "All Services" };
         return getAllCategory?.find(
             (cate) => cate?.id?.toString() === id?.toString(),
         );
-    }, [getAllCategory, id]);
+    }, [getAllCategory, id, isAllMode]);
 
     const searchService = useMemo(() => {
         return (
@@ -102,7 +106,7 @@ const CategoryDetails = () => {
                 if (!item) return false;
 
                 const matchesCategory =
-                    item.categoryId?.toString() === id?.toString();
+                    isAllMode || item.categoryId?.toString() === id?.toString();
                 const isNotPackage = item.package === false;
                 const matchesSearch = item.name
                     ?.toString()
@@ -112,7 +116,7 @@ const CategoryDetails = () => {
                 return matchesCategory && isNotPackage && matchesSearch;
             }) || []
         );
-    }, [allServices, id, searchText]);
+    }, [allServices, id, isAllMode, searchText]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -135,8 +139,6 @@ const CategoryDetails = () => {
 
     const isLoading = isCategoryLoading || isServicesLoading;
 
-    // console.log(selectedService);
-
     return (
         <>
             <SubHeaderSection
@@ -145,11 +147,17 @@ const CategoryDetails = () => {
                         ? "Loading..."
                         : currentCategory?.name || "Category Details"
                 }
-                subTitle="Manage all services under this category"
+                subTitle={
+                    isAllMode
+                        ? "Manage all services across all categories"
+                        : "Manage all services under this category"
+                }
                 formType="Services"
                 btnTitle="Services"
                 placeholderTitle="Search service name..."
                 showBackButton={true}
+                categories={getAllCategory}
+                isAllMode={isAllMode}
                 searchText={searchText}
                 setSearchText={setSearchText}
                 isEdit={editModalOpen}
@@ -181,58 +189,16 @@ const CategoryDetails = () => {
                     ))
                 ) : searchService.length === 0 ? (
                     <Col span={24} className="text-center text-gray-400 mt-10">
-                        No services found in this category.
+                        {isAllMode
+                            ? "No services found."
+                            : "No services found in this category."}
                     </Col>
                 ) : (
                     searchService.map((item) => (
-                        <Col
-                            key={item.id}
-                            xs={24}
-                            sm={12}
-                            xl={6}
-                            className="flex"
-                        >
-                            <Card className="w-full border! border-gray-300! rounded-xl! hover:shadow-md transition-shadow">
-                                <h1 className="text-xl mb-5 font-semibold">
-                                    {item.name}
-                                </h1>
-                                <div className="grid-items-2 mb-5 flex justify-between">
-                                    <div>
-                                        <p className="text-gray-500">
-                                            Service price:
-                                        </p>
-                                        <p className="my-2 text-gray-500">
-                                            Duration:
-                                        </p>
-                                    </div>
-                                    <div className="text-right font-medium">
-                                        <p>{item.price} MMK</p>
-                                        <p className="my-2">
-                                            {item.durationInMinutes} mins
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full mt-4">
-                                    <Button
-                                        onClick={(e) =>
-                                            handleActionClick("edit", item, e)
-                                        }
-                                        className="bg-primary! text-white flex-1 min-w-17.5 flex items-center justify-center"
-                                    >
-                                        <Edit size={14} className="mr-1" /> Edit
-                                    </Button>
-                                    <Button
-                                        onClick={(e) =>
-                                            handleActionClick("delete", item, e)
-                                        }
-                                        className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
-                                    >
-                                        <Trash2 size={14} />
-                                        Delete
-                                    </Button>
-                                </div>
-                            </Card>
-                        </Col>
+                        <CategoryCard
+                            item={item}
+                            handleActionClick={handleActionClick}
+                        />
                     ))
                 )}
             </Row>

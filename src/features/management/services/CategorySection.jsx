@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import {
     useCreateCategoryMutation,
     useDeleteCategoryMutation,
+    useGetAllServiceDataQuery,
     useGetCategoryDataQuery,
 } from "./servicesApi";
 import { cn } from "../../../lib/utils";
-import { X } from "lucide-react";
+// import { X } from "lucide-react";
 import { setMessage } from "../../../app/core/notiSlice";
 import { useDispatch } from "react-redux";
 
@@ -43,8 +44,6 @@ const CategorySection = () => {
                     msgContent: "Deleted successfully",
                 }),
             );
-
-            // console.log("click", selectedService.id);
         } catch (error) {
             console.error("Delete failed:", error);
 
@@ -59,13 +58,23 @@ const CategorySection = () => {
         }
     };
 
-    const categories = getAllCategory
+    const filteredCategories = getAllCategory
         ?.map((cate) => ({
             id: cate?.id,
             key: cate?.name,
             title: cate?.name || "",
         }))
         ?.filter((item) => item.title.toLowerCase() !== "package");
+
+    const categories = [
+        {
+            id: "all",
+            key: "all-services",
+            title: "All Services",
+            isAll: true,
+        },
+        ...filteredCategories,
+    ];
 
     return (
         <>
@@ -101,21 +110,25 @@ const CategorySection = () => {
                           </Col>
                       ))
                     : categories?.map((item, index) => {
-                          const isActiveState =
-                              item.title.includes("All Services");
+                          const isAllServices = item?.isAll;
 
                           return (
                               <Col span={6} key={item.id || index}>
-                                  <Link to={`/management/service/${item.id}`}>
+                                  <Link
+                                      to={
+                                          isAllServices
+                                              ? `/management/service/all`
+                                              : `/management/service/${item.id}`
+                                      }
+                                  >
                                       <Card
                                           className={cn(
                                               "relative pt-6! min-h-32! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
-                                              isActiveState
-                                                  ? "bg-white! text-primary! hover:bg-primary! hover:text-white!"
-                                                  : "bg-primary! text-white! hover:bg-white! hover:text-primary!",
+                                              isAllServices
+                                                  ? "bg-primary! text-white! hover:bg-white! hover:text-primary!"
+                                                  : "bg-white! text-primary! hover:bg-primary! hover:text-white!",
                                           )}
                                       >
-                                          <X size={12} onClick={handleDelete} />
                                           <h1 className="w-auto text-center text-base font-medium mt-2">
                                               {item?.title}
                                           </h1>

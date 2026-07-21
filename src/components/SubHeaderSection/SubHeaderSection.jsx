@@ -28,6 +28,8 @@ const SubHeaderSection = ({
     reportConfig,
     formType,
     showBackButton = false,
+    categories = [], // Category List လက်ခံရန်
+    isAllMode = false, // All Services Mode ဟုတ်မဟုတ် လက်ခံရန်
 }) => {
     const { Title } = Typography;
     const nav = useNavigate();
@@ -111,6 +113,8 @@ const SubHeaderSection = ({
                                 initialValue={initialValue}
                                 triggerCreate={triggerCreate}
                                 triggerEdit={triggerEdit}
+                                categories={categories}
+                                isAllMode={isAllMode}
                             />
                             <AddForm
                                 title={formType[1] || title}
@@ -123,6 +127,8 @@ const SubHeaderSection = ({
                                 initialValue={initialValue}
                                 triggerCreate={triggerCreate}
                                 triggerEdit={triggerEdit}
+                                categories={categories}
+                                isAllMode={isAllMode}
                             />
                         </div>
                     )}
@@ -163,13 +169,13 @@ const SubHeaderSection = ({
                     {title.includes("Reports & Analytics") && (
                         <Space>
                             <Select
-                                value={selectedDate.month()} // returns 0-11 index natively
+                                value={selectedDate.month()}
                                 style={{ width: 150 }}
                                 onChange={(val) => onDateChange("month", val)}
                                 options={months}
                             />
                             <Select
-                                value={selectedDate.year()} // returns full integer year
+                                value={selectedDate.year()}
                                 style={{ width: 120 }}
                                 onChange={(val) => onDateChange("year", val)}
                                 options={years.map((y) => ({
@@ -202,9 +208,11 @@ const SubHeaderSection = ({
                         isEdit={isEdit}
                         isOpen={isOpen}
                         onCancel={onCancel}
-                        initialValue={initialValue} // Selected Package Object
+                        initialValue={initialValue}
                         triggerCreate={triggerCreate}
                         triggerEdit={triggerEdit}
+                        categories={categories}
+                        isAllMode={isAllMode}
                     />
                 )}
             </div>

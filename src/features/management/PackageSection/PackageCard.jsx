@@ -1,5 +1,5 @@
 import { Button, Card, Col } from "antd";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, StarX } from "lucide-react";
 
 const PackageCard = ({ item, handleActionClick }) => {
     return (
@@ -66,7 +66,7 @@ const PackageCard = ({ item, handleActionClick }) => {
                         onClick={(e) => handleActionClick("delete", item, e)}
                         className="border border-red-200! text-red-500 hover:text-white! hover:bg-red-500! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
                     >
-                        <Trash2 size={14} className="mr-1.5" /> Delete
+                        <StarX size={14} className="mr-1.5" /> Disable
                     </Button>
                 </div>
             </Card>

@@ -1,6 +1,6 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Space, Typography } from "antd";
-import { Trash2 } from "lucide-react";
+import { StarX } from "lucide-react";
 
 const PackageDisableModal = ({
     deleteModalOpen,
@@ -37,7 +37,7 @@ const PackageDisableModal = ({
                     onClick={handleDisableConfirm}
                     className="bg-red-500! text-white! border-red-500!"
                 >
-                    <Trash2 size={14} /> Delete
+                    <StarX size={14} /> Disable
                 </Button>
             </Space>
         </Modal>

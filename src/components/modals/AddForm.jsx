@@ -16,6 +16,8 @@ const AddForm = ({
     triggerEdit,
     triggerCreate,
     formType,
+    categories,
+    isAllMode,
 }) => {
     const [isLocalModalOpen, setIsLocalModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -152,6 +154,8 @@ const AddForm = ({
                         isEdit={isEdit}
                         initialValue={initialValue}
                         formType={formType}
+                        categories={categories}
+                        isAllMode={isAllMode}
                     />
                 )}
             </Modal>
