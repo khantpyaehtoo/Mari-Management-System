@@ -71,4 +71,5 @@ export const {
     useGetTodayBookingListQuery,
     useGetServicePieChartQuery,
     useGetWeeklyChartDataQuery,
+    useGetMonthlyChartDataQuery,
 } = dashboardApi;

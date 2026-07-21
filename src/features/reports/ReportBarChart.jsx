@@ -20,7 +20,7 @@ ChartJS.register(
     Legend,
 );
 
-// Weekly Cards Render ပေးမည့် Plugin
+// Weekly Cards Render
 const htmlFooterPlugin = {
     id: "htmlFooterPlugin",
     afterLayout(chart) {
@@ -30,7 +30,7 @@ const htmlFooterPlugin = {
             ".chart-footer-container",
         );
 
-        // Past Month (Yearly View) ဆိုရင် Footer Cards ဖျောက်မည်
+        // Past Month (Yearly View) Hide Footer Cards
         if (!isCurrentMonth) {
             if (container) container.innerHTML = "";
             return;
@@ -89,19 +89,19 @@ const ReportBarChart = ({
     chartData = [],
     selectedMonth = "July",
     selectedYear = dayjs().format("YYYY"),
-    monthlyCache = {}, // 💡 Parent (ReportsPage) မှ ပို့ပေးမည့် လအလိုက် Revenue Cache
+    monthlyCache = {},
 }) => {
-    // Current Month ဟုတ်မဟုတ် တိုက်ရိုက် စစ်ဆေးခြင်း
-    const currentMonthName = dayjs().format("MMMM"); // "July"
+    // Current Month
+    const currentMonthName = dayjs().format("MMMM");
     const isCurrentMonth =
         selectedMonth.toLowerCase() === currentMonthName.toLowerCase();
 
-    const currentMonthIndex = dayjs().month(); // July = 6
+    const currentMonthIndex = dayjs().month();
 
     const { labels, totalRevenueData, topServiceData, statsMap } =
         useMemo(() => {
             if (isCurrentMonth) {
-                // === WEEKLY VIEW (Current Month) ===
+                // WEEKLY VIEW (Current Month)
                 const defaultDays = [
                     "Mon",
                     "Tue",
@@ -151,7 +151,7 @@ const ReportBarChart = ({
                     statsMap: map,
                 };
             } else {
-                // === YEARLY / MONTHLY VIEW (Past Month or Past Year) ===
+                // YEARLY / MONTHLY VIEW (Past Month or Past Year)
                 const allMonths = [
                     "Jan",
                     "Feb",
@@ -172,13 +172,10 @@ const ReportBarChart = ({
                     "year",
                 );
 
-                // 💡 2026 (Current Year) ဆိုရင် Jan -> Jul အထိပဲ ပြမည်
-                // 💡 2025 (Past Year) ဆိုရင် Jan -> Dec (12 လလုံး) ပြမည်
                 const visibleMonths = isCurrentYear
                     ? allMonths.slice(0, currentMonthIndex + 1)
                     : allMonths;
 
-                // လက်ရှိ ရွေးထားသည့်လ၏ Chart Data မှ Revenue စုစုပေါင်း တွက်ယူခြင်း
                 const calculatedTotalRevenue = chartData.reduce((sum, item) => {
                     const rev =
                         item.revenueBlock?.totalRevenue ??
@@ -190,21 +187,18 @@ const ReportBarChart = ({
 
                 const targetMonthKey = selectedMonth.toLowerCase().slice(0, 3); // e.g. "jun"
 
-                // 💡 Cache ထဲရှိသမျှ လပေါင်းများစွာ၏ Data များနှင့် ပေါင်းစပ်၍ Bar Data တည်ဆောက်ခြင်း
                 const totalRevList = visibleMonths.map((m) => {
                     const monthKey = m.toLowerCase();
 
-                    // ၁။ အခု Dropdown မှာ ရွေးထားတဲ့လ ဖြစ်ရင် Active Data ကို သုံးမည်
-                    if (monthKey === targetMonthKey) {
+                    if (targetMonthKey) {
                         return calculatedTotalRevenue;
                     }
 
-                    // ၂။ မဟုတ်ပါက ယခင်က ရောက်ခဲ့ဖူးသည့် Cache ထဲရှိ Data ရှိလျှင် ထုတ်ပြမည်
                     if (monthlyCache[monthKey] !== undefined) {
                         return monthlyCache[monthKey];
                     }
 
-                    return 0; // Data မလာသေးသော လများအတွက် 0
+                    return 0;
                 });
 
                 return {

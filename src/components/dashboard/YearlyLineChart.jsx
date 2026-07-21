@@ -9,6 +9,8 @@ import {
     Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { Card, Typography, Spin } from "antd";
+import { useGetReportChartDataQuery } from "../../features/reports/reportApi";
 
 ChartJS.register(
     CategoryScale,
@@ -19,10 +21,18 @@ ChartJS.register(
     Tooltip,
     Legend,
 );
-import { Card, Typography } from "antd";
-import { faker } from "@faker-js/faker";
+
+// Legend config
+const LEGEND_ITEMS = [
+    { label: "Total Bookings", color: "#A0656F" },
+    { label: "Cancel Booking", color: "#E61010" },
+];
 
 export const YearlyLineChart = () => {
+    const { data: apiResponse, isLoading } = useGetReportChartDataQuery({
+        period: "monthly",
+    });
+
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -30,47 +40,46 @@ export const YearlyLineChart = () => {
             legend: { display: false },
             title: { display: false },
         },
+        scales: {
+            y: {
+                display: true,
+                beginAtZero: true,
+            },
+            y1: undefined,
+        },
     };
 
-    const labels = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-    ];
+    // Extract monthly array
+    const chartList = apiResponse?.chartData || [];
 
-    const data = {
+    const labels = chartList.map((item) => item.label);
+
+    const formattedChartData = {
         labels,
         datasets: [
             {
-                label: "Booking Count",
-                data: labels.map(() =>
-                    faker.number.int({ min: -1000, max: 1000 }),
+                label: "Total Bookings",
+                data: chartList.map(
+                    (item) =>
+                        item?.totalBooking ??
+                        (item?.bookingCount || 0) + (item?.walkinCount || 0),
                 ),
                 borderColor: "#A0656F",
-                backgroundColor: "#FA9FB0",
+                backgroundColor: "#A0656F",
+                tension: 0.3,
             },
             {
                 label: "Cancel Booking",
-                data: labels.map(() =>
-                    faker.number.int({ min: -1000, max: 1000 }),
-                ),
-                borderColor: "#E6304F",
+                data: chartList.map((item) => item?.cancelCount ?? 0),
+                borderColor: "#E61010",
                 backgroundColor: "#E61010",
+                tension: 0.3,
             },
         ],
     };
 
-    const datasetsConfig = [
-        { label: "Booking Count", color: "#A0656F", hoverColor: "#FA9FB0" },
-        { label: "Cancel Booking", color: "#E61010", hoverColor: "#E6304F" },
-    ];
-
     return (
-        <Card className="w-full shadow-sm p-4 ">
+        <Card className="w-full shadow-sm p-4">
             <div className="flex justify-between items-center mb-6 w-full">
                 <Typography.Title
                     level={3}
@@ -79,25 +88,35 @@ export const YearlyLineChart = () => {
                     Yearly Bookings & Cancellations
                 </Typography.Title>
 
+                {/* Custom Legend */}
                 <div className="flex items-center gap-4">
-                    {datasetsConfig.map((dataset) => (
+                    {LEGEND_ITEMS.map((item) => (
                         <div
-                            key={dataset.label}
+                            key={item.label}
                             className="flex items-center gap-2"
                         >
                             <span
                                 className="w-3 h-3 rounded-full inline-block"
-                                style={{ backgroundColor: dataset.color }}
+                                style={{ backgroundColor: item.color }}
                             />
                             <span className="text-sm font-medium text-slate-500 font-sans">
-                                {dataset.label}
+                                {item.label}
                             </span>
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="relative w-full h-105!">
-                <Line options={options} data={data} className="w-full" />
+
+            <div className="relative w-full h-105! flex items-center justify-center">
+                {isLoading ? (
+                    <Spin size="large" />
+                ) : (
+                    <Line
+                        options={options}
+                        data={formattedChartData}
+                        className="w-full"
+                    />
+                )}
             </div>
         </Card>
     );
