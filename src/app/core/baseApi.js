@@ -23,6 +23,8 @@ export const baseApi = createApi({
         "dashboard",
         "stats",
         "services",
+        "categories",
+        "packages",
         "users",
         "booking-management",
         "staffs",

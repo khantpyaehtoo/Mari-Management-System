@@ -1,82 +1,95 @@
-import { Form, Input, Select, Space, Button } from "antd";
+import { Form, Input, Select, Space } from "antd";
 import { useEffect } from "react";
 import { useGetAllServiceDataQuery } from "../services/servicesApi";
 
-const PackageForm = ({
-    isEditing,
-    handleCancel,
-    triggerAction,
-    initialValues,
-}) => {
-    // Initialize the form instance locally inside the component
-    const [form] = Form.useForm();
+const PackageForm = ({ form: externalForm, isEdit, initialValue }) => {
+    const [internalForm] = Form.useForm();
+    const form = externalForm || internalForm;
 
     const { data: allService = [], isLoading } = useGetAllServiceDataQuery();
 
-    // Map your dropdown options safely
-    const serviceOptions = allService
-        ?.filter((service) => service && service.package !== true) // Show only pure services
-        ?.map((service) => ({
-            value: service.id,
-            label: service.name,
-        }));
+    const selectedServiceIds = Form.useWatch("serviceId", form) || [];
 
-    // Automatically pre-fill the form values when editing
+    // Map service options safely
+    const serviceOptions = allService
+        ?.filter((service) => service && service.package !== true) // Pure services
+        ?.map((service) => {
+            const isMaxReached = selectedServiceIds.length >= 3;
+            const isSelected = selectedServiceIds.includes(service.id);
+
+            return {
+                value: service.id,
+                label: `${service.name} (${service.price ? `${service.price} mmk` : ""})`,
+                disabled: isMaxReached && !isSelected,
+            };
+        });
+
+    // Automatically pre-fill form values when editing
     useEffect(() => {
-        if (isEditing && initialValues) {
-            // Find the IDs of the included services by matching their names
-            const preSelectedServiceIds =
-                allService
+        if (isEdit && initialValue) {
+            let preSelectedServiceIds = [];
+
+            if (Array.isArray(initialValue.serviceIds)) {
+                preSelectedServiceIds = initialValue.serviceIds;
+            } else if (Array.isArray(initialValue.services)) {
+                preSelectedServiceIds = initialValue.services.map((s) => s.id);
+            } else if (Array.isArray(initialValue.includedServices)) {
+                preSelectedServiceIds = allService
                     ?.filter((service) =>
-                        initialValues.includedServices?.includes(service.name),
+                        initialValue.includedServices?.includes(service.name),
                     )
-                    ?.map((service) => service.id) || [];
+                    ?.map((service) => service.id);
+            }
 
             form.setFieldsValue({
-                packageName: initialValues.name,
-                packagePrice: initialValues.price,
+                packageName: initialValue.name || initialValue.packageName,
+                packagePrice: initialValue.price || initialValue.packagePrice,
                 packageDuration:
-                    initialValues.durationInMinutes || initialValues.duration,
+                    initialValue.durationInMinutes ||
+                    initialValue.duration ||
+                    initialValue.packageDuration,
                 serviceId: preSelectedServiceIds,
             });
-        } else {
+        } else if (!isEdit) {
             form.resetFields();
         }
-    }, [isEditing, initialValues, allService, form]);
+    }, [isEdit, initialValue, allService, form]);
 
-    const onFinish = (values) => {
-        if (triggerAction) {
-            triggerAction(values);
-        }
-    };
-
-    // Calculate total price dynamically when services are selected
+    // Total Services
     const handleValuesChange = (changedValues, allValues) => {
         if (changedValues.serviceId) {
-            const selectedIds = allValues.serviceId || [];
+            const currentSelectedIds = allValues.serviceId || [];
 
-            const totalPrice = allService
-                ?.filter((service) => selectedIds.includes(service.id))
-                ?.reduce((sum, service) => sum + Number(service.price || 0), 0);
+            const selectedServices = allService?.filter((service) =>
+                currentSelectedIds.includes(service.id),
+            );
+
+            const totalPrice = selectedServices?.reduce(
+                (sum, service) => sum + Number(service.price || 0),
+                0,
+            );
+
+            const totalDuration = selectedServices?.reduce(
+                (sum, service) =>
+                    sum +
+                    Number(service.durationInMinutes || service.duration || 0),
+                0,
+            );
 
             form.setFieldsValue({
                 packagePrice: totalPrice > 0 ? totalPrice : undefined,
+                packageDuration: totalDuration > 0 ? totalDuration : undefined,
             });
         }
     };
 
     return (
-        <Form
-            layout="vertical"
-            form={form}
-            onFinish={onFinish}
-            onValuesChange={handleValuesChange}
-        >
+        <Form layout="vertical" form={form} onValuesChange={handleValuesChange}>
             <Form.Item
                 label="Select Services"
                 name="serviceId"
                 rules={[
-                    { required: true, message: "Please select a service" },
+                    { required: true, message: "Please select services" },
                     {
                         validator: (_, value) => {
                             if (!value || value.length < 2) {
@@ -116,40 +129,38 @@ const PackageForm = ({
                     { required: true, message: "Please enter package name" },
                 ]}
             >
-                <Input className="input-styling!" />
+                <Input
+                    className="input-styling!"
+                    placeholder="Enter package name"
+                />
             </Form.Item>
 
             <Space className="w-full flex" size="large">
                 <Form.Item
                     label="Package Price"
                     name="packagePrice"
+                    className="w-full"
                     rules={[{ required: true, message: "Please enter price" }]}
                 >
-                    <Input className="input-styling!" type="number" />
+                    <Input
+                        className="input-styling!"
+                        type="number"
+                        placeholder="0.00"
+                    />
                 </Form.Item>
                 <Form.Item
                     label="Package Duration (mins)"
                     name="packageDuration"
-                    rules={[
-                        { required: true, message: "Please enter duration" },
-                    ]}
+                    className="w-full"
                 >
-                    <Input className="input-styling!" type="number" />
+                    <Input
+                        className="input-styling!"
+                        type="number"
+                        placeholder="0"
+                        disabled
+                    />
                 </Form.Item>
             </Space>
-
-            <div className="flex justify-end items-center gap-3 mt-6">
-                <Button onClick={handleCancel} className="p-5! rounded-lg!">
-                    Cancel
-                </Button>
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="p-5! rounded-lg! text-white! bg-primary!"
-                >
-                    {isEditing ? "Save Changes" : "Create Package"}
-                </Button>
-            </div>
         </Form>
     );
 };

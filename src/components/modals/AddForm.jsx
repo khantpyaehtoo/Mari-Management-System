@@ -18,6 +18,8 @@ const AddForm = ({
     formType,
 }) => {
     const [isLocalModalOpen, setIsLocalModalOpen] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+
     const [form] = Form.useForm();
     const { token } = useSelector((state) => state?.auth);
 
@@ -31,8 +33,11 @@ const AddForm = ({
 
     useEffect(() => {
         if (isModalOpen && initialValue) {
-            form.setFieldsValue(initialValue);
-        } else if (!isModalOpen) {
+            const timer = setTimeout(() => {
+                form.setFieldsValue(initialValue);
+            }, 0);
+            return () => clearTimeout(timer);
+        } else {
             form.resetFields();
         }
     }, [isModalOpen, initialValue, form]);
@@ -48,7 +53,7 @@ const AddForm = ({
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            console.log("Form Values", values);
+            console.log("Form Values Submit:", values);
 
             const triggerMutation = isEdit ? triggerEdit : triggerCreate;
 
@@ -56,14 +61,15 @@ const AddForm = ({
                 throw new Error("Mutation not defined");
             }
 
-            // Returning data for Edit mode handling
+            setConfirmLoading(true);
+
             const payload = isEdit
-                ? { id: initialValue.id, body: values, token }
+                ? { id: initialValue?.id, body: values, token }
                 : values;
 
             const result = triggerMutation(payload);
             const data =
-                typeof result.unwrap === "function"
+                typeof result?.unwrap === "function"
                     ? await result.unwrap()
                     : await result;
 
@@ -96,6 +102,8 @@ const AddForm = ({
                     msgContent: errorMessage || "Error occurred",
                 }),
             );
+        } finally {
+            setConfirmLoading(false);
         }
     };
 
@@ -124,7 +132,7 @@ const AddForm = ({
                         <h1 className="mt-4 mb-2 uppercase text-3xl font-semibold text-primary">
                             {isEdit ? "Edit" : "Create"} {title}
                         </h1>
-                        <p className="p-1 mb-10 font-medium  text-xs">
+                        <p className="p-1 mb-10 font-medium text-xs">
                             {subFormTitle}
                         </p>
                     </>
@@ -132,6 +140,7 @@ const AddForm = ({
                 closable={{ "aria-label": "Custom Close Button" }}
                 open={isModalOpen}
                 onOk={handleOk}
+                confirmLoading={confirmLoading}
                 onCancel={handleCancel}
                 okText={isEdit ? "Update" : "Create"}
                 destroyOnHidden

@@ -202,7 +202,7 @@ const SubHeaderSection = ({
                         isEdit={isEdit}
                         isOpen={isOpen}
                         onCancel={onCancel}
-                        initialValue={initialValue}
+                        initialValue={initialValue} // Selected Package Object
                         triggerCreate={triggerCreate}
                         triggerEdit={triggerEdit}
                     />

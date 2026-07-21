@@ -10,7 +10,7 @@ export const packageApi = baseApi.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["categories", "packages"],
+            invalidatesTags: ["categories", "packages", "services"],
         }),
 
         updatePackage: builder.mutation({
@@ -19,7 +19,7 @@ export const packageApi = baseApi.injectEndpoints({
                 method: "PUT",
                 body,
             }),
-            invalidatesTags: ["categories", "packages"],
+            invalidatesTags: ["categories", "packages", "services"],
         }),
 
         deletePackage: builder.mutation({

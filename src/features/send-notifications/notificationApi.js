@@ -8,7 +8,7 @@ export const notiApi = baseApi.injectEndpoints({
                 url: `${notifications}/admin/staff`,
                 method: "GET",
             }),
-            providesTags: ["notifications"],
+            providesTags: ["notifications", "staff"],
         }),
 
         getCustomerNotifications: builder.query({
@@ -16,7 +16,7 @@ export const notiApi = baseApi.injectEndpoints({
                 url: `${notifications}/admin/customer`,
                 method: "GET",
             }),
-            providesTags: ["notifications"],
+            providesTags: ["notifications", "customer"],
         }),
 
         createNotification: builder.mutation({

@@ -1,12 +1,16 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Card, Empty, Flex } from "antd";
+import { Button, Card, Empty, Flex, Spin } from "antd";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { useGetStaffNotificationsQuery } from "./notificationApi";
 
-const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
-    const { data } = useGetStaffNotificationsQuery();
+dayjs.extend(relativeTime);
+const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
-    const staffNotis = Array.isArray(data) ? data : data?.data || [];
+const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
+    const { data, isLoading } = useGetStaffNotificationsQuery();
+
+    const staffNotis = Array.isArray(data) ? data : data?.content || [];
 
     return (
         <div className="w-1/2 h-full overflow-y-auto border-e border-e-gray-400 px-5 py-2 space-y-4">
@@ -14,14 +18,23 @@ const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
                 Sent Notifications (Staffs)
             </h1>
 
-            {staffNotis.length === 0 ? (
+            {isLoading ? (
+                <div className="py-10 text-center">
+                    <Spin size="large" />
+                </div>
+            ) : staffNotis.length === 0 ? (
                 <Empty
                     description="No staff notifications sent yet"
                     className="pt-10"
                 />
             ) : (
                 staffNotis.map((noti) => {
-                    const uiConfig = getNotificationIcon(noti.type);
+                    const uiConfig = getNotificationIcon
+                        ? getNotificationIcon(noti.type)
+                        : { bg: "bg-pink-50", icon: null };
+
+                    const fullImgUrl = `${IMAGE_BASE_URL}${noti.imageUrl}`;
+
                     return (
                         <Card
                             key={noti.id}
@@ -29,7 +42,7 @@ const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
                         >
                             <Flex justify="space-between" align="start">
                                 <div
-                                    className={`${uiConfig.bg} me-5 rounded-2xl p-3 shrink-0`}
+                                    className={`${uiConfig.bg} me-5 rounded-2xl p-3 shrink-0 flex items-center justify-center`}
                                 >
                                     {uiConfig.icon}
                                 </div>
@@ -44,7 +57,7 @@ const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
                                         {noti.imageUrl && (
                                             <div className="w-full max-w-sm border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
                                                 <img
-                                                    src={noti.imageUrl}
+                                                    src={fullImgUrl}
                                                     className="w-full object-cover max-h-48"
                                                     alt="attachment"
                                                 />

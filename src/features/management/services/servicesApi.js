@@ -34,7 +34,7 @@ export const servicesApi = baseApi.injectEndpoints({
                 url: `${serviceEndpoint}`,
                 method: "GET",
             }),
-            providesTags: ["services"],
+            providesTags: ["services", "packages"],
         }),
 
         createService: builder.mutation({
