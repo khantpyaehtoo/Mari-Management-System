@@ -8,6 +8,7 @@ const ServiceDeleteModal = ({
     setDeleteModalOpen,
     handleDeleteConfirm,
     isLoading,
+    // isDeletedMode,
 }) => {
     return (
         <Modal

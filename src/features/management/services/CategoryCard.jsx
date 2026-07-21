@@ -1,7 +1,7 @@
 import { Button, Card, Col } from "antd";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, RefreshCcw, Trash2 } from "lucide-react";
 
-const CategoryCard = ({ item, handleActionClick }) => {
+const CategoryCard = ({ item, handleActionClick, isDeletedMode }) => {
     return (
         <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
             <Card className="w-full border! border-gray-300! rounded-xl! hover:shadow-md transition-shadow ">
@@ -23,13 +23,27 @@ const CategoryCard = ({ item, handleActionClick }) => {
                     >
                         <Edit size={14} className="mr-1" /> Edit
                     </Button>
-                    <Button
-                        onClick={(e) => handleActionClick("delete", item, e)}
-                        className="border! border-red-500! text-red-500 hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
-                    >
-                        <Trash2 size={14} />
-                        Delete
-                    </Button>
+                    {!isDeletedMode ? (
+                        <Button
+                            onClick={(e) =>
+                                handleActionClick("delete", item, e)
+                            }
+                            className="border! border-red-500! hover:text-white! hover:bg-red-500! flex-1 min-w-21.25 flex items-center justify-center"
+                        >
+                            <Trash2 size={14} />
+                            Delete
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={(e) =>
+                                handleActionClick("delete", item, e)
+                            }
+                            className="border! border-available! hover:text-white! hover:bg-available! flex-1 min-w-21.25 flex items-center justify-center"
+                        >
+                            <RefreshCcw size={14} />
+                            Restore
+                        </Button>
+                    )}
                 </div>
             </Card>
         </Col>

@@ -243,6 +243,7 @@ const CategoryDetails = () => {
                 selectedService={selectedService}
                 setDeleteModalOpen={setDeleteModalOpen}
                 handleDeleteConfirm={handleDeleteConfirm}
+                isDeletedMode={isDeletedMode}
             />
         </>
     );
