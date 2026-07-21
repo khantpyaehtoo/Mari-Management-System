@@ -28,8 +28,11 @@ const SubHeaderSection = ({
     reportConfig,
     formType,
     showBackButton = false,
-    categories = [], // Category List လက်ခံရန်
-    isAllMode = false, // All Services Mode ဟုတ်မဟုတ် လက်ခံရန်
+    backToPath = "/management/service",
+    backText,
+    categories = [],
+    isAllMode = false,
+    hideAddButton = false,
 }) => {
     const { Title } = Typography;
     const nav = useNavigate();
@@ -40,8 +43,8 @@ const SubHeaderSection = ({
     const { selectedDate, onDateChange } = reportConfig || {};
 
     const titleIncludes =
-        title.includes("Staff Schedule and Calendar") ||
-        title.includes("Reports & Analytics") ||
+        title?.includes("Staff Schedule and Calendar") ||
+        title?.includes("Reports & Analytics") ||
         title?.includes("Sent Notifications");
 
     const currentYear = dayjs().year();
@@ -69,15 +72,14 @@ const SubHeaderSection = ({
                 title?.includes("Customer") ? "border-0 px-3" : "p-3 border-b",
             )}
         >
+            {/* Dynamic Back Button */}
             {showBackButton && (
                 <Button
-                    onClick={() =>
-                        nav("/management/service", { replace: true })
-                    }
+                    onClick={() => nav(backToPath, { replace: true })}
                     className="bg-transparent! border-none! shadow-none! hover:underline! hover:text-black! text-lg! p-0! mb-4! group flex items-center gap-1"
                 >
                     <ArrowLeftOutlined className="group-hover:-translate-x-1 transition-transform" />{" "}
-                    Back to Services
+                    Back to {backText}
                 </Button>
             )}
 
@@ -93,7 +95,8 @@ const SubHeaderSection = ({
                         <Title level={3} className="text-primary! text-3xl!">
                             {title.includes("Services") ||
                             title.includes("Calendar") ||
-                            title.includes("Reports")
+                            title.includes("Reports") ||
+                            title.includes("Disabled")
                                 ? title
                                 : `${title} Management`}
                         </Title>
@@ -113,8 +116,6 @@ const SubHeaderSection = ({
                                 initialValue={initialValue}
                                 triggerCreate={triggerCreate}
                                 triggerEdit={triggerEdit}
-                                categories={categories}
-                                isAllMode={isAllMode}
                             />
                             <AddForm
                                 title={formType[1] || title}
@@ -127,8 +128,6 @@ const SubHeaderSection = ({
                                 initialValue={initialValue}
                                 triggerCreate={triggerCreate}
                                 triggerEdit={triggerEdit}
-                                categories={categories}
-                                isAllMode={isAllMode}
                             />
                         </div>
                     )}
@@ -200,7 +199,7 @@ const SubHeaderSection = ({
                     />
                 )}
 
-                {title !== "Sent Notifications" && (
+                {!hideAddButton && title !== "Sent Notifications" && (
                     <AddForm
                         title={formType || title}
                         btnTitle={btnTitle}

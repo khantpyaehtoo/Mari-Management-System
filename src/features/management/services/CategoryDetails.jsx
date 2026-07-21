@@ -1,5 +1,4 @@
-import { Button, Card, Col, Row, Skeleton } from "antd";
-import { Edit, Trash2 } from "lucide-react";
+import { Card, Col, Row, Skeleton } from "antd";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -26,7 +25,9 @@ const CategoryDetails = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
 
+    // 1. Identify mode based on the URL parameter 'id'
     const isAllMode = id === "all";
+    const isDeletedMode = id === "deleted";
 
     const { data: getAllCategory = [], isLoading: isCategoryLoading } =
         useGetCategoryDataQuery();
@@ -44,7 +45,10 @@ const CategoryDetails = () => {
             name: formValues.name,
             price: Number(formValues.price),
             durationInMinutes: formValues.durationInMinutes,
-            categoryId: isAllMode ? Number(formValues.categoryId) : Number(id),
+            categoryId:
+                isAllMode || isDeletedMode
+                    ? Number(formValues.categoryId)
+                    : Number(id),
         };
         return await createServiceTrigger(formattedPayload).unwrap();
     };
@@ -93,30 +97,49 @@ const CategoryDetails = () => {
         }
     };
 
+    // 2. Set Category Title dynamically
     const currentCategory = useMemo(() => {
         if (isAllMode) return { name: "All Services" };
+        if (isDeletedMode) return { name: "Deleted Services" };
+
         return getAllCategory?.find(
             (cate) => cate?.id?.toString() === id?.toString(),
         );
-    }, [getAllCategory, id, isAllMode]);
+    }, [getAllCategory, id, isAllMode, isDeletedMode]);
 
+    // 3. Filter services based on active mode (All, Deleted, or Specific Category)
     const searchService = useMemo(() => {
         return (
             allServices?.filter((item) => {
                 if (!item) return false;
 
-                const matchesCategory =
-                    isAllMode || item.categoryId?.toString() === id?.toString();
                 const isNotPackage = item.package === false;
+
+                // Category match logic: All/Deleted modes allow all categories
+                const matchesCategory =
+                    isAllMode ||
+                    isDeletedMode ||
+                    item.categoryId?.toString() === id?.toString();
+
+                // Check enabled status: if deleted mode -> enabled === false, else -> enabled === true
+                const matchesStatus = isDeletedMode
+                    ? item.enabled === false
+                    : item.enabled === true;
+
                 const matchesSearch = item.name
                     ?.toString()
                     .toLowerCase()
                     .includes(searchText.toLowerCase());
 
-                return matchesCategory && isNotPackage && matchesSearch;
+                return (
+                    matchesCategory &&
+                    isNotPackage &&
+                    matchesStatus &&
+                    matchesSearch
+                );
             }) || []
         );
-    }, [allServices, id, isAllMode, searchText]);
+    }, [allServices, id, isAllMode, isDeletedMode, searchText]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -139,6 +162,21 @@ const CategoryDetails = () => {
 
     const isLoading = isCategoryLoading || isServicesLoading;
 
+    // Helper for empty list message
+    const getEmptyMessage = () => {
+        if (isDeletedMode) return "No deleted services found.";
+        if (isAllMode) return "No services found.";
+        return "No services found in this category.";
+    };
+
+    // Helper for sub-header subtitle
+    const getSubTitle = () => {
+        if (isDeletedMode)
+            return "Manage all soft-deleted or inactive services";
+        if (isAllMode) return "Manage all services across all categories";
+        return "Manage all services under this category";
+    };
+
     return (
         <>
             <SubHeaderSection
@@ -147,17 +185,14 @@ const CategoryDetails = () => {
                         ? "Loading..."
                         : currentCategory?.name || "Category Details"
                 }
-                subTitle={
-                    isAllMode
-                        ? "Manage all services across all categories"
-                        : "Manage all services under this category"
-                }
+                subTitle={getSubTitle()}
                 formType="Services"
                 btnTitle="Services"
                 placeholderTitle="Search service name..."
+                backText="All Categories"
                 showBackButton={true}
                 categories={getAllCategory}
-                isAllMode={isAllMode}
+                isAllMode={isAllMode || isDeletedMode}
                 searchText={searchText}
                 setSearchText={setSearchText}
                 isEdit={editModalOpen}
@@ -189,15 +224,15 @@ const CategoryDetails = () => {
                     ))
                 ) : searchService.length === 0 ? (
                     <Col span={24} className="text-center text-gray-400 mt-10">
-                        {isAllMode
-                            ? "No services found."
-                            : "No services found in this category."}
+                        {getEmptyMessage()}
                     </Col>
                 ) : (
                     searchService.map((item) => (
                         <CategoryCard
+                            key={item.id}
                             item={item}
                             handleActionClick={handleActionClick}
+                            isDeletedMode={isDeletedMode} // Pass this if you want to show a Restore button in CategoryCard
                         />
                     ))
                 )}

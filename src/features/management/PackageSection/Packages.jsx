@@ -1,6 +1,7 @@
 import { Card, Col, Row, Skeleton } from "antd";
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom"; // Route ပြောင်းရန် Link ထည့်ပါ
 import { setMessage } from "../../../app/core/notiSlice";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import PackageCard from "./PackageCard";
@@ -13,6 +14,7 @@ import {
     useCreatePackageMutation,
     useUpdatePackageMutation,
 } from "./packageApi";
+import { StarX } from "lucide-react";
 
 const Packages = () => {
     const [searchText, setSearchText] = useState("");
@@ -30,7 +32,7 @@ const Packages = () => {
     const [updatePackage, { isLoading: isUpdating }] =
         useUpdatePackageMutation();
 
-    const searchPackages = useMemo(() => {
+    const activePackages = useMemo(() => {
         return (
             servicesData?.filter((item) => {
                 if (!item) return false;
@@ -128,8 +130,12 @@ const Packages = () => {
 
         const rawServices = body.serviceIds || body.serviceId || [];
         const selectedServiceIds = rawServices
-            .map((sId) =>
-                Number(typeof sId === "object" ? sId?.value || sId?.id : sId),
+            .map((serId) =>
+                Number(
+                    typeof serId === "object"
+                        ? serId?.value || serId?.id
+                        : serId,
+                ),
             )
             .filter(Boolean);
 
@@ -149,8 +155,6 @@ const Packages = () => {
                 serviceIds: selectedServiceIds,
             },
         };
-
-        console.log("formatted payload", formattedPayload);
 
         return await updatePackage(formattedPayload).unwrap();
     };
@@ -190,20 +194,52 @@ const Packages = () => {
                             </Card>
                         </Col>
                     ))
-                ) : searchPackages.length === 0 ? (
-                    <Col span={24} className="text-center text-gray-400 mt-10">
-                        No packages found.
-                    </Col>
                 ) : (
-                    searchPackages
-                        ?.filter((item) => item.enabled)
-                        ?.map((item) => (
-                            <PackageCard
-                                key={item.id}
-                                item={item}
-                                handleActionClick={handleActionClick}
-                            />
-                        ))
+                    <>
+                        <Col xs={24} sm={12} xl={6} className="flex">
+                            <Link
+                                to="/management/packages/disabled"
+                                className="w-full"
+                            >
+                                <Card className="w-full min-h-65! flex items-center justify-center border-2! border-gray-400! border-dashed! rounded-xl! bg-gray-50! hover:bg-gray-100! transition-colors cursor-pointer shadow-sm hover:shadow-md">
+                                    <h1 className="text-base font-semibold text-gray-600 flex justify-center items-center text-center">
+                                        <StarX
+                                            size={20}
+                                            className="inline me-5"
+                                        />
+                                        Disabled Packages
+                                    </h1>
+                                    <div className="mt-3 flex justify-between items-baseline gap-4">
+                                        <span className="text-gray-400 shrink-0">
+                                            Disabled Items :
+                                        </span>
+                                        <span className="w-8 bg-gray-300 rounded-full text-center font-medium text-gray-600">
+                                            0
+                                        </span>
+                                    </div>
+                                </Card>
+                            </Link>
+                        </Col>
+
+                        {activePackages.length === 0 ? (
+                            <Col
+                                xs={24}
+                                sm={12}
+                                xl={18}
+                                className="flex items-center justify-center text-gray-400"
+                            >
+                                No active packages found.
+                            </Col>
+                        ) : (
+                            activePackages.map((item) => (
+                                <PackageCard
+                                    key={item.id}
+                                    item={item}
+                                    handleActionClick={handleActionClick}
+                                />
+                            ))
+                        )}
+                    </>
                 )}
             </Row>
 

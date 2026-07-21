@@ -140,6 +140,11 @@ const SideBar = () => {
         if (pathname.startsWith("/management/service")) {
             return "/management/service";
         }
+
+        if (pathname.startsWith("/management/packages")) {
+            return "/management/packages";
+        }
+
         return pathname;
     };
 

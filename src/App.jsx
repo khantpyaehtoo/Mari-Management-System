@@ -20,6 +20,7 @@ import Notifications from "./features/send-notifications/Notifications.jsx";
 
 import IsAuth from "./components/Guards/IsAuth.jsx";
 import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
+import DisabledPackage from "./features/management/PackageSection/DisabledPackage.jsx";
 
 export default function App() {
     return (
@@ -53,7 +54,13 @@ export default function App() {
                             <Route index element={<CategorySection />} />
                             <Route path=":id" element={<CategoryDetails />} />
                         </Route>
-                        <Route path="packages" element={<Packages />} />
+                        <Route path="packages">
+                            <Route index element={<Packages />} />
+                            <Route
+                                path="disabled"
+                                element={<DisabledPackage />}
+                            />
+                        </Route>
                         <Route path="booking" element={<Booking />} />
                         <Route path="staff" element={<Staff />} />
                     </Route>

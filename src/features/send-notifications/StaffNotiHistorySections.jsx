@@ -13,7 +13,7 @@ const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
     const staffNotis = Array.isArray(data) ? data : data?.content || [];
 
     return (
-        <div className="w-1/2 h-full overflow-y-auto border-e border-e-gray-400 px-5 py-2 space-y-4">
+        <div className="w-1/2 h-full overflow-y-auto border-e border-e-gray-400 px-5 py-2 space-y-4!">
             <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects mb-4">
                 Sent Notifications (Staffs)
             </h1>
@@ -38,7 +38,7 @@ const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
                     return (
                         <Card
                             key={noti.id}
-                            className="border-gray-300! shadow-sm! rounded-xl! hover:shadow-md transition-shadow"
+                            className="border-gray-300! shadow-sm! rounded-xl! hover:shadow-md! transition-shadow!"
                         >
                             <Flex justify="space-between" align="start">
                                 <div

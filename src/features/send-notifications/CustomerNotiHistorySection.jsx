@@ -19,7 +19,7 @@ const CustomerNotiHistorySection = ({
         : customerData?.content || customerData?.data || [];
 
     return (
-        <div className="w-1/2 h-full overflow-y-auto px-5 py-2 space-y-4">
+        <div className="w-1/2 h-full overflow-y-auto px-5 py-2 space-y-4!">
             <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects mb-4">
                 Sent Notifications (Customers)
             </h1>
@@ -45,7 +45,7 @@ const CustomerNotiHistorySection = ({
                     return (
                         <Card
                             key={noti.id}
-                            className="border-gray-300! shadow-sm! rounded-xl! hover:shadow-md transition-shadow"
+                            className="border-gray-300! shadow-sm! rounded-xl! hover:shadow-md! transition-shadow!"
                         >
                             <Flex justify="space-between" align="start">
                                 <div
