@@ -2,7 +2,7 @@ import { Card, Col, Row, Skeleton } from "antd";
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom"; // Route ပြောင်းရန် Link ထည့်ပါ
-import { setMessage } from "../../../app/core/notiSlice";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import PackageCard from "./PackageCard";
 import PackageDeleteModal from "./PackageDeleteModal";

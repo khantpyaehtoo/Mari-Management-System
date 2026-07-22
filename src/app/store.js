@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import layoutSlice from "../layout/layoutSlice";
 import { baseApi } from "./core/baseApi";
 import authSlice from "../features/auth/authSlice";
-import notiSlice from "./core/notiSlice";
+import notiSlice from "./core/notifications/notiSlice";
 
 export const store = configureStore({
     reducer: {

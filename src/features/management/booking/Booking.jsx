@@ -9,9 +9,9 @@ import ConfirmModal from "./ConfirmModal";
 import OverviewModal from "./OverviewModal";
 import CancelModal from "./CancelModal";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../../app/core/notiSlice";
 import dayjs from "dayjs";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const { useBreakpoint } = Grid;
 

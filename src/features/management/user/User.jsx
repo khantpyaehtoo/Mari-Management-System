@@ -3,7 +3,6 @@ import { useCallback, useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import UserDetailModal from "./UserDetailModal";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../../app/core/notiSlice";
 import {
     useBlockUserMutation,
     useGetAllUserDataQuery,
@@ -11,6 +10,7 @@ import {
 } from "./userApi";
 import CustomerSummaryCard from "./CustomerSummaryCard";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const { useBreakpoint } = Grid;
 

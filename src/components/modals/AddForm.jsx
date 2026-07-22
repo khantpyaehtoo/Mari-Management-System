@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../../app/core/notiSlice";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 import { FORM_CONFIG } from "../../lib/config/formConfig";
 
 const AddForm = ({

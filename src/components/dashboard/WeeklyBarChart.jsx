@@ -68,11 +68,9 @@ const formatDayLabel = (dayStr) => {
 };
 
 export default function WeeklyBarChart() {
-    const { data: chartData } = useGetWeeklyChartDataQuery();
+    const { data: chartData = [] } = useGetWeeklyChartDataQuery();
 
-    console.log(chartData);
-
-    const labels = chartData.map((item) => formatDayLabel(item.label));
+    const labels = chartData?.map((item) => formatDayLabel(item.label));
 
     const chartRenderData = {
         labels,

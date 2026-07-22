@@ -19,9 +19,9 @@ import {
 import StaffDetailModal from "./StaffDetailsModal";
 import TerminateStaffModal from "./TerminateStaffModal";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../../app/core/notiSlice";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
 import dayjs from "dayjs";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
@@ -217,10 +217,21 @@ const Staff = () => {
             const staffId = updatedStaffFields.staffId;
             await editStaff(staffId, updatedStaffFields).unwrap();
             setSelectedStaff(updatedStaffFields);
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Edit Change successfully.",
+                }),
+            );
         } catch (error) {
             console.error(
                 "Failed to save changes onto backend database:",
                 error,
+            );
+            const errorMessage =
+                error?.data?.message || error?.error || "Error while changeing";
+            dispatch(
+                setMessage({ msgType: "error", msgContent: errorMessage }),
             );
         }
     };

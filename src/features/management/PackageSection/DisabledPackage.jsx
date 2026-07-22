@@ -1,12 +1,12 @@
 import { Card, Col, Row, Skeleton } from "antd";
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../../app/core/notiSlice";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useGetAllServiceDataQuery } from "../services/servicesApi";
 import { useUpdatePackageMutation } from "./packageApi";
 import PackageCard from "./PackageCard";
 import PackageDeleteModal from "./PackageDeleteModal";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const DisabledPackage = () => {
     const dispatch = useDispatch();

@@ -9,25 +9,21 @@ import { useLoginAccountMutation } from "./authApi";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { setLoggedIn } from "./authSlice";
-import { setMessage } from "../../app/core/notiSlice";
 import { useState } from "react";
 import loginImg from "../../../public/asset/img1.png";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 
 const LoginForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
-    // const [isError, setIsError] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [loginAccount] = useLoginAccountMutation();
 
-    // console.log(" Message", setMessage); => check redux connection
-
     const onFinish = async (values) => {
         console.log("Received values of form: ", values);
         try {
             setIsSubmitting(true);
-            // setIsError(null);
 
             const data = await loginAccount(values).unwrap();
             console.log(data?.tokenPair.accessToken);
@@ -57,7 +53,6 @@ const LoginForm = () => {
             const errorMessage =
                 err?.data?.message || err?.error || "Login failed";
 
-            // setIsError(errorMessage);
             dispatch(
                 setMessage({
                     msgType: "error",

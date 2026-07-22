@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Button, Form, Input, Typography, message } from "antd";
+import { Button, Form, Input, Typography } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useResetPasswordMutation } from "./authApi";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../app/core/notiSlice";
 import resetImg2 from "../../../public/asset/Img2.png";
 import resetImg3 from "../../../public/asset/Img3.png";
 import ellipse from "../../../public/asset/Ellipse.png";
 import { ArrowRightOutlined } from "@ant-design/icons/es/icons/index";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 
 const { Title, Text } = Typography;
 
@@ -47,7 +47,6 @@ const NewPasswordForm = () => {
                     msgContent: errorMessage,
                 }),
             );
-            message.error(errorMessage);
         } finally {
             setLoading(false);
         }

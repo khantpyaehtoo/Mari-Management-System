@@ -157,7 +157,7 @@ const CategorySection = () => {
                                             isAllServices
                                                 ? "bg-primary! text-white! hover:bg-white! hover:text-primary!"
                                                 : isDeleted
-                                                  ? "bg-primary! text-white! border-dashed! hover:bg-white! hover:text-primary!"
+                                                  ? "border-gray-400! border-dashed text-center! hover:bg-gray-100!"
                                                   : "bg-white! text-primary! hover:bg-primary! hover:text-white!",
                                         )}
                                     >
@@ -171,9 +171,11 @@ const CategorySection = () => {
                                             <span
                                                 className={cn(
                                                     "px-3 py-1 rounded-full text-xs font-semibold transition-colors duration-300",
-                                                    isAllServices || isDeleted
+                                                    isAllServices
                                                         ? "bg-white text-primary group-hover:bg-primary! group-hover:text-white!"
-                                                        : "bg-primary! text-white! group-hover:bg-white! group-hover:text-primary!",
+                                                        : isDeleted
+                                                          ? "bg-gray-200! text-gray-400 text-center! group-hover:bg-gray-300!"
+                                                          : "bg-primary! text-white! group-hover:bg-white! group-hover:text-primary!",
                                                 )}
                                             >
                                                 {item?.count || 0}

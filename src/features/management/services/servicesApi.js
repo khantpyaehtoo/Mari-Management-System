@@ -56,6 +56,15 @@ export const servicesApi = baseApi.injectEndpoints({
             invalidatesTags: ["services"],
         }),
 
+        restoreService: builder.mutation({
+            query: ({ id, body }) => ({
+                url: `${categoryEndpoint}/${id}/restore`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["services", "packages"],
+        }),
+
         deleteService: builder.mutation({
             query: ({ id, token }) => ({
                 url: `${serviceEndpoint}/${id}`,

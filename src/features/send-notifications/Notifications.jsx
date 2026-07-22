@@ -9,11 +9,11 @@ import {
 } from "./notificationApi";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../app/core/notiSlice";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import CustomerNotiHistorySection from "./CustomerNotiHistorySection";
 import StaffNotiHistorySections from "./StaffNotiHistorySections";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 
 dayjs.extend(relativeTime);
 

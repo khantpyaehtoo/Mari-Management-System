@@ -8,11 +8,11 @@ import {
     useGetCategoryDataQuery,
     useUpdateServiceMutation,
 } from "./servicesApi";
-import ServiceDeleteModal from "./ServiceDeleteModal";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../../../app/core/notiSlice";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 import CategoryCard from "./CategoryCard";
+import ServiceConfirmationModal from "./ServiceConfirmationModal";
 
 const CategoryDetails = () => {
     const [searchText, setSearchText] = useState("");
@@ -25,7 +25,7 @@ const CategoryDetails = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    // 1. Identify mode based on the URL parameter 'id'
+    // Identify mode based on the URL parameter 'id'
     const isAllMode = id === "all";
     const isDeletedMode = id === "deleted";
 
@@ -97,7 +97,42 @@ const CategoryDetails = () => {
         }
     };
 
-    // 2. Set Category Title dynamically
+    const handleRestoreConfirm = async ({ serviceId, categoryId }) => {
+        if (!serviceId) return;
+
+        try {
+            await editServiceTrigger({
+                id: serviceId,
+                token,
+                body: {
+                    ...selectedService,
+                    categoryId: Number(categoryId),
+                    enabled: true, // Re-enable service
+                },
+            }).unwrap();
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Service restored successfully",
+                }),
+            );
+
+            setDeleteModalOpen(false);
+        } catch (error) {
+            console.error("Restore failed:", error);
+            let errorMessage =
+                error?.data?.message || "Restore failed occurred";
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMessage,
+                }),
+            );
+        }
+    };
+
+    // Set Category Title dynamically
     const currentCategory = useMemo(() => {
         if (isAllMode) return { name: "All Services" };
         if (isDeletedMode) return { name: "Deleted Services" };
@@ -107,7 +142,7 @@ const CategoryDetails = () => {
         );
     }, [getAllCategory, id, isAllMode, isDeletedMode]);
 
-    // 3. Filter services based on active mode (All, Deleted, or Specific Category)
+    // Filter services based on active mode (All, Deleted, or Specific Category)
     const searchService = useMemo(() => {
         return (
             allServices?.filter((item) => {
@@ -121,7 +156,7 @@ const CategoryDetails = () => {
                     isDeletedMode ||
                     item.categoryId?.toString() === id?.toString();
 
-                // Check enabled status: if deleted mode -> enabled === false, else -> enabled === true
+                // Check enabled status
                 const matchesStatus = isDeletedMode
                     ? item.enabled === false
                     : item.enabled === true;
@@ -231,18 +266,21 @@ const CategoryDetails = () => {
                         <CategoryCard
                             key={item.id}
                             item={item}
+                            categories={getAllCategory}
                             handleActionClick={handleActionClick}
-                            isDeletedMode={isDeletedMode} // Pass this if you want to show a Restore button in CategoryCard
+                            isDeletedMode={isDeletedMode}
                         />
                     ))
                 )}
             </Row>
 
-            <ServiceDeleteModal
+            <ServiceConfirmationModal
                 deleteModalOpen={deleteModalOpen}
                 selectedService={selectedService}
                 setDeleteModalOpen={setDeleteModalOpen}
                 handleDeleteConfirm={handleDeleteConfirm}
+                handleRestoreConfirm={handleRestoreConfirm}
+                categories={getAllCategory}
                 isDeletedMode={isDeletedMode}
             />
         </>

@@ -13,7 +13,7 @@ import { useEffect, useMemo } from "react";
 import { useCreateCalendarDataMutation } from "./calendarApi";
 import { cn } from "../../lib/utils";
 import { useDispatch } from "react-redux";
-import { setMessage } from "../../app/core/notiSlice";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
     const [form] = Form.useForm();

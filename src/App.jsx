@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
-import NotificationHandler from "./components/NotificationHandler";
 import User from "./features/management/user/User.jsx";
 import CategorySection from "./features/management/services/CategorySection.jsx";
 import Booking from "./features/management/booking/Booking.jsx";
@@ -21,6 +20,7 @@ import Notifications from "./features/send-notifications/Notifications.jsx";
 import IsAuth from "./components/Guards/IsAuth.jsx";
 import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 import DisabledPackage from "./features/management/PackageSection/DisabledPackage.jsx";
+import NotificationHandler from "./app/core/notifications/NotificationHandler.jsx";
 
 export default function App() {
     return (

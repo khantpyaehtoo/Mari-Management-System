@@ -4,10 +4,15 @@ const initialState = {
     message: {
         msgType: null,
         msgContent: null,
+        title: null,
+        duration: 4,
     },
     alert: {
         alertType: null,
         alertContent: null,
+    },
+    placement: {
+        placeholderType: "top",
     },
 };
 
@@ -22,14 +27,20 @@ export const notiSlice = createSlice({
             state.message = {
                 msgType: null,
                 msgContent: null,
-                duration: 10,
+                title: null,
+                duration: 4,
             };
         },
         setAlert: (state, { payload }) => {
             state.alert = payload;
         },
+        // Easily update placement dynamically
+        setPlacement: (state, { payload }) => {
+            state.placement.placeholderType = payload;
+        },
     },
 });
 
-export const { setMessage, setAlert, clearMessage } = notiSlice.actions;
+export const { setMessage, setAlert, clearMessage, setPlacement } =
+    notiSlice.actions;
 export default notiSlice.reducer;

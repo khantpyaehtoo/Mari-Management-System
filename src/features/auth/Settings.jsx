@@ -7,10 +7,10 @@ import {
     useUpdateAdminDataMutation,
     useGetSettingsQuery,
 } from "./authApi";
-import { setMessage } from "../../app/core/notiSlice";
 import SecuritySettings from "./Settings/SecuritySettings";
 import AccountSettings from "./Settings/AccountSettings";
 import MediaUploadsSetting from "./Settings/MediaUploadsSetting";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 
 const { Title, Text } = Typography;
 
@@ -84,15 +84,26 @@ const Settings = () => {
                         newPassword: values.newPassword,
                     },
                 }).unwrap();
-                message.success("Password changed successfully!");
                 passwordForm.resetFields();
+
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Password changed successfully!",
+                    }),
+                );
             } catch (error) {
-                message.error(
-                    error?.data?.message || "Failed to change password",
+                const errorMsg =
+                    error?.data?.message || "Failed to change password";
+                dispatch(
+                    setMessage({
+                        msgType: "error",
+                        msgContent: errorMsg,
+                    }),
                 );
             }
         },
-        [changePassword, message, passwordForm],
+        [changePassword, dispatch, passwordForm],
     );
 
     const uploadProps = useMemo(
