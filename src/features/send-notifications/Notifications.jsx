@@ -115,10 +115,8 @@ const Notifications = () => {
         formData.append("title", values.title);
         formData.append("message", values.message);
 
-        if (values.targetAudience && Array.isArray(values.targetAudience)) {
-            values.targetAudience.forEach((audience) => {
-                formData.append("targetAudience", audience);
-            });
+        if (values.targetAudience) {
+            formData.append("targetAudience", values.targetAudience);
         }
 
         if (values.image && values.image.length > 0) {

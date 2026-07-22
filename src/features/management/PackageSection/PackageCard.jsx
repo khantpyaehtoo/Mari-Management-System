@@ -1,7 +1,9 @@
 import { Button, Card, Col } from "antd";
-import { Edit, StarX } from "lucide-react";
+import { Edit, Star, StarX } from "lucide-react";
 
-const PackageCard = ({ item, handleActionClick }) => {
+const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
+    const isItemDisabled = isDisabledView || item.enabled === false;
+
     return (
         <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
             <Card className="w-full min-h-65! border border-gray-200! rounded-xl shadow-xs hover:shadow-md transition-all duration-300 bg-white flex flex-col justify-between">
@@ -62,12 +64,26 @@ const PackageCard = ({ item, handleActionClick }) => {
                     >
                         <Edit size={14} className="mr-1.5" /> Edit
                     </Button>
-                    <Button
-                        onClick={(e) => handleActionClick("delete", item, e)}
-                        className="border border-red-200! text-red-500 hover:text-white! hover:bg-red-500! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
-                    >
-                        <StarX size={14} className="mr-1.5" /> Disable
-                    </Button>
+
+                    {isItemDisabled ? (
+                        <Button
+                            onClick={(e) =>
+                                handleActionClick("enable", item, e)
+                            }
+                            className="border border-emerald-200! text-emerald-600 hover:text-white! hover:bg-emerald-600! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
+                        >
+                            <Star size={14} className="mr-1.5" /> Enable
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={(e) =>
+                                handleActionClick("delete", item, e)
+                            }
+                            className="border border-red-200! text-red-500 hover:text-white! hover:bg-red-500! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
+                        >
+                            <StarX size={14} className="mr-1.5" /> Disable
+                        </Button>
+                    )}
                 </div>
             </Card>
         </Col>

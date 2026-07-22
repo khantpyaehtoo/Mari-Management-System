@@ -74,15 +74,14 @@ const Staff = () => {
 
     const handleFilterChange = (value) => {
         setFilterValue(value);
-        setCurrentPage(1); // Reset page on filter change
+        setCurrentPage(1);
     };
 
     const handleSearchChange = (value) => {
         setSearchText(value);
-        setCurrentPage(1); // Reset page on search change
+        setCurrentPage(1);
     };
 
-    // Format query status parameter
     const statusParam =
         !filterValue || filterValue === "All" ? undefined : filterValue;
 
@@ -93,22 +92,29 @@ const Staff = () => {
         size: 10,
     });
 
+    // ⭐️ Map API response keys to match UI requirements smoothly
     const dataList = useMemo(() => {
         const rawStaff = Array.isArray(apiResponse)
             ? apiResponse
-            : apiResponse?.staff || [];
+            : apiResponse?.staff || apiResponse?.content || [];
 
         return rawStaff.map((staff) => {
-            let fullImageUrl = staff.profileImage;
+            const rawImg = staff.profilePicture || staff.profileImage;
+            let fullImageUrl = rawImg;
 
-            if (staff?.profileImage && !staff.profileImage.startsWith("http")) {
-                const separator = staff.profileImage.startsWith("/") ? "" : "/";
-                fullImageUrl = `${IMAGE_BASE_URL}${separator}${staff.profileImage}`;
+            if (rawImg && !rawImg.startsWith("http")) {
+                const separator = rawImg.startsWith("/") ? "" : "/";
+                fullImageUrl = `${IMAGE_BASE_URL}${separator}${rawImg}`;
             }
 
             return {
                 ...staff,
+                staffId: staff.id || staff.staffId,
+                staffCode: staff.code || staff.staffCode,
+                staffName: staff.fullName || staff.staffName,
+                phoneNumber: staff.phone || staff.phoneNumber,
                 profileImage: fullImageUrl,
+                joinedDate: staff.createdAt || staff.joinedDate,
             };
         });
     }, [apiResponse]);
@@ -118,6 +124,40 @@ const Staff = () => {
     const [deleteStaff] = useDeleteStaffMutation();
     const [terminateStaff] = useTerminateStaffMutation();
     const [rehiredStaff] = useRehiredStaffMutation();
+
+    // ⭐️ Form Handler for SubHeaderSection Create Trigger
+    const handleCreateStaff = async (formValues) => {
+        try {
+            const payload = {
+                fullName: formValues.fullName || formValues.staffName,
+                email: formValues.email,
+                phoneNumber: formValues.phoneNumber || formValues.phone,
+                dateOfBirth: formValues.dateOfBirth
+                    ? dayjs(formValues.dateOfBirth).format(
+                          "YYYY-MM-DDTHH:mm:ss[Z]",
+                      )
+                    : null,
+            };
+            const result = await createStaff(payload).unwrap();
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Staff created successfully.",
+                }),
+            );
+            return result;
+        } catch (error) {
+            console.error("Create staff error:", error);
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent:
+                        error?.data?.message || "Failed to create staff",
+                }),
+            );
+            throw error;
+        }
+    };
 
     const statusCounts = useMemo(() => {
         const AllTotal =
@@ -147,89 +187,99 @@ const Staff = () => {
     }, []);
 
     const handleTerminateStaff = async (staffId) => {
-        if (window.confirm(`Are you sure to terminate this ${staffId}`)) {
-            try {
-                await terminateStaff(staffId).unwrap();
-                dispatch(
-                    setMessage({
-                        msgType: "success",
-                        msgContent: "Terminated successfully.",
-                    }),
-                );
-            } catch (error) {
-                const errorMessage =
-                    error?.data?.message ||
-                    error?.error ||
-                    "Error while Terminate";
-                dispatch(
-                    setMessage({ msgType: "error", msgContent: errorMessage }),
-                );
-            }
+        const idToPass = staffId || selectedStaff?.staffId || selectedStaff?.id;
+        try {
+            await terminateStaff(idToPass).unwrap();
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Terminated successfully.",
+                }),
+            );
+            setIsTerminateOpen(false);
+        } catch (error) {
+            const errorMessage =
+                error?.data?.message ||
+                error?.error ||
+                "Error while Terminating staff";
+            dispatch(
+                setMessage({ msgType: "error", msgContent: errorMessage }),
+            );
         }
     };
 
     const handleRehired = async (staffId) => {
-        if (window.confirm(`Are you sure to rehired this ${staffId}`)) {
-            try {
-                await rehiredStaff(staffId).unwrap();
-                dispatch(
-                    setMessage({
-                        msgType: "success",
-                        msgContent: "Re-Hired successfully.",
-                    }),
-                );
-            } catch (error) {
-                const errorMessage =
-                    error?.data?.message ||
-                    error?.error ||
-                    "Error while Re-Hiring";
-                dispatch(
-                    setMessage({ msgType: "error", msgContent: errorMessage }),
-                );
-            }
+        const idToPass = staffId || selectedStaff?.staffId || selectedStaff?.id;
+        try {
+            await rehiredStaff(idToPass).unwrap();
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Re-Hired successfully.",
+                }),
+            );
+            setIsDetailOpen(false);
+        } catch (error) {
+            const errorMessage =
+                error?.data?.message ||
+                error?.error ||
+                "Error while Re-Hiring staff";
+            dispatch(
+                setMessage({ msgType: "error", msgContent: errorMessage }),
+            );
         }
     };
 
     const handleDeleteStaff = async (staffId) => {
-        if (window.confirm(`Are you sure to delete this ${staffId}`)) {
-            try {
-                await deleteStaff(staffId).unwrap();
-                dispatch(
-                    setMessage({
-                        msgType: "success",
-                        msgContent: "Deleted successfully.",
-                    }),
-                );
-            } catch (error) {
-                const errorMessage =
-                    error?.data?.message ||
-                    error?.error ||
-                    "Error while deleting";
-                dispatch(
-                    setMessage({ msgType: "error", msgContent: errorMessage }),
-                );
-            }
+        const idToPass = staffId || selectedStaff?.staffId || selectedStaff?.id;
+        try {
+            await deleteStaff(idToPass).unwrap();
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Deleted successfully.",
+                }),
+            );
+            setIsDetailOpen(false);
+        } catch (error) {
+            const errorMessage =
+                error?.data?.message ||
+                error?.error ||
+                "Error while deleting staff";
+            dispatch(
+                setMessage({ msgType: "error", msgContent: errorMessage }),
+            );
         }
     };
 
     const handleSaveStaffDetail = async (updatedStaffFields) => {
         try {
-            const staffId = updatedStaffFields.staffId;
-            await editStaff(staffId, updatedStaffFields).unwrap();
+            const targetId =
+                updatedStaffFields.id || updatedStaffFields.staffId;
+            await editStaff({
+                id: targetId,
+                fullName:
+                    updatedStaffFields.fullName || updatedStaffFields.staffName,
+                email: updatedStaffFields.email,
+                phoneNumber:
+                    updatedStaffFields.phoneNumber || updatedStaffFields.phone,
+                dateOfBirth: updatedStaffFields.dateOfBirth,
+            }).unwrap();
+
             setSelectedStaff(updatedStaffFields);
             dispatch(
                 setMessage({
                     msgType: "success",
-                    msgContent: "Edit Change successfully.",
+                    msgContent: "Staff updated successfully.",
                 }),
             );
+            setIsDetailOpen(false);
         } catch (error) {
-            console.error(
-                "Failed to save changes onto backend database:",
-                error,
-            );
+            console.error("Failed to update staff:", error);
             const errorMessage =
-                error?.data?.message || error?.error || "Error while changeing";
+                error?.data?.message ||
+                error?.error ||
+                "Error while updating staff";
             dispatch(
                 setMessage({ msgType: "error", msgContent: errorMessage }),
             );
@@ -283,7 +333,11 @@ const Staff = () => {
                 dataIndex: "dateOfBirth",
                 key: "dateOfBirth",
                 render: (dob) => {
-                    return dob && <p>{dayjs(dob).format("DD . MM . YYYY")}</p>;
+                    return dob ? (
+                        <p>{dayjs(dob).format("DD . MM . YYYY")}</p>
+                    ) : (
+                        <p>-</p>
+                    );
                 },
             },
             {
@@ -291,13 +345,18 @@ const Staff = () => {
                 dataIndex: "joinedDate",
                 key: "joinedDate",
                 render: (jd) => {
-                    return jd && <p>{dayjs(jd).format("DD . MM . YYYY")}</p>;
+                    return jd ? (
+                        <p>{dayjs(jd).format("DD . MM . YYYY")}</p>
+                    ) : (
+                        <p>-</p>
+                    );
                 },
             },
             {
                 title: "Count",
                 dataIndex: "completedJobsCount",
                 key: "completedJobsCount",
+                render: (count) => <p>{count ?? 0}</p>,
             },
             {
                 title: "Rating",
@@ -315,21 +374,18 @@ const Staff = () => {
                 title: "Status",
                 dataIndex: "status",
                 key: "status",
-                render: (status) => {
-                    const statusClasses = {
-                        "In Progress": "text-progress",
-                        Available: "text-available",
-                        Completed: "text-completed",
-                        Unavailable: "text-unavailable",
-                    };
+                render: (status, record) => {
+                    const currentStatus =
+                        status ||
+                        (record.available ? "Available" : "Unavailable");
                     return (
                         <p
                             className={cn(
                                 "font-medium",
-                                statusClasses[status] || "text-gray-500",
+                                statusClasses[currentStatus] || "text-gray-500",
                             )}
                         >
-                            {status}
+                            {currentStatus}
                         </p>
                     );
                 },
@@ -387,18 +443,18 @@ const Staff = () => {
     return (
         <div>
             <SubHeaderSection
-                setSearchText={handleSearchChange} // Triggers input state resetting and search pagination
+                setSearchText={handleSearchChange}
                 title="Staff"
                 subTitle="Manage your elite staff to unlock peak operational efficiency."
                 subFormTitle="Create your elite staff to unlock peak operational efficiency."
                 placeholderTitle="Search all staff..."
-                triggerCreate={createStaff}
-                triggerEdit={editStaff}
+                triggerCreate={handleCreateStaff}
+                triggerEdit={handleSaveStaffDetail}
             />
             <TableHeaderSection
                 renderlists={renderlists}
                 options={options}
-                setFilterValue={handleFilterChange} // Triggers status update & pagination reset
+                setFilterValue={handleFilterChange}
                 statusCounts={statusCounts}
             />
             <div className="table-wrapper">
@@ -424,18 +480,16 @@ const Staff = () => {
                 isDetailOpen={isDetailOpen}
                 handleClose={() => setIsDetailOpen(false)}
                 selectedStaff={selectedStaff}
-                onSave={(updatedStaffFields) =>
-                    handleSaveStaffDetail(updatedStaffFields)
-                }
-                onDelete={(staffId) => handleDeleteStaff(staffId)}
-                reHired={(staffId) => handleRehired(staffId)}
+                onSave={handleSaveStaffDetail}
+                onDelete={handleDeleteStaff}
+                reHired={handleRehired}
             />
 
             <TerminateStaffModal
                 isTerminateOpen={isTerminateOpen}
                 handleClose={() => setIsTerminateOpen(false)}
                 selectedStaff={selectedStaff}
-                onTerminate={(staffId) => handleTerminateStaff(staffId)}
+                onTerminate={handleTerminateStaff}
             />
         </div>
     );

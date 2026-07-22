@@ -32,9 +32,9 @@ const SentNotificationsForm = ({ form, formType }) => {
     ];
 
     const getInitialAudience = () => {
-        if (formType === "To Customer") return ["CUSTOMER"];
-        if (formType === "To Staff") return ["STAFF"];
-        return ["STAFF", "CUSTOMER"];
+        if (formType === "To Customer") return "CUSTOMER";
+        if (formType === "To Staff") return "STAFF";
+        return "BOTH";
     };
 
     const handlePreview = async (file) => {
@@ -99,7 +99,6 @@ const SentNotificationsForm = ({ form, formType }) => {
                             </div>
                         </Dragger>
 
-                        {/* Form state ထဲရှိ ပုံကို ထုတ်ပြခြင်း */}
                         {formImages.map((file) => (
                             <div
                                 key={file.uid || file.name}
@@ -169,16 +168,13 @@ const SentNotificationsForm = ({ form, formType }) => {
                                 Target Audience
                             </span>
                             <span className="text-xs text-gray-400 font-normal mb-1">
-                                <span className="font-medium">
-                                    Just Reminder :
-                                </span>{" "}
-                                ( You can select both when you want to send to
-                                both )
+                                <span className="font-medium">Reminder:</span>{" "}
+                                You can check both boxes to send to both groups.
                             </span>
                         </div>
                     }
                     name="targetAudience"
-                    initialValue={getInitialAudience()}
+                    initialValue={getInitialAudience(formType)}
                     rules={[
                         {
                             required: true,
@@ -186,6 +182,27 @@ const SentNotificationsForm = ({ form, formType }) => {
                                 "Please select at least one target audience!",
                         },
                     ]}
+                    getValueProps={(value) => {
+                        if (value === "BOTH") {
+                            return { value: ["STAFF", "CUSTOMER"] };
+                        }
+                        if (typeof value === "string") {
+                            return { value: [value] };
+                        }
+                        return { value: value || [] };
+                    }}
+                    getValueFromEvent={(checkedValues) => {
+                        if (
+                            checkedValues.includes("STAFF") &&
+                            checkedValues.includes("CUSTOMER")
+                        ) {
+                            return "BOTH";
+                        }
+                        if (checkedValues.length === 1) {
+                            return checkedValues[0];
+                        }
+                        return null;
+                    }}
                 >
                     <Checkbox.Group className="flex gap-3 flex-wrap mb-1">
                         {sendType.map((type, idx) => (

@@ -6,7 +6,7 @@ const BasicFormInput = ({ title }) => {
     return (
         <>
             <Item
-                name="fullname"
+                name="fullName"
                 label={
                     <label className="label-styling">{title} Full Name</label>
                 }
@@ -48,7 +48,7 @@ const BasicFormInput = ({ title }) => {
                 </Item>
 
                 <Item
-                    name="dob"
+                    name="dateOfBirth"
                     label={
                         <label className="label-styling">
                             {title} Date of Birth

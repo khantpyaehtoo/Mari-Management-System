@@ -22,12 +22,21 @@ export const packageApi = baseApi.injectEndpoints({
             invalidatesTags: ["categories", "packages", "services"],
         }),
 
+        restorePackage: builder.mutation({
+            query: (id) => ({
+                url: `${packageEndPoint}/${id}/restore`,
+                method: "PUT",
+                body: {},
+            }),
+            invalidatesTags: ["categories", "packages", "services"],
+        }),
+
         deletePackage: builder.mutation({
-            query: ({ id }) => ({
+            query: (id) => ({
                 url: `${packageEndPoint}/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["categories", "packages"],
+            invalidatesTags: ["categories", "packages", "services"],
         }),
     }),
 });
@@ -35,5 +44,6 @@ export const packageApi = baseApi.injectEndpoints({
 export const {
     useCreatePackageMutation,
     useUpdatePackageMutation,
+    useRestorePackageMutation,
     useDeletePackageMutation,
 } = packageApi;

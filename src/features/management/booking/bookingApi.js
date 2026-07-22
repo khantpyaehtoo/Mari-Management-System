@@ -35,14 +35,13 @@ export const bookingApi = baseApi.injectEndpoints({
         }),
 
         updateBooking: builder.mutation({
-            query: ({ id, reason, actionType, token }) => {
+            query: ({ id, reason, actionType }) => {
                 const bodyPayload =
                     actionType !== "confirm" ? { reason } : undefined;
 
                 return {
                     url: `bookings/${id}/${actionType}`,
                     method: "PUT",
-                    headers: { authorization: `Bearer ${token}` },
                     body: bodyPayload,
                 };
             },

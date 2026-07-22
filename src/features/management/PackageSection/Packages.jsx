@@ -1,20 +1,22 @@
 import { Card, Col, Row, Skeleton } from "antd";
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom"; // Route ပြောင်းရန် Link ထည့်ပါ
+import { Link } from "react-router-dom";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import PackageCard from "./PackageCard";
-import PackageDeleteModal from "./PackageDeleteModal";
 import {
     useGetAllServiceDataQuery,
     useGetCategoryDataQuery,
 } from "../services/servicesApi";
 import {
     useCreatePackageMutation,
+    useDeletePackageMutation,
+    useRestorePackageMutation,
     useUpdatePackageMutation,
 } from "./packageApi";
 import { StarX } from "lucide-react";
+import PackageConfirmModal from "./PackageConfirmModal";
 
 const Packages = () => {
     const [searchText, setSearchText] = useState("");
@@ -29,8 +31,12 @@ const Packages = () => {
     const { data: categoriesData = [] } = useGetCategoryDataQuery();
 
     const [createPackage] = useCreatePackageMutation();
-    const [updatePackage, { isLoading: isUpdating }] =
-        useUpdatePackageMutation();
+    const [updatePackage] = useUpdatePackageMutation();
+
+    const [restorePackage, { isLoading: isRestoring }] =
+        useRestorePackageMutation();
+    const [deletePackage, { isLoading: isDeleting }] =
+        useDeletePackageMutation();
 
     const activePackages = useMemo(() => {
         return (
@@ -48,6 +54,18 @@ const Packages = () => {
         );
     }, [searchText, servicesData]);
 
+    const disabledPackagesCount = useMemo(() => {
+        return (
+            servicesData?.filter((item) => {
+                if (!item) return false;
+                const isPackage = item.package === true;
+                const isDisabled = item.enabled === false;
+
+                return isPackage && isDisabled;
+            }).length || 0
+        );
+    }, [servicesData]);
+
     // Action buttons
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
@@ -61,33 +79,43 @@ const Packages = () => {
         }
     };
 
-    const handleDeleteConfirm = async () => {
+    const handleConfirmAction = async () => {
         if (!selectedPackage?.id) return;
-        try {
-            await updatePackage({
-                id: selectedPackage.id,
-                body: {
-                    name: selectedPackage.name,
-                    price: Number(selectedPackage.price),
-                    categoryId: selectedPackage.categoryId,
-                    serviceIds: selectedPackage.serviceIds,
-                    enabled: false,
-                },
-            }).unwrap();
 
-            dispatch(
-                setMessage({
-                    msgType: "success",
-                    msgContent: "Package disabled successfully",
-                }),
-            );
+        const isDisabled = selectedPackage.enabled === false;
+
+        try {
+            if (isDisabled) {
+                // Restore logic
+                await restorePackage(selectedPackage.id).unwrap();
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Package restored successfully",
+                    }),
+                );
+            } else {
+                // Disable/Delete logic
+                await deletePackage(selectedPackage.id).unwrap();
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Package disabled successfully",
+                    }),
+                );
+            }
             setDeleteModalOpen(false);
         } catch (error) {
-            console.error("Disable package failed:", error);
+            console.error(
+                `${isDisabled ? "Restore" : "Disable"} package failed:`,
+                error,
+            );
             dispatch(
                 setMessage({
                     msgType: "error",
-                    msgContent: error?.data?.message || "Disable failed",
+                    msgContent:
+                        error?.data?.message ||
+                        `${isDisabled ? "Restore" : "Disable"} failed`,
                 }),
             );
         }
@@ -214,7 +242,7 @@ const Packages = () => {
                                             Disabled Items :
                                         </span>
                                         <span className="w-8 bg-gray-300 rounded-full text-center font-medium text-gray-600">
-                                            0
+                                            {disabledPackagesCount}
                                         </span>
                                     </div>
                                 </Card>
@@ -243,12 +271,12 @@ const Packages = () => {
                 )}
             </Row>
 
-            <PackageDeleteModal
+            <PackageConfirmModal
                 deleteModalOpen={deleteModalOpen}
                 selectedPackage={selectedPackage}
                 setDeleteModalOpen={setDeleteModalOpen}
-                handleDisableConfirm={handleDeleteConfirm}
-                isLoading={isUpdating}
+                handleDisableConfirm={handleConfirmAction}
+                isLoading={isDeleting || isRestoring}
             />
         </>
     );

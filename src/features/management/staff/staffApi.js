@@ -1,56 +1,61 @@
 import { baseApi } from "../../../app/core/baseApi";
-const staffEndPoint = "staff-performance";
+
+const staffPerformanceEndPoint = "admin/dashboard/staff-performance";
+const staffAdminEndPoint = "admin/staffs";
 
 const staffApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getStaffData: builder.query({
-            query: () => ({
-                url: `admin/dashboard/${staffEndPoint}`,
+            query: (params) => ({
+                url: `${staffPerformanceEndPoint}`,
                 method: "GET",
+                params: params,
             }),
-            providesTags: ["staff-performance"],
+            providesTags: ["staff-performance", "staffs"],
         }),
 
         createStaff: builder.mutation({
             query: (body) => ({
-                url: `${staffEndPoint}`,
+                url: `${staffAdminEndPoint}`,
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["staffs"],
+            invalidatesTags: ["staff-performance", "staffs"],
         }),
 
         updateStaff: builder.mutation({
-            query: ({ staffId, updatedStaffFields }) => ({
-                url: `${staffEndPoint}/${staffId}`,
+            query: ({ id, ...body }) => ({
+                url: `${staffAdminEndPoint}/${id}`,
                 method: "PUT",
-                body: updatedStaffFields,
+                body,
             }),
-            invalidatesTags: ["staffs"],
+            invalidatesTags: ["staff-performance", "staffs"],
         }),
 
         terminateStaff: builder.mutation({
-            query: ({ staffId }) => ({
-                url: `${staffEndPoint}/${staffId}`,
-                method: "POST",
+            query: (staffId) => ({
+                url: `${staffAdminEndPoint}/${staffId}/status`,
+                method: "PUT",
+                params: { enable: false },
             }),
-            invalidatesTags: ["staffs"],
+            invalidatesTags: ["staff-performance", "staffs"],
         }),
 
         rehiredStaff: builder.mutation({
-            query: ({ staffId }) => ({
-                url: `${staffEndPoint}/${staffId}`,
+            query: (staffId) => ({
+                url: `${staffAdminEndPoint}/${staffId}/status`,
                 method: "PUT",
+                params: { enable: true },
             }),
-            invalidatesTags: ["staffs"],
+            invalidatesTags: ["staff-performance", "staffs"],
         }),
 
         deleteStaff: builder.mutation({
-            query: ({ staffId }) => ({
-                url: `${staffEndPoint}/${staffId}`,
+            query: (staffId) => ({
+                url: `${staffAdminEndPoint}/${staffId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["staffs"],
+            invalidatesTags: ["staff-performance", "staffs"],
         }),
     }),
 });

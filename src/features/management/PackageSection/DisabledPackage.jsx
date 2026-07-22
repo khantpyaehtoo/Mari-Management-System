@@ -1,12 +1,12 @@
 import { Card, Col, Row, Skeleton } from "antd";
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useGetAllServiceDataQuery } from "../services/servicesApi";
-import { useUpdatePackageMutation } from "./packageApi";
+import { useRestorePackageMutation } from "./packageApi";
 import PackageCard from "./PackageCard";
-import PackageDeleteModal from "./PackageDeleteModal";
-import { setMessage } from "../../../app/core/notifications/notiSlice";
+import PackageConfirmModal from "./PackageConfirmModal";
 
 const DisabledPackage = () => {
     const dispatch = useDispatch();
@@ -15,8 +15,9 @@ const DisabledPackage = () => {
     const [enableModalOpen, setEnableModalOpen] = useState(false);
 
     const { data: servicesData = [], isLoading } = useGetAllServiceDataQuery();
-    const [updatePackage, { isLoading: isUpdating }] =
-        useUpdatePackageMutation();
+
+    const [restorePackage, { isLoading: isRestoring }] =
+        useRestorePackageMutation();
 
     const disabledPackages = useMemo(() => {
         return (
@@ -34,7 +35,7 @@ const DisabledPackage = () => {
         );
     }, [searchText, servicesData]);
 
-    // 3. Action Logic (Restore/Enable)
+    // Action Logic (Restore/Enable)
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -44,17 +45,9 @@ const DisabledPackage = () => {
 
     const handleEnableConfirm = async () => {
         if (!selectedPackage?.id) return;
+
         try {
-            await updatePackage({
-                id: selectedPackage.id,
-                body: {
-                    name: selectedPackage.name,
-                    price: Number(selectedPackage.price),
-                    categoryId: selectedPackage.categoryId,
-                    serviceIds: selectedPackage.serviceIds,
-                    enabled: true,
-                },
-            }).unwrap();
+            await restorePackage(selectedPackage.id).unwrap();
 
             dispatch(
                 setMessage({
@@ -116,7 +109,7 @@ const DisabledPackage = () => {
                         <PackageCard
                             key={item.id}
                             item={item}
-                            isDisabledMode={true}
+                            isDisabledView={true}
                             handleActionClick={handleActionClick}
                         />
                     ))
@@ -124,12 +117,12 @@ const DisabledPackage = () => {
             </Row>
 
             {/* Restore Confirm Modal */}
-            <PackageDeleteModal
+            <PackageConfirmModal
                 deleteModalOpen={enableModalOpen}
                 selectedPackage={selectedPackage}
                 setDeleteModalOpen={setEnableModalOpen}
                 handleDisableConfirm={handleEnableConfirm}
-                isLoading={isUpdating}
+                isLoading={isRestoring}
             />
         </div>
     );

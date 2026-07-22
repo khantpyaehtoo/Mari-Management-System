@@ -156,7 +156,7 @@ const CategorySection = () => {
                                             isAllServices
                                                 ? "bg-primary! text-white! hover:bg-white! hover:text-primary!"
                                                 : isDeleted
-                                                  ? "border-gray-400! border-dashed text-center! hover:bg-gray-100!"
+                                                  ? "border-gray-400! border-dashed text-base! font-semibold text-gray-600! hover:bg-gray-100!"
                                                   : "bg-white! text-primary! hover:bg-primary! hover:text-white!",
                                         )}
                                     >

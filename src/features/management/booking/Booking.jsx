@@ -15,7 +15,7 @@ import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const { useBreakpoint } = Grid;
 
-const renderlists = [
+const RENDER_LISTS = [
     "All",
     "Pending",
     "In Progress",
@@ -23,7 +23,8 @@ const renderlists = [
     "Completed",
     "Reject",
 ];
-const statusClasses = {
+
+const STATUS_CLASSES = {
     "In Progress": "text-progress",
     Pending: "text-pending",
     Confirm: "text-confirm",
@@ -33,19 +34,10 @@ const statusClasses = {
     Reject: "text-unavailable",
 };
 
-const filterOptions = renderlists.map((status) => ({
-    label: (
-        <span className={statusClasses[status] || "text-gray-500"}>
-            {status}
-        </span>
-    ),
-    value: status,
-}));
-
 const Booking = () => {
     const dispatch = useDispatch();
     const screens = useBreakpoint();
-    const scrollX = screens.xs ? undefined : "1500";
+    const scrollX = screens.xs ? undefined : 1500;
 
     // State Handlers
     const [searchText, setSearchText] = useState("");
@@ -64,7 +56,7 @@ const Booking = () => {
         setCurrentPage(page);
     };
 
-    // jump into page 1
+    // Reset to page 1 on filter/search change
     const handleFilterChange = (value) => {
         setFilterValue(value);
         setCurrentPage(1);
@@ -74,6 +66,34 @@ const Booking = () => {
         setSearchText(value);
         setCurrentPage(1);
     };
+
+    const handleDateChange = (dates) => {
+        setSelectedDates(dates);
+        setCurrentPage(1);
+    };
+
+    // Dynamic Options with Active Underline
+    const filterOptions = useMemo(() => {
+        return RENDER_LISTS.map((status) => {
+            const isActive = filterValue === status;
+
+            return {
+                label: (
+                    <span
+                        className={cn(
+                            STATUS_CLASSES[status] || "text-gray-500",
+                            "transition-all duration-200 cursor-pointer inline-block",
+                            isActive &&
+                                "border-b-2 border-current pb-0.5 font-bold",
+                        )}
+                    >
+                        {status}
+                    </span>
+                ),
+                value: status,
+            };
+        });
+    }, [filterValue]);
 
     // Dynamic Parameters for RTK Query
     const startDate = selectedDates?.[0]
@@ -96,7 +116,7 @@ const Booking = () => {
         size: 10,
         search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
     });
-    const bookingsdata = apiResponse?.bookings;
+    const bookingsData = apiResponse?.bookings;
     const [updateBooking] = useUpdateBookingMutation();
 
     // Action Handlers
@@ -111,9 +131,9 @@ const Booking = () => {
         }
     }, []);
 
-    const handleBookingStatusChange = async (id, reason, actionType, token) => {
+    const handleBookingStatusChange = async (id, reason, actionType) => {
         try {
-            await updateBooking({ id, reason, actionType, token }).unwrap();
+            await updateBooking({ id, reason, actionType }).unwrap();
             dispatch(
                 setMessage({
                     msgType: "success",
@@ -132,30 +152,28 @@ const Booking = () => {
         }
     };
 
+    // Sorted Data
     const sortedData = useMemo(() => {
-        const rawData = Array.isArray(bookingsdata) ? bookingsdata : [];
+        const list = Array.isArray(bookingsData) ? bookingsData : [];
 
-        return [...rawData].sort((a, b) => {
-            const timeA = a.bookTime || a.startTime || "";
-            const timeB = b.bookTime || b.startTime || "";
-
-            const dateTimeA = dayjs(`${a.date} ${timeA}`);
-            const dateTimeB = dayjs(`${b.date} ${timeB}`);
-
-            return dateTimeB.valueOf() - dateTimeA.valueOf();
+        return [...list].sort((a, b) => {
+            const idA = Number(a.id || 0);
+            const idB = Number(b.id || 0);
+            return idB - idA;
         });
-    }, [bookingsdata]);
-
-    // Local Search Text Filter
+    }, [bookingsData]);
 
     // Status Counting Pills
     const statusCounts = useMemo(() => {
-        const AllTotal =
+        const calculatedTotal =
             (apiResponse?.pendingCount || 0) +
             (apiResponse?.inProgressCount || 0) +
             (apiResponse?.confirmCount || 0) +
             (apiResponse?.completedCount || 0) +
             (apiResponse?.rejectedCount || 0);
+
+        const AllTotal =
+            apiResponse?.totalCount ?? apiResponse?.total ?? calculatedTotal;
 
         return {
             All: AllTotal,
@@ -205,11 +223,8 @@ const Booking = () => {
                 title: "Date",
                 dataIndex: "date",
                 key: "date",
-                render: (date) => {
-                    return (
-                        date && <p>{dayjs(date).format("DD . MMM . YYYY")}</p>
-                    );
-                },
+                render: (date) =>
+                    date && <p>{dayjs(date).format("DD . MMM . YYYY")}</p>,
             },
             {
                 title: "During Time",
@@ -225,32 +240,23 @@ const Booking = () => {
                 title: "Status",
                 dataIndex: "status",
                 key: "status",
-                render: (status) => {
-                    const statusClasses = {
-                        Pending: "text-pending",
-                        "In Progress": "text-progress",
-                        Confirm: "text-confirm",
-                        Completed: "text-completed",
-                        Reject: "text-unavailable",
-                    };
-                    return (
-                        <p
-                            className={cn(
-                                "font-medium",
-                                statusClasses[status] || "text-gray-500",
-                            )}
-                        >
-                            {status}
-                        </p>
-                    );
-                },
+                render: (status) => (
+                    <p
+                        className={cn(
+                            "font-medium",
+                            STATUS_CLASSES[status] || "text-gray-500",
+                        )}
+                    >
+                        {status}
+                    </p>
+                ),
             },
             {
                 title: "Action",
                 key: "action",
                 render: (record) => {
                     return record?.status === "Pending" ? (
-                        <Space size="medium">
+                        <Space size="middle">
                             <Button
                                 onClick={() =>
                                     handleActionBtn("cancel", record)
@@ -284,7 +290,7 @@ const Booking = () => {
 
     const dateConfig = {
         selectedDates: selectedDates,
-        setSelectedDates: setSelectedDates,
+        setSelectedDates: handleDateChange,
     };
 
     return (
@@ -298,7 +304,7 @@ const Booking = () => {
                 placeholderTitle="Search all customer bookings..."
             />
             <TableHeaderSection
-                renderlists={renderlists}
+                renderlists={RENDER_LISTS}
                 options={filterOptions}
                 statusCounts={statusCounts}
                 setFilterValue={handleFilterChange}
@@ -316,7 +322,10 @@ const Booking = () => {
                         current: currentPage,
                         onChange: handlePageChange,
                         size: "large",
-                        total: statusCounts[filterValue] || 0,
+                        total:
+                            statusCounts[filterValue] ??
+                            apiResponse?.totalCount ??
+                            0,
                         pageSize: 10,
                         showSizeChanger: false,
                     }}
@@ -329,13 +338,8 @@ const Booking = () => {
                         isViewModalOpen={isViewModalOpen}
                         setIsViewModalOpen={setIsViewModalOpen}
                         selectedBooking={selectedBooking}
-                        onConfirmCancel={(id, reason, token) =>
-                            handleBookingStatusChange(
-                                id,
-                                reason,
-                                "cancel",
-                                token,
-                            )
+                        onConfirmCancel={(id, reason) =>
+                            handleBookingStatusChange(id, reason, "reject")
                         }
                     />
                     <ConfirmModal

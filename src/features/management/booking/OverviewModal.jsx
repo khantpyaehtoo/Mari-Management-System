@@ -96,11 +96,24 @@ const OverviewModal = ({
                             Appointment Details
                         </Typography.Title>
                         <ul className="border-b border-b-gray-400 px-7 pb-4 flex flex-col list-disc marker:text-primary marker:text-2xl gap-1">
-                            <li>{bookingDetails?.appointmentDetails}</li>
-                            <li>{bookingDetails?.staffName}</li>
                             <li>
+                                <span className="font-semibold">
+                                    Booked Time :
+                                </span>{" "}
+                                {bookingDetails?.appointmentDetails}
+                            </li>
+                            <li>
+                                <span className="font-semibold">
+                                    Staff Name :
+                                </span>{" "}
+                                {bookingDetails?.staffName}
+                            </li>
+                            <li>
+                                <span className="font-semibold">
+                                    Services :
+                                </span>{" "}
                                 {bookingDetails?.serviceName} (
-                                {bookingDetails?.duration})
+                                {bookingDetails?.duration} mins)
                             </li>
                         </ul>
                         <Flex
@@ -108,7 +121,7 @@ const OverviewModal = ({
                             className="pt-3 font-semibold text-lg"
                         >
                             <h3>Total Charges</h3>
-                            <h3>{bookingDetails?.totalCharges}</h3>
+                            <h3>{bookingDetails?.price}</h3>
                         </Flex>
                     </div>
 

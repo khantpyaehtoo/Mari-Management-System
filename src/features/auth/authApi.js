@@ -27,7 +27,6 @@ export const authApi = baseApi.injectEndpoints({
                 url: `${authEndPoint}/forgot-password`,
                 method: "POST",
                 body: { email },
-                responseHandler: (response) => response.text(),
             }),
             invalidatesTags: ["auth"],
         }),
