@@ -153,7 +153,6 @@ const CategorySection = () => {
                                     <Card
                                         className={cn(
                                             "group relative pt-6! min-h-32! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
-                                            // Base Styling per Card Type
                                             isAllServices
                                                 ? "bg-primary! text-white! hover:bg-white! hover:text-primary!"
                                                 : isDeleted

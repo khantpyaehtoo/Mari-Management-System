@@ -25,7 +25,7 @@ export const notiApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: formData,
             }),
-            invalidatesTags: ["notifications"],
+            invalidatesTags: ["notifications", "customer", "staff"],
         }),
 
         deleteNotiHistory: builder.mutation({

@@ -1,4 +1,4 @@
-import { Tabs, Form, Typography, App, Skeleton } from "antd";
+import { Tabs, Form, Typography } from "antd";
 import { UserOutlined, LockOutlined, SoundOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import SecuritySettings from "./Settings/SecuritySettings";
 import AccountSettings from "./Settings/AccountSettings";
 import MediaUploadsSetting from "./Settings/MediaUploadsSetting";
 import { setMessage } from "../../app/core/notifications/notiSlice";
+import SettingsSkeleton from "./SettingsSkeleton";
 
 const { Title, Text } = Typography;
 
@@ -27,21 +28,24 @@ const Settings = () => {
     const [pillStyles, setPillStyles] = useState({ width: 0, left: 0 });
     const [activeKey, setActiveKey] = useState("1");
 
-    const { message } = App.useApp();
     const [form] = Form.useForm();
     const [passwordForm] = Form.useForm();
 
     const updatePillPosition = useCallback((key) => {
         if (!containerRef.current) return;
-        const activeTabEl = containerRef.current.querySelector(
-            `[data-node-key="${key}"]`,
-        );
-        if (activeTabEl) {
-            setPillStyles({
-                width: activeTabEl.offsetWidth,
-                left: activeTabEl.offsetLeft,
-            });
-        }
+
+        // Ensure DOM elements are fully mounted
+        requestAnimationFrame(() => {
+            const activeTabEl = containerRef.current?.querySelector(
+                `[data-node-key="${key}"]`,
+            );
+            if (activeTabEl) {
+                setPillStyles({
+                    width: activeTabEl.offsetWidth,
+                    left: activeTabEl.offsetLeft,
+                });
+            }
+        });
     }, []);
 
     useEffect(() => {
@@ -64,26 +68,35 @@ const Settings = () => {
     const onFinishAccount = useCallback(
         async (values) => {
             try {
-                await updateAdminData({ adminData: values }).unwrap();
-                message.success("Account settings updated successfully!");
+                await updateAdminData(values).unwrap();
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: "Account settings updated successfully!",
+                    }),
+                );
             } catch (error) {
-                message.error(
-                    error?.data?.message || "Failed to update account settings",
+                const errorMessage =
+                    error?.data?.message || "Failed to update account settings";
+                dispatch(
+                    setMessage({ msgType: "error", msgContent: errorMessage }),
                 );
             }
         },
-        [updateAdminData, message],
+        [updateAdminData, dispatch],
     );
 
     const onFinishPassword = useCallback(
         async (values) => {
             try {
+                // Fixed key names & object structure sent to mutation
                 await changePassword({
                     updatePasswords: {
                         oldPassword: values.currentPassword,
                         newPassword: values.newPassword,
                     },
                 }).unwrap();
+
                 passwordForm.resetFields();
 
                 dispatch(
@@ -133,49 +146,6 @@ const Settings = () => {
         [dispatch],
     );
 
-    const renderSkeleton = () => (
-        <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col lg:flex-row gap-8">
-            <div className="flex flex-col items-center lg:w-1/4 pt-4">
-                <Skeleton.Avatar active size={140} shape="circle" />
-                <Skeleton.Button active size="small" className="mt-4 w-32" />
-            </div>
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <Skeleton.Button
-                        active
-                        size="small"
-                        className="mb-2 w-20"
-                    />
-                    <Skeleton.Input active block size="large" />
-                </div>
-                <div>
-                    <Skeleton.Button
-                        active
-                        size="small"
-                        className="mb-2 w-28"
-                    />
-                    <Skeleton.Input active block size="large" />
-                </div>
-                <div>
-                    <Skeleton.Button
-                        active
-                        size="small"
-                        className="mb-2 w-24"
-                    />
-                    <Skeleton.Input active block size="large" />
-                </div>
-                <div>
-                    <Skeleton.Button
-                        active
-                        size="small"
-                        className="mb-2 w-16"
-                    />
-                    <Skeleton.Input active block size="large" />
-                </div>
-            </div>
-        </div>
-    );
-
     const items = useMemo(
         () => [
             {
@@ -187,7 +157,7 @@ const Settings = () => {
                     </span>
                 ),
                 children: isLoading ? (
-                    renderSkeleton()
+                    <SettingsSkeleton />
                 ) : (
                     <AccountSettings
                         adminData={adminData}

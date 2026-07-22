@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Form, Input, Typography, message } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,51 +6,76 @@ import resetImg2 from "../../../public/asset/Img2.png";
 import heroImg from "../../../public/asset/Img3.png";
 import ellipse from "../../../public/asset/Ellipse.png";
 
+import { useResetPasswordMutation, useVerifyOtpMutation } from "./authApi";
+
 const { Title, Text } = Typography;
 
 const ForgetPasswordForm = () => {
     const [form] = Form.useForm();
     const [currentStep, setCurrentStep] = useState("email");
-    const [loading, setLoading] = useState(false);
+    const [countdown, setCountdown] = useState(0);
 
     const navigate = useNavigate();
 
+    const [resetPassword, { isLoading: isRequestingOtp }] =
+        useResetPasswordMutation();
+    const [verifyOtp, { isLoading: isVerifyingOtp }] = useVerifyOtpMutation();
+
+    // Form inputs watch
     const emailValue = Form.useWatch("email", form);
     const otpValue = Form.useWatch("otp", form);
 
-    const isFormEmpty = !emailValue || emailValue.length === 0;
-    const isSubmitting = !otpValue || otpValue.length !== 6;
+    const isFormEmpty = !emailValue || emailValue.trim().length === 0;
+    const isSubmitting = !otpValue || otpValue.trim().length !== 6;
+
+    // Countdown Timer Logic
+    useEffect(() => {
+        let timer;
+        if (countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [countdown]);
 
     const handleRequestOTP = async () => {
         try {
             const values = await form.validateFields(["email"]);
-            setLoading(true);
+            const response = await resetPassword(values.email).unwrap();
 
-            console.log("Requesting OTP for:", values.email);
-            setTimeout(() => {
-                setLoading(false);
-                setCurrentStep("reset");
-                message.success("Verification code sent to your email!");
-            }, 1000);
+            message.success(
+                response?.message || "Verification code sent to your email!",
+            );
+
+            setCurrentStep("reset");
+            setCountdown(60);
         } catch (error) {
-            console.error(error);
+            console.error("Failed to request OTP:", error);
+            const errorMsg =
+                error?.data?.message ||
+                "Failed to send reset code. Please try again.";
+            message.error(errorMsg);
         }
     };
 
     const handleVerifyOTP = async () => {
         try {
             const values = await form.validateFields(["otp"]);
-            setLoading(true);
 
-            console.log("Verifying OTP:", values.otp);
-            setTimeout(() => {
-                setLoading(false);
-                message.success("OTP verified successfully!");
-                navigate("/new-password", { state: { email: emailValue } });
-            }, 1000);
+            await verifyOtp({ email: emailValue, otp: values.otp }).unwrap();
+
+            message.success("OTP verified successfully!");
+
+            navigate("/new-password", {
+                state: { email: emailValue, otp: values.otp },
+            });
         } catch (error) {
-            console.error(error);
-            message.error("Please enter a valid verification code");
+            console.error("OTP Verification failed:", error);
+            const errorMsg =
+                error?.data?.message ||
+                "Please enter a valid verification code";
+            message.error(errorMsg);
         }
     };
 
@@ -58,36 +83,35 @@ const ForgetPasswordForm = () => {
         <div className="relative overflow-hidden min-h-screen flex items-center justify-center bg-white-back px-4">
             <img
                 src={ellipse}
-                className="absolute pointer-events-none left-[-50px] top-0"
+                className="absolute pointer-events-none -left-12.5 top-0"
                 alt=""
             />
             <img
                 src={ellipse}
-                className="absolute pointer-events-none right-[-50px] bottom-30"
+                className="absolute pointer-events-none -right-12.5 bottom-30"
                 alt=""
             />
 
             <div className="w-full max-w-345 p-8 rounded-xl shadow-lg bg-white-form relative overflow-hidden">
                 <div className="mb-8">
                     <div className="flex justify-evenly items-center">
-                        <img src={heroImg} className="md:block hidden" />
+                        <img
+                            src={heroImg}
+                            className="md:block hidden"
+                            alt="Hero"
+                        />
                         <img
                             src={resetImg2}
-                            className="absolute top-0 right-0 lg:block md:hidden hidden "
+                            className="absolute top-0 right-0 lg:block md:hidden hidden"
+                            alt="Reset"
                         />
                         <img
                             src={ellipse}
                             className="absolute pointer-events-none -bottom-12.5"
+                            alt=""
                         />
 
                         <div>
-                            {/* <Link
-                                to="/login"
-                                className="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 transition-colors mb-6 group"
-                            >
-                                <ArrowLeftOutlined className="mr-2 text-xs group-hover:-translate-x-1 transition-transform" />
-                                Back to Login
-                            </Link> */}
                             <Title
                                 level={3}
                                 className="mb-2! font-semi-bold! font-montserrat!"
@@ -104,6 +128,7 @@ const ForgetPasswordForm = () => {
                                     ? "Please Enter your Email and we will send a code to reset your password."
                                     : `We’ve sent a verification code to your email ${emailValue || ""}. Please enter it below to reset your password.`}
                             </Text>
+
                             <Form
                                 form={form}
                                 name="forget-password"
@@ -144,7 +169,7 @@ const ForgetPasswordForm = () => {
                                                 type="primary"
                                                 size="large"
                                                 block
-                                                loading={loading}
+                                                loading={isRequestingOtp}
                                                 onClick={handleRequestOTP}
                                                 disabled={isFormEmpty}
                                                 className="h-12 font-semibold rounded-lg"
@@ -190,24 +215,32 @@ const ForgetPasswordForm = () => {
                                                 type="primary"
                                                 size="large"
                                                 block
-                                                loading={loading}
+                                                loading={isVerifyingOtp}
                                                 onClick={handleVerifyOTP}
                                                 disabled={isSubmitting}
                                                 className="h-12 font-semibold rounded-lg my-6"
                                             >
                                                 Verify Code
                                             </Button>
-                                            <Form.Item className="mb-0 mt-6">
+
+                                            <div className="mt-6">
                                                 <span className="text-black font-medium">
-                                                    Don’t Receive the OTP Code?
+                                                    Didn’t receive the OTP Code?
                                                 </span>{" "}
                                                 <button
+                                                    type="button"
                                                     onClick={handleRequestOTP}
-                                                    className="mt-2 !text-primary hover:!underline"
+                                                    disabled={
+                                                        countdown > 0 ||
+                                                        isRequestingOtp
+                                                    }
+                                                    className="mt-2 text-primary! hover:underline! cursor-pointer disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed font-semibold"
                                                 >
-                                                    Resend
+                                                    {countdown > 0
+                                                        ? `Resend in ${countdown}s`
+                                                        : "Resend Code"}
                                                 </button>
-                                            </Form.Item>
+                                            </div>
                                         </Form.Item>
                                     </>
                                 )}

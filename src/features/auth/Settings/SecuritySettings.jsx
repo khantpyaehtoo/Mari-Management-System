@@ -1,12 +1,29 @@
 import { LockOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Skeleton } from "antd";
 
+const confirmPasswordRules = [
+    {
+        required: true,
+        message: "Please confirm your new password!",
+    },
+    ({ getFieldValue }) => ({
+        validator(_, value) {
+            if (!value || getFieldValue("newPassword") === value) {
+                return Promise.resolve();
+            }
+            return Promise.reject(
+                new Error("The two passwords that you entered do not match!"),
+            );
+        },
+    }),
+];
+
 const SecuritySettings = ({
     isChangingPassword,
     passwordForm,
     onFinishPassword,
+    isLoading = false,
 }) => {
-    const isLoading = false;
     return (
         <Card
             title="Change Password"
@@ -22,8 +39,7 @@ const SecuritySettings = ({
                     <>
                         <Skeleton
                             active
-                            paragraph={false}
-                            rows="1"
+                            paragraph={{ rows: 0 }}
                             className="mb-3!"
                             style={{ width: 120 }}
                         />
@@ -50,12 +66,12 @@ const SecuritySettings = ({
                         />
                     </Form.Item>
                 )}
+
                 {isLoading ? (
                     <>
                         <Skeleton
                             active
-                            paragraph={false}
-                            rows="1"
+                            paragraph={{ rows: 0 }}
                             className="mb-3!"
                             style={{ width: 120 }}
                         />
@@ -92,8 +108,7 @@ const SecuritySettings = ({
                     <>
                         <Skeleton
                             active
-                            paragraph={false}
-                            rows="1"
+                            paragraph={{ rows: 0 }}
                             className="mb-3!"
                             style={{ width: 120 }}
                         />
@@ -108,27 +123,7 @@ const SecuritySettings = ({
                         label="Confirm New Password"
                         name="confirmPassword"
                         dependencies={["newPassword"]}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please confirm your new password!",
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (
-                                        !value ||
-                                        getFieldValue("newPassword") === value
-                                    ) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(
-                                        new Error(
-                                            "The two passwords that you entered do not match!",
-                                        ),
-                                    );
-                                },
-                            }),
-                        ]}
+                        rules={confirmPasswordRules}
                     >
                         <Input.Password
                             prefix={<LockOutlined />}
@@ -136,16 +131,13 @@ const SecuritySettings = ({
                         />
                     </Form.Item>
                 )}
+
                 {isLoading ? (
-                    <>
-                        <Skeleton.Node
-                            active
-                            paragraph={false}
-                            rows="1"
-                            className="mb-3!"
-                            style={{ width: 200, height: 40 }}
-                        />
-                    </>
+                    <Skeleton.Node
+                        active
+                        className="mb-3!"
+                        style={{ width: 200, height: 40 }}
+                    />
                 ) : (
                     <Form.Item>
                         <Button

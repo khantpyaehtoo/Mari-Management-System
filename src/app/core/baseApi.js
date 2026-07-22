@@ -10,7 +10,7 @@ export const baseApi = createApi({
             const token = CookieJS.get("lmsToken");
             if (token) {
                 headers.set("Authorization", `Bearer ${token}`);
-                headers.set("Content-Type", "application/json");
+                // headers.set("Content-Type", "application/json");
                 console.log(token);
             }
 

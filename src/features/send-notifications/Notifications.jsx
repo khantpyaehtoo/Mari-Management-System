@@ -20,12 +20,32 @@ dayjs.extend(relativeTime);
 const Notifications = () => {
     const dispatch = useDispatch();
 
-    const { isLoading: isStaffLoading } = useGetStaffNotificationsQuery();
+    const { data: staffData, isLoading: isStaffLoading } =
+        useGetStaffNotificationsQuery();
 
     const { data: customerData, isLoading: isCustomerLoading } =
         useGetCustomerNotificationsQuery();
 
-    const customerNotis = customerData?.content || [];
+    const rawStaffNotis = staffData?.content || staffData || [];
+    const rawCustomerNotis = customerData?.content || customerData || [];
+
+    const staffNotis = rawStaffNotis.filter((noti) => {
+        if (Array.isArray(noti.targetAudience)) {
+            return noti.targetAudience.includes("STAFF");
+        }
+        return (
+            noti.targetAudience === "STAFF" || noti.targetAudience === "BOTH"
+        );
+    });
+
+    const customerNotis = rawCustomerNotis.filter((noti) => {
+        if (Array.isArray(noti.targetAudience)) {
+            return noti.targetAudience.includes("CUSTOMER");
+        }
+        return (
+            noti.targetAudience === "CUSTOMER" || noti.targetAudience === "BOTH"
+        );
+    });
 
     const [deleteNoti] = useDeleteNotiHistoryMutation();
     const [createNotification] = useCreateNotificationMutation();
@@ -87,6 +107,46 @@ const Notifications = () => {
         }
     };
 
+    const handleCreateNotification = async (values) => {
+        const formData = new FormData();
+
+        // Simple text fields
+        formData.append("type", values.type);
+        formData.append("title", values.title);
+        formData.append("message", values.message);
+
+        if (values.targetAudience && Array.isArray(values.targetAudience)) {
+            values.targetAudience.forEach((audience) => {
+                formData.append("targetAudience", audience);
+            });
+        }
+
+        if (values.image && values.image.length > 0) {
+            const fileObj = values.image[0].originFileObj;
+            if (fileObj) {
+                formData.append("image", fileObj);
+            }
+        }
+
+        try {
+            await createNotification(formData).unwrap();
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Notification sent successfully!",
+                }),
+            );
+        } catch (error) {
+            console.error("Upload error:", error);
+            let errorMessage =
+                error?.data?.message || "Failed to send notification";
+            dispatch(
+                setMessage({ msgType: "error", msgContent: errorMessage }),
+            );
+            throw error;
+        }
+    };
+
     const isGlobalLoading = isStaffLoading || isCustomerLoading;
 
     return (
@@ -95,7 +155,7 @@ const Notifications = () => {
                 title="Sent Notifications"
                 subTitle="You can send notifications to staffs & customers."
                 formType={["To Staff", "To Customer"]}
-                triggerCreate={createNotification}
+                triggerCreate={handleCreateNotification}
             />
 
             {isGlobalLoading ? (
@@ -106,15 +166,16 @@ const Notifications = () => {
                 <div className="flex w-full h-[calc(100vh-150px)] mt-4 overflow-hidden">
                     {/* LEFT COLUMN: STAFFS */}
                     <StaffNotiHistorySections
+                        staffNotis={staffNotis} // 👈 Passed staffNotis here
                         getNotificationIcon={getNotificationIcon}
                         showDeleteModal={showDeleteModal}
                     />
 
                     {/* RIGHT COLUMN: CUSTOMERS */}
                     <CustomerNotiHistorySection
-                        customerNotis={customerNotis}
-                        showDeleteModal={showDeleteModal}
+                        customerNotis={customerNotis} // 👈 Passed customerNotis here
                         getNotificationIcon={getNotificationIcon}
+                        showDeleteModal={showDeleteModal}
                     />
                 </div>
             )}

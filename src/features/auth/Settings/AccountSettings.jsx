@@ -14,9 +14,9 @@ const AccountSettings = ({
     onFinishAccount,
     adminData,
 }) => {
-    const imageBaseUrl = "http://192.168.0.183:8080/uploads/";
+    const imageBaseUrl = "http://192.168.0.183:8080";
     const profilePicUrl = adminData?.profilePicture
-        ? `${imageBaseUrl}${adminData.profilePicture}`
+        ? `${imageBaseUrl}${adminData?.profilePicture}`
         : "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg";
 
     return (
