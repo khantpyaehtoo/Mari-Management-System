@@ -70,6 +70,7 @@ const AccountSettings = ({
                             <Col xs={24} md={12}>
                                 <Form.Item label="Full Name" name="fullName">
                                     <Input
+                                        disabled
                                         prefix={
                                             <UserOutlined className="me-2!" />
                                         }
@@ -84,6 +85,7 @@ const AccountSettings = ({
                             <Col xs={24} md={12}>
                                 <Form.Item label="Phone Number" name="phone">
                                     <Input
+                                        disabled
                                         prefix={
                                             <PhoneOutlined className="me-2!" />
                                         }
@@ -108,6 +110,7 @@ const AccountSettings = ({
                                     ]}
                                 >
                                     <Input
+                                        disabled
                                         prefix={
                                             <MailOutlined className="me-2!" />
                                         }

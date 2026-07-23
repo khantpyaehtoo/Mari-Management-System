@@ -1,7 +1,6 @@
 import { baseApi } from "../../../app/core/baseApi";
 const userEndpoint = "customers";
 
-// admin/staffs
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllUserData: builder.query({
@@ -18,35 +17,53 @@ export const userApi = baseApi.injectEndpoints({
             providesTags: ["customers"],
         }),
 
+        getMetricData: builder.query({
+            query: () => ({
+                url: `admin/${userEndpoint}/metrics`,
+                method: "GET",
+            }),
+            providesTags: ["metrics"],
+        }),
+
         getDetailUser: builder.query({
             query: (id) => ({
                 url: `admin/${userEndpoint}/${id}/detail`,
                 method: "GET",
             }),
-            providesTags: ["customers"],
+            providesTags: (result, error, id) => [{ type: "customers", id }],
         }),
 
         getBlockUserData: builder.query({
             query: () => ({
-                url: `admin/${userEndpoint}/block`,
+                url: `admin/${userEndpoint}/blocked`,
                 method: "GET",
             }),
-            providesTags: ["block"],
+            providesTags: ["blocked"],
         }),
 
         blockUser: builder.mutation({
             query: (id) => ({
-                url: `admin/${userEndpoint}/${id}/block`,
-                method: "POST",
+                url: `users/${id}/block`,
+                method: "PUT",
             }),
-            invalidatesTags: ["customers", "block"],
+            invalidatesTags: ["customers", "blocked", "metrics"],
+        }),
+
+        unblockUser: builder.mutation({
+            query: (id) => ({
+                url: `users/${id}/unblock`,
+                method: "PUT",
+            }),
+            invalidatesTags: ["customers", "blocked", "metrics"],
         }),
     }),
 });
 
 export const {
     useGetAllUserDataQuery,
+    useGetMetricDataQuery,
     useGetDetailUserQuery,
-    useBlockUserMutation,
     useGetBlockUserDataQuery,
+    useBlockUserMutation,
+    useUnblockUserMutation,
 } = userApi;

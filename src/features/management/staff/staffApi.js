@@ -6,10 +6,15 @@ const staffAdminEndPoint = "admin/staffs";
 const staffApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getStaffData: builder.query({
-            query: (params) => ({
+            query: ({ status, page = 0, size, search }) => ({
                 url: `${staffPerformanceEndPoint}`,
                 method: "GET",
-                params: params,
+                params: {
+                    page,
+                    size,
+                    ...(status && { status }),
+                    ...(search && { search }),
+                },
             }),
             providesTags: ["staff-performance", "staffs"],
         }),

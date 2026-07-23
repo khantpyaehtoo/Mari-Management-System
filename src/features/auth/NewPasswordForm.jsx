@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Button, Form, Input, Typography } from "antd";
-import { LockOutlined } from "@ant-design/icons";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { LockOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "./authApi";
 import { useDispatch } from "react-redux";
 import resetImg2 from "../../../public/asset/Img2.png";
 import resetImg3 from "../../../public/asset/Img3.png";
 import ellipse from "../../../public/asset/Ellipse.png";
-import { ArrowRightOutlined } from "@ant-design/icons/es/icons/index";
 import { setMessage } from "../../app/core/notifications/notiSlice";
 
 const { Title, Text } = Typography;
@@ -16,18 +15,23 @@ const NewPasswordForm = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
     const dispatch = useDispatch();
+
+    // resetPassword mutation hook
     const [resetPassword] = useResetPasswordMutation();
 
     const email = location.state?.email || "";
+    const token = location.state?.token || "";
 
     const onFinish = async (values) => {
         console.log("Submitting new password for:", email, values);
         try {
             setLoading(true);
-            const response = await resetPassword(email).unwrap();
-            console.log("Reset password API response:", response);
+
+            await resetPassword({
+                newPassword: values.password,
+                token: token,
+            }).unwrap();
 
             dispatch(
                 setMessage({
@@ -36,6 +40,7 @@ const NewPasswordForm = () => {
                         "Password reset successful! Please log in with your new password.",
                 }),
             );
+
             navigate("/login");
         } catch (err) {
             console.error("Reset password failed:", err);
@@ -71,7 +76,8 @@ const NewPasswordForm = () => {
                         <img src={resetImg3} alt="Reset Illustration" />
                         <img
                             src={resetImg2}
-                            className="absolute top-0 right-0 lg:block md:hidden hidden "
+                            className="absolute top-0 right-0 lg:block md:hidden hidden"
+                            alt=""
                         />
                         <img
                             src={ellipse}
@@ -129,7 +135,7 @@ const NewPasswordForm = () => {
                                 </Form.Item>
 
                                 <Form.Item
-                                    name="confirmPassword"
+                                    name="newPassword"
                                     label="Confirm Password"
                                     hasFeedback
                                     dependencies={["password"]}
@@ -184,10 +190,10 @@ const NewPasswordForm = () => {
                                 <Form.Item className="mb-0 mt-4 text-center">
                                     <Link
                                         to="/login"
-                                        className="text-primary! hover:underline! font-medium group"
+                                        className="text-primary! hover:underline! font-medium group inline-flex items-center gap-1"
                                     >
-                                        Back to Log In{" "}
-                                        <ArrowRightOutlined className="mr-2 text-xs group-hover:translate-x-2 transition-transform" />
+                                        Back to Log In
+                                        <ArrowRightOutlined className="text-xs group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </Form.Item>
                             </Form>

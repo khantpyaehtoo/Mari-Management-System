@@ -25,7 +25,7 @@ import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
-const renderlists = [
+const RENDER_LISTS = [
     "All",
     "In Progress",
     "Completed",
@@ -33,7 +33,7 @@ const renderlists = [
     "Unavailable",
     "Terminate",
 ];
-const statusClasses = {
+const STATUS_CLASSES = {
     "In Progress": "text-progress",
     Pending: "text-pending",
     Confirm: "text-confirm",
@@ -44,15 +44,6 @@ const statusClasses = {
     Terminate: "text-gray-500",
 };
 
-const options = renderlists.map((status) => ({
-    label: (
-        <span className={statusClasses[status] || "text-gray-500"}>
-            {status}
-        </span>
-    ),
-    value: status,
-}));
-
 const { useBreakpoint } = Grid;
 
 const Staff = () => {
@@ -61,7 +52,7 @@ const Staff = () => {
     const scrollX = screens.xs ? undefined : "1500";
 
     const [searchText, setSearchText] = useState("");
-    const [filterValue, setFilterValue] = useState(undefined);
+    const [filterValue, setFilterValue] = useState("All");
     const [currentPage, setCurrentPage] = useState(1);
 
     const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -75,7 +66,7 @@ const Staff = () => {
     };
 
     const handleFilterChange = (value) => {
-        setFilterValue(value);
+        setFilterValue(value || "All");
         setCurrentPage(1);
     };
 
@@ -83,6 +74,27 @@ const Staff = () => {
         setSearchText(value);
         setCurrentPage(1);
     };
+
+    const filterOptions = useMemo(() => {
+        return RENDER_LISTS.map((status) => {
+            const isActive = filterValue === status;
+
+            return {
+                label: (
+                    <span
+                        className={cn(
+                            STATUS_CLASSES[status] || "text-gray-500",
+                            "transition-all duration-200 cursor-pointer inline-block",
+                            isActive && "font-medium",
+                        )}
+                    >
+                        {status}
+                    </span>
+                ),
+                value: status,
+            };
+        });
+    }, [filterValue]);
 
     const statusParam =
         !filterValue || filterValue === "All"
@@ -106,8 +118,8 @@ const Staff = () => {
               apiResponse?.content ||
               [];
 
-        return rawStaff.map((staff) => {
-            const rawImg = staff.profilePicture || staff.profileImage;
+        const formatted = rawStaff.map((staff) => {
+            const rawImg = staff.profileImage || staff.profilePicture;
             let fullImageUrl = rawImg;
 
             if (rawImg && !rawImg.startsWith("http")) {
@@ -115,20 +127,31 @@ const Staff = () => {
                 fullImageUrl = `${IMAGE_BASE_URL}${separator}${rawImg}`;
             }
 
-            const realId = staff.userId || staff.staffId || staff.id;
+            const realId = staff.staffId || staff.userId || staff.id;
+            const currentStatus =
+                staff.status === "Inactive" ? "Terminate" : staff.status;
 
             return {
                 ...staff,
                 id: realId,
                 staffId: realId,
-                staffCode: staff.code || staff.staffCode,
-                staffName: staff.fullName || staff.staffName,
-                phoneNumber: staff.phone || staff.phoneNumber,
+                status: currentStatus,
+                staffCode: staff.staffCode || staff.code,
+                staffName: staff.staffName || staff.fullName,
+                phoneNumber: staff.phoneNumber || staff.phone,
                 profileImage: fullImageUrl,
-                joinedDate: staff.createdAt || staff.joinedDate,
+                joinedDate: staff.joinedDate || staff.createdAt,
             };
         });
-    }, [apiResponse]);
+
+        if (!filterValue || filterValue === "All") {
+            return formatted;
+        }
+
+        return formatted.filter(
+            (item) => item.status?.toLowerCase() === filterValue.toLowerCase(),
+        );
+    }, [apiResponse, filterValue]);
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();
@@ -415,7 +438,8 @@ const Staff = () => {
                         <p
                             className={cn(
                                 "font-medium",
-                                statusClasses[currentStatus] || "text-gray-500",
+                                STATUS_CLASSES[currentStatus] ||
+                                    "text-gray-500",
                             )}
                         >
                             {currentStatus}
@@ -489,8 +513,8 @@ const Staff = () => {
                 triggerEdit={handleSaveStaffDetail}
             />
             <TableHeaderSection
-                renderlists={renderlists}
-                options={options}
+                renderlists={RENDER_LISTS}
+                options={filterOptions}
                 filterValue={filterValue}
                 setFilterValue={handleFilterChange}
                 statusCounts={statusCounts}

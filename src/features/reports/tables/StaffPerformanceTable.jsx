@@ -8,9 +8,7 @@ const StaffPerformanceTable = ({
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
-    const tableData = Array.isArray(staffPerform)
-        ? staffPerform
-        : staffPerform?.data?.staffList || staffPerform?.staffList || [];
+    console.log(staffPerform);
 
     const staffColumns = [
         {
@@ -88,7 +86,7 @@ const StaffPerformanceTable = ({
             <div className="table-wrapper">
                 <Table
                     columns={staffColumns}
-                    dataSource={tableData}
+                    dataSource={staffPerform}
                     loading={isStaffFetching}
                     rowKey={(record) =>
                         record.staffId || record.userId || record.staffCode

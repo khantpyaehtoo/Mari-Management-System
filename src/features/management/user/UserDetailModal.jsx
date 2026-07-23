@@ -5,7 +5,8 @@ const UserDetailModal = ({
     viewModalOpen,
     onClose,
     selectedCustomer,
-    handleBlockBtn,
+    handleUserAction,
+    actionType = "block",
 }) => {
     const { data: userDetails, isLoading } = useGetDetailUserQuery(
         selectedCustomer?.id,
@@ -13,6 +14,8 @@ const UserDetailModal = ({
     );
 
     if (!selectedCustomer) return null;
+
+    const isUnblocking = actionType === "unblock";
 
     const customerDetailCardItem = [
         {
@@ -33,9 +36,9 @@ const UserDetailModal = ({
         },
     ];
 
-    const handleBlock = () => {
-        if (handleBlockBtn && userDetails?.customerId) {
-            handleBlockBtn(userDetails.customerId);
+    const handleActionClick = () => {
+        if (handleUserAction && userDetails?.id) {
+            handleUserAction(userDetails.id, actionType);
         }
         onClose();
     };
@@ -221,7 +224,7 @@ const UserDetailModal = ({
                 </>
             )}
 
-            {/* Action Buttons (Always visible at the bottom) */}
+            {/* Dynamic Action Button */}
             <Flex
                 justify="end"
                 align="center"
@@ -236,11 +239,15 @@ const UserDetailModal = ({
                     Cancel
                 </Button>
                 <Button
-                    className="bg-red-500! text-lg! text-white! rounded-xl! p-6! hover:bg-red-800!"
                     disabled={isLoading}
-                    onClick={handleBlock}
+                    onClick={handleActionClick}
+                    className={`text-lg! text-white! rounded-xl! p-6! ${
+                        isUnblocking
+                            ? "bg-green-600! hover:bg-green-700!"
+                            : "bg-red-500! hover:bg-red-800!"
+                    }`}
                 >
-                    Block
+                    {isUnblocking ? "Unblock" : "Block"}
                 </Button>
             </Flex>
         </Modal>

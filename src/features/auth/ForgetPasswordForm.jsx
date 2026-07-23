@@ -1,24 +1,29 @@
 import { useState, useEffect } from "react";
-import { Button, Form, Input, Typography, message } from "antd";
+import { Button, Form, Input, Typography } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import resetImg2 from "../../../public/asset/Img2.png";
 import heroImg from "../../../public/asset/Img3.png";
 import ellipse from "../../../public/asset/Ellipse.png";
 
-import { useResetPasswordMutation, useVerifyOtpMutation } from "./authApi";
+import { useRequestOtpMutation, useVerifyOtpMutation } from "./authApi";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../app/core/notifications/notiSlice";
 
 const { Title, Text } = Typography;
 
 const ForgetPasswordForm = () => {
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     const [currentStep, setCurrentStep] = useState("email");
     const [countdown, setCountdown] = useState(0);
 
+    const [userEmail, setUserEmail] = useState("");
+
     const navigate = useNavigate();
 
-    const [resetPassword, { isLoading: isRequestingOtp }] =
-        useResetPasswordMutation();
+    const [requestOtp, { isLoading: isRequestingOtp }] =
+        useRequestOtpMutation();
     const [verifyOtp, { isLoading: isVerifyingOtp }] = useVerifyOtpMutation();
 
     // Form inputs watch
@@ -41,11 +46,20 @@ const ForgetPasswordForm = () => {
 
     const handleRequestOTP = async () => {
         try {
-            const values = await form.validateFields(["email"]);
-            const response = await resetPassword(values.email).unwrap();
+            const targetEmail =
+                userEmail || (await form.validateFields(["email"])).email;
 
-            message.success(
-                response?.message || "Verification code sent to your email!",
+            await requestOtp({
+                email: targetEmail,
+            }).unwrap();
+
+            setUserEmail(targetEmail);
+
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "Verification code sent to your email!",
+                }),
             );
 
             setCurrentStep("reset");
@@ -55,7 +69,12 @@ const ForgetPasswordForm = () => {
             const errorMsg =
                 error?.data?.message ||
                 "Failed to send reset code. Please try again.";
-            message.error(errorMsg);
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMsg,
+                }),
+            );
         }
     };
 
@@ -63,19 +82,36 @@ const ForgetPasswordForm = () => {
         try {
             const values = await form.validateFields(["otp"]);
 
-            await verifyOtp({ email: emailValue, otp: values.otp }).unwrap();
+            const response = await verifyOtp({
+                email: userEmail,
+                otp: values.otp,
+            }).unwrap();
 
-            message.success("OTP verified successfully!");
+            dispatch(
+                setMessage({
+                    msgType: "success",
+                    msgContent: "OTP verified successfully!",
+                }),
+            );
 
             navigate("/new-password", {
-                state: { email: emailValue, otp: values.otp },
+                state: {
+                    email: userEmail,
+                    token: response?.accessToken || response?.token,
+                },
             });
         } catch (error) {
             console.error("OTP Verification failed:", error);
             const errorMsg =
                 error?.data?.message ||
                 "Please enter a valid verification code";
-            message.error(errorMsg);
+
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent: errorMsg,
+                }),
+            );
         }
     };
 
@@ -126,7 +162,7 @@ const ForgetPasswordForm = () => {
                             >
                                 {currentStep === "email"
                                     ? "Please Enter your Email and we will send a code to reset your password."
-                                    : `We’ve sent a verification code to your email ${emailValue || ""}. Please enter it below to reset your password.`}
+                                    : `We’ve sent a verification code to your email "${userEmail || ""}". Please enter it below to reset your password.`}
                             </Text>
 
                             <Form

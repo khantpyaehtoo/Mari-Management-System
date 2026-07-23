@@ -39,8 +39,8 @@ const ReportsPage = () => {
         useGetReportChartDataQuery(currentMonthParams);
 
     // Current Month Total Revenue
-    const julyChartData = currentMonthReportResponse?.chartData || [];
-    const julyTotalRevenue = julyChartData.reduce((sum, item) => {
+    const currChartData = currentMonthReportResponse?.chartData || [];
+    const currTotalRevenue = currChartData.reduce((sum, item) => {
         const rev =
             item.revenueBlock?.totalRevenue ??
             item.totalRevenue ??
@@ -67,7 +67,9 @@ const ReportsPage = () => {
     const { data: staffPerform, isFetching: isStaffFetching } =
         useGetStaffPerformQuery(queryParams);
 
-    const staffPerformData = staffPerform?.content || staffPerform?.data || [];
+    const staffPerformData = Array.isArray(staffPerform)
+        ? staffPerform
+        : staffPerform?.data?.staffList || staffPerform?.staffList || [];
 
     // Date Filter Handler
     const handleDateChange = (type, value) => {
@@ -134,7 +136,7 @@ const ReportsPage = () => {
                                 <ReportBarChart
                                     chartData={chartData}
                                     selectedMonth={selectedDate.format("MMMM")}
-                                    julyRevenue={julyTotalRevenue}
+                                    julyRevenue={currTotalRevenue}
                                 />
                             )}
                         </div>

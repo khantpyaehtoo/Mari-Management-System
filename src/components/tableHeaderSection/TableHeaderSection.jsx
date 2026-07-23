@@ -13,8 +13,10 @@ const TableHeaderSection = ({
     dateConfig,
 }) => {
     const handleChange = (value) => {
-        console.log("clicked", value);
-        setFilterValue(value || "All");
+        const newValue = value || "All";
+        if (setFilterValue) {
+            setFilterValue(newValue);
+        }
     };
 
     const { selectedDates, setSelectedDates } = dateConfig || {};
@@ -73,6 +75,7 @@ const TableHeaderSection = ({
             Available: "text-available",
             Unavailable: "text-unavailable",
             Reject: "text-unavailable",
+            Terminate: "text-gray-500",
         }),
         [],
     );
@@ -92,35 +95,38 @@ const TableHeaderSection = ({
         return "";
     }, [selectedDates]);
 
+    const activeFilter = filterValue || "All";
+
     return (
         <div className="flex justify-between items-center p-3">
+            {/* Tabs List */}
             <ul className="flex gap-4">
                 {renderlists?.map((listName, index) => {
                     const counts = statusCounts?.[listName] ?? 0;
-                    const isActive = (filterValue || "All") === listName;
+                    const isActive = activeFilter === listName;
 
                     return (
                         <li
                             key={index}
                             className={cn(
-                                "font-medium cursor-pointer transition-all duration-150",
+                                "font-medium cursor-pointer transition-all duration-150 select-none",
                                 statusClasses[listName] || "text-gray-500",
                                 isActive
-                                    ? "underline font-bold"
-                                    : "opacity-80 hover:opacity-100",
+                                    ? "underline font-semibold opacity-100"
+                                    : "opacity-70 hover:opacity-100",
                             )}
-                            onClick={() =>
-                                !!setFilterValue && handleChange(listName)
-                            }
+                            onClick={() => handleChange(listName)}
                         >
                             <span className="md:text-xs">
-                                {listName} <span>{counts}</span>
+                                {listName} <span>({counts})</span>
                             </span>
                         </li>
                     );
                 })}
             </ul>
-            <Space>
+
+            {/* Select & Date Picker controls */}
+            <Space horizontal>
                 {!!setSelectedDates && (
                     <Space size={4}>
                         <DatePicker.RangePicker
@@ -155,8 +161,10 @@ const TableHeaderSection = ({
                     <Select
                         allowClear
                         placeholder="All Status"
-                        value={filterValue === "All" ? null : filterValue}
-                        style={{ width: 130 }}
+                        value={
+                            activeFilter === "All" ? undefined : activeFilter
+                        }
+                        style={{ width: 140 }}
                         onChange={handleChange}
                         options={options}
                     />

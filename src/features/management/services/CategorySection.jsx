@@ -32,21 +32,18 @@ const CategorySection = () => {
     const isLoading = isCategoryLoading || isServiceLoading;
 
     const categories = useMemo(() => {
-        // 1. Package မဟုတ်ဘဲ Enabled ဖြစ်နေသည့် Active Services များ
         const activeServices = getAllServices.filter((item) => {
             const isNotPackage = item?.package !== true;
             const isEnabled = item?.enabled === true;
             return isNotPackage && isEnabled;
         });
 
-        // 2. Disabled/Deleted ဖြစ်နေသည့် Services အရေအတွက် တွက်ချက်ခြင်း
         const deletedServices = getAllServices.filter((item) => {
             const isNotPackage = item?.package !== true;
             const isDeleted = item?.enabled === false;
             return isNotPackage && isDeleted;
         });
 
-        // 3. Category တစ်ခုချင်းစီ၏ Count ကို ID/Name ဖြင့် Match စစ်ခြင်း
         const filteredCategories = getAllCategory
             ?.filter((cate) => cate?.name?.toLowerCase() !== "package")
             ?.map((cate) => {
@@ -73,15 +70,7 @@ const CategorySection = () => {
                 };
             });
 
-        // 4. Deleted, All Services နှင့် အခြား Categories များ ပေါင်းစပ်ခြင်း
         const allList = [
-            {
-                id: "deleted",
-                key: "deleted-services",
-                title: "Deleted Services",
-                isDeleted: true,
-                count: deletedServices.length,
-            },
             {
                 id: "all",
                 key: "all-services",
@@ -90,6 +79,13 @@ const CategorySection = () => {
                 count: activeServices.length,
             },
             ...filteredCategories,
+            {
+                id: "deleted",
+                key: "deleted-services",
+                title: "Deleted Services",
+                isDeleted: true,
+                count: deletedServices.length,
+            },
         ];
 
         if (!searchText.trim()) return allList;

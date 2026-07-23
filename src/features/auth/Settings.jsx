@@ -34,7 +34,6 @@ const Settings = () => {
     const updatePillPosition = useCallback((key) => {
         if (!containerRef.current) return;
 
-        // Ensure DOM elements are fully mounted
         requestAnimationFrame(() => {
             const activeTabEl = containerRef.current?.querySelector(
                 `[data-node-key="${key}"]`,
@@ -89,7 +88,6 @@ const Settings = () => {
     const onFinishPassword = useCallback(
         async (values) => {
             try {
-                // Fixed key names & object structure sent to mutation
                 await changePassword({
                     updatePasswords: {
                         oldPassword: values.currentPassword,

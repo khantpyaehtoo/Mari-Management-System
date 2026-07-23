@@ -1,16 +1,18 @@
-import { Grid, Table, Button, Avatar } from "antd";
+import { Grid, Table, Button, Image } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import UserDetailModal from "./UserDetailModal";
 import { useDispatch } from "react-redux";
 import {
     useBlockUserMutation,
+    useUnblockUserMutation,
     useGetAllUserDataQuery,
     useGetBlockUserDataQuery,
 } from "./userApi";
 import CustomerSummaryCard from "./CustomerSummaryCard";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
+import { getImageUrl } from "../../../lib/getImageUrl";
 
 const { useBreakpoint } = Grid;
 
@@ -25,30 +27,23 @@ const User = () => {
     const [filteredValue, setFilteredValue] = useState("All");
 
     const screens = useBreakpoint();
-    const scrollX = screens.xs ? undefined : "1500";
+    const scrollX = screens.xs ? undefined : 1500;
 
     const [blockCustomer] = useBlockUserMutation();
+    const [unblockCustomer] = useUnblockUserMutation();
 
-    // Fetch blocked users data
     const { data: getBlockUserData, isLoading: isBlockedLoading } =
         useGetBlockUserDataQuery(undefined, {
             skip: filteredValue !== "Blocked",
         });
 
-    const statusParam =
-        !filteredValue || filteredValue === "All" || filteredValue === "Blocked"
-            ? undefined
-            : String(filteredValue).toLowerCase();
-
     const debouncedSearchText = useDebounce(searchText, 300);
 
-    // Fetch all/paginated customer data
     const { data: getAllUser, isLoading: isAllLoading } =
         useGetAllUserDataQuery(
             {
                 page: currentPage - 1,
                 size: 10,
-                status: statusParam,
                 search: debouncedSearchText
                     ? debouncedSearchText.trim()
                     : undefined,
@@ -56,41 +51,64 @@ const User = () => {
             { skip: filteredValue === "Blocked" },
         );
 
-    // Dynamically switch DataSource and Loading states based on Card selection
     const isBlockedView = filteredValue === "Blocked";
 
-    const currentTableData = isBlockedView
-        ? getBlockUserData?.content || getBlockUserData || []
-        : getAllUser?.content || [];
+    const currentTableData = useMemo(() => {
+        if (isBlockedView) {
+            return (
+                getBlockUserData?.content ||
+                getBlockUserData?.data?.content ||
+                (Array.isArray(getBlockUserData) ? getBlockUserData : [])
+            );
+        }
+
+        const allUsers =
+            getAllUser?.content ||
+            getAllUser?.data?.content ||
+            (Array.isArray(getAllUser) ? getAllUser : []);
+
+        return allUsers.filter(
+            (user) =>
+                user.status !== "BLOCKED" &&
+                user.status !== "blocked" &&
+                !user.isBlocked,
+        );
+    }, [isBlockedView, getBlockUserData, getAllUser]);
 
     const isTableLoading = isBlockedView ? isBlockedLoading : isAllLoading;
 
     const handleViewDetail = useCallback((record) => {
-        console.log(record);
         setSelectedCustomer(record);
         setViewModalOpen(true);
     }, []);
 
-    const handleBlockCustomer = async (customerId) => {
-        console.log("Block", customerId);
+    const handleUserAction = async (userId, actionType) => {
+        const isUnblock = actionType === "unblock";
+        const actionLabel = isUnblock ? "unblock" : "block";
+
         if (
             window.confirm(
-                `Are you sure you want to block this customer ${customerId} `,
+                `Are you sure you want to ${actionLabel} this customer?`,
             )
         ) {
             try {
-                await blockCustomer(customerId).unwrap();
+                if (isUnblock) {
+                    await unblockCustomer(userId).unwrap();
+                } else {
+                    await blockCustomer(userId).unwrap();
+                }
+
                 dispatch(
                     setMessage({
                         msgType: "success",
-                        msgContent: "Blocked successfully.",
+                        msgContent: `${isUnblock ? "Unblocked" : "Blocked"} successfully.`,
                     }),
                 );
             } catch (error) {
                 const errorMessage =
                     error?.data?.message ||
                     error?.error ||
-                    "Error while Terminate";
+                    `Error while trying to ${actionLabel} customer`;
 
                 dispatch(
                     setMessage({
@@ -124,7 +142,16 @@ const User = () => {
                 title: "Profile",
                 dataIndex: "profilePicture",
                 key: "profilePicture",
-                render: (profilePicture) => <Avatar src={profilePicture} />,
+                render: (profilePicture) => {
+                    return (
+                        <Image
+                            src={getImageUrl(profilePicture)}
+                            alt="Profile"
+                            width={40}
+                            className="rounded-md"
+                        />
+                    );
+                },
             },
             {
                 title: "Contact",
@@ -150,6 +177,7 @@ const User = () => {
                 title: "Gender",
                 dataIndex: "gender",
                 key: "gender",
+                render: (gender) => gender || "-",
             },
             {
                 title: "Joined Date",
@@ -160,6 +188,7 @@ const User = () => {
                 title: "Booking Count",
                 dataIndex: "bookingCount",
                 key: "bookingCount",
+                render: (count) => count ?? 0,
             },
             {
                 title: "Action",
@@ -191,8 +220,6 @@ const User = () => {
             />
 
             <CustomerSummaryCard
-                getAllUserData={getAllUser}
-                getBlockUserData={getBlockUserData}
                 setFilteredValue={setFilteredValue}
                 filteredValue={filteredValue}
             />
@@ -202,7 +229,7 @@ const User = () => {
                     loading={isTableLoading}
                     columns={columns}
                     dataSource={currentTableData}
-                    rowKey="id"
+                    rowKey={(record) => record.id || record.customerId}
                     scroll={{ x: scrollX }}
                     pagination={
                         isBlockedView
@@ -212,22 +239,20 @@ const User = () => {
                                   onChange: handlePageChange,
                                   size: "large",
                                   pageSize: 10,
-                                  total:
-                                      getAllUser?.totalElements ||
-                                      currentTableData.length,
+                                  total: currentTableData.length,
                               }
                     }
                     bordered
                 />
             </div>
+
             {selectedCustomer && (
                 <UserDetailModal
                     viewModalOpen={viewModalOpen}
                     onClose={() => setViewModalOpen(false)}
                     selectedCustomer={selectedCustomer}
-                    handleBlockBtn={(customerId) =>
-                        handleBlockCustomer(customerId)
-                    }
+                    handleUserAction={handleUserAction}
+                    actionType={isBlockedView ? "unblock" : "block"}
                 />
             )}
         </>
