@@ -67,6 +67,8 @@ const ReportsPage = () => {
     const { data: staffPerform, isFetching: isStaffFetching } =
         useGetStaffPerformQuery(queryParams);
 
+    const staffPerformData = staffPerform?.content || staffPerform?.data || [];
+
     // Date Filter Handler
     const handleDateChange = (type, value) => {
         if (type === "month") {
@@ -154,7 +156,7 @@ const ReportsPage = () => {
 
             <StaffPerformanceTable
                 formattedDate={formattedDate}
-                staffPerform={staffPerform}
+                staffPerform={staffPerformData}
                 isStaffFetching={isStaffFetching}
             />
         </>

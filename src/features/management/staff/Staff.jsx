@@ -41,7 +41,9 @@ const statusClasses = {
     Available: "text-available",
     Unavailable: "text-unavailable",
     Reject: "text-unavailable",
+    Terminate: "text-gray-500",
 };
+
 const options = renderlists.map((status) => ({
     label: (
         <span className={statusClasses[status] || "text-gray-500"}>
@@ -59,7 +61,7 @@ const Staff = () => {
     const scrollX = screens.xs ? undefined : "1500";
 
     const [searchText, setSearchText] = useState("");
-    const [filterValue, setFilterValue] = useState("All");
+    const [filterValue, setFilterValue] = useState(undefined);
     const [currentPage, setCurrentPage] = useState(1);
 
     const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -83,7 +85,11 @@ const Staff = () => {
     };
 
     const statusParam =
-        !filterValue || filterValue === "All" ? undefined : filterValue;
+        !filterValue || filterValue === "All"
+            ? undefined
+            : filterValue === "Terminate"
+              ? "Inactive"
+              : filterValue;
 
     const { data: apiResponse, isLoading } = useGetStaffDataQuery({
         status: statusParam,
@@ -92,11 +98,13 @@ const Staff = () => {
         size: 10,
     });
 
-    // ⭐️ Map API response keys to match UI requirements smoothly
     const dataList = useMemo(() => {
         const rawStaff = Array.isArray(apiResponse)
             ? apiResponse
-            : apiResponse?.staff || apiResponse?.content || [];
+            : apiResponse?.staffList ||
+              apiResponse?.staff ||
+              apiResponse?.content ||
+              [];
 
         return rawStaff.map((staff) => {
             const rawImg = staff.profilePicture || staff.profileImage;
@@ -107,9 +115,12 @@ const Staff = () => {
                 fullImageUrl = `${IMAGE_BASE_URL}${separator}${rawImg}`;
             }
 
+            const realId = staff.userId || staff.staffId || staff.id;
+
             return {
                 ...staff,
-                staffId: staff.id || staff.staffId,
+                id: realId,
+                staffId: realId,
                 staffCode: staff.code || staff.staffCode,
                 staffName: staff.fullName || staff.staffName,
                 phoneNumber: staff.phone || staff.phoneNumber,
@@ -125,7 +136,6 @@ const Staff = () => {
     const [terminateStaff] = useTerminateStaffMutation();
     const [rehiredStaff] = useRehiredStaffMutation();
 
-    // ⭐️ Form Handler for SubHeaderSection Create Trigger
     const handleCreateStaff = async (formValues) => {
         try {
             const payload = {
@@ -165,6 +175,7 @@ const Staff = () => {
             (apiResponse?.completedCount || 0) +
             (apiResponse?.availableCount || 0) +
             (apiResponse?.unavailableCount || 0) +
+            (apiResponse?.inactiveCount || 0) +
             (apiResponse?.terminateCount || 0);
 
         return {
@@ -173,11 +184,13 @@ const Staff = () => {
             Completed: apiResponse?.completedCount || 0,
             Available: apiResponse?.availableCount || 0,
             Unavailable: apiResponse?.unavailableCount || 0,
-            Terminate: apiResponse?.terminateCount || 0,
+            Terminate:
+                apiResponse?.terminateCount || apiResponse?.inactiveCount || 0,
         };
     }, [apiResponse, dataList]);
 
     const handleActionClick = useCallback((actionType, record) => {
+        console.log("Selected Staff DB Record:", record);
         setSelectedStaff(record);
         if (actionType === "view") {
             setIsDetailOpen(true);
@@ -187,9 +200,16 @@ const Staff = () => {
     }, []);
 
     const handleTerminateStaff = async (staffId) => {
-        const idToPass = staffId || selectedStaff?.staffId || selectedStaff?.id;
+        // Resolve the numeric ID safely
+        const targetId =
+            typeof staffId === "number" || typeof staffId === "string"
+                ? staffId
+                : selectedStaff?.staffId || selectedStaff?.id;
+
+        if (!targetId) return;
+
         try {
-            await terminateStaff(idToPass).unwrap();
+            await terminateStaff(targetId).unwrap();
             dispatch(
                 setMessage({
                     msgType: "success",
@@ -197,6 +217,7 @@ const Staff = () => {
                 }),
             );
             setIsTerminateOpen(false);
+            setSelectedStaff(null);
         } catch (error) {
             const errorMessage =
                 error?.data?.message ||
@@ -209,9 +230,15 @@ const Staff = () => {
     };
 
     const handleRehired = async (staffId) => {
-        const idToPass = staffId || selectedStaff?.staffId || selectedStaff?.id;
+        const targetId =
+            typeof staffId === "number" || typeof staffId === "string"
+                ? staffId
+                : selectedStaff?.staffId || selectedStaff?.id;
+
+        if (!targetId) return;
+
         try {
-            await rehiredStaff(idToPass).unwrap();
+            await rehiredStaff(targetId).unwrap();
             dispatch(
                 setMessage({
                     msgType: "success",
@@ -219,6 +246,7 @@ const Staff = () => {
                 }),
             );
             setIsDetailOpen(false);
+            setSelectedStaff(null);
         } catch (error) {
             const errorMessage =
                 error?.data?.message ||
@@ -375,9 +403,14 @@ const Staff = () => {
                 dataIndex: "status",
                 key: "status",
                 render: (status, record) => {
-                    const currentStatus =
+                    let currentStatus =
                         status ||
                         (record.available ? "Available" : "Unavailable");
+
+                    if (currentStatus === "Inactive") {
+                        currentStatus = "Terminate";
+                    }
+
                     return (
                         <p
                             className={cn(
@@ -412,22 +445,26 @@ const Staff = () => {
                             ),
                             key: "0",
                         },
-                        record.status !== "Terminate" && {
-                            label: (
-                                <Button
-                                    type="text"
-                                    danger
-                                    className="w-full! text-left!"
-                                    onClick={() =>
-                                        handleActionClick("terminate", record)
-                                    }
-                                >
-                                    <DisconnectOutlined className="me-3" />{" "}
-                                    Terminate
-                                </Button>
-                            ),
-                            key: "1",
-                        },
+                        record.status !== "Terminate" &&
+                            record.status !== "Inactive" && {
+                                label: (
+                                    <Button
+                                        type="text"
+                                        danger
+                                        className="w-full! text-left!"
+                                        onClick={() =>
+                                            handleActionClick(
+                                                "terminate",
+                                                record,
+                                            )
+                                        }
+                                    >
+                                        <DisconnectOutlined className="me-3" />{" "}
+                                        Terminate
+                                    </Button>
+                                ),
+                                key: "1",
+                            },
                     ].filter(Boolean);
                     return (
                         <Dropdown menu={{ items }} placement="bottom">
@@ -454,6 +491,7 @@ const Staff = () => {
             <TableHeaderSection
                 renderlists={renderlists}
                 options={options}
+                filterValue={filterValue}
                 setFilterValue={handleFilterChange}
                 statusCounts={statusCounts}
             />

@@ -58,7 +58,7 @@ const Booking = () => {
 
     // Reset to page 1 on filter/search change
     const handleFilterChange = (value) => {
-        setFilterValue(value);
+        setFilterValue(value || "All");
         setCurrentPage(1);
     };
 
@@ -72,7 +72,7 @@ const Booking = () => {
         setCurrentPage(1);
     };
 
-    // Dynamic Options with Active Underline
+    // Dynamic Options with Active Styling
     const filterOptions = useMemo(() => {
         return RENDER_LISTS.map((status) => {
             const isActive = filterValue === status;
@@ -83,8 +83,7 @@ const Booking = () => {
                         className={cn(
                             STATUS_CLASSES[status] || "text-gray-500",
                             "transition-all duration-200 cursor-pointer inline-block",
-                            isActive &&
-                                "border-b-2 border-current pb-0.5 font-bold",
+                            isActive && "font-bold",
                         )}
                     >
                         {status}
@@ -102,10 +101,10 @@ const Booking = () => {
     const endDate = selectedDates?.[1]
         ? dayjs(selectedDates[1]).format("YYYY-MM-DD")
         : undefined;
+
+    // Map status filter parameter for API request
     const statusParam =
-        !filterValue || filterValue === "All"
-            ? undefined
-            : String(filterValue).toLowerCase();
+        !filterValue || filterValue === "All" ? undefined : filterValue;
 
     // Fetch Data
     const { data: apiResponse, isLoading } = useGetAllBookingQuery({
@@ -116,6 +115,7 @@ const Booking = () => {
         size: 10,
         search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
     });
+
     const bookingsData = apiResponse?.bookings;
     const [updateBooking] = useUpdateBookingMutation();
 
@@ -155,12 +155,7 @@ const Booking = () => {
     // Sorted Data
     const sortedData = useMemo(() => {
         const list = Array.isArray(bookingsData) ? bookingsData : [];
-
-        return [...list].sort((a, b) => {
-            const idA = Number(a.id || 0);
-            const idB = Number(b.id || 0);
-            return idB - idA;
-        });
+        return list;
     }, [bookingsData]);
 
     // Status Counting Pills
@@ -198,6 +193,7 @@ const Booking = () => {
                 title: "Booking Id",
                 dataIndex: "bookingId",
                 key: "bookingId",
+                render: (val, record) => val || record.id || "-",
             },
             {
                 title: "Service Name",
@@ -213,6 +209,15 @@ const Booking = () => {
                 title: "Price",
                 dataIndex: "price",
                 key: "price",
+                render: (price) =>
+                    price !== undefined && price !== null ? (
+                        <p>
+                            {Number(price).toLocaleString()}{" "}
+                            <small className="text-gray-500">MMK</small>
+                        </p>
+                    ) : (
+                        <p>-</p>
+                    ),
             },
             {
                 title: "Booked Time",
@@ -224,7 +229,11 @@ const Booking = () => {
                 dataIndex: "date",
                 key: "date",
                 render: (date) =>
-                    date && <p>{dayjs(date).format("DD . MMM . YYYY")}</p>,
+                    date ? (
+                        <p>{dayjs(date).format("DD . MMM . YYYY")}</p>
+                    ) : (
+                        <p>-</p>
+                    ),
             },
             {
                 title: "During Time",
@@ -235,6 +244,7 @@ const Booking = () => {
                 title: "Staff Name",
                 dataIndex: "staffName",
                 key: "staffName",
+                render: (name) => name || "-",
             },
             {
                 title: "Status",
@@ -254,7 +264,7 @@ const Booking = () => {
             {
                 title: "Action",
                 key: "action",
-                render: (record) => {
+                render: (_, record) => {
                     return record?.status === "Pending" ? (
                         <Space size="middle">
                             <Button
@@ -306,6 +316,7 @@ const Booking = () => {
             <TableHeaderSection
                 renderlists={RENDER_LISTS}
                 options={filterOptions}
+                filterValue={filterValue}
                 statusCounts={statusCounts}
                 setFilterValue={handleFilterChange}
                 dateConfig={dateConfig}
@@ -316,7 +327,7 @@ const Booking = () => {
                     dataSource={sortedData}
                     scroll={{ x: scrollX }}
                     loading={isLoading}
-                    rowKey="id"
+                    rowKey={(record) => record.id || record.bookingId}
                     bordered
                     pagination={{
                         current: currentPage,

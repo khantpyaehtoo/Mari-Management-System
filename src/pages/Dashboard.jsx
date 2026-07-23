@@ -43,7 +43,9 @@ const Dashboard = () => {
     const [viewType, setViewType] = useState("weekly");
 
     const { data: cardDatas, isLoading } = useGetDashBoardCardStatsQuery();
-    const { data: staffPerformData = [] } = useGetStaffPerformQuery();
+
+    const { data: staffPerformResponse } = useGetStaffPerformQuery();
+    const staffPerformData = staffPerformResponse?.staffList || [];
 
     const dashboardCardItem = [
         {

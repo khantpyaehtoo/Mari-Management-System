@@ -27,7 +27,10 @@ const RenderStaffFooterButtons = ({
         );
     }
 
-    if (selectedStaff.status === "Terminate") {
+    if (
+        selectedStaff.status === "Terminate" ||
+        selectedStaff.status === "Inactive"
+    ) {
         return (
             <Space size="medium">
                 <Button onClick={handleClose} className="p-5! rounded-lg!">

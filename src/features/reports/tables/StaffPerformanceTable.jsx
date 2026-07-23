@@ -8,6 +8,10 @@ const StaffPerformanceTable = ({
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
+    const tableData = Array.isArray(staffPerform)
+        ? staffPerform
+        : staffPerform?.data?.staffList || staffPerform?.staffList || [];
+
     const staffColumns = [
         {
             title: "No.",
@@ -20,7 +24,7 @@ const StaffPerformanceTable = ({
             dataIndex: "staffName",
             key: "employeeInfo",
             render: (text, record) => (
-                <Space vertical>
+                <Space vertical size={0}>
                     <div className="font-medium">{text}</div>
                     <div className="text-xs text-gray-400">
                         {record.staffCode}
@@ -39,9 +43,9 @@ const StaffPerformanceTable = ({
             key: "ratingAverage",
             render: (rating) => {
                 return rating !== undefined && rating !== null ? (
-                    <p>⭐ {Number(rating).toFixed(1)}</p>
+                    <p className="m-0">⭐ {Number(rating).toFixed(1)}</p>
                 ) : (
-                    <p>-</p>
+                    <p className="m-0">-</p>
                 );
             },
         },
@@ -84,9 +88,11 @@ const StaffPerformanceTable = ({
             <div className="table-wrapper">
                 <Table
                     columns={staffColumns}
-                    dataSource={staffPerform}
+                    dataSource={tableData}
                     loading={isStaffFetching}
-                    rowKey={(record) => record.id || record.staffCode}
+                    rowKey={(record) =>
+                        record.staffId || record.userId || record.staffCode
+                    }
                     pagination={{
                         pageSize: 5,
                         current: currentPage,

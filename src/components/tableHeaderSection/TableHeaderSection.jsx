@@ -7,17 +7,14 @@ import { ChevronsRight } from "lucide-react";
 const TableHeaderSection = ({
     renderlists,
     options,
+    filterValue = "All",
     setFilterValue,
     statusCounts,
     dateConfig,
 }) => {
     const handleChange = (value) => {
         console.log("clicked", value);
-        if (value === "All" || !value) {
-            setFilterValue(null);
-        } else {
-            setFilterValue(value);
-        }
+        setFilterValue(value || "All");
     };
 
     const { selectedDates, setSelectedDates } = dateConfig || {};
@@ -45,6 +42,7 @@ const TableHeaderSection = ({
         ],
         [],
     );
+
     const presets = useMemo(
         () => [
             {
@@ -97,23 +95,26 @@ const TableHeaderSection = ({
     return (
         <div className="flex justify-between items-center p-3">
             <ul className="flex gap-4">
-                {renderlists?.map((lists, index) => {
-                    const counts = statusCounts?.[lists] || 0;
+                {renderlists?.map((listName, index) => {
+                    const counts = statusCounts?.[listName] ?? 0;
+                    const isActive = (filterValue || "All") === listName;
 
                     return (
                         <li
                             key={index}
                             className={cn(
-                                "font-medium",
-                                statusClasses[lists] || "text-gray-500",
-                                "hover:underline",
+                                "font-medium cursor-pointer transition-all duration-150",
+                                statusClasses[listName] || "text-gray-500",
+                                isActive
+                                    ? "underline font-bold"
+                                    : "opacity-80 hover:opacity-100",
                             )}
                             onClick={() =>
-                                !!setFilterValue && handleChange(lists)
+                                !!setFilterValue && handleChange(listName)
                             }
                         >
                             <span className="md:text-xs">
-                                {lists} <span>{counts}</span>
+                                {listName} <span>{counts}</span>
                             </span>
                         </li>
                     );
@@ -154,6 +155,7 @@ const TableHeaderSection = ({
                     <Select
                         allowClear
                         placeholder="All Status"
+                        value={filterValue === "All" ? null : filterValue}
                         style={{ width: 130 }}
                         onChange={handleChange}
                         options={options}
