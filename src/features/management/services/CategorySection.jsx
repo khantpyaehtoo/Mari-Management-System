@@ -1,18 +1,23 @@
-import { Card, Col, Row, Skeleton } from "antd";
+import { Card, Col, Row, Skeleton, Modal } from "antd";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
     useCreateCategoryMutation,
+    useDeleteCategoryMutation,
     useGetCategoryDataQuery,
     useGetAllServiceDataQuery,
 } from "./servicesApi";
 import { cn } from "../../../lib/utils";
-import { Trash } from "lucide-react";
+import { Trash, X } from "lucide-react";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
+import { useDispatch } from "react-redux";
 
 const CategorySection = () => {
+    const dispatch = useDispatch();
     const [searchText, setSearchText] = useState("");
     const [createCategory] = useCreateCategoryMutation();
+    const [deleteCategory] = useDeleteCategoryMutation(); // 2. Delete Mutation Hook
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -29,7 +34,93 @@ const CategorySection = () => {
     const { data: getAllServices = [], isLoading: isServiceLoading } =
         useGetAllServiceDataQuery();
 
+    console.log(getAllCategory);
+
     const isLoading = isCategoryLoading || isServiceLoading;
+
+    const handleDeleteCategory = (e, category) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const relatedServices = getAllServices.filter((service) => {
+            const isIdMatch =
+                service?.categoryId !== undefined &&
+                category?.id !== undefined &&
+                String(service.categoryId) === String(category.id);
+
+            const isNameMatch =
+                service?.categoryName &&
+                category?.title &&
+                service.categoryName.trim().toLowerCase() ===
+                    category.title.trim().toLowerCase();
+
+            return (isIdMatch || isNameMatch) && service?.enabled !== false;
+        });
+
+        Modal.confirm({
+            title: `Delete "${category.title}" Category?`,
+            icon: null,
+            okText: "Delete",
+            cancelText: "Cancel",
+            okButtonProps: {
+                danger: true,
+                type: "primary",
+                className:
+                    "bg-red-500 hover:bg-red-600! font-medium rounded-lg px-4",
+            },
+
+            cancelButtonProps: {
+                className:
+                    "border-gray-300 hover:border-gray-400 text-gray-700 font-medium rounded-lg px-4",
+            },
+
+            content: (
+                <div className="mt-3 space-y-2">
+                    <p className="text-sm text-gray-600 font-medium font-montserrat">
+                        Deleting this category will also affect the following (
+                        {relatedServices.length}) service(s) and move them to{" "}
+                        <span className="text-red-500 font-bold font-montserrat">
+                            "Deleted Services"
+                        </span>
+                        .
+                    </p>
+
+                    {relatedServices.length > 0 && (
+                        <div className="bg-white-back border-2 border-gray-200 rounded-lg p-4 max-h-36 overflow-y-auto mt-3">
+                            <p className="text-xs font-bold text-gray-500 mb-1">
+                                Affected Services:
+                            </p>
+                            <ul className="list-disc list-inside text-xs text-gray-700 space-y-1">
+                                {relatedServices.map((s) => (
+                                    <li key={s.id}>{s.name || s.title}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            ),
+            async onOk() {
+                try {
+                    await deleteCategory(category.id).unwrap();
+                    dispatch(
+                        setMessage({
+                            message: "Category deleted successfully!",
+                            type: "success",
+                        }),
+                    );
+                } catch (err) {
+                    dispatch(
+                        setMessage({
+                            message:
+                                err?.data?.message ||
+                                "Failed to delete category.",
+                            type: "error",
+                        }),
+                    );
+                }
+            },
+        });
+    };
 
     const categories = useMemo(() => {
         const activeServices = getAllServices.filter((item) => {
@@ -148,7 +239,7 @@ const CategorySection = () => {
                                 <Link to={getTargetLink()}>
                                     <Card
                                         className={cn(
-                                            "group relative pt-6! min-h-32! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md!",
+                                            "group relative! pt-6! min-h-32! rounded-xl! border-primary! border-2! duration-400! shadow-sm! hover:shadow-md! ",
                                             isAllServices
                                                 ? "bg-primary! text-white! hover:bg-white! hover:text-primary!"
                                                 : isDeleted
@@ -156,6 +247,21 @@ const CategorySection = () => {
                                                   : "bg-white! text-primary! hover:bg-primary! hover:text-white!",
                                         )}
                                     >
+                                        {!isAllServices && !isDeleted && (
+                                            <button
+                                                type="button"
+                                                onClick={(e) =>
+                                                    handleDeleteCategory(
+                                                        e,
+                                                        item,
+                                                    )
+                                                }
+                                                className="absolute top-2 right-2 z-20 p-1 text-white hover:text-red-500 transition-colors rounded-full hover:bg-gray-100"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        )}
+
                                         <div className="flex items-center justify-center gap-2">
                                             <h1 className="flex items-center gap-1.5 text-base font-medium">
                                                 {isDeleted && (

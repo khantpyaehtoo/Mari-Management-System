@@ -47,17 +47,6 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
             let endDateFormatted = null;
             const selectDate = values["select-date"];
 
-            // if (selectDate && Array.isArray(selectDate)) {
-            //     //  toISOString()
-            //     startDateFormatted = selectDate[0]
-            //         ? selectDate[0].startOf("day").toISOString()
-            //         : null;
-
-            //     if (selectDate[1]) {
-            //         endDateFormatted = selectDate[1].endOf("day").toISOString();
-            //     }
-            // }
-
             if (selectDate && Array.isArray(selectDate)) {
                 startDateFormatted = selectDate[0]
                     ? selectDate[0].format("YYYY-MM-DDT00:00:00.000[Z]")

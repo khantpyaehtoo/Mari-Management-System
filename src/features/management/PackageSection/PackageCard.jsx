@@ -2,7 +2,15 @@ import { Button, Card, Col } from "antd";
 import { Edit, Star, StarX } from "lucide-react";
 
 const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
-    const isItemDisabled = isDisabledView || item.enabled === false;
+    // 1. Included Services မရှိတော့တာ (သို့) item disabled ဖြစ်နေတာကို စစ်ဆေးပါ
+    const hasServices =
+        item.includedServices && item.includedServices.length > 0;
+    const isItemDisabled =
+        isDisabledView || item.enabled === false || !hasServices;
+
+    const displayServices = hasServices
+        ? item.includedServices.join(", ")
+        : "No active services";
 
     return (
         <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
@@ -18,18 +26,14 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                             Includes Services:
                         </span>
                         <span
-                            className="text-right font-semibold text-primary wrap-break-words max-w-[65%] line-clamp-2"
-                            title={
-                                item.includedServices &&
-                                item.includedServices.length > 0
-                                    ? item.includedServices.join(", ")
-                                    : "No services"
-                            }
+                            className={`text-right font-semibold wrap-break-words max-w-[65%] line-clamp-2 ${
+                                hasServices
+                                    ? "text-primary"
+                                    : "text-gray-400 italic"
+                            }`}
+                            title={displayServices}
                         >
-                            {item.includedServices &&
-                            item.includedServices.length > 0
-                                ? item.includedServices.join(", ")
-                                : "No services"}
+                            {displayServices}
                         </span>
                     </div>
 
@@ -38,7 +42,7 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                             Package price:
                         </span>
                         <span className="text-right font-medium text-gray-600">
-                            {Number(item.price).toLocaleString()} MMK
+                            {Number(item.price || 0).toLocaleString()} MMK
                         </span>
                     </div>
 
@@ -52,33 +56,54 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                     </div>
                 </div>
 
-                {/* Actions Section */}
                 <div className="flex gap-2 w-full mt-auto pt-2 border-t border-gray-100">
-                    <Button
-                        onClick={(e) => handleActionClick("edit", item, e)}
-                        className="bg-primary! hover:bg-primary-hover! text-white border-none flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
-                    >
-                        <Edit size={14} className="mr-1.5" /> Edit
-                    </Button>
-
                     {isItemDisabled ? (
                         <Button
                             onClick={(e) =>
                                 handleActionClick("enable", item, e)
                             }
-                            className="border border-emerald-200! text-emerald-600 hover:text-white! hover:bg-emerald-600! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
+                            disabled={!hasServices} // Service တစ်ခုမှမရှိရင် Enable လုပ်လို့မရအောင် Disable ပိတ်ထားပါမည်
+                            className="border border-emerald-200! text-emerald-600 hover:text-white! hover:bg-emerald-600! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors text-xs sm:text-sm px-2! disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <Star size={14} className="mr-1.5" /> Enable
+                            <Star
+                                size={14}
+                                className="shrink-0 xl:mr-1 2xl:mr-1.5"
+                            />
+                            <span className="hidden sm:inline xl:hidden 2xl:inline">
+                                Enable
+                            </span>
                         </Button>
                     ) : (
-                        <Button
-                            onClick={(e) =>
-                                handleActionClick("delete", item, e)
-                            }
-                            className="border border-red-200! text-red-500 hover:text-white! hover:bg-red-500! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors"
-                        >
-                            <StarX size={14} className="mr-1.5" /> Disable
-                        </Button>
+                        <>
+                            <Button
+                                onClick={(e) =>
+                                    handleActionClick("edit", item, e)
+                                }
+                                className="bg-primary! hover:bg-primary-hover! text-white border-none flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors text-xs sm:text-sm px-2!"
+                            >
+                                <Edit
+                                    size={14}
+                                    className="shrink-0 xl:mr-1 2xl:mr-1.5"
+                                />
+                                <span className="hidden sm:inline xl:hidden 2xl:inline">
+                                    Edit
+                                </span>
+                            </Button>
+                            <Button
+                                onClick={(e) =>
+                                    handleActionClick("delete", item, e)
+                                }
+                                className="border border-red-200! text-red-500 hover:text-white! hover:bg-red-500! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors text-xs sm:text-sm px-2!"
+                            >
+                                <StarX
+                                    size={14}
+                                    className="shrink-0 xl:mr-1 2xl:mr-1.5"
+                                />
+                                <span className="hidden sm:inline xl:hidden 2xl:inline">
+                                    Disable
+                                </span>
+                            </Button>
+                        </>
                     )}
                 </div>
             </Card>

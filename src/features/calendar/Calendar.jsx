@@ -7,6 +7,7 @@ import CalendarDetailOverview from "./CalendarDetailOverview";
 import CalendarAssignModal from "./CalendarAssignModal";
 import { useGetCalendarDataQuery, useGetDailyStaffQuery } from "./calendarApi";
 import DebounceSelect from "./DebounceSelect";
+import { getImageUrl } from "../../lib/getImageUrl";
 
 const leaveOptions = [
     { label: "DayOff", value: "DAY_OFF" },
@@ -66,7 +67,7 @@ const CalendarSection = () => {
         return filtered.map((user) => ({
             label: user.name,
             value: user.id,
-            avatar: user.profileImage,
+            avatar: getImageUrl(user.profileImage),
         }));
     };
 
@@ -76,7 +77,7 @@ const CalendarSection = () => {
             label: user.name,
             value: user.id,
             desc: user.role || "STAFF",
-            avatar: user.profileImage,
+            avatar: getImageUrl(user.profileImage),
         }));
     }, [dailyStaff]);
 
@@ -103,29 +104,15 @@ const CalendarSection = () => {
                 dayData && dayData.events && dayData.events.length > 0;
 
             return (
-                <div
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        minHeight: "50px",
-                        padding: "2px",
-                    }}
-                >
+                <div className="w-full h-full min-h-10 p-2">
                     {hasEvents && (
-                        <div
-                            style={{
-                                background: "#FFE3E3",
-                                borderRadius: "4px",
-                                padding: "4px",
-                                borderLeft: "4px solid #FF4D4F",
-                            }}
-                        >
-                            <span className="text-xs font-bold text-red-600 block truncate">
+                        <div className="bg-primary-sec rounded-md p-4 border-l-4 border-red-400">
+                            <span className="text-md font-montserrat font-medium text-red-600 block truncate">
                                 {selectedUserFilter.label}
                             </span>
-                            <span className="text-2xs text-gray-500 block">
+                            <small className="text-gray-500 block">
                                 {dayData.events[0]?.leaveType || "Day Off"}
-                            </span>
+                            </small>
                         </div>
                     )}
                 </div>

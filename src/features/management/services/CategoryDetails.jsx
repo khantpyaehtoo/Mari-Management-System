@@ -6,6 +6,7 @@ import {
     useDeleteServiceMutation,
     useGetAllServiceDataQuery,
     useGetCategoryDataQuery,
+    useRestoreServiceMutation,
     useUpdateServiceMutation,
 } from "./servicesApi";
 import SubHeaderSection from "../../../components/SubHeaderSection/SubHeaderSection";
@@ -25,7 +26,6 @@ const CategoryDetails = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    // Identify mode based on the URL parameter 'id'
     const isAllMode = id === "all";
     const isDeletedMode = id === "deleted";
 
@@ -37,9 +37,9 @@ const CategoryDetails = () => {
 
     const [createServiceTrigger] = useCreateServiceMutation();
     const [editServiceTrigger] = useUpdateServiceMutation();
+    const [restoreService] = useRestoreServiceMutation();
     const [deleteService] = useDeleteServiceMutation();
 
-    // Intercept and format for Creating a Service
     const handleCreateService = async (formValues) => {
         const formattedPayload = {
             name: formValues.name,
@@ -53,7 +53,6 @@ const CategoryDetails = () => {
         return await createServiceTrigger(formattedPayload).unwrap();
     };
 
-    // Intercept and format for Updating a Service
     const handleEditService = async ({ id: serviceId, body, token }) => {
         const formattedPayload = {
             id: serviceId,
@@ -101,14 +100,10 @@ const CategoryDetails = () => {
         if (!serviceId) return;
 
         try {
-            await editServiceTrigger({
+            await restoreService({
                 id: serviceId,
+                categoryId: Number(categoryId),
                 token,
-                body: {
-                    ...selectedService,
-                    categoryId: Number(categoryId),
-                    enabled: true, // Re-enable service
-                },
             }).unwrap();
 
             dispatch(

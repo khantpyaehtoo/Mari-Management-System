@@ -14,8 +14,10 @@ const CategoryCard = ({
 
     return (
         <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
-            <Card className="w-full border! border-gray-300! rounded-xl! hover:shadow-md transition-shadow">
-                <h1 className="text-xl mb-5 font-semibold">{item.name}</h1>
+            <Card className="w-full min-h-65 border! border-gray-300! rounded-xl! hover:shadow-md transition-shadow">
+                <h1 className="text-xl mb-5 font-montserrat font-semibold">
+                    {item.name}
+                </h1>
                 <div className="grid-items-2 mb-5 flex justify-between">
                     <div>
                         <p className="text-gray-500">Service price:</p>

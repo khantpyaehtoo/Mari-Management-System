@@ -38,33 +38,98 @@ const Packages = () => {
     const [deletePackage, { isLoading: isDeleting }] =
         useDeletePackageMutation();
 
+    const activeServiceNames = useMemo(() => {
+        return servicesData
+            ?.filter((s) => s?.enabled !== false && s?.package !== true)
+            ?.map((s) => s?.name?.trim()?.toLowerCase());
+    }, [servicesData]);
+
     const activePackages = useMemo(() => {
         return (
-            servicesData?.filter((item) => {
-                if (!item) return false;
-                const isPackage = item.package === true;
-                const isEnabled = item.enabled !== false;
-                const matchesSearch = item.name
-                    ?.toString()
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
+            servicesData
+                ?.filter((item) => {
+                    if (!item || item.package !== true) return false;
 
-                return isPackage && isEnabled && matchesSearch;
-            }) || []
+                    const activeIncluded =
+                        item.includedServices?.filter((serviceName) =>
+                            activeServiceNames?.includes(
+                                serviceName?.trim()?.toLowerCase(),
+                            ),
+                        ) || [];
+
+                    const isEnabled = item.enabled !== false;
+                    const matchesSearch = item.name
+                        ?.toString()
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase());
+
+                    const hasActiveServices = activeIncluded.length > 0;
+
+                    return isEnabled && hasActiveServices && matchesSearch;
+                })
+                ?.map((pkg) => {
+                    const filteredServices = pkg.includedServices?.filter(
+                        (serviceName) =>
+                            activeServiceNames?.includes(
+                                serviceName?.trim()?.toLowerCase(),
+                            ),
+                    );
+
+                    return {
+                        ...pkg,
+                        includedServices: filteredServices,
+                    };
+                }) || []
         );
-    }, [searchText, servicesData]);
+    }, [searchText, servicesData, activeServiceNames]);
 
     const disabledPackagesCount = useMemo(() => {
         return (
             servicesData?.filter((item) => {
-                if (!item) return false;
-                const isPackage = item.package === true;
-                const isDisabled = item.enabled === false;
+                if (!item || item.package !== true) return false;
 
-                return isPackage && isDisabled;
+                const activeIncluded =
+                    item.includedServices?.filter((serviceName) =>
+                        activeServiceNames?.includes(
+                            serviceName?.trim()?.toLowerCase(),
+                        ),
+                    ) || [];
+
+                const isDisabled = item.enabled === false;
+                const hasNoActiveServices = activeIncluded.length === 0;
+
+                return isDisabled || hasNoActiveServices;
             }).length || 0
         );
-    }, [servicesData]);
+    }, [servicesData, activeServiceNames]);
+
+    // const activePackages = useMemo(() => {
+    //     return (
+    //         servicesData?.filter((item) => {
+    //             if (!item) return false;
+    //             const isPackage = item.package === true;
+    //             const isEnabled = item.enabled !== false;
+    //             const matchesSearch = item.name
+    //                 ?.toString()
+    //                 .toLowerCase()
+    //                 .includes(searchText.toLowerCase());
+
+    //             return isPackage && isEnabled && matchesSearch;
+    //         }) || []
+    //     );
+    // }, [searchText, servicesData]);
+
+    // const disabledPackagesCount = useMemo(() => {
+    //     return (
+    //         servicesData?.filter((item) => {
+    //             if (!item) return false;
+    //             const isPackage = item.package === true;
+    //             const isDisabled = item.enabled === false;
+
+    //             return isPackage && isDisabled;
+    //         }).length || 0
+    //     );
+    // }, [servicesData]);
 
     // Action buttons
     const handleActionClick = (actionType, item, e) => {

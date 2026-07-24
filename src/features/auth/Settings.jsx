@@ -122,7 +122,15 @@ const Settings = () => {
         () => ({
             name: "file",
             multiple: true,
-            action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+            beforeUpload: (file) => {
+                dispatch(
+                    setMessage({
+                        msgType: "success",
+                        msgContent: `${file.name} added to queue.`,
+                    }),
+                );
+                return false;
+            },
             onChange(info) {
                 const { status } = info.file;
                 if (status === "done") {
@@ -208,7 +216,8 @@ const Settings = () => {
 
     const renderTabBar = useCallback(
         (props, DefaultTabBar) => (
-            <div className="sticky top-0 bg-white-back mb-10 z-50">
+            // sticky top-0 bg-white-back
+            <div className="mb-10 z-50">
                 <div className="mb-2 px-3 py-3">
                     <Title level={2} className="text-primary!">
                         Settings

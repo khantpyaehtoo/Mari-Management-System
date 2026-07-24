@@ -67,7 +67,6 @@ export const ServicePieChart = () => {
                 {chartDatas.map((item, index) => {
                     const label = item?.serviceName;
                     const value = item?.totalCount ?? 0;
-                    // Use countPercentage from API
                     const percentage = Number(
                         item?.countPercentage ?? 0,
                     ).toFixed(1);

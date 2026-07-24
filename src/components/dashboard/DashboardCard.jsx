@@ -44,7 +44,7 @@ const DashboardCard = ({ title, value, icon, trending, isLoading }) => {
                             ) : (
                                 <Minus size={16} />
                             )}
-                            <span>{trending}</span>
+                            <span className="font-montserrat!">{trending}</span>
                         </div>
                     )}
                 </Space>
@@ -56,26 +56,27 @@ const DashboardCard = ({ title, value, icon, trending, isLoading }) => {
                                 active
                                 size="large"
                                 style={{
-                                    width: 90,
                                     height: 38,
                                     marginBottom: 4,
                                 }}
                             />
                             <Skeleton.Input
                                 active
-                                size="small"
-                                style={{ width: 230, height: 20 }}
+                                size="large"
+                                style={{ height: 20 }}
                             />
                         </>
                     ) : (
                         <>
                             <Typography.Title
                                 level={2}
-                                className="m-0! font-semibold"
+                                className="m-0! font-semibold font-montserrat!"
                             >
                                 {value}
                             </Typography.Title>
-                            <p className="text-gray-500 text-sm m-0">{title}</p>
+                            <p className="text-gray-500 text-sm m-0 font-montserrat!">
+                                {title}
+                            </p>
                         </>
                     )}
                 </Space>

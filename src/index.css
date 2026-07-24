@@ -63,12 +63,12 @@ body {
 
 /* LABEL STYLING */
 @utility label-styling {
-    @apply font-medium;
+    @apply font-medium font-montserrat;
 }
 
 /* MODAL FORM INPUT */
 @utility input-styling {
-    @apply w-full px-4 py-3 bg-transparent font-semibold border-t-0 border-r-0 border-l-0 outline-none border-b-black hover:border-b-primary focus:border-b-primary focus-within:border-b-primary;
+    @apply w-full px-4 py-3 bg-transparent font-montserrat font-semibold border-t-0 border-r-0 border-l-0 outline-none border-b-black hover:border-b-primary focus:border-b-primary focus-within:border-b-primary;
 }
 
 /* LOGIN FORM INPUT  */
@@ -127,10 +127,10 @@ body {
 }
 
 /* STICKY HEADER */
-.custom-header-stickys {
+/* .custom-header-stickys {
     width: 100% !important;
     box-shadow: 0 10px 5px rgba(0, 0, 0, 0.2);
-}
+} */
 
 /* ANTD CUSTOM TAB ANIMATION PILL */
 .custom-tabs-wrapper {
@@ -150,9 +150,8 @@ body {
 .custom-settings-tab .ant-tabs-nav {
     background: #fffaf6 !important;
     margin-bottom: 0rem !important;
+    border-bottom: 1px solid black;
     color: black !important;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.05) !important;
-    border-radius: 10px;
 }
 
 .custom-settings-tab .ant-tabs-nav::before {

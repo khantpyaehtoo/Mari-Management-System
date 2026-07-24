@@ -19,21 +19,52 @@ const DisabledPackage = () => {
     const [restorePackage, { isLoading: isRestoring }] =
         useRestorePackageMutation();
 
+    //  Active Services
+    const activeServiceNames = useMemo(() => {
+        return servicesData
+            ?.filter((s) => s?.enabled !== false && s?.package !== true)
+            ?.map((s) => s?.name?.trim()?.toLowerCase());
+    }, [servicesData]);
+
+    // Disabled Packages ( Disabled  + Active Service )
     const disabledPackages = useMemo(() => {
         return (
-            servicesData?.filter((item) => {
-                if (!item) return false;
-                const isPackage = item.package === true;
-                const isDisabled = item.enabled === false;
-                const matchesSearch = item.name
-                    ?.toString()
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
+            servicesData
+                ?.filter((item) => {
+                    if (!item || item.package !== true) return false;
 
-                return isPackage && isDisabled && matchesSearch;
-            }) || []
+                    const activeIncluded =
+                        item.includedServices?.filter((serviceName) =>
+                            activeServiceNames?.includes(
+                                serviceName?.trim()?.toLowerCase(),
+                            ),
+                        ) || [];
+
+                    const isDisabled = item.enabled === false;
+                    const hasNoActiveServices = activeIncluded.length === 0;
+
+                    const matchesSearch = item.name
+                        ?.toString()
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase());
+
+                    return (isDisabled || hasNoActiveServices) && matchesSearch;
+                })
+                ?.map((pkg) => {
+                    const filteredServices = pkg.includedServices?.filter(
+                        (serviceName) =>
+                            activeServiceNames?.includes(
+                                serviceName?.trim()?.toLowerCase(),
+                            ),
+                    );
+
+                    return {
+                        ...pkg,
+                        includedServices: filteredServices,
+                    };
+                }) || []
         );
-    }, [searchText, servicesData]);
+    }, [searchText, servicesData, activeServiceNames]);
 
     // Action Logic (Restore/Enable)
     const handleActionClick = (actionType, item, e) => {

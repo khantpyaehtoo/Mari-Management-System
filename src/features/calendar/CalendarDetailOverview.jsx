@@ -1,9 +1,9 @@
-import { Avatar, Flex, Space, Typography, Tag } from "antd";
+import { Flex, Space, Typography, Tag } from "antd";
 import dayjs from "dayjs";
 import { X } from "lucide-react";
 
 const CalendarDetailOverview = ({
-    details, // CalendarSection ကနေ dayData.events ကို လှမ်းပေးလိုက်တဲ့ Array ဖြစ်ပါတယ်
+    details,
     selectedDate,
     setActivePopoverDate,
 }) => {
@@ -11,7 +11,6 @@ const CalendarDetailOverview = ({
         ? dayjs(selectedDate).format("dddd, DD MMMM")
         : "";
 
-    // API Doc အရ leaveType ပေါ်မူတည်ပြီး Tag အရောင် ခွဲထုတ်ပါမယ်
     const getTypeTag = (leaveType) => {
         if (leaveType === "DAYOFF") {
             return <Tag color="warning">Day OFF</Tag>;
@@ -41,30 +40,30 @@ const CalendarDetailOverview = ({
 
             <section className="space-y-3">
                 {details && details.length > 0 ? (
-                    details.map((staff, index) => (
-                        <div
-                            key={index}
-                            className="border border-gray-200 rounded-xl p-3 bg-white shadow-sm"
-                        >
-                            <Flex align="center" justify="space-between">
-                                <Space size="middle">
-                                    <Avatar
-                                        src={staff.profileImage}
-                                        size={36}
-                                    />
-                                    <div>
-                                        <h4 className="font-semibold text-sm m-0 text-gray-800">
-                                            {staff.staffName || "Unknown Staff"}
-                                        </h4>
-                                        <p className="text-xs text-gray-400 m-0">
-                                            {staff.role || "STAFF"}
-                                        </p>
-                                    </div>
-                                </Space>
-                                {getTypeTag(staff.leaveType)}
-                            </Flex>
-                        </div>
-                    ))
+                    details.map((staff, index) => {
+                        console.log(staff);
+                        return (
+                            <div
+                                key={index}
+                                className="border border-gray-200 rounded-xl p-3 bg-white shadow-sm"
+                            >
+                                <Flex align="center" justify="space-between">
+                                    <Space size="middle">
+                                        <div>
+                                            <h4 className="font-semibold text-sm m-0 text-gray-800">
+                                                {staff.staffName ||
+                                                    "Unknown Staff"}
+                                            </h4>
+                                            <p className="text-xs text-gray-400 m-0">
+                                                {staff.role || "STAFF"}
+                                            </p>
+                                        </div>
+                                    </Space>
+                                    {getTypeTag(staff.leaveType)}
+                                </Flex>
+                            </div>
+                        );
+                    })
                 ) : (
                     <p className="text-gray-400 text-xs text-center my-4">
                         No special schedule for this day.

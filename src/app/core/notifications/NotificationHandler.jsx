@@ -21,7 +21,7 @@ const NotificationHandler = () => {
 
             if (isInbox) {
                 notification[type]({
-                    message: title || "Inbox Notification",
+                    title: title || "Inbox Notification",
                     description: msgContent,
                     placement: "bottomRight",
                     duration: 4,

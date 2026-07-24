@@ -1,10 +1,11 @@
-import { Avatar, Card, Flex, Space, Typography, Spin } from "antd";
+import { Card, Flex, Space, Typography, Spin, Avatar } from "antd";
 import dayjs from "dayjs";
 import { useMemo } from "react";
 import {
     useGetDailyStaffQuery,
     useGetSelectedDayLeavesQuery,
 } from "./calendarApi";
+import { getImageUrl } from "../../lib/getImageUrl";
 
 const EmployeeAttendance = () => {
     const todayLabel = dayjs().format("MMMM DD");
@@ -32,12 +33,30 @@ const EmployeeAttendance = () => {
         );
     }, [leaveStaffsData]);
 
+    // const activeStaffs = useMemo(() => {
+    //     const rawActive = dailyStaffData?.activeStaff || [];
+    //     return rawActive.filter(
+    //         (staff) => !unavailableStaffIds.includes(staff.id),
+    //     );
+    // }, [dailyStaffData, unavailableStaffIds]);
+
+    console.log(dailyStaffData);
+
     const activeStaffs = useMemo(() => {
         const rawActive = dailyStaffData?.activeStaff || [];
-        return rawActive.filter(
-            (staff) => !unavailableStaffIds.includes(staff.id),
-        );
+
+        return rawActive.filter((staff) => {
+            const isUnavailable = unavailableStaffIds.includes(staff.id);
+
+            const status = staff?.status?.toUpperCase();
+            const isTerminated =
+                status === "Inactive" || status === "Terminate";
+
+            return !isUnavailable && !isTerminated;
+        });
     }, [dailyStaffData, unavailableStaffIds]);
+
+    console.log(activeStaffs);
 
     if (isDailyLoading || isLeaveLoading) {
         return (
@@ -64,18 +83,12 @@ const EmployeeAttendance = () => {
                 <Flex vertical>
                     <div className="flex items-center justify-between">
                         <Space size="small">
-                            <Avatar
-                                src={
-                                    avatarUrl ||
-                                    "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                                }
-                                size={40}
-                            />
+                            <Avatar src={getImageUrl(avatarUrl)} size={40} />
                             <div>
-                                <h1 className="lg:text-lg! font-semibold! md:text-md m-0 text-gray-800">
+                                <h1 className="lg:text-basic! font-semibold! md:text-md m-0 text-gray-800 font-montserrat">
                                     {name}
                                 </h1>
-                                <p className="text-sm m-0 text-gray-500">
+                                <p className="text-xs m-0 text-gray-500 font-montserrat!">
                                     {role}
                                 </p>
                             </div>

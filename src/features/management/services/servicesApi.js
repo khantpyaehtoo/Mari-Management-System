@@ -58,7 +58,7 @@ export const servicesApi = baseApi.injectEndpoints({
 
         restoreService: builder.mutation({
             query: ({ id, body }) => ({
-                url: `${categoryEndpoint}/${id}/restore`,
+                url: `${serviceEndpoint}/${id}/restore`,
                 method: "PUT",
                 body,
             }),
@@ -80,6 +80,7 @@ export const {
     useGetAllServiceDataQuery,
     useCreateServiceMutation,
     useDeleteServiceMutation,
+    useRestoreServiceMutation,
     useUpdateServiceMutation,
 
     useGetCategoryDataQuery,

@@ -54,7 +54,7 @@ const ServiceConfirmationModal = ({
             destroyOnHidden
         >
             {isDeletedMode ? (
-                /* RESTORE MODE UI */
+                /* RESTORE MODE  */
                 <div>
                     <Typography.Text className="text-gray-600 block mt-2">
                         Select a category to restore this service into:
@@ -95,9 +95,9 @@ const ServiceConfirmationModal = ({
                     </Space>
                 </div>
             ) : (
-                /* DELETE MODE UI */
+                /* DELETE MODE  */
                 <div>
-                    <Typography.Title level={5} className="mt-4! text-red-500!">
+                    <Typography.Title level={5} className="mt-4!">
                         Are you sure you want to delete "
                         {selectedService?.name || "Service"}"?
                     </Typography.Title>

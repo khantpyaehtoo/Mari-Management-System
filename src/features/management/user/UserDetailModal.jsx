@@ -1,5 +1,6 @@
 import { Modal, Space, Avatar, Flex, Card, Button, Skeleton } from "antd";
 import { useGetDetailUserQuery } from "./userApi";
+import { getImageUrl } from "../../../lib/getImageUrl";
 
 const UserDetailModal = ({
     viewModalOpen,
@@ -16,6 +17,8 @@ const UserDetailModal = ({
     if (!selectedCustomer) return null;
 
     const isUnblocking = actionType === "unblock";
+
+    console.log(userDetails);
 
     const customerDetailCardItem = [
         {
@@ -135,10 +138,7 @@ const UserDetailModal = ({
                 <>
                     <Space className="w-full border-b border-gray-400 pb-3 px-3 my-3">
                         <Avatar
-                            src={
-                                userDetails?.profilePicture ||
-                                userDetails?.profileUrl
-                            }
+                            src={getImageUrl(userDetails?.profilePicture)}
                             size="large"
                             className="w-15! h-15!"
                         />

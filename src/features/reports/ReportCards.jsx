@@ -27,7 +27,7 @@ const ReportCards = ({ queryParams }) => {
             icon: <DollarOutlined />,
             trending: getTrendingText(reportData?.revenueGrowthPercentage),
             value: reportData?.totalRevenue
-                ? `${reportData.totalRevenue.toLocaleString()}`
+                ? `${reportData.totalRevenue.toLocaleString()} MMK`
                 : "0",
             title: `Total Revenue This Month (${selectedMonthName}, ${selectedYear})`,
         },
