@@ -8,7 +8,11 @@ const TerminateStaffModal = ({
 }) => {
     const handleTerminateBtn = () => {
         if (onTerminate) {
-            onTerminate(selectedStaff.staffId);
+            onTerminate(
+                selectedStaff?.userId ||
+                    selectedStaff?.staffId ||
+                    selectedStaff?.id,
+            );
         }
         handleClose();
     };

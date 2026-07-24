@@ -52,7 +52,7 @@ const WalkIn = () => {
             {
                 title: "No.",
                 render: (_, __, index) => (
-                    <p>{(currentPage - 1) * 5 + index + 1}</p>
+                    <p>{(currentPage - 1) * 10 + index + 1}</p>
                 ),
             },
             {
@@ -157,7 +157,7 @@ const WalkIn = () => {
                         current: currentPage,
                         onChange: handlePageChange,
                         size: "large",
-                        pageSize: 5,
+                        pageSize: 10,
                     }}
                 />
             </div>

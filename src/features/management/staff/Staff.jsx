@@ -223,11 +223,12 @@ const Staff = () => {
     }, []);
 
     const handleTerminateStaff = async (staffId) => {
-        // Resolve the numeric ID safely
         const targetId =
             typeof staffId === "number" || typeof staffId === "string"
                 ? staffId
-                : selectedStaff?.staffId || selectedStaff?.id;
+                : selectedStaff?.userId ||
+                  selectedStaff?.staffId ||
+                  selectedStaff?.id;
 
         if (!targetId) return;
 
@@ -256,7 +257,9 @@ const Staff = () => {
         const targetId =
             typeof staffId === "number" || typeof staffId === "string"
                 ? staffId
-                : selectedStaff?.staffId || selectedStaff?.id;
+                : selectedStaff?.userId ||
+                  selectedStaff?.staffId ||
+                  selectedStaff?.id;
 
         if (!targetId) return;
 

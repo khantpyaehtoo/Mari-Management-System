@@ -21,7 +21,7 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
         useGetIncomingCustomerNotisQuery(
             { tab: customerTab },
             {
-                // pollingInterval: 10000,
+                pollingInterval: 10000,
             },
         );
 
@@ -29,7 +29,7 @@ const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
         useGetIncomingStaffNotisQuery(
             { tab: staffTab },
             {
-                // pollingInterval: 10000,
+                pollingInterval: 10000,
             },
         );
 

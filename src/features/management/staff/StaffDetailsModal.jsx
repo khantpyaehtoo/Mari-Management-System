@@ -50,7 +50,11 @@ const StaffDetailModal = ({
 
     const handleRehired = async () => {
         if (reHired) {
-            reHired(selectedStaff.staffId);
+            reHired(
+                selectedStaff?.userId ||
+                    selectedStaff?.staffId ||
+                    selectedStaff?.id,
+            );
         }
         handleClose();
     };
