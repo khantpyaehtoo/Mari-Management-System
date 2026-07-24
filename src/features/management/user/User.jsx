@@ -143,6 +143,7 @@ const User = () => {
                 dataIndex: "profilePicture",
                 key: "profilePicture",
                 render: (profilePicture) => {
+                    console.log(profilePicture);
                     return (
                         <Image
                             src={getImageUrl(profilePicture)}

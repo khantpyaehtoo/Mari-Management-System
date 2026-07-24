@@ -71,7 +71,7 @@ export const authApi = baseApi.injectEndpoints({
 
         updateAdminData: builder.mutation({
             query: (adminData) => ({
-                url: `${settingEndPoint}`,
+                url: `users/${settingEndPoint}/photo`,
                 method: "PUT",
                 body: adminData,
             }),

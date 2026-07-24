@@ -2,56 +2,82 @@ import {
     InfoCircleOutlined,
     MailOutlined,
     PhoneOutlined,
-    SaveOutlined,
     UploadOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Card, Col, Form, Input, Row, Tag, Upload } from "antd";
+import { Button, Card, Col, Form, Image, Input, Row, Tag, Upload } from "antd";
+import { getImageUrl } from "../../../lib/getImageUrl";
 
 const AccountSettings = ({
-    isUpdatingAdmin,
+    // isUpdatingAdmin,
     form,
     onFinishAccount,
     adminData,
 }) => {
-    const imageBaseUrl = "http://192.168.0.183:8080";
-    const profilePicUrl = adminData?.profilePicture
-        ? `${imageBaseUrl}${adminData?.profilePicture}`
-        : "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg";
+    const profilePicUrl =
+        adminData?.profilePicture ||
+        "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg";
+
+    const getImg = getImageUrl(profilePicUrl);
+
+    const handleBeforeUpload = (file) => {
+        const formData = new FormData();
+        formData.append("profileImage", file);
+        onFinishAccount(formData);
+        return false; // Prevents default Antd upload behavior
+    };
 
     return (
         <Card
             title="Account Information"
-            extra={
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon={<SaveOutlined />}
-                    className="bg-blue-600"
-                    loading={isUpdatingAdmin}
-                >
-                    Save Changes
-                </Button>
-            }
+            // extra={
+            //     <Button
+            //         type="primary"
+            //         htmlType="submit"
+            //         icon={<SaveOutlined />}
+            //         className="bg-blue-600"
+            //         loading={isUpdatingAdmin}
+            //     >
+            //         Save Changes
+            //     </Button>
+            // }
             className="shadow-sm rounded-2xl!"
         >
             <Row gutter={[24, 24]}>
                 <Col xs={24} lg={6}>
-                    <div className="flex flex-col items-center justify-center pb-8 lg:pb-0 lg:items-start lg:justify-start lg:border-r lg:border-gray-300 lg:ps-10 h-full">
-                        <div className="relative">
+                    <div className="flex flex-col items-center justify-center pb-8 lg:pb-0 lg:border-r lg:border-gray-300 h-full">
+                        <div className="relative group flex justify-center items-center">
                             <Upload
                                 showUploadList={false}
-                                className="cursor-pointer!"
+                                beforeUpload={handleBeforeUpload}
+                                className="cursor-pointer! flex justify-center items-center!"
                             >
-                                <Avatar
-                                    size={140}
-                                    src={profilePicUrl}
+                                <Image
+                                    src={getImg}
+                                    width={128}
+                                    height={128}
+                                    preview={{ open: false }}
+                                    styles={{
+                                        root: {
+                                            border: "2px solid var(--primary-pink)",
+                                            borderRadius: "50%",
+                                            padding: 4,
+                                            transition: "all 0.3s ease",
+                                            overflow: "hidden",
+                                        },
+                                        image: {
+                                            borderRadius: "50%",
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            transition: "transform 0.3s ease",
+                                        },
+                                    }}
                                     icon={<UserOutlined />}
-                                    className="border-3! border-primary!"
                                 />
                                 <Button
                                     icon={<UploadOutlined size={10} />}
-                                    className="absolute! bottom-3! right-3! rounded-full! bg-primary! text-white! border-primary! transform translate-x-1/4 translate-y-1/4"
+                                    className="absolute! bottom-1! right-1! sm:bottom-2! sm:right-2! rounded-full! bg-primary! text-white! border-primary! z-10 shadow-md"
                                 />
                             </Upload>
                         </div>
@@ -98,17 +124,7 @@ const AccountSettings = ({
                                 </Form.Item>
                             </Col>
                             <Col xs={24} md={12}>
-                                <Form.Item
-                                    label="Email Address"
-                                    name="email"
-                                    rules={[
-                                        {
-                                            type: "email",
-                                            message:
-                                                "Please enter a valid email!",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item label="Email Address" name="email">
                                     <Input
                                         disabled
                                         prefix={

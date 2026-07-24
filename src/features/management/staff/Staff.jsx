@@ -22,8 +22,7 @@ import { useDispatch } from "react-redux";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
 import dayjs from "dayjs";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
-
-const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
+import { getImageUrl } from "../../../lib/getImageUrl";
 
 const RENDER_LISTS = [
     "All",
@@ -120,14 +119,10 @@ const Staff = () => {
 
         const formatted = rawStaff.map((staff) => {
             const rawImg = staff.profileImage || staff.profilePicture;
-            let fullImageUrl = rawImg;
 
-            if (rawImg && !rawImg.startsWith("http")) {
-                const separator = rawImg.startsWith("/") ? "" : "/";
-                fullImageUrl = `${IMAGE_BASE_URL}${separator}${rawImg}`;
-            }
+            const fullImageUrl = getImageUrl(rawImg);
 
-            const realId = staff.staffId || staff.userId || staff.id;
+            const realId = staff.userId || staff.staffId || staff.id;
             const currentStatus =
                 staff.status === "Inactive" ? "Terminate" : staff.status;
 
@@ -152,6 +147,8 @@ const Staff = () => {
             (item) => item.status?.toLowerCase() === filterValue.toLowerCase(),
         );
     }, [apiResponse, filterValue]);
+
+    console.log(dataList);
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();

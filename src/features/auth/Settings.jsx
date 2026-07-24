@@ -67,7 +67,8 @@ const Settings = () => {
     const onFinishAccount = useCallback(
         async (values) => {
             try {
-                await updateAdminData(values).unwrap();
+                const payload = values instanceof FormData ? values : values;
+                await updateAdminData(payload).unwrap();
                 dispatch(
                     setMessage({
                         msgType: "success",

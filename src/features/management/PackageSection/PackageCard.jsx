@@ -7,14 +7,12 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
     return (
         <Col key={item.id} xs={24} sm={12} xl={6} className="flex">
             <Card className="w-full min-h-65! border border-gray-200! rounded-xl shadow-xs hover:shadow-md transition-all duration-300 bg-white flex flex-col justify-between">
-                {/* Header Section */}
                 <h1 className="text-lg font-bold text-gray-800 mb-4 line-clamp-1">
                     {item.name}
                 </h1>
 
                 {/* Details Section */}
                 <div className="space-y-3 mb-6 text-sm">
-                    {/* Includes Services Row */}
                     <div className="flex justify-between items-start gap-4">
                         <span className="text-gray-400 shrink-0">
                             Includes Services:
@@ -35,7 +33,6 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                         </span>
                     </div>
 
-                    {/* Package Price Row */}
                     <div className="flex justify-between items-baseline gap-4">
                         <span className="text-gray-400 shrink-0">
                             Package price:
@@ -45,7 +42,6 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                         </span>
                     </div>
 
-                    {/* Duration Row */}
                     <div className="flex justify-between items-baseline gap-4">
                         <span className="text-gray-400 shrink-0">
                             Duration:

@@ -66,6 +66,7 @@ const HeroBannerSection = ({
                             item?.bannerImage,
                         );
                         const imgPath = item?.bannerImage || item?.url;
+                        console.log(imgPath);
                         const fullImgUrl = `${IMAGE_BASE_URL}${imgPath}`;
                         return (
                             <div

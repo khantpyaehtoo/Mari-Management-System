@@ -7,21 +7,20 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FilteredTabContent } from "./IncomeNotifications/FilteredTabContent";
 import IncomeNotiSection from "./IncomeNotifications/IncomeNotiSection";
-
-const bookingData = [
-    "For Booking Data",
-    "Racing car sprays burning fuel into crowd.",
-    "Japanese princess to wed commoner.",
-    "Australian walks 100km after outback crash.",
-    "Man charged over missing wedding girl.",
-    "Los Angeles battles huge wildfires.",
-    "The End of Booking Data",
-];
+import { useGetSettingsQuery } from "../../features/auth/authApi";
+import { getImageUrl } from "../../lib/getImageUrl";
 
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
-
     const dispatch = useDispatch();
+
+    const { data: adminData } = useGetSettingsQuery();
+
+    const profilePicUrl =
+        adminData?.profilePicture ||
+        "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg";
+
+    const getImg = getImageUrl(profilePicUrl);
 
     // for tab section
     const items = [
@@ -32,9 +31,7 @@ const Navbar = () => {
                     Incoming Customer
                 </span>
             ),
-            children: (
-                <FilteredTabContent data={bookingData} type="customers" />
-            ),
+            children: <FilteredTabContent type="customers" />,
         },
         {
             key: "2",
@@ -43,7 +40,7 @@ const Navbar = () => {
                     Incoming Staff
                 </span>
             ),
-            children: <FilteredTabContent data={bookingData} type="staffs" />,
+            children: <FilteredTabContent type="staffs" />,
         },
     ];
 
@@ -61,7 +58,11 @@ const Navbar = () => {
                     <MenuOutlined />
                 </button>
                 <h3 className="text-white lg:text-2xl md:text-lg">
-                    Welcome <span className="font-bold">Rebillet</span> !
+                    Welcome{" "}
+                    <span className="font-bold">
+                        {adminData?.fullName || "Rebillet"}
+                    </span>{" "}
+                    !
                 </h3>
             </div>
 
@@ -83,9 +84,10 @@ const Navbar = () => {
                         />
                     </Badge>
                     <Link to={"/settings"}>
+                        {/* Dynamic, circular, fixed aspect-ratio profile avatar */}
                         <img
-                            src="https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg"
-                            className="w-10 ms-3 mb-1 rounded-full border-3 border-white"
+                            src={getImg}
+                            className="w-10 h-10 ms-3 mb-1 rounded-full border-2 border-white object-cover shadow-sm hover:opacity-90 transition-opacity"
                             alt="avatar"
                         />
                     </Link>
