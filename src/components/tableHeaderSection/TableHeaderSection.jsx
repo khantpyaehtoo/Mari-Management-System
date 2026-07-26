@@ -22,7 +22,6 @@ const TableHeaderSection = ({
     const { selectedDates, setSelectedDates } = dateConfig || {};
     const [pValue, setPValue] = useState(dayjs().subtract(1, "month"));
 
-    // Side Bar Options
     const rangePresets = useMemo(
         () => [
             {
@@ -60,12 +59,9 @@ const TableHeaderSection = ({
         [rangePresets],
     );
 
-    // Disable Future Dates
-    const disableFutureDates = (current) => {
-        return current && current > dayjs().endOf("day");
-    };
+    const disableFutureDates = (current) =>
+        current && current > dayjs().endOf("day");
 
-    // Filter
     const statusClasses = useMemo(
         () => ({
             "In Progress": "text-progress",
@@ -80,7 +76,6 @@ const TableHeaderSection = ({
         [],
     );
 
-    // Single Selected Date
     const calendarClassName = useMemo(() => {
         const hasStartDate = selectedDates?.[0];
         const hasNoEndDate = !selectedDates?.[1];
@@ -98,9 +93,8 @@ const TableHeaderSection = ({
     const activeFilter = filterValue || "All";
 
     return (
-        <div className="flex justify-between items-center p-3">
-            {/* Tabs List */}
-            <ul className="flex gap-4">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 p-3">
+            <ul className="flex gap-4 overflow-x-auto whitespace-nowrap pb-1 md:pb-0 -mx-1 px-1 md:mx-0 md:px-0 scrollbar-none">
                 {renderlists?.map((listName, index) => {
                     const counts = statusCounts?.[listName] ?? 0;
                     const isActive = activeFilter === listName;
@@ -109,10 +103,10 @@ const TableHeaderSection = ({
                         <li
                             key={index}
                             className={cn(
-                                "font-medium cursor-pointer transition-all duration-150 select-none",
+                                "font-medium cursor-pointer transition-all duration-150 select-none shrink-0",
                                 statusClasses[listName] || "text-gray-500",
                                 isActive
-                                    ? "underline font-semibold opacity-100"
+                                    ? "underline font-semibold font-montserrat opacity-100"
                                     : "opacity-70 hover:opacity-100",
                             )}
                             onClick={() => handleChange(listName)}
@@ -125,10 +119,10 @@ const TableHeaderSection = ({
                 })}
             </ul>
 
-            {/* Select & Date Picker controls */}
-            <Space horizontal>
+            {/* Select & Date Picker */}
+            <Space horizontal className="w-full md:w-auto">
                 {!!setSelectedDates && (
-                    <Space size={4}>
+                    <Space size={4} className="w-full sm:w-auto">
                         <DatePicker.RangePicker
                             separator={<ChevronsRight size={16} />}
                             maxDate={dayjs()}
@@ -136,7 +130,7 @@ const TableHeaderSection = ({
                             value={selectedDates}
                             onChange={(dates) => setSelectedDates(dates)}
                             className={cn(
-                                "rounded-lg! border border-gray-300! lg:w-100 md:w-40",
+                                "rounded-lg! border border-gray-300! w-full sm:w-72 md:w-80 lg:w-100",
                                 calendarClassName,
                             )}
                             classNames={{ popup: "my-custom-rangepicker" }}
@@ -164,7 +158,7 @@ const TableHeaderSection = ({
                         value={
                             activeFilter === "All" ? undefined : activeFilter
                         }
-                        style={{ width: 140 }}
+                        className="w-full sm:w-33"
                         onChange={handleChange}
                         options={options}
                     />
