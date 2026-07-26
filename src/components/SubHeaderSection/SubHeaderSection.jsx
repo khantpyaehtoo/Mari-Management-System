@@ -69,14 +69,16 @@ const SubHeaderSection = ({
     return (
         <div
             className={cn(
-                title?.includes("Customer") ? "border-0 px-3" : "p-3 border-b",
+                title?.includes("Customer")
+                    ? "border-0 px-3"
+                    : "p-3 border-b border-gray-400 ",
             )}
         >
             {/* Dynamic Back Button */}
             {showBackButton && (
                 <Button
                     onClick={() => nav(backToPath, { replace: true })}
-                    className="bg-transparent! border-none! shadow-none! hover:underline! hover:text-black! text-lg! p-0! mb-4! group flex items-center gap-1"
+                    className="bg-transparent! border-none! shadow-none! hover:underline! hover:text-black! text-lg! p-0! mb-4! group flex items-center gap-1 cursor-pointer"
                 >
                     <ArrowLeftOutlined className="group-hover:-translate-x-1 transition-transform" />{" "}
                     Back to {backText}
@@ -87,12 +89,15 @@ const SubHeaderSection = ({
                 <div
                     className={cn(
                         titleIncludes
-                            ? "flex justify-between items-center"
+                            ? "flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4"
                             : "",
                     )}
                 >
                     <div>
-                        <Title level={3} className="text-primary! text-3xl!">
+                        <Title
+                            level={3}
+                            className="text-primary! text-2xl lg:text-3xl! m-0!"
+                        >
                             {title.includes("Services") ||
                             title.includes("Calendar") ||
                             title.includes("Reports") ||
@@ -100,10 +105,10 @@ const SubHeaderSection = ({
                                 ? title
                                 : `${title} Management`}
                         </Title>
-                        <p className="text-gray-600">{subTitle}</p>
+                        <p className="text-gray-500 text-sm mt-1">{subTitle}</p>
                     </div>
 
-                    {title === "Sent Notifications" && (
+                    {title === "Sent Notifications" && formType && (
                         <div className="flex gap-3">
                             <AddForm
                                 title={formType[0] || title}
@@ -117,65 +122,69 @@ const SubHeaderSection = ({
                                 triggerCreate={triggerCreate}
                                 triggerEdit={triggerEdit}
                             />
-                            <AddForm
-                                title={formType[1] || title}
-                                formType={formType[1]}
-                                btnTitle={btnTitle}
-                                subFormTitle={subFormTitle}
-                                isEdit={isEdit}
-                                isOpen={isOpen}
-                                onCancel={onCancel}
-                                initialValue={initialValue}
-                                triggerCreate={triggerCreate}
-                                triggerEdit={triggerEdit}
-                            />
+                            {formType[1] && (
+                                <AddForm
+                                    title={formType[1] || title}
+                                    formType={formType[1]}
+                                    btnTitle={btnTitle}
+                                    subFormTitle={subFormTitle}
+                                    isEdit={isEdit}
+                                    isOpen={isOpen}
+                                    onCancel={onCancel}
+                                    initialValue={initialValue}
+                                    triggerCreate={triggerCreate}
+                                    triggerEdit={triggerEdit}
+                                />
+                            )}
                         </div>
                     )}
 
                     {title?.includes("Staff Schedule and Calendar") && (
-                        <Space>
-                            <DebounceSelect
-                                value={value}
-                                placeholder="Select user"
-                                fetchOptions={fetchUserList}
-                                style={{ width: "300px" }}
-                                onChange={(newValue) => {
-                                    setValue(newValue || null);
-
-                                    if (CalendarConfig?.onChange) {
-                                        CalendarConfig.onChange(
-                                            newValue || null,
-                                        );
-                                    }
-                                }}
-                                onClear={() => {
-                                    setValue(null);
-                                    if (CalendarConfig?.onChange) {
-                                        CalendarConfig.onChange(null);
-                                    }
-                                }}
-                            />
+                        <Space wrap>
+                            {DebounceSelect && (
+                                <DebounceSelect
+                                    value={value}
+                                    placeholder="Select staff"
+                                    fetchOptions={fetchUserList}
+                                    style={{ width: "260px" }}
+                                    onChange={(newValue) => {
+                                        setValue(newValue || null);
+                                        if (CalendarConfig?.onChange) {
+                                            CalendarConfig.onChange(
+                                                newValue || null,
+                                            );
+                                        }
+                                    }}
+                                    onClear={() => {
+                                        setValue(null);
+                                        if (CalendarConfig?.onChange) {
+                                            CalendarConfig.onChange(null);
+                                        }
+                                    }}
+                                />
+                            )}
                             <Button
                                 type="primary"
                                 icon={<PlusCircleOutlined />}
-                                onClick={() => setOpenCalForm(true)}
+                                onClick={() => setOpenCalForm?.(true)}
+                                className="bg-primary hover:bg-primary-sec! border-none shadow-sm cursor-pointer"
                             >
                                 Assign Leave
                             </Button>
                         </Space>
                     )}
 
-                    {title.includes("Reports & Analytics") && (
-                        <Space>
+                    {title.includes("Reports & Analytics") && selectedDate && (
+                        <Space wrap>
                             <Select
                                 value={selectedDate.month()}
-                                style={{ width: 150 }}
+                                style={{ width: 140 }}
                                 onChange={(val) => onDateChange("month", val)}
                                 options={months}
                             />
                             <Select
                                 value={selectedDate.year()}
-                                style={{ width: 120 }}
+                                style={{ width: 110 }}
                                 onChange={(val) => onDateChange("year", val)}
                                 options={years.map((y) => ({
                                     value: y,
@@ -190,12 +199,15 @@ const SubHeaderSection = ({
             <div className="flex justify-between items-center my-6">
                 {setSearchText && (
                     <Input
-                        placeholder={placeholderTitle}
+                        placeholder={placeholderTitle || "Search..."}
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
                         className="lg:w-146! md:w-120! w-100! shadow-md! py-2!"
-                        prefix={<SearchOutlined className="px-3" />}
+                        prefix={
+                            <SearchOutlined className="px-2 text-gray-400" />
+                        }
                         size="large"
+                        allowClear
                     />
                 )}
 

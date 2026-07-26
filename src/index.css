@@ -150,7 +150,7 @@ body {
 .custom-settings-tab .ant-tabs-nav {
     background: #fffaf6 !important;
     margin-bottom: 0rem !important;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(161, 161, 161);
     color: black !important;
 }
 
@@ -369,6 +369,7 @@ body {
     color: #f8eee6 !important;
 }
 
+
 .my-custom-rangepicker .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
     color: #fff !important;
     background-color: var(--primary-pink) !important;
@@ -480,6 +481,10 @@ body {
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-in-view) .ant-picker-calendar-date {
     border: none;
     border: 1px solid gainsboro;
+}
+
+.custom-calendar .ant-picker-calendar-mode-switch {
+    display: none !important;
 }
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date {

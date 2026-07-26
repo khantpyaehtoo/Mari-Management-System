@@ -1,38 +1,43 @@
+import { useState } from "react";
 import { Layout } from "antd";
 import SideBar from "../components/Bars/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Bars/NavBar";
-// import AppFooter from "../components/Footer";
 
 const { Sider, Header, Content } = Layout;
 
 const MainLayout = () => {
+    const [collapsed, setCollapsed] = useState(false);
+
     return (
         <Layout className="h-screen overflow-hidden">
-            {/* for desktop */}
+            {/* Desktop Sider */}
             <Sider
                 theme="light"
                 trigger={null}
+                collapsible
+                collapsed={collapsed}
                 breakpoint="lg"
                 width={270}
-                className="hidden h-full lg:block"
+                collapsedWidth={80}
+                className="hidden h-full lg:block transition-all duration-300 bg-white-back shadow-lg"
             >
-                <SideBar />
+                <SideBar collapsed={collapsed} />
             </Sider>
 
             <Layout className="h-full flex flex-col">
-                {/* for mobile */}
+                {/* Mobile SideBar */}
                 <div className="lg:hidden">
-                    <SideBar />
+                    <SideBar collapsed={false} />
                 </div>
 
                 <Header className="bg-primary! px-4 h-16">
-                    <Navbar />
+                    <Navbar collapsed={collapsed} setCollapsed={setCollapsed} />
                 </Header>
+
                 <Content className="p-4 md:p-6 bg-white-back overflow-y-auto flex-1">
                     <Outlet />
                 </Content>
-                {/* <AppFooter /> */}
             </Layout>
         </Layout>
     );

@@ -33,15 +33,6 @@ const EmployeeAttendance = () => {
         );
     }, [leaveStaffsData]);
 
-    // const activeStaffs = useMemo(() => {
-    //     const rawActive = dailyStaffData?.activeStaff || [];
-    //     return rawActive.filter(
-    //         (staff) => !unavailableStaffIds.includes(staff.id),
-    //     );
-    // }, [dailyStaffData, unavailableStaffIds]);
-
-    console.log(dailyStaffData);
-
     const activeStaffs = useMemo(() => {
         const rawActive = dailyStaffData?.activeStaff || [];
 
@@ -55,8 +46,6 @@ const EmployeeAttendance = () => {
             return !isUnavailable && !isTerminated;
         });
     }, [dailyStaffData, unavailableStaffIds]);
-
-    console.log(activeStaffs);
 
     if (isDailyLoading || isLeaveLoading) {
         return (

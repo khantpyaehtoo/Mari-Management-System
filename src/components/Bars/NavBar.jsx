@@ -1,8 +1,13 @@
-import { BellOutlined, MenuOutlined } from "@ant-design/icons";
+import {
+    BellOutlined,
+    MenuOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+} from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../layout/layoutSlice";
 import DateTimeFormatter from "../../app/core/functions/DateTimeFormatter";
-import { Badge, Space } from "antd";
+import { Badge, Flex } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FilteredTabContent } from "./IncomeNotifications/FilteredTabContent";
@@ -10,7 +15,7 @@ import IncomeNotiSection from "./IncomeNotifications/IncomeNotiSection";
 import { useGetSettingsQuery } from "../../features/auth/authApi";
 import { getImageUrl } from "../../app/core/functions/getImageUrl";
 
-const Navbar = () => {
+const Navbar = ({ collapsed, setCollapsed }) => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);
     const dispatch = useDispatch();
 
@@ -22,7 +27,6 @@ const Navbar = () => {
 
     const getImg = getImageUrl(profilePicUrl);
 
-    // for tab section
     const items = [
         {
             key: "1",
@@ -44,58 +48,67 @@ const Navbar = () => {
         },
     ];
 
-    const onCloseDrawer = () => {
-        setIsNotiOpen(false);
-    };
-
     return (
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center h-full">
             <div className="flex items-center gap-4">
+                {/* Mobile Menu Button */}
                 <button
                     className="text-white text-xl lg:hidden cursor-pointer"
                     onClick={() => dispatch(toggleSidebar(true))}
                 >
                     <MenuOutlined />
                 </button>
-                <h3 className="text-white lg:text-2xl md:text-lg">
+
+                {/* Desktop Collapse Toggle Button */}
+                <button
+                    className="text-white text-xl hidden lg:block cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => setCollapsed(!collapsed)}
+                >
+                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                </button>
+
+                <h3 className="text-white lg:text-xl md:text-lg m-0">
                     Welcome{" "}
                     <span className="font-bold">
-                        {adminData?.fullName || "Rebillet"}
+                        {adminData?.fullName || "Admin"}
                     </span>{" "}
                     !
                 </h3>
             </div>
 
             <div className="text-white">
-                <Space align="center">
-                    <span className="hidden md:block lg:block">
-                        Current Date:{" "}
+                <Flex align="center">
+                    <span className="hidden md:block lg:block text-sm me-2">
+                        Current Date:{""}
                     </span>
                     <DateTimeFormatter />
                     <Badge>
                         <BellOutlined
                             style={{
-                                fontSize: "20px",
-                                padding: "10px",
+                                fontSize: "18px",
+                                padding: "8px",
                                 color: "#FBB1BD",
                             }}
-                            className="cursor-pointer! ms-3 bg-white rounded-full hover:bg-gray-200"
+                            className="cursor-pointer ms-3 bg-white rounded-full hover:bg-gray-100"
                             onClick={() => setIsNotiOpen(true)}
                         />
                     </Badge>
                     <Link to={"/settings"}>
-                        {/* Dynamic, circular, fixed aspect-ratio profile avatar */}
                         <img
                             src={getImg}
-                            className="w-10 h-10 ms-3 mb-1 rounded-full border-2 border-white object-cover shadow-sm hover:opacity-90 transition-opacity"
+                            onError={(e) => {
+                                e.currentTarget.src =
+                                    "https://i.pinimg.com/736x/8a/e9/e9/8ae9e92fa4e69967aa61bf2bda967b7b.jpg";
+                            }}
+                            className="w-9 h-9 ms-3 rounded-full border-2 border-white object-cover shadow-sm hover:opacity-90 transition-opacity"
                             alt="avatar"
                         />
                     </Link>
-                </Space>
+                </Flex>
 
                 <IncomeNotiSection
                     isNotiOpen={isNotiOpen}
-                    onCloseDrawer={onCloseDrawer}
+                    onCloseDrawer={() => setIsNotiOpen(false)}
                     items={items}
                 />
             </div>
