@@ -21,6 +21,7 @@ import IsAuth from "./components/Guards/IsAuth.jsx";
 import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 import DisabledPackage from "./features/management/PackageSection/DisabledPackage.jsx";
 import NotificationHandler from "./app/core/notifications/NotificationHandler.jsx";
+import { NotificationListener } from "./components/Bars/IncomeNotifications/NotificationsListener.jsx";
 
 export default function App() {
     return (
@@ -42,6 +43,7 @@ export default function App() {
                     path="/"
                     element={
                         <IsAuth>
+                            <NotificationListener />
                             <MainLayout />
                         </IsAuth>
                     }

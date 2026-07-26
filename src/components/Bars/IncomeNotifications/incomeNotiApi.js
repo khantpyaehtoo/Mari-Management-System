@@ -15,19 +15,39 @@ export const incomeNotiApi = baseApi.injectEndpoints({
                     params: queryParams,
                 };
             },
-            providesTags: ["notifications", "customer"],
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.content.map(({ id }) => ({
+                              type: "notifications",
+                              id,
+                          })),
+                          { type: "notifications", id: "CUSTOMER_LIST" },
+                      ]
+                    : [{ type: "notifications", id: "CUSTOMER_LIST" }],
         }),
 
         getIncomingStaffNotis: builder.query({
             query: (params = {}) => {
-                const tab = params.tab;
+                const { tab = "all" } = params;
+                const queryParams = tab && tab !== "all" ? { tab } : {};
+
                 return {
                     url: `${NOTIFICATIONS}/admin/inbox/staff`,
                     method: "GET",
-                    params: { tab },
+                    params: queryParams,
                 };
             },
-            providesTags: ["notifications", "staff"],
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.content.map(({ id }) => ({
+                              type: "notifications",
+                              id,
+                          })),
+                          { type: "notifications", id: "STAFF_LIST" },
+                      ]
+                    : [{ type: "notifications", id: "STAFF_LIST" }],
         }),
     }),
 });

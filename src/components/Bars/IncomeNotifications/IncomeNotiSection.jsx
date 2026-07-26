@@ -1,70 +1,27 @@
 import { BellOutlined, SendOutlined } from "@ant-design/icons";
 import { Button, Drawer, Tabs } from "antd";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FilteredTabContent } from "./FilteredTabContent";
 import {
     useGetIncomingCustomerNotisQuery,
     useGetIncomingStaffNotisQuery,
 } from "./incomeNotiApi";
-import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 const IncomeNotiSection = ({ isNotiOpen, onCloseDrawer }) => {
     const nav = useNavigate();
-    const dispatch = useDispatch();
 
     const [customerTab, setCustomerTab] = useState("all");
     const [staffTab, setStaffTab] = useState("all");
 
     const { data: customerData, isLoading: isCustomerLoading } =
-        useGetIncomingCustomerNotisQuery(
-            { tab: customerTab },
-            {
-                pollingInterval: 10000,
-            },
-        );
+        useGetIncomingCustomerNotisQuery({ tab: customerTab });
 
     const { data: staffData, isLoading: isStaffLoading } =
-        useGetIncomingStaffNotisQuery(
-            { tab: staffTab },
-            {
-                pollingInterval: 10000,
-            },
-        );
+        useGetIncomingStaffNotisQuery({ tab: staffTab });
 
     const customerNotis = customerData?.content || [];
     const staffNotis = staffData?.content || [];
-
-    // Noti Alert Logic
-    const lastNotiIdRef = useRef(null);
-
-    useEffect(() => {
-        const latestNoti = customerData?.content?.[0];
-
-        if (latestNoti) {
-            if (lastNotiIdRef.current === null) {
-                lastNotiIdRef.current = latestNoti.id;
-                return;
-            }
-
-            if (latestNoti.id !== lastNotiIdRef.current) {
-                lastNotiIdRef.current = latestNoti.id;
-
-                dispatch(
-                    setMessage({
-                        msgType: "info",
-                        title: latestNoti.title || "Customer Notification",
-                        msgContent:
-                            latestNoti.message ||
-                            latestNoti.description ||
-                            "You have a new message",
-                        isInbox: true,
-                    }),
-                );
-            }
-        }
-    }, [customerData, dispatch]);
 
     const navigateSentNoti = () => {
         nav("/send-notifications", { replace: true });
