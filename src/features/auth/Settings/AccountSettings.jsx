@@ -6,7 +6,7 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Col, Form, Image, Input, Row, Tag, Upload } from "antd";
-import { getImageUrl } from "../../../lib/getImageUrl";
+import { getImageUrl } from "../../../app/core/functions/getImageUrl";
 
 const AccountSettings = ({
     // isUpdatingAdmin,

@@ -1,11 +1,11 @@
 // src/app/core/notifications/NotificationListener.jsx
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setMessage } from "./notiSlice";
 import {
     useGetIncomingCustomerNotisQuery,
     useGetIncomingStaffNotisQuery,
 } from "./incomeNotiApi";
+import { setMessage } from "../../../app/core/notifications/notiSlice";
 
 export const NotificationListener = () => {
     const dispatch = useDispatch();
@@ -14,13 +14,10 @@ export const NotificationListener = () => {
     const lastCustomerNotiIdRef = useRef(null);
     const lastStaffNotiIdRef = useRef(null);
 
-    // Customer Notifications Polling
     const { data: customerData } = useGetIncomingCustomerNotisQuery(
         { tab: "all" },
         { pollingInterval: 10000 },
     );
-
-    // Staff Notifications Polling
     const { data: staffData } = useGetIncomingStaffNotisQuery(
         { tab: "all" },
         { pollingInterval: 10000 },

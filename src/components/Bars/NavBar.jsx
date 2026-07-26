@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { FilteredTabContent } from "./IncomeNotifications/FilteredTabContent";
 import IncomeNotiSection from "./IncomeNotifications/IncomeNotiSection";
 import { useGetSettingsQuery } from "../../features/auth/authApi";
-import { getImageUrl } from "../../lib/getImageUrl";
+import { getImageUrl } from "../../app/core/functions/getImageUrl";
 
 const Navbar = () => {
     const [isNotiOpen, setIsNotiOpen] = useState(false);

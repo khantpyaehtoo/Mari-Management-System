@@ -6,7 +6,7 @@ export const incomeNotiApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getIncomingCustomerNotis: builder.query({
             query: (params = {}) => {
-                const { tab = "all" } = params;
+                const { tab } = params;
                 const queryParams = tab && tab !== "all" ? { tab } : {};
 
                 return {
@@ -15,21 +15,12 @@ export const incomeNotiApi = baseApi.injectEndpoints({
                     params: queryParams,
                 };
             },
-            providesTags: (result) =>
-                result
-                    ? [
-                          ...result.content.map(({ id }) => ({
-                              type: "notifications",
-                              id,
-                          })),
-                          { type: "notifications", id: "CUSTOMER_LIST" },
-                      ]
-                    : [{ type: "notifications", id: "CUSTOMER_LIST" }],
+            providesTags: ["notifications", "customer"],
         }),
 
         getIncomingStaffNotis: builder.query({
             query: (params = {}) => {
-                const { tab = "all" } = params;
+                const { tab } = params;
                 const queryParams = tab && tab !== "all" ? { tab } : {};
 
                 return {
@@ -38,16 +29,7 @@ export const incomeNotiApi = baseApi.injectEndpoints({
                     params: queryParams,
                 };
             },
-            providesTags: (result) =>
-                result
-                    ? [
-                          ...result.content.map(({ id }) => ({
-                              type: "notifications",
-                              id,
-                          })),
-                          { type: "notifications", id: "STAFF_LIST" },
-                      ]
-                    : [{ type: "notifications", id: "STAFF_LIST" }],
+            providesTags: ["notifications", "staff"],
         }),
     }),
 });

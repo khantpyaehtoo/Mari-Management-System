@@ -5,7 +5,7 @@ import {
     useGetDailyStaffQuery,
     useGetSelectedDayLeavesQuery,
 } from "./calendarApi";
-import { getImageUrl } from "../../lib/getImageUrl";
+import { getImageUrl } from "../../app/core/functions/getImageUrl";
 
 const EmployeeAttendance = () => {
     const todayLabel = dayjs().format("MMMM DD");

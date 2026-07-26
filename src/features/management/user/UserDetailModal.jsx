@@ -1,6 +1,6 @@
 import { Modal, Space, Avatar, Flex, Card, Button, Skeleton } from "antd";
 import { useGetDetailUserQuery } from "./userApi";
-import { getImageUrl } from "../../../lib/getImageUrl";
+import { getImageUrl } from "../../../app/core/functions/getImageUrl";
 
 const UserDetailModal = ({
     viewModalOpen,

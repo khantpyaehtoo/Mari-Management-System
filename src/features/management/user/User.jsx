@@ -12,7 +12,7 @@ import {
 import CustomerSummaryCard from "./CustomerSummaryCard";
 import { useDebounce } from "../../../lib/hooks/useDebounce";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
-import { getImageUrl } from "../../../lib/getImageUrl";
+import { getImageUrl } from "../../../app/core/functions/getImageUrl";
 
 const { useBreakpoint } = Grid;
 

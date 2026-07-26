@@ -7,7 +7,7 @@ import CalendarDetailOverview from "./CalendarDetailOverview";
 import CalendarAssignModal from "./CalendarAssignModal";
 import { useGetCalendarDataQuery, useGetDailyStaffQuery } from "./calendarApi";
 import DebounceSelect from "./DebounceSelect";
-import { getImageUrl } from "../../lib/getImageUrl";
+import { getImageUrl } from "../../app/core/functions/getImageUrl";
 
 const leaveOptions = [
     { label: "DayOff", value: "DAY_OFF" },
