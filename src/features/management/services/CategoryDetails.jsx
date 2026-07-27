@@ -50,7 +50,9 @@ const CategoryDetails = () => {
                     ? Number(formValues.categoryId)
                     : Number(id),
         };
-        return await createServiceTrigger(formattedPayload).unwrap();
+        const res = await createServiceTrigger(formattedPayload).unwrap();
+        handleModalCancel();
+        return res;
     };
 
     const handleEditService = async ({ id: serviceId, body, token }) => {
@@ -66,7 +68,9 @@ const CategoryDetails = () => {
                     : Number(selectedService?.categoryId),
             },
         };
-        return await editServiceTrigger(formattedPayload).unwrap();
+        const res = await editServiceTrigger(formattedPayload).unwrap();
+        handleModalCancel();
+        return res;
     };
 
     const handleDeleteConfirm = async () => {
@@ -100,16 +104,34 @@ const CategoryDetails = () => {
         if (!serviceId) return;
 
         try {
+            // Restore API
             await restoreService({
                 id: serviceId,
                 categoryId: Number(categoryId),
                 token,
             }).unwrap();
 
+            if (
+                categoryId &&
+                Number(categoryId) !== Number(selectedService?.categoryId)
+            ) {
+                await editServiceTrigger({
+                    id: serviceId,
+                    token,
+                    body: {
+                        name: selectedService?.name,
+                        price: Number(selectedService?.price),
+                        durationInMinutes: selectedService?.durationInMinutes,
+                        categoryId: Number(categoryId),
+                    },
+                }).unwrap();
+            }
+
             dispatch(
                 setMessage({
                     msgType: "success",
-                    msgContent: "Service restored successfully",
+                    msgContent:
+                        "Service restored and moved to new category successfully",
                 }),
             );
 
@@ -300,6 +322,12 @@ const CategoryDetails = () => {
                 setSearchText={setSearchText}
                 isEdit={editModalOpen}
                 isOpen={editModalOpen || createModalOpen}
+                onOpen={() => {
+                    if (!editModalOpen) {
+                        setSelectedService(null);
+                        setCreateModalOpen(true);
+                    }
+                }}
                 initialValue={editModalOpen ? selectedService : null}
                 onCancel={handleModalCancel}
                 triggerCreate={handleCreateService}

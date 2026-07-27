@@ -48,7 +48,6 @@ const ServiceForm = ({
                 <Input placeholder="Service name" className="input-styling!" />
             </Item>
 
-            {/* All Services mode ဖြစ်နေရင် သို့မဟုတ် Edit လုပ်ချိန်မှာ Category ရွေးဖို့ Dropdown ပြပေးပါမည် */}
             {(isAllMode || isEdit) && (
                 <Item
                     label={<label className="label-styling">Category</label>}

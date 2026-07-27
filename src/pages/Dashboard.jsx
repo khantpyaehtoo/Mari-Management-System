@@ -25,6 +25,7 @@ import {
     useGetStaffPerformQuery,
 } from "../components/dashboard/dashboardApi";
 import WeeklyBarChart from "../components/dashboard/WeeklyBarChart";
+import { getImageUrl } from "../app/core/functions/getImageUrl";
 
 const radioBtnOptions = [
     {
@@ -36,8 +37,6 @@ const radioBtnOptions = [
         value: "monthly",
     },
 ];
-
-const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
 const Dashboard = () => {
     const [viewType, setViewType] = useState("weekly");
@@ -96,7 +95,7 @@ const Dashboard = () => {
             key: "staffName",
             render: (text, record) => (
                 <Space>
-                    <Avatar src={`${IMAGE_BASE_URL}/${record?.profileImage}`} />
+                    <Avatar src={getImageUrl(record?.profileImage)} />
                     <div>
                         <div className="font-medium">{text}</div>
                         <div className="text-xs text-gray-400">

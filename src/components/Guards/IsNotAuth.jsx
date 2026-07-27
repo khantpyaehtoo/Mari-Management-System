@@ -5,7 +5,6 @@ const IsNotAuth = ({ children }) => {
     const { token } = useSelector((state) => state.auth);
 
     if (token) {
-        // return nav("/");
         return <Navigate to={"/"} />;
     } else {
         return children;

@@ -61,7 +61,7 @@ export default function DebounceSelect({
             showSearch
             filterOption={false}
             onSearch={debouncedSearch}
-            onDropdownVisibleChange={handleDropdownVisibleChange}
+            onOpenChange={handleDropdownVisibleChange}
             placeholder="Select staff"
             allowClear
             notFoundContent={

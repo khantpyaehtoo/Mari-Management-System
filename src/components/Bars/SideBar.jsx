@@ -23,7 +23,6 @@ import { removeCookie, setLoggedIn } from "../../features/auth/authSlice";
 import brandLogo from "../../../public/asset/brandLogo.png";
 import brandName from "../../../public/asset/brandName.png";
 
-// collapsed prop ကို လက်ခံထားပါတယ်
 const SideBar = ({ collapsed = false }) => {
     const navigate = useNavigate();
     const location = useLocation();

@@ -21,7 +21,10 @@ import PackageConfirmModal from "./PackageConfirmModal";
 const Packages = () => {
     const [searchText, setSearchText] = useState("");
 
+    // State management for Create vs Edit modals
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState(null);
 
@@ -97,7 +100,6 @@ const Packages = () => {
 
                 const isDisabled = item.enabled === false;
 
-                // Package Active Service 0 > Go Disabled
                 const hasNoActiveServices = activeIncluded.length === 0;
 
                 return isDisabled || hasNoActiveServices;
@@ -125,7 +127,6 @@ const Packages = () => {
 
         try {
             if (isDisabled) {
-                // Restore logic
                 await restorePackage(selectedPackage.id).unwrap();
                 dispatch(
                     setMessage({
@@ -134,7 +135,6 @@ const Packages = () => {
                     }),
                 );
             } else {
-                // Disable/Delete logic
                 await deletePackage(selectedPackage.id).unwrap();
                 dispatch(
                     setMessage({
@@ -160,8 +160,9 @@ const Packages = () => {
         }
     };
 
-    // Close Handler for AddForm Edit Modal
+    // Close Handler for Modals
     const handleCancel = () => {
+        setIsCreateOpen(false);
         setIsEditOpen(false);
         setSelectedPackage(null);
     };
@@ -189,7 +190,9 @@ const Packages = () => {
             enabled: true,
         };
 
-        return await createPackage(formattedPayload).unwrap();
+        const result = await createPackage(formattedPayload).unwrap();
+        handleCancel();
+        return result;
     };
 
     const handleEditPackage = async (payload) => {
@@ -223,20 +226,29 @@ const Packages = () => {
             },
         };
 
-        return await updatePackage(formattedPayload).unwrap();
+        const result = await updatePackage(formattedPayload).unwrap();
+        handleCancel();
+        return result;
     };
 
     return (
         <>
             <SubHeaderSection
                 title="Packages"
+                formType="Packages"
                 subTitle="Create, customize, and optimize your packages. Easily manage pricing, duration, and staff assignments in one place."
                 placeholderTitle="Search with package name..."
                 setSearchText={setSearchText}
                 searchText={searchText}
                 triggerCreate={handleCreatePackage}
                 triggerEdit={handleEditPackage}
-                isOpen={isEditOpen}
+                isOpen={isCreateOpen || isEditOpen}
+                onOpen={() => {
+                    if (!isEditOpen) {
+                        setSelectedPackage(null);
+                        setIsCreateOpen(true);
+                    }
+                }}
                 isEdit={isEditOpen}
                 initialValue={selectedPackage}
                 onCancel={handleCancel}

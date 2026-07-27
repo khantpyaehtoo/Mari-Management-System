@@ -159,7 +159,7 @@ const CategorySection = () => {
             async onOk() {
                 try {
                     await deleteCategory(category.id).unwrap();
-                    await refetchCategories(); // Delete ပြီးပါက Category List ကို Auto Refetch လုပ်ပါမည်
+                    await refetchCategories();
                     dispatch(
                         setMessage({
                             message: "Category deleted successfully!",
@@ -264,12 +264,14 @@ const CategorySection = () => {
         <>
             <SubHeaderSection
                 title="Category"
-                subTitle="Create, customize, and optimize your service catalog. Easily manage pricing, duration, and staff assignments in one place."
+                formType="Category"
+                subTitle="Create, customize, and optimize your service catalog..."
                 btnTitle="Category"
                 placeholderTitle="Search the category name"
                 setSearchText={setSearchText}
                 searchText={searchText}
                 isOpen={isFormOpen}
+                onOpen={() => setIsFormOpen(true)}
                 isEdit={isEdit}
                 initialValue={selectedService}
                 onCancel={onCancel}

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Form, Input, Typography } from "antd";
 import { LockOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useResetPasswordMutation } from "./authApi";
 import { useDispatch } from "react-redux";
 import resetImg2 from "../../../public/asset/Img2.png";
@@ -15,16 +15,35 @@ const NewPasswordForm = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
 
-    // resetPassword mutation hook
     const [resetPassword] = useResetPasswordMutation();
 
     const email = location.state?.email || "";
     const token = location.state?.token || "";
 
+    useEffect(() => {
+        if (!token) {
+            dispatch(
+                setMessage({
+                    msgType: "error",
+                    msgContent:
+                        "Invalid or missing token. Please start the password reset process again.",
+                }),
+            );
+            navigate("/login");
+        }
+    }, [token, navigate, dispatch]);
+
     const onFinish = async (values) => {
-        console.log("Submitting new password for:", email, values);
+        console.log(
+            "Submitting new password for:",
+            email,
+            "With Token:",
+            token,
+        );
+
         try {
             setLoading(true);
 

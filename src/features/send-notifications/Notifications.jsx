@@ -1,6 +1,12 @@
 import { Modal, Spin } from "antd";
 import SubHeaderSection from "../../components/SubHeaderSection/SubHeaderSection";
-import { BellRing, PartyPopper, TriangleAlert, Info } from "lucide-react";
+import {
+    BellRing,
+    PartyPopper,
+    TriangleAlert,
+    Info,
+    Megaphone,
+} from "lucide-react";
 import {
     useGetStaffNotificationsQuery,
     useGetCustomerNotificationsQuery,
@@ -19,6 +25,8 @@ dayjs.extend(relativeTime);
 
 const Notifications = () => {
     const dispatch = useDispatch();
+
+    const [activeFormType, setActiveFormType] = useState(null);
 
     const { data: staffData, isLoading: isStaffLoading } =
         useGetStaffNotificationsQuery();
@@ -64,8 +72,18 @@ const Notifications = () => {
             case "BOOKING":
             case "ANNOUNCEMENT":
                 return {
+                    icon: (
+                        <Megaphone
+                            size={30}
+                            className="text-primary! font-bold"
+                        />
+                    ),
+                    bg: "bg-primary-sec!",
+                };
+            case "REMINDER":
+                return {
                     icon: <BellRing size={30} className="text-primary" />,
-                    bg: "bg-primary-sec",
+                    bg: "bg-red-50",
                 };
             case "ALERT":
                 return {
@@ -110,7 +128,6 @@ const Notifications = () => {
     const handleCreateNotification = async (values) => {
         const formData = new FormData();
 
-        // Simple text fields
         formData.append("type", values.type);
         formData.append("title", values.title);
         formData.append("message", values.message);
@@ -134,6 +151,7 @@ const Notifications = () => {
                     msgContent: "Notification sent successfully!",
                 }),
             );
+            setActiveFormType(null);
         } catch (error) {
             console.error("Upload error:", error);
             let errorMessage =
@@ -152,7 +170,11 @@ const Notifications = () => {
             <SubHeaderSection
                 title="Sent Notifications"
                 subTitle="You can send notifications to staffs & customers."
+                btnTitle="Notification"
                 formType={["To Staff", "To Customer"]}
+                activeFormType={activeFormType}
+                setActiveFormType={setActiveFormType}
+                onCancel={() => setActiveFormType(null)}
                 triggerCreate={handleCreateNotification}
             />
 
@@ -164,14 +186,14 @@ const Notifications = () => {
                 <div className="flex w-full h-[calc(100vh-150px)] mt-4 overflow-hidden">
                     {/* LEFT COLUMN: STAFFS */}
                     <StaffNotiHistorySections
-                        staffNotis={staffNotis} // 👈 Passed staffNotis here
+                        staffNotis={staffNotis}
                         getNotificationIcon={getNotificationIcon}
                         showDeleteModal={showDeleteModal}
                     />
 
                     {/* RIGHT COLUMN: CUSTOMERS */}
                     <CustomerNotiHistorySection
-                        customerNotis={customerNotis} // 👈 Passed customerNotis here
+                        customerNotis={customerNotis}
                         getNotificationIcon={getNotificationIcon}
                         showDeleteModal={showDeleteModal}
                     />

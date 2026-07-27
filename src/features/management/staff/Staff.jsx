@@ -148,7 +148,7 @@ const Staff = () => {
         );
     }, [apiResponse, filterValue]);
 
-    console.log(dataList);
+    // console.log(dataList);
 
     const [createStaff] = useCreateStaffMutation();
     const [editStaff] = useUpdateStaffMutation();

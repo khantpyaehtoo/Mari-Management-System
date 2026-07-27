@@ -26,7 +26,7 @@ export const calendarApi = baseApi.injectEndpoints({
                     : dayjs().format("YYYY-MM-DD");
 
                 return {
-                    url: `admin/staffs/${dailyStaff}`,
+                    url: `admin/staffs/${dailyStaff}?month=7`,
                     method: "GET",
                     params: { targetDate: formattedDate },
                 };

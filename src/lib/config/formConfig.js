@@ -8,13 +8,25 @@ export const FORM_CONFIG = {
     Staff: {
         Component: StaffForm,
     },
+
+    Package: {
+        Component: PackageForm,
+    },
     Packages: {
         Component: PackageForm,
+    },
+
+    Service: {
+        Component: ServiceForm,
     },
     Services: {
         Component: ServiceForm,
     },
+
     Category: {
+        Component: CategoryForm,
+    },
+    Categories: {
         Component: CategoryForm,
     },
     // notifications

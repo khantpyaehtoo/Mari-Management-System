@@ -33,7 +33,28 @@ const CalendarSection = () => {
 
     const todayStr = dayjs().format("YYYY-MM-DD");
 
-    // Fix: ISO String Compare safely using dayjs
+    // Fix 1: Get activeStaff safely from API Response structure
+    const activeStaffList = useMemo(() => {
+        if (!dailyStaff) return [];
+
+        // Option A: If activeStaff is directly inside dailyStaff
+        if (Array.isArray(dailyStaff.activeStaff)) {
+            return dailyStaff.activeStaff;
+        }
+
+        // Option B: If inside dailyStatuses -> "YYYY-MM-DD" -> activeStaff
+        if (dailyStaff.dailyStatuses) {
+            // Get today's object or first available date object
+            const dateKey = Object.keys(dailyStaff.dailyStatuses)[0];
+            if (dateKey && dailyStaff.dailyStatuses[dateKey]?.activeStaff) {
+                return dailyStaff.dailyStatuses[dateKey].activeStaff;
+            }
+        }
+
+        return [];
+    }, [dailyStaff]);
+
+    // Fix 2: Get today's events safely
     const todayEvents = useMemo(() => {
         const todayData = calendarData.find(
             (item) => dayjs(item.date).format("YYYY-MM-DD") === todayStr,
@@ -45,23 +66,22 @@ const CalendarSection = () => {
         return todayEvents.map((e) => e.staffProfileId || e.staffId || e.id);
     }, [todayEvents]);
 
-    // Active Staff Calculation
+    // Active Staff Calculation after removing leave/dayoff staff
     const actualActiveStaff = useMemo(() => {
-        if (!dailyStaff?.activeStaff) return [];
-        return dailyStaff.activeStaff.filter(
+        if (!activeStaffList.length) return [];
+        return activeStaffList.filter(
             (staff) => !unavailableStaffIds.includes(staff.id),
         );
-    }, [dailyStaff, unavailableStaffIds]);
+    }, [activeStaffList, unavailableStaffIds]);
 
     const handleFetchUserList = async (searchText) => {
-        if (!dailyStaff?.activeStaff) return [];
-        const list = dailyStaff.activeStaff;
+        if (!activeStaffList.length) return [];
 
         const filtered = searchText
-            ? list.filter((u) =>
+            ? activeStaffList.filter((u) =>
                   u.name.toLowerCase().includes(searchText.toLowerCase()),
               )
-            : list;
+            : activeStaffList;
 
         return filtered.map((user) => ({
             label: user.name,
@@ -71,14 +91,14 @@ const CalendarSection = () => {
     };
 
     const dynamicOptionsStaff = useMemo(() => {
-        if (!dailyStaff?.activeStaff) return [];
-        return dailyStaff.activeStaff.map((user) => ({
+        if (!activeStaffList.length) return [];
+        return activeStaffList.map((user) => ({
             label: user.name,
             value: user.id,
             desc: user.role || "STAFF",
             avatar: getImageUrl(user.profileImage),
         }));
-    }, [dailyStaff]);
+    }, [activeStaffList]);
 
     const handleFilterChange = (val) => {
         setSelectedUserFilter(val || null);
@@ -91,7 +111,7 @@ const CalendarSection = () => {
             (item) => dayjs(item.date).format("YYYY-MM-DD") === dateStr,
         );
 
-        const totalStaffCount = dailyStaff?.activeStaff?.length || 0;
+        const totalStaffCount = activeStaffList.length || 0;
 
         // Individual Staff Filter Mode
         if (selectedUserFilter) {

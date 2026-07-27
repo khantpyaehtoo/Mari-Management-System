@@ -79,9 +79,7 @@ const TableHeaderSection = ({
         () => [
             {
                 label: (
-                    <span aria-label="Current Time to End of Day">
-                        Now ~ EOD
-                    </span>
+                    <span aria-label="Current Time to End of Day">Today</span>
                 ),
                 value: () => [dayjs(), dayjs().endOf("day")],
             },
@@ -176,7 +174,7 @@ const TableHeaderSection = ({
             </div>
 
             {/* Select & Date Picker */}
-            <Space direction="horizontal" className="w-full md:w-auto">
+            <Space horizontal="true" className="w-full md:w-auto">
                 {!!setSelectedDates && (
                     <Space size={4} className="w-full sm:w-auto">
                         <DatePicker.RangePicker

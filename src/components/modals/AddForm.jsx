@@ -13,6 +13,7 @@ const AddForm = ({
     isEdit,
     isOpen,
     onCancel,
+    onOpen,
     triggerEdit,
     triggerCreate,
     formType,
@@ -25,7 +26,9 @@ const AddForm = ({
     const [form] = Form.useForm();
     const { token } = useSelector((state) => state?.auth);
 
-    const isModalOpen = isOpen || isLocalModalOpen;
+    // const isModalOpen = isOpen !== undefined ? isOpen : isLocalModalOpen;
+    const isModalOpen =
+        isOpen !== undefined && onOpen ? isOpen : isOpen || isLocalModalOpen;
 
     // Get configuration
     const config = FORM_CONFIG[title];
@@ -39,13 +42,14 @@ const AddForm = ({
                 form.setFieldsValue(initialValue);
             }, 0);
             return () => clearTimeout(timer);
-        } else {
+        } else if (!isModalOpen) {
             form.resetFields();
         }
     }, [isModalOpen, initialValue, form]);
 
     const showModal = () => {
         setIsLocalModalOpen(true);
+        if (onOpen) onOpen();
     };
 
     if (!config) {
@@ -75,7 +79,7 @@ const AddForm = ({
                     ? await result.unwrap()
                     : await result;
 
-            if (data) {
+            if (data !== undefined) {
                 dispatch(
                     setMessage({
                         msgType: "success",

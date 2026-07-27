@@ -2,7 +2,6 @@ import { Button, Card, Col } from "antd";
 import { Edit, Star, StarX } from "lucide-react";
 
 const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
-    // 1. Included Services မရှိတော့တာ (သို့) item disabled ဖြစ်နေတာကို စစ်ဆေးပါ
     const hasServices =
         item.includedServices && item.includedServices.length > 0;
     const isItemDisabled =
@@ -62,7 +61,7 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                             onClick={(e) =>
                                 handleActionClick("enable", item, e)
                             }
-                            disabled={!hasServices} // Service တစ်ခုမှမရှိရင် Enable လုပ်လို့မရအောင် Disable ပိတ်ထားပါမည်
+                            disabled={!hasServices}
                             className="border border-emerald-200! text-emerald-600 hover:text-white! hover:bg-emerald-600! flex-1 h-9 flex items-center justify-center rounded-lg font-medium transition-colors text-xs sm:text-sm px-2! disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Star

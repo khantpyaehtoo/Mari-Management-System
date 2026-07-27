@@ -68,7 +68,7 @@ body {
 
 /* MODAL FORM INPUT */
 @utility input-styling {
-    @apply w-full px-4 py-3 bg-transparent font-montserrat font-semibold border-t-0 border-r-0 border-l-0 outline-none border-b-black hover:border-b-primary focus:border-b-primary focus-within:border-b-primary;
+    @apply w-full px-4 py-3 bg-transparent font-montserrat! border-t-0 border-r-0 border-l-0 outline-none border-b-black hover:border-b-primary focus:border-b-primary focus-within:border-b-primary;
 }
 
 /* LOGIN FORM INPUT  */

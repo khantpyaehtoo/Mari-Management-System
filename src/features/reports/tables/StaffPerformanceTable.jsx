@@ -8,7 +8,7 @@ const StaffPerformanceTable = ({
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
-    console.log(staffPerform);
+    // console.log(staffPerform);
 
     const staffColumns = [
         {

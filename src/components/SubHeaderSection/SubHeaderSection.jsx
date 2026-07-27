@@ -20,6 +20,7 @@ const SubHeaderSection = ({
     isEdit,
     isOpen,
     onCancel,
+    onOpen,
     initialValue,
     triggerCreate,
     triggerEdit,
@@ -33,6 +34,8 @@ const SubHeaderSection = ({
     categories = [],
     isAllMode = false,
     hideAddButton = false,
+    activeFormType,
+    setActiveFormType,
 }) => {
     const { Title } = Typography;
     const nav = useNavigate();
@@ -65,6 +68,11 @@ const SubHeaderSection = ({
             label: dayjs().month(i).format("MMMM"),
         }));
     }, [selectedDate, currentYear]);
+
+    // Single formType သို့မဟုတ် title ကို သတ်မှတ်ခြင်း
+    const resolvedFormType = Array.isArray(formType)
+        ? formType[0]
+        : formType || title;
 
     return (
         <div
@@ -108,36 +116,43 @@ const SubHeaderSection = ({
                         <p className="text-gray-500 text-sm mt-1">{subTitle}</p>
                     </div>
 
-                    {title === "Sent Notifications" && formType && (
-                        <div className="flex gap-3">
-                            <AddForm
-                                title={formType[0] || title}
-                                formType={formType[0]}
-                                btnTitle={btnTitle}
-                                subFormTitle={subFormTitle}
-                                isEdit={isEdit}
-                                isOpen={isOpen}
-                                onCancel={onCancel}
-                                initialValue={initialValue}
-                                triggerCreate={triggerCreate}
-                                triggerEdit={triggerEdit}
-                            />
-                            {formType[1] && (
+                    {title === "Sent Notifications" &&
+                        Array.isArray(formType) && (
+                            <div className="flex gap-3">
                                 <AddForm
-                                    title={formType[1] || title}
-                                    formType={formType[1]}
+                                    title={formType[0] || title}
+                                    formType={formType[0]}
                                     btnTitle={btnTitle}
                                     subFormTitle={subFormTitle}
                                     isEdit={isEdit}
-                                    isOpen={isOpen}
+                                    isOpen={activeFormType === formType[0]}
                                     onCancel={onCancel}
                                     initialValue={initialValue}
                                     triggerCreate={triggerCreate}
                                     triggerEdit={triggerEdit}
+                                    onOpen={() =>
+                                        setActiveFormType?.(formType[0])
+                                    }
                                 />
-                            )}
-                        </div>
-                    )}
+                                {formType[1] && (
+                                    <AddForm
+                                        title={formType[1] || title}
+                                        formType={formType[1]}
+                                        btnTitle={btnTitle}
+                                        subFormTitle={subFormTitle}
+                                        isEdit={isEdit}
+                                        isOpen={activeFormType === formType[1]}
+                                        onCancel={onCancel}
+                                        initialValue={initialValue}
+                                        triggerCreate={triggerCreate}
+                                        triggerEdit={triggerEdit}
+                                        onOpen={() =>
+                                            setActiveFormType?.(formType[1])
+                                        }
+                                    />
+                                )}
+                            </div>
+                        )}
 
                     {title?.includes("Staff Schedule and Calendar") && (
                         <Space wrap>
@@ -213,12 +228,21 @@ const SubHeaderSection = ({
 
                 {!hideAddButton && title !== "Sent Notifications" && (
                     <AddForm
-                        title={formType || title}
+                        title={resolvedFormType}
+                        formType={resolvedFormType}
                         btnTitle={btnTitle}
                         subFormTitle={subFormTitle}
                         isEdit={isEdit}
-                        isOpen={isOpen}
                         onCancel={onCancel}
+                        isOpen={isOpen}
+                        onOpen={() => {
+                            if (setActiveFormType) {
+                                setActiveFormType(resolvedFormType);
+                            }
+                            if (onOpen) {
+                                onOpen();
+                            }
+                        }}
                         initialValue={initialValue}
                         triggerCreate={triggerCreate}
                         triggerEdit={triggerEdit}
