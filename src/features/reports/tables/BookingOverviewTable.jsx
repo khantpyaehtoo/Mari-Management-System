@@ -54,6 +54,7 @@ const BookingOverviewTable = ({
                     dataSource={bookingReport}
                     loading={isBookingFetching}
                     rowKey={(record, idx) => record.id || record.date || idx}
+                    bordered
                     pagination={{
                         pageSize: 5,
                         current: currentPage,

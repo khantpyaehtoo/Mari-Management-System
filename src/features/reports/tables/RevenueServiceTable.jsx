@@ -86,6 +86,7 @@ const RevenueServiceTable = ({
                     dataSource={revenueService}
                     loading={isServiceFetching}
                     rowKey={(record) => record.id || record.serviceName}
+                    bordered
                     pagination={{
                         pageSize: 5,
                         current: currentPage,

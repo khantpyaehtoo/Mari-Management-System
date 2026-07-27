@@ -91,6 +91,7 @@ const StaffPerformanceTable = ({
                     rowKey={(record) =>
                         record.staffId || record.userId || record.staffCode
                     }
+                    bordered
                     pagination={{
                         pageSize: 5,
                         current: currentPage,

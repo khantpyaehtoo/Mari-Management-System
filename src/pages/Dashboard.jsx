@@ -17,7 +17,7 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import { YearlyLineChart } from "../components/dashboard/YearlyLineChart";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ServicePieChart from "../components/dashboard/ServicePieChart";
 import BookingCard from "../components/dashboard/BookingCard";
 import {
@@ -40,6 +40,11 @@ const radioBtnOptions = [
 
 const Dashboard = () => {
     const [viewType, setViewType] = useState("weekly");
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     const { data: cardDatas, isLoading } = useGetDashBoardCardStatsQuery();
 
@@ -88,61 +93,70 @@ const Dashboard = () => {
         },
     ];
 
-    const column = [
-        {
-            title: "Employee Info",
-            dataIndex: "staffName",
-            key: "staffName",
-            render: (text, record) => (
-                <Space>
-                    <Avatar src={getImageUrl(record?.profileImage)} />
-                    <div>
-                        <div className="font-medium">{text}</div>
-                        <div className="text-xs text-gray-400">
-                            {record.staffCode}
-                        </div>
-                    </div>
-                </Space>
-            ),
-        },
-        {
-            title: "Services Completed",
-            dataIndex: "completedJobsCount",
-            key: "completedJobsCount",
-        },
-        {
-            title: "Client Rating",
-            dataIndex: "ratingAverage",
-            key: "ratingAverage",
-            render: (rating) => {
-                return rating !== undefined && rating !== null ? (
-                    <p>⭐ {Number(rating).toFixed(1)}</p>
-                ) : (
-                    <p>-</p>
-                );
+    const column = useMemo(
+        () => [
+            {
+                title: "No.",
+                render: (_, __, index) => (
+                    <p>{(currentPage - 1) * 5 + index + 1}</p>
+                ),
             },
-        },
-        {
-            title: "Revenue",
-            dataIndex: "totalRevenue",
-            key: "totalRevenue",
-            render: (val) => (
-                <>
-                    {val.toLocaleString()} <small>MMK</small>
-                </>
-            ),
-        },
-        {
-            title: "Commission",
-            dataIndex: "totalCommission",
-            key: "totalCommission",
-            render: (val) => (
-                <>
-                    {val.toLocaleString()} <small>MMK</small>
-                </>
-            ),
-        },
-    ];
+            {
+                title: "Employee Info",
+                dataIndex: "staffName",
+                key: "staffName",
+                render: (text, record) => (
+                    <Space>
+                        <Avatar src={getImageUrl(record?.profileImage)} />
+                        <div>
+                            <div className="font-medium">{text}</div>
+                            <div className="text-xs text-gray-400">
+                                {record.staffCode}
+                            </div>
+                        </div>
+                    </Space>
+                ),
+            },
+            {
+                title: "Services Completed",
+                dataIndex: "completedJobsCount",
+                key: "completedJobsCount",
+            },
+            {
+                title: "Client Rating",
+                dataIndex: "ratingAverage",
+                key: "ratingAverage",
+                render: (rating) => {
+                    return rating !== undefined && rating !== null ? (
+                        <p>⭐ {Number(rating).toFixed(1)}</p>
+                    ) : (
+                        <p>-</p>
+                    );
+                },
+            },
+            {
+                title: "Revenue",
+                dataIndex: "totalRevenue",
+                key: "totalRevenue",
+                render: (val) => (
+                    <>
+                        {val.toLocaleString()} <small>MMK</small>
+                    </>
+                ),
+            },
+            {
+                title: "Commission",
+                dataIndex: "totalCommission",
+                key: "totalCommission",
+                render: (val) => (
+                    <>
+                        {val.toLocaleString()} <small>MMK</small>
+                    </>
+                ),
+            },
+        ],
+        [currentPage],
+    );
 
     return (
         <Flex vertical>
@@ -200,6 +214,14 @@ const Dashboard = () => {
                         columns={column}
                         dataSource={staffPerformData}
                         rowKey="staffId"
+                        bordered
+                        pagination={{
+                            current: currentPage,
+                            onChange: handlePageChange,
+                            size: "large",
+                            pageSize: 5,
+                            showSizeChanger: false,
+                        }}
                     />
                 </div>
             </section>
