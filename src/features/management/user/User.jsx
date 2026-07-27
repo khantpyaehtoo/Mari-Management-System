@@ -143,12 +143,12 @@ const User = () => {
                 dataIndex: "profilePicture",
                 key: "profilePicture",
                 render: (profilePicture) => {
-                    // console.log(profilePicture);
                     return (
                         <Image
                             src={getImageUrl(profilePicture)}
                             alt="Profile"
                             width={40}
+                            height={40}
                             className="rounded-md"
                         />
                     );

@@ -358,6 +358,7 @@ const Staff = () => {
                     <Image
                         src={url}
                         width={40}
+                        height={40}
                         alt="profile"
                         fallback="https://placehold.co/40x40?text=Staff"
                         className="rounded-md! shadow-sm!"
