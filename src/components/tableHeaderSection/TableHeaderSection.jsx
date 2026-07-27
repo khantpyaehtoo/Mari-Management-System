@@ -11,7 +11,6 @@ const TableHeaderSection = ({
     setFilterValue,
     statusCounts,
     dateConfig,
-    latestBookingDate,
 }) => {
     const handleChange = (value) => {
         const newValue = value || "All";
@@ -87,21 +86,6 @@ const TableHeaderSection = ({
                     dayjs().subtract(90, "d").startOf("day"),
                     dayjs().endOf("day"),
                 ],
-            },
-            {
-                label: "Latest Booking",
-                value: () => {
-                    if (setSelectedDates) {
-                        setSelectedDates(null);
-                    }
-
-                    const targetPanelDate = latestBookingDate
-                        ? dayjs(latestBookingDate)
-                        : dayjs();
-                    setPValue(targetPanelDate);
-
-                    return [];
-                },
             },
         ],
         [],
