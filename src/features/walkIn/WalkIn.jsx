@@ -137,7 +137,7 @@ const WalkIn = () => {
                 title="Walk In"
                 subTitle="View and manage customers who visited without a booking."
                 setSearchText={handleSearchChange}
-                placeholderTitle="Search ..."
+                placeholderTitle="Search with name"
             />
 
             <TableHeaderSection

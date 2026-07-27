@@ -17,18 +17,25 @@ export const baseApi = createApi({
             return headers;
         },
     }),
+
     tagTypes: [
         "auth",
         "admin",
         "dashboard",
         "stats",
+
         "services",
         "categories",
         "packages",
+
         "users",
         "booking-management",
         "staffs",
+
         "calendar",
+        "daily-status",
+        "selected-day-leaves",
+
         "notifications",
         "report-chart",
     ],

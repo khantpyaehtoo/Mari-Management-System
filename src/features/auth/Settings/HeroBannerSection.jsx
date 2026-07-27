@@ -13,8 +13,7 @@ import {
     Image,
 } from "antd";
 import { Trash2 } from "lucide-react";
-
-const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
+import { getImageUrl } from "../../../app/core/functions/getImageUrl";
 
 const HeroBannerSection = ({
     isHeroBannerFormOpen,
@@ -66,8 +65,8 @@ const HeroBannerSection = ({
                             item?.bannerImage,
                         );
                         const imgPath = item?.bannerImage || item?.url;
-                        console.log(imgPath);
-                        const fullImgUrl = `${IMAGE_BASE_URL}${imgPath}`;
+                        const fullImgUrl = getImageUrl(imgPath);
+
                         return (
                             <div
                                 key={item.id}

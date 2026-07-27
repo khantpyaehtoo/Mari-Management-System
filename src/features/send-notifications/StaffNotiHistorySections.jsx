@@ -3,9 +3,9 @@ import { Button, Card, Empty, Flex, Spin } from "antd";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useGetStaffNotificationsQuery } from "./notificationApi";
+import { getImageUrl } from "../../app/core/functions/getImageUrl";
 
 dayjs.extend(relativeTime);
-const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
 
 const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
     const { data, isLoading } = useGetStaffNotificationsQuery();
@@ -33,7 +33,7 @@ const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
                         ? getNotificationIcon(noti.type)
                         : { bg: "bg-pink-50", icon: null };
 
-                    const fullImgUrl = `${IMAGE_BASE_URL}${noti.imageUrl}`;
+                    const fullImgUrl = getImageUrl(noti.imageUrl);
 
                     return (
                         <Card

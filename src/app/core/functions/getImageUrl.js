@@ -1,4 +1,4 @@
-const BASE_API = import.meta.env.VITE_BASE_API || "http://192.168.0.182:8080";
+const BASE_API = import.meta.env.VITE_BASE_API;
 
 export const getImageUrl = (filePath) => {
     if (!filePath) return "/uploads/profile-pictures/default-profile.png";

@@ -13,8 +13,7 @@ import {
     Image,
 } from "antd";
 import { Trash2 } from "lucide-react";
-
-const IMAGE_BASE_URL = import.meta.env.VITE_BASE_API;
+import { getImageUrl } from "../../../app/core/functions/getImageUrl";
 
 const TrendingUploadSection = ({
     isFetchingDesigns,
@@ -73,7 +72,7 @@ const TrendingUploadSection = ({
                             design?.url ||
                             design?.designImage;
 
-                        const fullImgUrl = `${IMAGE_BASE_URL}${imgPath}`;
+                        const fullImgUrl = getImageUrl(imgPath);
 
                         return (
                             <div
