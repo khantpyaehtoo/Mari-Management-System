@@ -33,16 +33,16 @@ const CalendarSection = () => {
 
     const todayStr = dayjs().format("YYYY-MM-DD");
 
-    // Fix 1: Get activeStaff safely from API Response structure
+    // Get activeStaff safely from API Response structure
     const activeStaffList = useMemo(() => {
         if (!dailyStaff) return [];
 
-        // Option A: If activeStaff is directly inside dailyStaff
+        // If activeStaff is directly inside dailyStaff
         if (Array.isArray(dailyStaff.activeStaff)) {
             return dailyStaff.activeStaff;
         }
 
-        // Option B: If inside dailyStatuses -> "YYYY-MM-DD" -> activeStaff
+        // If inside dailyStatuses -> "YYYY-MM-DD" -> activeStaff
         if (dailyStaff.dailyStatuses) {
             // Get today's object or first available date object
             const dateKey = Object.keys(dailyStaff.dailyStatuses)[0];
@@ -54,7 +54,7 @@ const CalendarSection = () => {
         return [];
     }, [dailyStaff]);
 
-    // Fix 2: Get today's events safely
+    // Get today's events safely
     const todayEvents = useMemo(() => {
         const todayData = calendarData.find(
             (item) => dayjs(item.date).format("YYYY-MM-DD") === todayStr,

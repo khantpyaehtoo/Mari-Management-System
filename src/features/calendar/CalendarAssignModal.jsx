@@ -1,4 +1,5 @@
 import {
+    Avatar,
     Button,
     DatePicker,
     Form,
@@ -14,6 +15,7 @@ import { useCreateCalendarDataMutation } from "./calendarApi";
 import { cn } from "../../lib/utils";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../app/core/notifications/notiSlice";
+import { User } from "lucide-react";
 
 const CalendarAssignModal = ({ calendarAssignConfig }) => {
     const [form] = Form.useForm();
@@ -23,13 +25,13 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
         useCreateCalendarDataMutation();
 
     const {
-        optionsStaff,
+        optionsStaff = [],
         setSelectedDates,
         selectedDates,
         setOpenCalForm,
         openCalForm,
-        leaveOptions,
-    } = calendarAssignConfig;
+        leaveOptions = [],
+    } = calendarAssignConfig || {};
 
     useEffect(() => {
         if (openCalForm && selectedDates) {
@@ -38,6 +40,8 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 : [selectedDates, selectedDates];
 
             form.setFieldsValue({ "select-date": formattedDate });
+        } else if (!openCalForm) {
+            form.resetFields();
         }
     }, [openCalForm, selectedDates, form]);
 
@@ -75,29 +79,35 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                     msgContent: "Leave assigned successfully!",
                 }),
             );
-            setOpenCalForm(false);
-            form.resetFields();
-            setSelectedDates(null);
+            handleClose();
         } catch (error) {
             console.error("Failed to assign leave:", error);
+            const errorMessage =
+                error?.data?.message ||
+                "Failed to assign leave. Please try again.";
             dispatch(
                 setMessage({
                     msgType: "error",
-                    msgContent: "Failed to assign leave. Please try again.",
+                    msgContent: errorMessage,
                 }),
             );
         }
     };
 
-    const calendarClassName = useMemo(() => {
-        const hasStartDate = selectedDates && selectedDates[0];
-        const hasNoEndDate = !selectedDates || !selectedDates[1];
-        const isSameDay =
-            hasStartDate &&
-            selectedDates[1] &&
-            selectedDates[0].isSame(selectedDates[1], "day");
+    const handleClose = () => {
+        setOpenCalForm(false);
+        form.resetFields();
+        if (setSelectedDates) setSelectedDates(null);
+    };
 
-        if (hasStartDate && (hasNoEndDate || isSameDay)) {
+    const calendarClassName = useMemo(() => {
+        const isArray = Array.isArray(selectedDates);
+        const start = isArray ? selectedDates[0] : selectedDates;
+        const end = isArray ? selectedDates[1] : null;
+
+        const isSameDay = start && end && start.isSame(end, "day");
+
+        if (start && (!end || isSameDay)) {
             return "single-active-view";
         }
         return "";
@@ -106,12 +116,9 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
     return (
         <Modal
             open={openCalForm}
-            onCancel={() => {
-                setOpenCalForm(false);
-                form.resetFields();
-            }}
+            onCancel={handleClose}
             title={
-                <Typography.Title level={3} className="font-semibold!">
+                <Typography.Title level={3} className="font-semibold! m-0!">
                     Assign Leave
                 </Typography.Title>
             }
@@ -125,7 +132,7 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 layout="vertical"
                 form={form}
                 autoComplete="off"
-                className="mt-8! space-y-10!"
+                className="mt-6! space-y-6!"
                 onFinish={handleFinish}
             >
                 <Form.Item
@@ -140,15 +147,26 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 >
                     <Select
                         style={{ width: "100%" }}
-                        placeholder="Please select a staff."
+                        placeholder="Please select a staff"
                         className="calendar-inputs!"
                         options={optionsStaff}
                         optionRender={(option) => (
-                            <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
+                            <Space align="center" size="small">
+                                <Avatar
+                                    size={24}
+                                    src={option.data.avatar}
+                                    icon={
+                                        !option.data.avatar ? (
+                                            <User size={12} />
+                                        ) : undefined
+                                    }
+                                />
+                                <span className="font-medium">
+                                    {option.data.label}
                                 </span>
-                                {`${option.data.label} (${option.data.desc})`}
+                                <span className="text-xs text-gray-400">
+                                    ({option.data.desc})
+                                </span>
                             </Space>
                         )}
                     />
@@ -178,8 +196,9 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                     label="Date"
                 >
                     <DatePicker.RangePicker
-                        value={selectedDates}
-                        onChange={(dates) => setSelectedDates(dates)}
+                        onChange={(dates) => {
+                            if (setSelectedDates) setSelectedDates(dates);
+                        }}
                         autoFocus={false}
                         className={cn(
                             "w-full calendar-inputs!",
@@ -190,22 +209,19 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                 </Form.Item>
 
                 <Form.Item label="Note" name="note">
-                    <Input.TextArea rows={2} className="calendar-inputs!" />
+                    <Input.TextArea
+                        rows={3}
+                        placeholder="Add reason or note..."
+                        className="calendar-inputs!"
+                    />
                 </Form.Item>
 
-                <Form.Item className="mb-0!">
+                <Form.Item className="mb-0! pt-2">
                     <Space
                         size="middle"
                         className="flex! justify-end! items-center!"
                     >
-                        <Button
-                            onClick={() => {
-                                setOpenCalForm(false);
-                                form.resetFields();
-                            }}
-                        >
-                            Cancel
-                        </Button>
+                        <Button onClick={handleClose}>Cancel</Button>
                         <Button
                             type="primary"
                             htmlType="submit"
