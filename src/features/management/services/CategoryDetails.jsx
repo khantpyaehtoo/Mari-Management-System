@@ -1,4 +1,4 @@
-import { Card, Col, Row, Skeleton } from "antd";
+import { Card, Col, Row, Skeleton, Modal } from "antd";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -137,6 +137,15 @@ const CategoryDetails = () => {
         );
     }, [getAllCategory, id, isAllMode, isDeletedMode]);
 
+    // Active (enabled === true)
+    const activeCategoryIds = useMemo(() => {
+        return (
+            getAllCategory
+                ?.filter((cate) => cate?.enabled !== false)
+                ?.map((cate) => cate?.id?.toString()) || []
+        );
+    }, [getAllCategory]);
+
     // Filter services based on active mode (All, Deleted, or Specific Category)
     const searchService = useMemo(() => {
         return (
@@ -156,6 +165,10 @@ const CategoryDetails = () => {
                     ? item.enabled === false
                     : item.enabled === true;
 
+                const hasActiveCategory = activeCategoryIds.includes(
+                    item.categoryId?.toString(),
+                );
+
                 const matchesSearch = item.name
                     ?.toString()
                     .toLowerCase()
@@ -165,19 +178,77 @@ const CategoryDetails = () => {
                     matchesCategory &&
                     isNotPackage &&
                     matchesStatus &&
+                    hasActiveCategory &&
                     matchesSearch
                 );
             }) || []
         );
-    }, [allServices, id, isAllMode, isDeletedMode, searchText]);
+    }, [
+        allServices,
+        id,
+        isAllMode,
+        isDeletedMode,
+        searchText,
+        activeCategoryIds,
+    ]);
 
     const handleActionClick = (actionType, item, e) => {
         e.preventDefault();
         e.stopPropagation();
         setSelectedService(item);
+
         if (actionType === "edit") {
             setEditModalOpen(true);
         } else {
+            if (!isDeletedMode) {
+                const activePackages =
+                    allServices?.filter(
+                        (pkg) =>
+                            pkg?.package === true && pkg?.enabled !== false,
+                    ) || [];
+
+                const blockedPackages = activePackages.filter((pkg) =>
+                    pkg?.includedServices?.some(
+                        (serviceName) =>
+                            serviceName?.trim()?.toLowerCase() ===
+                            item?.name?.trim()?.toLowerCase(),
+                    ),
+                );
+
+                if (blockedPackages.length > 0) {
+                    const packageNames = blockedPackages
+                        .map((p) => p.name)
+                        .join(", ");
+
+                    Modal.error({
+                        title: `Cannot Delete "${item?.name}"`,
+                        okText: "Understand",
+                        okButtonProps: {
+                            type: "primary",
+                            className:
+                                "bg-pink-500! hover:bg-pink-600! font-medium rounded-lg px-4",
+                        },
+                        content: (
+                            <div className="mt-3 space-y-2 font-montserrat">
+                                <p className="text-sm text-gray-600 font-medium">
+                                    This service is currently used in active
+                                    package(s):{" "}
+                                    <span className="font-bold text-red-500">
+                                        {packageNames}
+                                    </span>
+                                    .
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    Please remove this service from the
+                                    package(s) or disable the package first.
+                                </p>
+                            </div>
+                        ),
+                    });
+                    return;
+                }
+            }
+
             setDeleteModalOpen(true);
         }
     };
@@ -221,7 +292,9 @@ const CategoryDetails = () => {
                 placeholderTitle="Search service name..."
                 backText="All Categories"
                 showBackButton={true}
-                categories={getAllCategory}
+                categories={getAllCategory?.filter(
+                    (cate) => cate?.enabled !== false,
+                )}
                 isAllMode={isAllMode || isDeletedMode}
                 searchText={searchText}
                 setSearchText={setSearchText}
@@ -275,7 +348,9 @@ const CategoryDetails = () => {
                 setDeleteModalOpen={setDeleteModalOpen}
                 handleDeleteConfirm={handleDeleteConfirm}
                 handleRestoreConfirm={handleRestoreConfirm}
-                categories={getAllCategory}
+                categories={getAllCategory?.filter(
+                    (cate) => cate?.enabled !== false,
+                )}
                 isDeletedMode={isDeletedMode}
             />
         </>

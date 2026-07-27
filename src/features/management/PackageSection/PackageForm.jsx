@@ -12,7 +12,12 @@ const PackageForm = ({ form: externalForm, isEdit, initialValue }) => {
 
     // Map service options safely
     const serviceOptions = allService
-        ?.filter((service) => service && service.package !== true) // Pure services
+        ?.filter(
+            (service) =>
+                service &&
+                service.package !== true &&
+                service.enabled !== false,
+        )
         ?.map((service) => {
             const isMaxReached = selectedServiceIds.length >= 3;
             const isSelected = selectedServiceIds.includes(service.id);
@@ -29,25 +34,50 @@ const PackageForm = ({ form: externalForm, isEdit, initialValue }) => {
         if (isEdit && initialValue) {
             let preSelectedServiceIds = [];
 
+            const activeServices =
+                allService?.filter(
+                    (s) => s && s.enabled !== false && s.package !== true,
+                ) || [];
+            const activeServiceIds = activeServices.map((s) => s.id);
+
             if (Array.isArray(initialValue.serviceIds)) {
-                preSelectedServiceIds = initialValue.serviceIds;
+                preSelectedServiceIds = initialValue.serviceIds.filter((id) =>
+                    activeServiceIds.includes(id),
+                );
             } else if (Array.isArray(initialValue.services)) {
-                preSelectedServiceIds = initialValue.services.map((s) => s.id);
+                preSelectedServiceIds = initialValue.services
+                    .filter((s) => activeServiceIds.includes(s.id))
+                    .map((s) => s.id);
             } else if (Array.isArray(initialValue.includedServices)) {
-                preSelectedServiceIds = allService
+                preSelectedServiceIds = activeServices
                     ?.filter((service) =>
                         initialValue.includedServices?.includes(service.name),
                     )
                     ?.map((service) => service.id);
             }
 
+            // Active Selected Services Price/Duration
+            const selectedServices = activeServices.filter((service) =>
+                preSelectedServiceIds.includes(service.id),
+            );
+            const totalPrice = selectedServices.reduce(
+                (sum, service) => sum + Number(service.price || 0),
+                0,
+            );
+            const totalDuration = selectedServices.reduce(
+                (sum, service) =>
+                    sum +
+                    Number(service.durationInMinutes || service.duration || 0),
+                0,
+            );
+
             form.setFieldsValue({
                 packageName: initialValue.name || initialValue.packageName,
-                packagePrice: initialValue.price || initialValue.packagePrice,
-                packageDuration:
-                    initialValue.durationInMinutes ||
-                    initialValue.duration ||
-                    initialValue.packageDuration,
+                packagePrice:
+                    initialValue.price ||
+                    initialValue.packagePrice ||
+                    (totalPrice > 0 ? totalPrice : undefined),
+                packageDuration: totalDuration > 0 ? totalDuration : undefined,
                 serviceId: preSelectedServiceIds,
             });
         } else if (!isEdit) {

@@ -17,7 +17,7 @@ const CategorySection = () => {
     const dispatch = useDispatch();
     const [searchText, setSearchText] = useState("");
     const [createCategory] = useCreateCategoryMutation();
-    const [deleteCategory] = useDeleteCategoryMutation(); // 2. Delete Mutation Hook
+    const [deleteCategory] = useDeleteCategoryMutation();
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -29,18 +29,24 @@ const CategorySection = () => {
         setIsEdit(false);
     };
 
-    const { data: getAllCategory = [], isLoading: isCategoryLoading } =
-        useGetCategoryDataQuery();
+    const {
+        data: getAllCategory = [],
+        isLoading: isCategoryLoading,
+        refetch: refetchCategories,
+    } = useGetCategoryDataQuery();
+
     const { data: getAllServices = [], isLoading: isServiceLoading } =
         useGetAllServiceDataQuery();
-
-    console.log(getAllCategory);
 
     const isLoading = isCategoryLoading || isServiceLoading;
 
     const handleDeleteCategory = (e, category) => {
         e.preventDefault();
         e.stopPropagation();
+
+        const activePackages = getAllServices.filter(
+            (item) => item?.package === true && item?.enabled !== false,
+        );
 
         const relatedServices = getAllServices.filter((service) => {
             const isIdMatch =
@@ -54,8 +60,61 @@ const CategorySection = () => {
                 service.categoryName.trim().toLowerCase() ===
                     category.title.trim().toLowerCase();
 
-            return (isIdMatch || isNameMatch) && service?.enabled !== false;
+            return (
+                (isIdMatch || isNameMatch) &&
+                service?.enabled !== false &&
+                service?.package !== true
+            );
         });
+
+        const blockedServices = relatedServices.filter((childService) => {
+            const childName = childService?.name || childService?.title;
+            if (!childName) return false;
+
+            return activePackages.some((pkg) =>
+                pkg.includedServices?.some(
+                    (incServiceName) =>
+                        incServiceName?.trim()?.toLowerCase() ===
+                        childName.trim().toLowerCase(),
+                ),
+            );
+        });
+
+        // Active Package ? Child Service : no delete
+        if (blockedServices.length > 0) {
+            Modal.error({
+                title: `Cannot Delete "${category.title}" Category`,
+                okText: "Understand",
+                okButtonProps: {
+                    type: "primary",
+                    className:
+                        "bg-pink-500 hover:bg-pink-600 font-medium rounded-lg px-4",
+                },
+                content: (
+                    <div className="mt-3 space-y-2">
+                        <p className="text-sm text-gray-600 font-medium font-montserrat">
+                            This category contains active service(s) that are
+                            currently used in active packages. Please remove
+                            them from the packages first before deleting this
+                            category.
+                        </p>
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-3 max-h-36 overflow-y-auto">
+                            <p className="text-xs font-bold text-red-600 mb-1">
+                                Services tied to Active Packages:
+                            </p>
+                            <ul className="list-disc list-inside text-xs text-red-500 space-y-1">
+                                {blockedServices.map((s) => (
+                                    <li key={s.id} className="font-semibold">
+                                        {s.name || s.title}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                ),
+            });
+            return;
+        }
 
         Modal.confirm({
             title: `Delete "${category.title}" Category?`,
@@ -68,12 +127,10 @@ const CategorySection = () => {
                 className:
                     "bg-red-500 hover:bg-red-600! font-medium rounded-lg px-4",
             },
-
             cancelButtonProps: {
                 className:
                     "border-gray-300 hover:border-gray-400 text-gray-700 font-medium rounded-lg px-4",
             },
-
             content: (
                 <div className="mt-3 space-y-2">
                     <p className="text-sm text-gray-600 font-medium font-montserrat">
@@ -102,6 +159,7 @@ const CategorySection = () => {
             async onOk() {
                 try {
                     await deleteCategory(category.id).unwrap();
+                    await refetchCategories(); // Delete ပြီးပါက Category List ကို Auto Refetch လုပ်ပါမည်
                     dispatch(
                         setMessage({
                             message: "Category deleted successfully!",
@@ -123,20 +181,36 @@ const CategorySection = () => {
     };
 
     const categories = useMemo(() => {
+        // Active Category ID
+        const activeCategoryIds = getAllCategory
+            ?.filter((cate) => cate?.enabled !== false)
+            ?.map((cate) => String(cate.id));
+
+        // Active
         const activeServices = getAllServices.filter((item) => {
             const isNotPackage = item?.package !== true;
             const isEnabled = item?.enabled === true;
             return isNotPackage && isEnabled;
         });
 
+        // Deleted Services
         const deletedServices = getAllServices.filter((item) => {
             const isNotPackage = item?.package !== true;
             const isDeleted = item?.enabled === false;
-            return isNotPackage && isDeleted;
+
+            const hasActiveCategory = activeCategoryIds.includes(
+                String(item.categoryId),
+            );
+
+            return isNotPackage && isDeleted && hasActiveCategory;
         });
 
         const filteredCategories = getAllCategory
-            ?.filter((cate) => cate?.name?.toLowerCase() !== "package")
+            ?.filter(
+                (cate) =>
+                    cate?.name?.toLowerCase() !== "package" &&
+                    cate?.enabled !== false,
+            )
             ?.map((cate) => {
                 const serviceCount = activeServices.filter((service) => {
                     const isIdMatch =

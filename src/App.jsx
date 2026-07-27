@@ -17,8 +17,8 @@ import ReportsPage from "./features/reports/ReportsPage.jsx";
 import Packages from "./features/management/PackageSection/Packages.jsx";
 import Notifications from "./features/send-notifications/Notifications.jsx";
 
-// import IsAuth from "./components/Guards/IsAuth.jsx";
-// import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
+import IsAuth from "./components/Guards/IsAuth.jsx";
+import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 import DisabledPackage from "./features/management/PackageSection/DisabledPackage.jsx";
 import NotificationHandler from "./app/core/notifications/NotificationHandler.jsx";
 import { NotificationListener } from "./components/Bars/IncomeNotifications/NotificationsListener.jsx";
@@ -31,9 +31,9 @@ export default function App() {
                 <Route
                     path="/login"
                     element={
-                        // <IsNotAuth>
-                        <LoginForm />
-                        // </IsNotAuth>
+                        <IsNotAuth>
+                            <LoginForm />
+                        </IsNotAuth>
                     }
                 />
                 <Route path="/reset" element={<ForgetPasswordForm />} />
@@ -42,12 +42,10 @@ export default function App() {
                 <Route
                     path="/"
                     element={
-                        // <IsAuth>
-                        <>
+                        <IsAuth>
                             <NotificationListener />
                             <MainLayout />
-                        </>
-                        // </IsAuth>
+                        </IsAuth>
                     }
                 >
                     <Route index path="/" element={<Dashboard />} />
