@@ -11,6 +11,7 @@ const TableHeaderSection = ({
     setFilterValue,
     statusCounts,
     dateConfig,
+    latestBookingDate,
 }) => {
     const handleChange = (value) => {
         const newValue = value || "All";
@@ -22,7 +23,7 @@ const TableHeaderSection = ({
     const { selectedDates, setSelectedDates } = dateConfig || {};
     const [pValue, setPValue] = useState(dayjs().subtract(1, "month"));
 
-    // Scroll
+    // Scroll Logic
     const tabsRef = useRef(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
@@ -53,43 +54,61 @@ const TableHeaderSection = ({
         el.scrollBy({ left: dir * 150, behavior: "smooth" });
     };
 
-    const rangePresets = useMemo(
+    const presets = useMemo(
         () => [
             {
+                label: "Today",
+                value: () => [dayjs().startOf("day"), dayjs().endOf("day")],
+            },
+            {
                 label: "Last 7 Days",
-                value: [dayjs().subtract(7, "d"), dayjs()],
+                value: () => [
+                    dayjs().subtract(7, "d").startOf("day"),
+                    dayjs().endOf("day"),
+                ],
             },
             {
                 label: "Last 14 Days",
-                value: [dayjs().subtract(14, "d"), dayjs()],
+                value: () => [
+                    dayjs().subtract(14, "d").startOf("day"),
+                    dayjs().endOf("day"),
+                ],
             },
             {
                 label: "Last 30 Days",
-                value: [dayjs().subtract(30, "d"), dayjs()],
+                value: () => [
+                    dayjs().subtract(30, "d").startOf("day"),
+                    dayjs().endOf("day"),
+                ],
             },
             {
                 label: "Last 90 Days",
-                value: [dayjs().subtract(90, "d"), dayjs()],
+                value: () => [
+                    dayjs().subtract(90, "d").startOf("day"),
+                    dayjs().endOf("day"),
+                ],
+            },
+            {
+                label: "Latest Booking",
+                value: () => {
+                    if (setSelectedDates) {
+                        setSelectedDates(null);
+                    }
+
+                    const targetPanelDate = latestBookingDate
+                        ? dayjs(latestBookingDate)
+                        : dayjs();
+                    setPValue(targetPanelDate);
+
+                    return [];
+                },
             },
         ],
         [],
     );
 
-    const presets = useMemo(
-        () => [
-            {
-                label: (
-                    <span aria-label="Current Time to End of Day">Today</span>
-                ),
-                value: () => [dayjs(), dayjs().endOf("day")],
-            },
-            ...rangePresets,
-        ],
-        [rangePresets],
-    );
-
-    const disableFutureDates = (current) =>
-        current && current > dayjs().endOf("day");
+    // const disableFutureDates = (current) =>
+    //     current && current > dayjs().endOf("day");
 
     const statusClasses = useMemo(
         () => ({
@@ -179,8 +198,8 @@ const TableHeaderSection = ({
                     <Space size={4} className="w-full sm:w-auto">
                         <DatePicker.RangePicker
                             separator={<ChevronsRight size={16} />}
-                            maxDate={dayjs()}
-                            disabledDate={disableFutureDates}
+                            // maxDate={dayjs()}
+                            // disabledDate={disableFutureDates}
                             value={selectedDates}
                             onChange={(dates) => setSelectedDates(dates)}
                             className={cn(
@@ -191,14 +210,22 @@ const TableHeaderSection = ({
                             presets={presets}
                             defaultPickerValue={pValue}
                             onPickerValueChange={(_, info) => {
-                                if (!selectedDates?.length) return;
+                                if (
+                                    !selectedDates ||
+                                    selectedDates.length === 0 ||
+                                    !selectedDates[0]
+                                )
+                                    return;
 
                                 switch (info.range) {
                                     case "start":
-                                        setPValue(selectedDates[0]);
+                                        if (selectedDates[0])
+                                            setPValue(selectedDates[0]);
                                         break;
                                     case "end":
-                                        setPValue(selectedDates[1]);
+                                        if (selectedDates[1])
+                                            setPValue(selectedDates[1]);
+                                        break;
                                 }
                             }}
                         />

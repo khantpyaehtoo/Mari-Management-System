@@ -39,10 +39,12 @@ const Booking = () => {
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : 1500;
 
-    // State Handlers
     const [searchText, setSearchText] = useState("");
     const [filterValue, setFilterValue] = useState("All");
-    const [selectedDates, setSelectedDates] = useState(null);
+    const [selectedDates, setSelectedDates] = useState([
+        dayjs().subtract(6, "day"),
+        dayjs(),
+    ]);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -98,6 +100,8 @@ const Booking = () => {
     const startDate = selectedDates?.[0]
         ? dayjs(selectedDates[0]).format("YYYY-MM-DD")
         : undefined;
+
+    // Fallback to today if end date isn't explicitly defined
     const endDate = selectedDates?.[1]
         ? dayjs(selectedDates[1]).format("YYYY-MM-DD")
         : undefined;
