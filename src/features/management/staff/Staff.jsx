@@ -27,7 +27,6 @@ import { getImageUrl } from "../../../app/core/functions/getImageUrl";
 const RENDER_LISTS = [
     "All",
     "In Progress",
-    "Completed",
     "Available",
     "Unavailable",
     "Terminate",
@@ -36,7 +35,6 @@ const STATUS_CLASSES = {
     "In Progress": "text-progress",
     Pending: "text-pending",
     Confirm: "text-confirm",
-    Completed: "text-completed",
     Available: "text-available",
     Unavailable: "text-unavailable",
     Reject: "text-unavailable",
