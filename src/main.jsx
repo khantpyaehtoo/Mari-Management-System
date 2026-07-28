@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { store } from "./app/store.js";
 import { Provider } from "react-redux";
 import { ConfigProvider, App as AntdApp } from "antd";
+import { Analytics } from "@vercel/analytics/react";
 
 const config = {
     token: {
@@ -44,6 +45,7 @@ createRoot(document.getElementById("root")).render(
                 <ConfigProvider theme={config}>
                     <AntdApp>
                         <App />
+                        <Analytics />
                     </AntdApp>
                 </ConfigProvider>
             </BrowserRouter>
