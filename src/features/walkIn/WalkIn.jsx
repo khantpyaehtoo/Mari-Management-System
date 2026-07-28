@@ -24,6 +24,8 @@ const WalkIn = () => {
         search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
     });
 
+    console.log(walkInData);
+
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";
 
@@ -43,7 +45,7 @@ const WalkIn = () => {
 
     const statusCounts = useMemo(() => {
         return {
-            All: walkInData?.numberOfElements,
+            All: walkInData?.totalElements,
         };
     }, [walkInData]);
 
@@ -158,6 +160,8 @@ const WalkIn = () => {
                         onChange: handlePageChange,
                         size: "large",
                         pageSize: 10,
+                        total: walkInData?.totalElements || 0,
+                        showSizeChanger: false,
                     }}
                 />
             </div>

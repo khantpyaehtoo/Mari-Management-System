@@ -6,6 +6,7 @@ import {
     useGetIncomingStaffNotisQuery,
 } from "./incomeNotiApi";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
+import { walkinApi } from "../../../features/walkIn/walkInApi";
 
 export const NotificationListener = () => {
     const dispatch = useDispatch();
@@ -48,6 +49,8 @@ export const NotificationListener = () => {
                         isInbox: true,
                     }),
                 );
+
+                dispatch(walkinApi.util.invalidateTags(["walkin"]));
             }
         }
     }, [customerData, dispatch]);

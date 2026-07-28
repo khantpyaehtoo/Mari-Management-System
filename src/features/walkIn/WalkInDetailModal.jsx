@@ -9,6 +9,8 @@ const WalkInDetailModal = ({ selectedWalkin, isOpen, onClose }) => {
 
     if (!selectedWalkin) return null;
 
+    console.log(walkinDetails);
+
     // Safely parse values with optional chaining to prevent crashes during loading
     const serviceName = walkinDetails?.serviceName;
     const startTime = walkinDetails?.startTime;
@@ -110,13 +112,13 @@ const WalkInDetailModal = ({ selectedWalkin, isOpen, onClose }) => {
                         </Flex>
                     </div>
 
-                    {walkinDetails.note && (
+                    {walkinDetails.extraChargesNote && (
                         <div className="border-gray-400 border p-4 rounded-xl bg-white-back my-4">
                             <h1 className="text-primary font-medium text-base mb-2">
                                 Extra Charges Note
                             </h1>
                             <p className="text-sm text-gray-700 mb-1">
-                                {walkinDetails.note}
+                                {walkinDetails.extraChargesNote}
                             </p>
                         </div>
                     )}

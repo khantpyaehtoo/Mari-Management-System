@@ -33,6 +33,7 @@ export const baseApi = createApi({
 
         "users",
         "booking-management",
+        "walkin",
         "staffs",
 
         "calendar",
