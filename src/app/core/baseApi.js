@@ -1,6 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import CookieJS from "js-cookie";
-const BASE_URL = import.meta.env.VITE_BASE_API;
+const BASE_URL =
+    import.meta.env.VITE_BASE_API ||
+    import.meta.env.VITE_BASE_API_1 ||
+    import.meta.env.VITE_BASE_API_2;
 
 export const baseApi = createApi({
     reducerPath: "api",

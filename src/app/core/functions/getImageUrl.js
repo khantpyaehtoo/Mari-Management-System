@@ -1,4 +1,7 @@
-const BASE_API = import.meta.env.VITE_BASE_API;
+const BASE_API =
+    import.meta.env.VITE_BASE_API ||
+    import.meta.env.VITE_BASE_API_1 ||
+    import.meta.env.VITE_BASE_API_2;
 
 export const getImageUrl = (filePath) => {
     if (!filePath) return "/uploads/profile-pictures/default-profile.png";
