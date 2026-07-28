@@ -102,7 +102,11 @@ const Staff = () => {
               ? "Inactive"
               : filterValue;
 
-    const { data: apiResponse, isLoading } = useGetStaffDataQuery({
+    const {
+        data: apiResponse,
+        isLoading,
+        refetch,
+    } = useGetStaffDataQuery({
         status: statusParam,
         search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
         page: currentPage - 1,
@@ -175,6 +179,7 @@ const Staff = () => {
                     msgContent: "Staff created successfully.",
                 }),
             );
+            refetch();
             return result;
         } catch (error) {
             console.error("Create staff error:", error);
