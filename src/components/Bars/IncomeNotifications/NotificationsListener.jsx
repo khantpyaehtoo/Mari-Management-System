@@ -7,6 +7,7 @@ import {
 } from "./incomeNotiApi";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
 import { walkinApi } from "../../../features/walkIn/walkInApi";
+import { bookingApi } from "../../../features/management/booking/bookingApi";
 
 export const NotificationListener = () => {
     const dispatch = useDispatch();
@@ -51,6 +52,9 @@ export const NotificationListener = () => {
                 );
 
                 dispatch(walkinApi.util.invalidateTags(["walkin"]));
+                dispatch(
+                    bookingApi.util.invalidateTags(["booking-management"]),
+                );
             }
         }
     }, [customerData, dispatch]);
@@ -78,6 +82,11 @@ export const NotificationListener = () => {
                             "You have a new staff notification",
                         isInbox: true,
                     }),
+                );
+
+                dispatch(walkinApi.util.invalidateTags(["walkin"]));
+                dispatch(
+                    bookingApi.util.invalidateTags(["booking-management"]),
                 );
             }
         }
