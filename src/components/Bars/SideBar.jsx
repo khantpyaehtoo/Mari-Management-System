@@ -145,7 +145,7 @@ const SideBar = ({ collapsed = false }) => {
             {/* Sidebar content */}
             <aside
                 className={cn(
-                    "sidebar-mobile fixed inset-y-0 left-0 h-screen z-999 lg:relative lg:translate-x-0 lg:z-0 lg:w-full lg:h-full bg-white flex flex-col justify-between overflow-hidden",
+                    "sidebar-mobile fixed inset-y-0 left-0 h-screen z-999 lg:relative lg:translate-x-0 lg:z-0 lg:w-full lg:h-full bg-primary flex flex-col justify-between overflow-hidden",
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full",
                 )}
             >
