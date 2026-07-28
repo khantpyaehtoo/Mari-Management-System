@@ -230,7 +230,7 @@ const SubHeaderSection = ({
                     <AddForm
                         title={resolvedFormType}
                         formType={resolvedFormType}
-                        btnTitle={btnTitle}
+                        btnTitle={formType}
                         subFormTitle={subFormTitle}
                         isEdit={isEdit}
                         onCancel={onCancel}

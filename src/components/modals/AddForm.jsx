@@ -129,7 +129,7 @@ const AddForm = ({
                 icon={<PlusCircleOutlined />}
                 className="createFormBtn!"
             >
-                {!btnTitle ? `Create ${title}` : `Create ${btnTitle}`}
+                {!btnTitle ? `Create ${title}` : `Create ${formType}`}
             </Button>
 
             <Modal

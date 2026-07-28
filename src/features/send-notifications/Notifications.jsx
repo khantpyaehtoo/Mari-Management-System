@@ -170,7 +170,6 @@ const Notifications = () => {
             <SubHeaderSection
                 title="Sent Notifications"
                 subTitle="You can send notifications to staffs & customers."
-                btnTitle="Notification"
                 formType={["To Staff", "To Customer"]}
                 activeFormType={activeFormType}
                 setActiveFormType={setActiveFormType}
