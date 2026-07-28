@@ -178,9 +178,14 @@ const CalendarSection = () => {
                                 <Badge
                                     status="success"
                                     text={
-                                        <span className="text-xs font-medium text-green-600">
-                                            Active: {activeCount}
-                                        </span>
+                                        <div className="inline-flex gap-2">
+                                            <span className="text-xs font-medium text-green-600 md:hidden lg:block">
+                                                Active:
+                                            </span>
+                                            <span className="text-xs font-medium text-green-600">
+                                                {activeCount}
+                                            </span>
+                                        </div>
                                     }
                                 />
                             </li>
@@ -191,9 +196,14 @@ const CalendarSection = () => {
                                 <Badge
                                     status="warning"
                                     text={
-                                        <span className="text-xs font-medium text-amber-600">
-                                            Day Off: {dayOffCount}
-                                        </span>
+                                        <div className="inline-flex justify-around gap-2 text-center">
+                                            <span className="text-xs font-medium text-amber-600 md:hidden lg:block">
+                                                Day Off:{"  "}
+                                            </span>
+                                            <span className="text-xs font-medium text-amber-600">
+                                                {dayOffCount}
+                                            </span>
+                                        </div>
                                     }
                                 />
                             </li>
@@ -204,9 +214,14 @@ const CalendarSection = () => {
                                 <Badge
                                     status="error"
                                     text={
-                                        <span className="text-xs font-medium text-red-600">
-                                            Leave: {leaveCount}
-                                        </span>
+                                        <div className="inline-flex justify-around gap-2 text-center ">
+                                            <span className="text-xs font-medium text-red-600 md:hidden lg:block">
+                                                Leave:{"  "}
+                                            </span>
+                                            <span className="text-xs font-medium text-red-600">
+                                                {leaveCount}
+                                            </span>
+                                        </div>
                                     }
                                 />
                             </li>

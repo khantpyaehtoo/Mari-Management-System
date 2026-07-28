@@ -72,6 +72,4 @@ export const {
     useGetCalendarDataQuery,
     useGetSelectedDayLeavesQuery,
     useCreateCalendarDataMutation,
-    useUpdateCalendarDataMutation,
-    useDeleteCalendarDataMutation,
 } = calendarApi;

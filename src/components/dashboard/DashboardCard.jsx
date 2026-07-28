@@ -74,7 +74,7 @@ const DashboardCard = ({ title, value, icon, trending, isLoading }) => {
                             >
                                 {value}
                             </Typography.Title>
-                            <p className="text-gray-500 text-sm m-0 font-montserrat!">
+                            <p className="text-gray-500 text-sm m-0 font-montserrat! line-clamp-1">
                                 {title}
                             </p>
                         </>
