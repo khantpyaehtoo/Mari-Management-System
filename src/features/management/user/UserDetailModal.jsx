@@ -18,7 +18,7 @@ const UserDetailModal = ({
 
     const isUnblocking = actionType === "unblock";
 
-    console.log(userDetails);
+    // console.log(userDetails);
 
     const customerDetailCardItem = [
         {

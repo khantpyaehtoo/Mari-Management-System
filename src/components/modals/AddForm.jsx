@@ -59,7 +59,7 @@ const AddForm = ({
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            console.log("Form Values Submit:", values);
+            // console.log("Form Values Submit:", values);
 
             const triggerMutation = isEdit ? triggerEdit : triggerCreate;
 
@@ -94,7 +94,7 @@ const AddForm = ({
             }
         } catch (err) {
             if (err.errorFields) {
-                console.log("Validation Failed:", err.errorFields);
+                // console.log("Validation Failed:", err.errorFields);
                 return;
             }
 

@@ -24,7 +24,7 @@ const WalkIn = () => {
         search: debouncedSearchText ? debouncedSearchText.trim() : undefined,
     });
 
-    console.log(walkInData);
+    // console.log(walkInData);
 
     const screens = useBreakpoint();
     const scrollX = screens.xs ? undefined : "1500";

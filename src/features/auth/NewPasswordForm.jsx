@@ -40,8 +40,8 @@ const NewPasswordForm = () => {
         console.log(
             "Submitting new password for:",
             email,
-            "With Token:",
-            token,
+            // "With Token:",
+            // token,
         );
 
         try {

@@ -60,10 +60,10 @@ const HeroBannerSection = ({
                     ))
                 ) : vendorDesignData && vendorDesignData.length > 0 ? (
                     vendorDesignData.map((item) => {
-                        console.log(
-                            `Banner ID ${item.id} path:`,
-                            item?.bannerImage,
-                        );
+                        // console.log(
+                        //     `Banner ID ${item.id} path:`,
+                        //     item?.bannerImage,
+                        // );
                         const imgPath = item?.bannerImage || item?.url;
                         const fullImgUrl = getImageUrl(imgPath);
 

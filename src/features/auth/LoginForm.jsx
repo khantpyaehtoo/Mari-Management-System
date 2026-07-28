@@ -21,12 +21,12 @@ const LoginForm = () => {
     const [loginAccount] = useLoginAccountMutation();
 
     const onFinish = async (values) => {
-        console.log("Received values of form: ", values);
+        // console.log("Received values of form: ", values);
         try {
             setIsSubmitting(true);
 
             const data = await loginAccount(values).unwrap();
-            console.log(data?.tokenPair.accessToken);
+            // console.log(data?.tokenPair.accessToken);
 
             if (data?.tokenPair.accessToken) {
                 Cookies.set("lmsToken", data?.tokenPair.accessToken);

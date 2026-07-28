@@ -41,7 +41,7 @@ const CalendarDetailOverview = ({
             <section className="space-y-3">
                 {details && details.length > 0 ? (
                     details.map((staff, index) => {
-                        console.log(staff);
+                        // console.log(staff);
                         return (
                             <div
                                 key={index}

@@ -210,7 +210,7 @@ const Staff = () => {
     }, [apiResponse, dataList]);
 
     const handleActionClick = useCallback((actionType, record) => {
-        console.log("Selected Staff DB Record:", record);
+        // console.log("Selected Staff DB Record:", record);
         setSelectedStaff(record);
         if (actionType === "view") {
             setIsDetailOpen(true);

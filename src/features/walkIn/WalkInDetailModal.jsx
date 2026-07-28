@@ -9,7 +9,7 @@ const WalkInDetailModal = ({ selectedWalkin, isOpen, onClose }) => {
 
     if (!selectedWalkin) return null;
 
-    console.log(walkinDetails);
+    // console.log(walkinDetails);
 
     // Safely parse values with optional chaining to prevent crashes during loading
     const serviceName = walkinDetails?.serviceName;
