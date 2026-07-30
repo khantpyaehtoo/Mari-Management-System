@@ -25,7 +25,10 @@ const MainLayout = () => {
                 <SideBar collapsed={collapsed} />
             </Sider>
 
-            <Layout className="h-full flex flex-col">
+            <Layout
+                id="main-content-container"
+                className="h-full flex flex-col"
+            >
                 {/* Mobile SideBar */}
                 <div className="lg:hidden">
                     <SideBar collapsed={false} />

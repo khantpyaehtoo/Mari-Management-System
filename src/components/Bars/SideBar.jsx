@@ -14,7 +14,7 @@ import {
     UserOutlined,
 } from "@ant-design/icons";
 import { Menu, Button } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "../../lib/utils";
 import { toggleSidebar } from "../../layout/layoutSlice";
@@ -159,17 +159,22 @@ const SideBar = ({ collapsed = false }) => {
 
                     {/* Header Logo Section */}
                     <div className="flex bg-primary justify-center items-center h-16 gap-2 shrink-0 overflow-hidden px-2">
-                        <img
-                            src={brandLogo}
-                            alt="brandLogo"
-                            className="w-10 h-10 object-contain shrink-0"
-                        />
-                        {!collapsed && (
+                        <Link to={"/"}>
                             <img
-                                src={brandName}
-                                alt="brandName"
-                                className="w-12 object-contain"
+                                src={brandLogo}
+                                alt="brandLogo"
+                                className="w-10 h-10 object-contain shrink-0"
                             />
+                        </Link>
+
+                        {!collapsed && (
+                            <Link to={"/"}>
+                                <img
+                                    src={brandName}
+                                    alt="brandName"
+                                    className="w-12 object-contain"
+                                />
+                            </Link>
                         )}
                     </div>
 

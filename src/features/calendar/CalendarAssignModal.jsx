@@ -6,7 +6,6 @@ import {
     Input,
     Modal,
     Radio,
-    Select,
     Space,
     Typography,
 } from "antd";
@@ -26,10 +25,12 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
 
     const {
         optionsStaff = [],
+        fetchUserList,
         setSelectedDates,
         selectedDates,
         setOpenCalForm,
         openCalForm,
+        DebounceSelect,
         leaveOptions = [],
     } = calendarAssignConfig || {};
 
@@ -145,31 +146,36 @@ const CalendarAssignModal = ({ calendarAssignConfig }) => {
                         },
                     ]}
                 >
-                    <Select
-                        style={{ width: "100%" }}
-                        placeholder="Please select a staff"
-                        className="calendar-inputs!"
-                        options={optionsStaff}
-                        optionRender={(option) => (
-                            <Space align="center" size="small">
-                                <Avatar
-                                    size={24}
-                                    src={option.data.avatar}
-                                    icon={
-                                        !option.data.avatar ? (
-                                            <User size={12} />
-                                        ) : undefined
-                                    }
-                                />
-                                <span className="font-medium">
-                                    {option.data.label}
-                                </span>
-                                <span className="text-xs text-gray-400">
-                                    ({option.data.desc})
-                                </span>
-                            </Space>
-                        )}
-                    />
+                    {DebounceSelect && (
+                        <DebounceSelect
+                            style={{ width: "100%" }}
+                            placeholder="Please select a staff member"
+                            className="calendar-inputs!"
+                            options={optionsStaff}
+                            fetchOptions={fetchUserList}
+                            // Allow user to clear selection
+                            allowClear
+                            optionRender={(option) => (
+                                <Space align="center" size="small">
+                                    <Avatar
+                                        size={24}
+                                        src={option.data.avatar}
+                                        icon={
+                                            !option.data.avatar ? (
+                                                <User size={12} />
+                                            ) : undefined
+                                        }
+                                    />
+                                    <span className="font-medium">
+                                        {option.data.label}
+                                    </span>
+                                    <span className="text-xs text-gray-400">
+                                        ({option.data.desc})
+                                    </span>
+                                </Space>
+                            )}
+                        />
+                    )}
                 </Form.Item>
 
                 <Form.Item

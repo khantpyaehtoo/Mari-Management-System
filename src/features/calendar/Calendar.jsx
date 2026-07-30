@@ -244,6 +244,9 @@ const CalendarSection = () => {
         optionsStaff: dynamicOptionsStaff,
         setSelectedDates: setSelectedDate,
         selectedDates: selectedDate,
+        fetchUserList: handleFetchUserList,
+        onChange: handleFilterChange,
+        DebounceSelect,
         setOpenCalForm,
         openCalForm,
         leaveOptions,
@@ -266,33 +269,31 @@ const CalendarSection = () => {
                 </Col>
                 <Col xs={24} md={16} lg={18}>
                     <Space vertical style={{ width: "100%" }} size="middle">
-                        <div className="w-full overflow-x-auto">
-                            <Calendar
-                                cellRender={dateCellRender}
-                                className="custom-calendar shadow-sm rounded-2xl"
-                                onChange={(date) => {
-                                    if (date.format("M") !== currentMonth) {
-                                        setCurrentMonth(date.format("M"));
-                                    }
-                                }}
-                                styles={{
-                                    root: {
-                                        borderRadius: "20px",
-                                    },
-                                    header: {
-                                        background: "#FBB1BD",
-                                        padding: "16px 20px",
-                                        borderRadius: "20px 20px 0 0",
-                                    },
-                                    body: {
-                                        background: "#FFFAF6",
-                                        padding: "16px",
-                                        border: "2px solid #FBB1BD",
-                                        borderRadius: "0 0 20px 20px",
-                                    },
-                                }}
-                            />
-                        </div>
+                        <Calendar
+                            cellRender={dateCellRender}
+                            className="custom-calendar shadow-sm rounded-2xl"
+                            onChange={(date) => {
+                                if (date.format("M") !== currentMonth) {
+                                    setCurrentMonth(date.format("M"));
+                                }
+                            }}
+                            styles={{
+                                root: {
+                                    borderRadius: "20px",
+                                },
+                                header: {
+                                    background: "#FBB1BD",
+                                    padding: "16px 20px",
+                                    borderRadius: "20px 20px 0 0",
+                                },
+                                body: {
+                                    background: "#FFFAF6",
+                                    padding: "16px",
+                                    border: "2px solid #FBB1BD",
+                                    borderRadius: "0 0 20px 20px",
+                                },
+                            }}
+                        />
 
                         <CalendarAssignModal
                             calendarAssignConfig={calendarAssignConfig}

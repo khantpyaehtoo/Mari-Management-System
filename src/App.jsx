@@ -22,11 +22,14 @@ import IsNotAuth from "./components/Guards/IsNotAuth.jsx";
 import DisabledPackage from "./features/management/PackageSection/DisabledPackage.jsx";
 import NotificationHandler from "./app/core/notifications/NotificationHandler.jsx";
 import { NotificationListener } from "./components/Bars/IncomeNotifications/NotificationsListener.jsx";
+import ScrollToTop from "./app/core/functions/ScrollToTop.jsx";
 
 export default function App() {
     return (
         <>
             <NotificationHandler />
+            <ScrollToTop />
+
             <Routes>
                 <Route
                     path="/login"

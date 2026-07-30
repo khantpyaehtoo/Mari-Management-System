@@ -69,9 +69,14 @@ const Dashboard = () => {
                     : "Loading...",
             title: "Total Revenue This Month",
             value:
-                cardDatas?.totalRevenue !== undefined
-                    ? `${cardDatas.totalRevenue.toLocaleString()} MMK`
-                    : "0 MMK",
+                cardDatas?.totalRevenue !== undefined ? (
+                    <>
+                        {cardDatas.totalRevenue.toLocaleString()}{" "}
+                        <small className="md:text-sm">MMK</small>
+                    </>
+                ) : (
+                    "0 MMK"
+                ),
         },
         {
             icon: <IdcardOutlined />,
@@ -97,6 +102,7 @@ const Dashboard = () => {
         () => [
             {
                 title: "No.",
+                key: "index",
                 render: (_, __, index) => (
                     <p>{(currentPage - 1) * 5 + index + 1}</p>
                 ),
@@ -140,7 +146,7 @@ const Dashboard = () => {
                 key: "totalRevenue",
                 render: (val) => (
                     <>
-                        {val.toLocaleString()} <small>MMK</small>
+                        {val?.toLocaleString() ?? 0} <small>MMK</small>
                     </>
                 ),
             },
@@ -150,7 +156,7 @@ const Dashboard = () => {
                 key: "totalCommission",
                 render: (val) => (
                     <>
-                        {val.toLocaleString()} <small>MMK</small>
+                        {val?.toLocaleString() ?? 0} <small>MMK</small>
                     </>
                 ),
             },
@@ -229,7 +235,7 @@ const Dashboard = () => {
             <section className="mt-10 mx-10">
                 <Row gutter={24}>
                     <Col md={12} lg={12}>
-                        <Card className="shadow-md">
+                        <Card className="shadow-md min-h-137!">
                             <Space vertical size="small">
                                 <Typography.Title
                                     level={3}

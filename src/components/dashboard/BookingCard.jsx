@@ -22,7 +22,7 @@ const BookingCard = () => {
     };
 
     return (
-        <Card className="shadow-sm">
+        <Card className="shadow-md min-h-137!">
             <Flex justify="space-between" align="center">
                 <Space vertical size="small">
                     <Typography.Title
@@ -50,10 +50,10 @@ const BookingCard = () => {
                             >
                                 <Flex vertical>
                                     <div className="flex items-center justify-between mb-2">
-                                        <h1 className="text-xl! font-semibold!">
+                                        <h1 className="text-lg! font-medium! font-montserrat!">
                                             {booking.staffName}
                                         </h1>
-                                        <p className="text-end font-medium text-gray-700">
+                                        <p className="text-end text-sm! font-medium! text-gray-700">
                                             {booking.bookingTime}
                                         </p>
                                     </div>

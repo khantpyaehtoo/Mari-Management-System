@@ -187,7 +187,7 @@ const TableHeaderSection = ({
                             value={selectedDates}
                             onChange={(dates) => setSelectedDates(dates)}
                             className={cn(
-                                "rounded-lg! border border-gray-300! w-full sm:w-72 md:w-80 lg:w-100",
+                                "rounded-lg! border border-gray-300! w-70",
                                 calendarClassName,
                             )}
                             classNames={{ popup: "my-custom-rangepicker" }}
