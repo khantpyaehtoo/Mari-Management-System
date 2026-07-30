@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal, Space, Avatar, Form, Input } from "antd";
 import RenderStaffFooterButtons from "./RenderStaffFooterBtn";
+import { formatMyanmarPhoneNumber } from "../../../app/core/functions/formatMyanmarPhNo";
 
 const StaffDetailModal = ({
     isDetailOpen,
@@ -84,7 +85,11 @@ const StaffDetailModal = ({
                         />
                         <Space vertical size={0}>
                             {isEditing ? (
-                                <Form.Item name="staffName" className="mb-0!">
+                                <Form.Item
+                                    initialValue={selectedStaff.staffName}
+                                    name="staffName"
+                                    className="mb-0!"
+                                >
                                     {" "}
                                     <Input
                                         placeholder={selectedStaff.staffName}
@@ -113,6 +118,7 @@ const StaffDetailModal = ({
                             {isEditing ? (
                                 <Form.Item
                                     name="phoneNumber"
+                                    initialValue={selectedStaff.phoneNumber}
                                     className="mb-0! flex-1!"
                                     rules={[{ required: true, message: "" }]}
                                 >
@@ -122,7 +128,11 @@ const StaffDetailModal = ({
                                     />
                                 </Form.Item>
                             ) : (
-                                <span>{selectedStaff.phoneNumber}</span>
+                                <span>
+                                    {formatMyanmarPhoneNumber(
+                                        selectedStaff.phoneNumber,
+                                    ) || "-"}
+                                </span>
                             )}
                         </div>
 
@@ -131,6 +141,7 @@ const StaffDetailModal = ({
                             {isEditing ? (
                                 <Form.Item
                                     name="email"
+                                    initialValue={selectedStaff.email}
                                     className="mb-0! flex-1!"
                                     rules={[
                                         {

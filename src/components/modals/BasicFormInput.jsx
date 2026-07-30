@@ -54,6 +54,15 @@ const BasicFormInput = ({ title }) => {
                             {title} Date of Birth
                         </label>
                     }
+                    format={[
+                        "YYYY-MM-DD",
+                        "YYYY/MM/DD",
+                        "YYYY M D",
+                        "YYYY MM DD",
+                        "DD/MM/YYYY",
+                    ]}
+                    showSearch
+                    placeholder="Select or type date (e.g. 1999 9 19)"
                     rules={[
                         {
                             required: true,
@@ -61,7 +70,14 @@ const BasicFormInput = ({ title }) => {
                         },
                     ]}
                 >
-                    <DatePicker className="input-styling!" />
+                    <DatePicker
+                        classNames={{
+                            popup: {
+                                root: "custom-date-popup",
+                            },
+                        }}
+                        className="input-styling!"
+                    />
                 </Item>
             </Space>
 

@@ -20,7 +20,7 @@ const CustomerNotiHistorySection = ({
 
     return (
         <div className="w-1/2 h-full overflow-y-auto px-5 py-2 space-y-4!">
-            <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects mb-4 isolate">
+            <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 mb-4 bg-white-form border border-gray-400 text-gray-500">
                 Sent Notifications (Customers)
             </h1>
 

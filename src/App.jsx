@@ -43,8 +43,10 @@ export default function App() {
                     path="/"
                     element={
                         <IsAuth>
-                            <NotificationListener />
-                            <MainLayout />
+                            <>
+                                <NotificationListener />
+                                <MainLayout />
+                            </>
                         </IsAuth>
                     }
                 >

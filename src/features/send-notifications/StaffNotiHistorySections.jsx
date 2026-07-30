@@ -6,15 +6,47 @@ import { useGetStaffNotificationsQuery } from "./notificationApi";
 import { getImageUrl } from "../../app/core/functions/getImageUrl";
 
 dayjs.extend(relativeTime);
-
+// const DUMMY_NOTIFICATIONS = [
+//     {
+//         id: "1",
+//         title: "System Maintenance Notice",
+//         message:
+//             "The system will be undergoing scheduled maintenance tonight from 12:00 AM to 2:00 AM.",
+//         type: "warning",
+//         imageUrl:
+//             "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500", // Sample Image
+//         createdAt: new Date().toISOString(),
+//     },
+//     {
+//         id: "2",
+//         title: "New Policy Update",
+//         message:
+//             "Please review the updated staff guidelines in the company portal.",
+//         type: "info",
+//         imageUrl: null, // Image မပါတဲ့ card အတွက် စမ်းဖို့
+//         createdAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+//     },
+//     {
+//         id: "3",
+//         title: "Emergency Announcement",
+//         message:
+//             "All staff are required to submit their monthly report by 5 PM today.",
+//         type: "urgent",
+//         imageUrl:
+//             "https://images.unsplash.com/photo-1557683316-973673baf926?w=500",
+//         createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+//     },
+// ];
 const StaffNotiHistorySections = ({ getNotificationIcon, showDeleteModal }) => {
     const { data, isLoading } = useGetStaffNotificationsQuery();
 
     const staffNotis = Array.isArray(data) ? data : data?.content || [];
 
+    // const staffNotis = DUMMY_NOTIFICATIONS;
+
     return (
         <div className="w-1/2 h-full overflow-y-auto border-e border-e-gray-400 px-5 py-2 space-y-4!">
-            <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 bg-backdrop-effects mb-4 isolate">
+            <h1 className="font-semibold sticky top-0 py-5 px-4 rounded-2xl shadow-md w-full z-10 mb-4 bg-white-form border border-gray-400 text-gray-500">
                 Sent Notifications (Staffs)
             </h1>
 

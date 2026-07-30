@@ -23,6 +23,7 @@ import { useDebounce } from "../../../lib/hooks/useDebounce";
 import dayjs from "dayjs";
 import { setMessage } from "../../../app/core/notifications/notiSlice";
 import { getImageUrl } from "../../../app/core/functions/getImageUrl";
+import { formatMyanmarPhoneNumber } from "../../../app/core/functions/formatMyanmarPhNo";
 
 const RENDER_LISTS = [
     "All",
@@ -378,8 +379,11 @@ const Staff = () => {
                 key: "contact",
                 render: (_, record) => (
                     <Space vertical size="small">
-                        <p className="font-medium">{record.phoneNumber}</p>
-                        <p className="text-gray-500">{record.email}</p>
+                        <p className="font-medium">
+                            {formatMyanmarPhoneNumber(record.phoneNumber) ||
+                                "-"}
+                        </p>
+                        <p className="text-gray-500">{record.email || "-"}</p>
                     </Space>
                 ),
             },
