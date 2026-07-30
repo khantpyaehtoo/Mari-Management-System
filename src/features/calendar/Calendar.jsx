@@ -169,8 +169,8 @@ const CalendarSection = () => {
                 placement="rightTop"
             >
                 {/* Fixed overflow-hidden to prevent scrollbars */}
-                <div className="w-full h-full p-1 cursor-pointer overflow-hidden">
-                    <div className="flex flex-col gap-0.5 overflow-hidden">
+                <div className="w-full h-full p-1 cursor-pointer overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#f99cb0_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-[#f99cb0] [&::-webkit-scrollbar-thumb]:rounded-full">
+                    <div className="flex flex-col gap-0.5 scrollbar-none!">
                         {totalStaffCount > 0 && (
                             <div className="truncate leading-tight">
                                 <Badge

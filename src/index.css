@@ -81,6 +81,7 @@ body {
     @apply border-gray-300 rounded-xl p-3 hover:shadow-md hover:border-primary focus-within:shadow-md focus-within:border-primary;
 }
 
+
 /* CALENDAR FORM INPUT DATE RANGE STYLING */
 .single-range-view .ant-picker-input:nth-child(3),
 .single-range-view .ant-picker-range-separator {
@@ -489,10 +490,7 @@ body {
   display: none !important;
 }
 
-/* .custom-calendar .ant-picker-content {
-  border-collapse: separate !important;
-  border-spacing: 8px !important; 
-} */
+
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell {
   padding: 0 !important;
@@ -583,8 +581,9 @@ body {
 
 /* 3. Responsive Breakpoints (13" Screen and Below) */
 @media (max-width: 1366px) {
-  .custom-calendar .ant-picker-content {
-    border-spacing: 6px !important; 
+.custom-calendar .ant-picker-content {
+    border-collapse: separate !important;
+    border-spacing: 6px 6px !important; /* X: 6px, Y: 6px (Adjust these values as needed) */
   }
 
   .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-value {
@@ -599,16 +598,18 @@ body {
   }
 }
 
-.custom-calendar .ant-picker-content {
-  border-collapse: separate !important;
-  border-spacing: 12px 12px !important; 
-}
+
 
 @media (max-width: 1024px) {
   .custom-calendar .ant-picker-cell-inner {
-    min-width: 70px !important;
-    min-height: 80px !important;
+    max-width: 70px !important;
+    max-height: 80px !important;
   }
+}
+
+.custom-calendar .ant-picker-content {
+  border-collapse: separate !important;
+  border-spacing: 12px 12px !important; 
 }
 
 /* date-popup */
@@ -654,6 +655,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #f99cb0 !important;
 }
+
+
 
 /* Report Bar Chart Card Container */
 .footer-card {
