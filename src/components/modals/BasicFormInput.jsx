@@ -1,4 +1,5 @@
-import { DatePicker, Form, Input, Space } from "antd";
+import { Form, Input, Space } from "antd";
+import CustomCalendarDropdown from "./CustomCalendarDropdown";
 
 const BasicFormInput = ({ title }) => {
     const { Item } = Form;
@@ -24,7 +25,7 @@ const BasicFormInput = ({ title }) => {
                 />
             </Item>
 
-            <Space size="small" align="center">
+            <Space size="large" align="center">
                 <Item
                     name="phoneNumber"
                     label={
@@ -47,44 +48,30 @@ const BasicFormInput = ({ title }) => {
                     />
                 </Item>
 
-                <Item
+                <Form.Item
+                    label="Date of Birth"
                     name="dateOfBirth"
-                    label={
-                        <label className="label-styling">
-                            {title} Date of Birth
-                        </label>
-                    }
-                    format={[
-                        "YYYY-MM-DD",
-                        "YYYY/MM/DD",
-                        "YYYY M D",
-                        "YYYY MM DD",
-                        "DD/MM/YYYY",
-                    ]}
-                    showSearch
-                    placeholder="Select or type date (e.g. 1999 9 19)"
                     rules={[
                         {
                             required: true,
-                            message: "Please input the Date of Birth",
+                            message: `Please input the Date Of Birth`,
                         },
                     ]}
                 >
-                    <DatePicker
-                        classNames={{
-                            popup: {
-                                root: "custom-date-popup",
-                            },
-                        }}
-                        className="input-styling!"
-                    />
-                </Item>
+                    <CustomCalendarDropdown width={350} />
+                </Form.Item>
             </Space>
 
             <Item
                 name="email"
                 label={<label className="label-styling">{title} Email</label>}
-                rules={[{ required: true, message: `Please input the Email` }]}
+                rules={[
+                    { required: true, message: `Please input the Email` },
+                    {
+                        type: "email",
+                        message: "Please enter a valid email address!",
+                    },
+                ]}
             >
                 <Input
                     placeholder={"example@gmail.com"}

@@ -59,7 +59,7 @@ export const ServicePieChart = () => {
 
     return (
         <Flex vertical gap="middle" align="center" className="w-full">
-            <div className="w-full max-w-[280px] flex justify-center items-center">
+            <div className="w-full max-w-[280px] h-[280px] flex justify-center items-center">
                 <Doughnut data={chartData} options={options} />
             </div>
 

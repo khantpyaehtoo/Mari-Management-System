@@ -6,31 +6,27 @@ import { useLocation } from "react-router-dom";
 const ScrollToTop = () => {
     const { pathname } = useLocation();
 
-    // Reset container scroll position on route navigation
+    // Reset container scroll position on route/page change
     useEffect(() => {
-        const container = document.getElementById("main-content-container");
-        if (container) {
-            container.scrollTo(0, 0);
-        } else {
-            window.scrollTo(0, 0);
+        const el = document.getElementById("main-content-container");
+        if (el) {
+            el.scrollTo(0, 0);
         }
     }, [pathname]);
 
     return (
         <FloatButton.BackTop
-            // Target the scrollable main content div
             target={() =>
                 document.getElementById("main-content-container") || window
             }
-            visibilityHeight={200}
+            visibilityHeight={100}
             duration={300}
             icon={<ArrowUp size={18} />}
             type="primary"
-            tooltip="Back to Top"
+            tooltip="Back to top"
             style={{
-                right: 32,
-                bottom: 32,
-                zIndex: 9999,
+                right: 24,
+                bottom: 24,
             }}
         />
     );

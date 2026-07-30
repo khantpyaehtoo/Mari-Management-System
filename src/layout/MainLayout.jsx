@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import SideBar from "../components/Bars/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Bars/NavBar";
+import ScrollToTop from "./BacktoTop";
 
 const { Sider, Header, Content } = Layout;
 
@@ -25,10 +26,7 @@ const MainLayout = () => {
                 <SideBar collapsed={collapsed} />
             </Sider>
 
-            <Layout
-                id="main-content-container"
-                className="h-full flex flex-col"
-            >
+            <Layout className="h-full flex flex-col">
                 {/* Mobile SideBar */}
                 <div className="lg:hidden">
                     <SideBar collapsed={false} />
@@ -38,10 +36,16 @@ const MainLayout = () => {
                     <Navbar collapsed={collapsed} setCollapsed={setCollapsed} />
                 </Header>
 
-                <Content className="p-4 md:p-6 bg-white-back overflow-y-auto flex-1">
+                <Content
+                    id="main-content-container"
+                    className="p-4 md:p-6 bg-white-back overflow-y-auto flex-1 relative"
+                >
                     <Outlet />
                 </Content>
             </Layout>
+
+            {/* Float Button / Top Button */}
+            <ScrollToTop />
         </Layout>
     );
 };
