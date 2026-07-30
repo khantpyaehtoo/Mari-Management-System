@@ -37,14 +37,11 @@ const CalendarSection = () => {
     const activeStaffList = useMemo(() => {
         if (!dailyStaff) return [];
 
-        // If activeStaff is directly inside dailyStaff
         if (Array.isArray(dailyStaff.activeStaff)) {
             return dailyStaff.activeStaff;
         }
 
-        // If inside dailyStatuses -> "YYYY-MM-DD" -> activeStaff
         if (dailyStaff.dailyStatuses) {
-            // Get today's object or first available date object
             const dateKey = Object.keys(dailyStaff.dailyStatuses)[0];
             if (dateKey && dailyStaff.dailyStatuses[dateKey]?.activeStaff) {
                 return dailyStaff.dailyStatuses[dateKey].activeStaff;
@@ -119,13 +116,13 @@ const CalendarSection = () => {
                 dayData && dayData.events && dayData.events.length > 0;
 
             return (
-                <div className="w-full h-full min-h-10 p-1">
+                <div className="w-full h-full p-1 overflow-hidden">
                     {hasEvents && (
-                        <div className="bg-red-50 rounded-md p-2 border-l-4 border-red-400">
+                        <div className="bg-red-50 rounded-md p-1.5 border-l-4 border-red-400 overflow-hidden">
                             <span className="text-xs font-semibold text-red-600 block truncate">
                                 {selectedUserFilter.label}
                             </span>
-                            <small className="text-gray-500 block text-[10px]">
+                            <small className="text-gray-500 block text-[10px] truncate">
                                 {dayData.events[0]?.leaveType || "Day Off"}
                             </small>
                         </div>
@@ -171,15 +168,16 @@ const CalendarSection = () => {
                 }
                 placement="rightTop"
             >
-                <div className="w-full h-full min-h-12.5 p-1 cursor-pointer">
-                    <ul className="list-none p-0 m-0 space-y-0.5">
+                {/* Fixed overflow-hidden to prevent scrollbars */}
+                <div className="w-full h-full p-1 cursor-pointer overflow-hidden">
+                    <div className="flex flex-col gap-0.5 overflow-hidden">
                         {totalStaffCount > 0 && (
-                            <li>
+                            <div className="truncate leading-tight">
                                 <Badge
                                     status="success"
                                     text={
-                                        <div className="inline-flex gap-2">
-                                            <span className="text-xs font-medium text-green-600 md:hidden lg:block">
+                                        <div className="inline-flex gap-1 items-center">
+                                            <span className="text-xs font-medium text-green-600 md:hidden xl:hidden 2xl:inline">
                                                 Active:
                                             </span>
                                             <span className="text-xs font-medium text-green-600">
@@ -188,17 +186,17 @@ const CalendarSection = () => {
                                         </div>
                                     }
                                 />
-                            </li>
+                            </div>
                         )}
 
                         {dayOffCount > 0 && (
-                            <li>
+                            <div className="truncate leading-tight">
                                 <Badge
                                     status="warning"
                                     text={
-                                        <div className="inline-flex justify-around gap-2 text-center">
-                                            <span className="text-xs font-medium text-amber-600 md:hidden lg:block">
-                                                Day Off:{"  "}
+                                        <div className="inline-flex gap-1 items-center">
+                                            <span className="text-xs font-medium text-amber-600 md:hidden xl:hidden 2xl:inline">
+                                                Day Off:
                                             </span>
                                             <span className="text-xs font-medium text-amber-600">
                                                 {dayOffCount}
@@ -206,17 +204,17 @@ const CalendarSection = () => {
                                         </div>
                                     }
                                 />
-                            </li>
+                            </div>
                         )}
 
                         {leaveCount > 0 && (
-                            <li>
+                            <div className="truncate leading-tight">
                                 <Badge
                                     status="error"
                                     text={
-                                        <div className="inline-flex justify-around gap-2 text-center ">
-                                            <span className="text-xs font-medium text-red-600 md:hidden lg:block">
-                                                Leave:{"  "}
+                                        <div className="inline-flex gap-1 items-center">
+                                            <span className="text-xs font-medium text-red-600 md:hidden xl:hidden 2xl:inline">
+                                                Leave:
                                             </span>
                                             <span className="text-xs font-medium text-red-600">
                                                 {leaveCount}
@@ -224,9 +222,9 @@ const CalendarSection = () => {
                                         </div>
                                     }
                                 />
-                            </li>
+                            </div>
                         )}
-                    </ul>
+                    </div>
                 </div>
             </Popover>
         );

@@ -84,7 +84,7 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                                     size={14}
                                     className="shrink-0 xl:mr-1 2xl:mr-1.5"
                                 />
-                                <span className="hidden sm:inline xl:hidden 2xl:inline">
+                                <span className="hidden sm:inline xl:line-clamp-1 2xl:inline">
                                     Edit
                                 </span>
                             </Button>
@@ -98,7 +98,7 @@ const PackageCard = ({ item, handleActionClick, isDisabledView = false }) => {
                                     size={14}
                                     className="shrink-0 xl:mr-1 2xl:mr-1.5"
                                 />
-                                <span className="hidden sm:inline xl:hidden 2xl:inline">
+                                <span className="hidden sm:inline xl:line-clamp-1 2xl:inline">
                                     Disable
                                 </span>
                             </Button>

@@ -477,121 +477,134 @@ body {
 }
 
 /* CUSTOM MAIN CALENDAR SECTION */
+/* Header styling */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-panel .ant-picker-body th {
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
 }
 
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-in-view) .ant-picker-calendar-date {
-    border: none;
-    border: 1px solid gainsboro;
-}
-
+/* Hide mode switch buttons */
 .custom-calendar .ant-picker-calendar-mode-switch {
-    display: none !important;
+  display: none !important;
 }
 
+.custom-calendar .ant-picker-content {
+  border-collapse: separate !important;
+  border-spacing: 8px !important; 
+}
+
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell {
+  padding: 0 !important;
+}
+
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-inner {
+  background: transparent !important;
+}
+
+/* 2. Main Calendar Cell - Square (1:1 Ratio) Structure */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date {
-    height: 150px;
-    border: 2px solid var(--primary-pink);
-    margin: 10px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
+  aspect-ratio: 1 / 1;
+  height: auto !important;
+  border: 2px solid var(--primary-pink);
+  margin: 0 !important;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  box-sizing: border-box;
 }
 
+/* Out of month cells */
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-in-view) .ant-picker-calendar-date {
+  border: 1px solid gainsboro !important;
+}
+
+/* Date Number Badge */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-value {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    padding: 4px;
-    align-self: flex-end; 
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  padding: 4px;
+  align-self: flex-end;
 }
 
+/* Events wrapper inside cell */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .events {
-    width: 100%;
-    align-self: flex-start;
-    text-align: left;       
-    padding-left: 5px;      
-    margin-bottom: 5px;    
+  width: 100%;
+  align-self: flex-start;
+  text-align: left;
+  padding-left: 5px;
+  margin-bottom: 5px;
 }
 
+/* Hover States */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-selected):hover .ant-picker-calendar-date {
-    background-color: #FFF0F2 !important; 
-    border-color: #FBB1BD !important;     
-    cursor: pointer;
-}
-
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date-value {
-    color: black !important;    
-    background: white;          
+  background-color: #FFF0F2 !important;
+  border-color: #FBB1BD !important;
+  cursor: pointer;
 }
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell:not(.ant-picker-cell-selected):hover .ant-picker-calendar-date-value {
-    color: #ff4d4f !important;
+  color: #ff4d4f !important;
 }
 
+/* Today Cell */
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-today .ant-picker-calendar-date {
-    border: 2px dashed #FBB1BD !important;
-    /* background-color: #FFF0F2 !important; */
-}
-
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-today .ant-picker-calendar-date .ant-picker-calendar-date-value {
-    background: #FBB1BD;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 50%;
-}
-
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date {
-    background-color: #FFF0F2 !important; 
-    border-color: #ffa4a5 !important;
-}
-
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-value {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    padding: 4px;
-}
-
-.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date-value {
-    /* background: #FBB1BD;  */
-    color: black !important;    
-    background: white;       
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    border: 2px dashed #fd3052;
-    /* color: #fd3052; */
-    padding: 2px;
+  border: 2px dashed #FBB1BD !important;
 }
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-today .ant-picker-calendar-date-value {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 50%;
-    color: white !important;
-    border: 0;
-    padding: 3px;
+  background: #FBB1BD;
+  color: white !important;
+  border: 0;
+  padding: 3px;
 }
 
-/* Ensures calendar cells adapt tightly on tablet screens */
+/* Selected Cell */
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date {
+  background-color: #FFF0F2 !important;
+  border-color: #ffa4a5 !important;
+}
+
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date-value {
+  color: black !important;
+  background: white;
+  border: 2px dashed #fd3052;
+  padding: 2px;
+}
+
+.custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date-value {
+  color: black !important;
+  background: white;
+}
+
+/* 3. Responsive Breakpoints (13" Screen and Below) */
+@media (max-width: 1366px) {
+  .custom-calendar .ant-picker-content {
+    border-spacing: 6px !important; 
+  }
+
+  .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-value {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 12px !important;
+    padding: 2px !important;
+  }
+
+  .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-content {
+    padding: 2px !important;
+  }
+}
+
 @media (max-width: 1024px) {
   .custom-calendar .ant-picker-cell-inner {
     min-width: 70px !important;
     min-height: 80px !important;
   }
 }
-
 
 /* date-popup */
 .custom-date-popup .ant-picker-header {
