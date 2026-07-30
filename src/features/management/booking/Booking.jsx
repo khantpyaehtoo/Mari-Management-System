@@ -338,8 +338,9 @@ const Booking = () => {
                         onChange: handlePageChange,
                         size: "large",
                         total:
-                            statusCounts[filterValue] ??
                             apiResponse?.totalCount ??
+                            apiResponse?.total ??
+                            statusCounts[filterValue] ??
                             0,
                         pageSize: 10,
                         showSizeChanger: false,
