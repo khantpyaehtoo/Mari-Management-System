@@ -489,10 +489,10 @@ body {
   display: none !important;
 }
 
-.custom-calendar .ant-picker-content {
+/* .custom-calendar .ant-picker-content {
   border-collapse: separate !important;
   border-spacing: 8px !important; 
-}
+} */
 
 .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell {
   padding: 0 !important;
@@ -597,6 +597,11 @@ body {
   .custom-calendar.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-content {
     padding: 2px !important;
   }
+}
+
+.custom-calendar .ant-picker-content {
+  border-collapse: separate !important;
+  border-spacing: 12px 12px !important; 
 }
 
 @media (max-width: 1024px) {

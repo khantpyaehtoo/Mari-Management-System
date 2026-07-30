@@ -46,7 +46,7 @@ const OverviewModal = ({
         Reject: "text-unavailable",
     };
 
-    const currentStatus = bookingDetails?.status || selectedBooking?.status;
+    const currentStatus = selectedBooking?.status;
 
     return (
         <Modal

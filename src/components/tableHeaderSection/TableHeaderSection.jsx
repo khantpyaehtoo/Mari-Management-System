@@ -100,6 +100,7 @@ const TableHeaderSection = ({
             Pending: "text-pending",
             Confirm: "text-confirm",
             Available: "text-available",
+            Completed: "text-available",
             Unavailable: "text-unavailable",
             Reject: "text-unavailable",
             Terminate: "text-gray-500",
