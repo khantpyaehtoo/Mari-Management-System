@@ -7,7 +7,7 @@ const DashboardCard = ({ title, value, icon, trending, isLoading }) => {
     const isNegative = trending.startsWith("-");
 
     return (
-        <Card className="shadow w-full">
+        <Card className="shadow w-full min-h-50">
             <Space vertical size="large" className="w-full">
                 <Space
                     size="middle"
