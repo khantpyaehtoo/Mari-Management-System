@@ -237,7 +237,7 @@ const Packages = () => {
                 title="Packages"
                 formType="Packages"
                 subTitle="Create, customize, and optimize your packages. Easily manage pricing, duration, and staff assignments in one place."
-                placeholderTitle="Search with package name..."
+                placeholderTitle="Search by package name..."
                 setSearchText={setSearchText}
                 searchText={searchText}
                 triggerCreate={handleCreatePackage}

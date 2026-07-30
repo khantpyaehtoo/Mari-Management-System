@@ -217,7 +217,7 @@ const User = () => {
                 setSearchText={setSearchText}
                 title="Customer"
                 subTitle="Manage customer accounts, view user details, and update account status."
-                placeholderTitle="Search by name or phone..."
+                placeholderTitle="Search by user ID or Name..."
             />
 
             <CustomerSummaryCard

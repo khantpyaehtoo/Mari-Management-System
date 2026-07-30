@@ -516,7 +516,7 @@ const Staff = () => {
                 title="Staff"
                 subTitle="Manage your elite staff to unlock peak operational efficiency."
                 subFormTitle="Create your elite staff to unlock peak operational efficiency."
-                placeholderTitle="Search all staff..."
+                placeholderTitle="Search by ID or name..."
                 triggerCreate={handleCreateStaff}
                 triggerEdit={handleSaveStaffDetail}
             />

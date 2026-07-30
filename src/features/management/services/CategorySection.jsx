@@ -267,7 +267,7 @@ const CategorySection = () => {
                 formType="Category"
                 subTitle="Create, customize, and optimize your service catalog..."
                 btnTitle="Category"
-                placeholderTitle="Search the category name"
+                placeholderTitle="Search by category name..."
                 setSearchText={setSearchText}
                 searchText={searchText}
                 isOpen={isFormOpen}
