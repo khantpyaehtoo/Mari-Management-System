@@ -166,8 +166,8 @@ export const FilteredTabContent = ({
         { value: "all", label: "All" },
         ...(type === "customers"
             ? [
-                  { value: "ordered", label: "Ordered" },
-                  { value: "cancel", label: "Cancel" },
+                  { value: "ordered", label: "Booked" },
+                  { value: "cancel", label: "Cancelled" },
                   { value: "review", label: "Review" },
               ]
             : [
